@@ -1,21 +1,21 @@
 {
 	"_id": "itkamianets-3d",
 	"name": "IT Kamianets 3D Engine",
-	"title": "IT Kamianets 3D Engine — framework for reusable 3D apps and games",
-	"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
+	"title": "IT Kamianets 3D Engine — фреймворк для багаторазових 3D-застосунків та ігор",
+	"description": "Екосистема фреймворків для створення багаторазових 3D-застосунків та ігор: базові пакети, конструктори ігор і згенеровані ігрові проєкти.",
 	"image": "https://3d.itkamianets.com/logo.png",
 	"siteUrl": "https://3d.itkamianets.com",
 	"lang": "uk",
 	"locale": "uk_UA",
 	"logo": "/logo.png",
 	"defaultSeo": {
-		"title": "IT Kamianets 3D Engine — framework for reusable 3D apps and games",
-		"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
+		"title": "IT Kamianets 3D Engine — фреймворк для багаторазових 3D-застосунків та ігор",
+		"description": "Екосистема фреймворків для створення багаторазових 3D-застосунків та ігор: базові пакети, конструктори ігор і згенеровані ігрові проєкти.",
 		"keywords": [
-			"3D framework",
-			"Unity packages",
-			"game constructors",
-			"3D games",
+			"3D-фреймворк",
+			"пакети Unity",
+			"конструктори ігор",
+			"3D-ігри",
 			"IT Kamianets"
 		],
 		"author": "IT Kamianets",
@@ -23,76 +23,76 @@
 	},
 	"pageSeo": {
 		"/packages": {
-			"title": "Packages",
-			"description": "Catalog of reusable 3d-* framework packages: core, scene, assets, interaction, XR, and spatial."
+			"title": "Пакети",
+			"description": "Каталог багаторазових пакетів фреймворку 3d-*: ядро, сцена, ресурси, взаємодія, XR і простір."
 		},
 		"/constructors": {
-			"title": "Constructors",
-			"description": "Game constructors for character view, top-down, isometric, side view, fixed camera, and god camera games."
+			"title": "Конструктори",
+			"description": "Конструктори ігор для видів від персонажа, зверху, ізометрії, збоку, фіксованої та вільної камери."
+		},
+		"/docs": {
+			"title": "Документація",
+			"description": "Документація IT Kamianets 3D Engine: огляд, встановлення та архітектура."
+		},
+		"/docs/installation": {
+			"title": "Встановлення",
+			"description": "Встановіть пакети Unity IT Kamianets 3D Engine через Unity Package Manager."
+		},
+		"/docs/architecture": {
+			"title": "Архітектура",
+			"description": "Три шари IT Kamianets 3D Engine, потік сцен через схему та граф залежностей пакетів."
 		},
 		"/packages/3d-scene-schema": {
 			"title": "3d-scene-schema",
-			"description": "Engine-independent scene specification: the shared structure for scenes, objects, transforms, materials, assets, and metadata."
+			"description": "Незалежна від рушія специфікація сцен: спільна структура сцен, об'єктів, трансформацій, матеріалів, ресурсів і метаданих."
 		},
 		"/packages/3d-unity-core": {
 			"title": "3d-unity-core",
-			"description": "Core runtime package of the IT-Kamianets 3D Engine: shared Unity systems, configuration, utilities, and base architecture."
+			"description": "Базовий пакет виконання IT-Kamianets 3D Engine: спільні системи Unity, конфігурація, утиліти та базова архітектура."
 		},
 		"/packages/3d-unity-scene": {
 			"title": "3d-unity-scene",
-			"description": "Scene runtime package: loads, saves, synchronizes, and rebuilds 3D scenes in Unity from the shared scene schema."
+			"description": "Пакет виконання сцен: завантажує, зберігає, синхронізує й перебудовує 3D-сцени в Unity зі спільної схеми сцен."
 		},
 		"/packages/3d-unity-assets": {
 			"title": "3d-unity-assets",
-			"description": "Asset management package: 3D models, materials, textures, metadata, and runtime asset loading."
+			"description": "Пакет керування ресурсами: 3D-моделі, матеріали, текстури, метадані та завантаження ресурсів під час виконання."
 		},
 		"/packages/3d-unity-interaction": {
 			"title": "3d-unity-interaction",
-			"description": "Object editing package: selection, movement, rotation, scaling, snapping, duplication, and deletion."
+			"description": "Пакет редагування об'єктів: вибір, переміщення, обертання, масштабування, прив'язка, дублювання та видалення."
 		},
 		"/packages/3d-unity-xr": {
 			"title": "3d-unity-xr",
-			"description": "XR package: Meta Quest / VR interaction, controllers, hand tracking, locomotion, and XR tools."
+			"description": "Пакет XR: взаємодія в Meta Quest / VR, контролери, відстеження рук, пересування та інструменти XR."
 		},
 		"/packages/3d-unity-spatial": {
 			"title": "3d-unity-spatial",
-			"description": "Spatial computing package: room scanning, spatial anchors, boundaries, surfaces, and real-world environment mapping."
+			"description": "Пакет просторових обчислень: сканування кімнат, просторові якорі, межі, поверхні та картографування реального середовища."
 		},
 		"/constructors/character-view": {
-			"title": "Character View constructor",
-			"description": "For games where the player directly controls a character from first-person or third-person perspective. Examples: GTA V, Cyberpunk 2077, Elden Ring."
+			"title": "Конструктор: Вид від персонажа",
+			"description": "Для ігор, де гравець напряму керує персонажем від першої або третьої особи. Приклади: GTA V, Cyberpunk 2077, Elden Ring."
 		},
 		"/constructors/top-down": {
-			"title": "Top-Down constructor",
-			"description": "For games viewed primarily from above, with direct player movement and action-focused gameplay. Examples: Hades, Vampire Survivors, Hotline Miami."
+			"title": "Конструктор: Вид зверху",
+			"description": "Для ігор із видом переважно згори, прямим рухом гравця та екшн-геймплеєм. Приклади: Hades, Vampire Survivors, Hotline Miami."
 		},
 		"/constructors/isometric": {
-			"title": "Isometric constructor",
-			"description": "For games using an angled isometric-style camera, commonly used for RPGs, strategy games, and action RPGs. Examples: Baldur's Gate 3, Diablo IV, Path of Exile 2."
+			"title": "Конструктор: Ізометрія",
+			"description": "Для ігор із ізометричною камерою під кутом, яку часто використовують в RPG, стратегіях і екшн-RPG. Приклади: Baldur's Gate 3, Diablo IV, Path of Exile 2."
 		},
 		"/constructors/side-view": {
-			"title": "Side View constructor",
-			"description": "For games viewed from the side, including platformers, metroidvanias, action games, and sandbox games. Examples: Hollow Knight, Dead Cells, Terraria."
+			"title": "Конструктор: Вид збоку",
+			"description": "Для ігор із видом збоку: платформерів, метроідваній, екшн-ігор і пісочниць. Приклади: Hollow Knight, Dead Cells, Terraria."
 		},
 		"/constructors/fixed-camera": {
-			"title": "Fixed Camera constructor",
-			"description": "For games where camera positions are predefined or controlled by the scene rather than directly by the player. Examples: Resident Evil, INSIDE, Little Nightmares."
+			"title": "Конструктор: Фіксована камера",
+			"description": "Для ігор, де положення камери задане наперед або керується сценою, а не гравцем напряму. Приклади: Resident Evil, INSIDE, Little Nightmares."
 		},
 		"/constructors/god-camera": {
-			"title": "God / Free Camera constructor",
-			"description": "For games where the user controls the world from a free, strategic, or god-like camera. Examples: Civilization, Cities: Skylines, Total War."
-		},
-		"/docs": {
-			"title": "Documentation",
-			"description": "Documentation for the IT Kamianets 3D Engine: overview, installation, and architecture."
-		},
-		"/docs/installation": {
-			"title": "Installation",
-			"description": "Install the IT Kamianets 3D Engine Unity packages with the Unity Package Manager."
-		},
-		"/docs/architecture": {
-			"title": "Architecture",
-			"description": "The three layers of the IT Kamianets 3D Engine, the scene schema flow, and the package dependency graph."
+			"title": "Конструктор: Камера «бога» / вільна камера",
+			"description": "Для ігор, де користувач керує світом із вільної, стратегічної чи «божественної» камери. Приклади: Civilization, Cities: Skylines, Total War."
 		}
 	},
 	"structuredData": {

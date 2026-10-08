@@ -5,6 +5,10 @@ import { GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
 import { CompanyService } from '../../feature/company/company.service';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 
+/** English source text; translated through the dictionary so the footer follows the active language. */
+const FOOTER_DESCRIPTION =
+	'A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.';
+
 @Component({
 	selector: 'app-footer',
 	imports: [RouterLink, TrPipe],
@@ -22,6 +26,6 @@ export class FooterComponent {
 		{ label: 'Docs', path: '/docs' },
 	];
 	protected readonly companyDescription = computed(() =>
-		this._translateService.translate(this.company().description)(),
+		this._translateService.translate(FOOTER_DESCRIPTION)(),
 	);
 }
