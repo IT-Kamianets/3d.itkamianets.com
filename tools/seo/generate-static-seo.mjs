@@ -13,6 +13,9 @@ const staticRoutes = [
 	'/',
 	'/packages',
 	...packages.map((item) => `/packages/${item.slug}`),
+	'/docs',
+	'/docs/installation',
+	'/docs/architecture',
 	'/constructors',
 	...constructors.map((item) => `/constructors/${item.slug}`),
 ];

@@ -1,0 +1,174 @@
+<div class="mx-auto grid max-w-[var(--container)] gap-10 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[14rem_minmax(0,1fr)]">
+	<nav class="lg:sticky lg:top-6 lg:self-start" [translate]="{ ariaLabel: 'Documentation navigation' }">
+		<p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--c-text-muted)]" translate>Documentation</p>
+		<ul class="mt-3 flex gap-2 lg:flex-col lg:gap-1">
+			@for (link of nav; track link.path) {
+				<li>
+					<a
+						class="theme-interactive theme-focus block rounded-full px-4 py-2 text-sm font-medium text-[var(--c-text)] hover:bg-[var(--c-bg-tertiary)] lg:rounded-[var(--radius-btn)]"
+						activeClass="!bg-[var(--c-bg-tertiary)] !text-[var(--c-text-strong)]"
+						[routerLink]="link.path"
+						[routerLinkActiveOptions]="{ exact: true }"
+						routerLinkActive
+						[translate]="link.label"
+					>
+						{{ link.label }}
+					</a>
+				</li>
+			}
+		</ul>
+	</nav>
+
+	<article class="min-w-0 space-y-10 leading-8">
+		@switch (page) {
+			@case ('overview') {
+				<header>
+					<h1 class="text-4xl font-semibold tracking-[-0.03em] text-[var(--c-text-strong)] sm:text-5xl">Documentation</h1>
+					<p class="mt-4 max-w-2xl">
+						IT Kamianets 3D Engine is a set of reusable packages for building 3D applications and games. This section explains how the pieces fit together and how to install them.
+					</p>
+				</header>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Where to start</h2>
+					<ul class="mt-3 list-disc space-y-2 pl-5">
+						<li><a class="font-semibold text-[var(--c-text-strong)] underline" routerLink="/docs/architecture">Architecture</a>: the three layers and how scenes flow between Unity and the shared schema.</li>
+						<li><a class="font-semibold text-[var(--c-text-strong)] underline" routerLink="/docs/installation">Installation</a>: Unity requirements and the Package Manager URL of every package.</li>
+						<li><a class="font-semibold text-[var(--c-text-strong)] underline" routerLink="/packages">Packages</a>: one page per package with its current state and roadmap.</li>
+						<li><a class="font-semibold text-[var(--c-text-strong)] underline" routerLink="/constructors">Constructors</a>: planned starting points for each camera and gameplay style.</li>
+					</ul>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Project status</h2>
+					<p class="mt-3">
+						The core packages are in early development and the scene schema has a first version. Constructors and game generation are planned and have no repositories yet. Each package page states what exists today and what does not.
+					</p>
+					<p class="mt-3">
+						All source code lives in the
+						<a class="font-semibold text-[var(--c-text-strong)] underline" [href]="orgUrl" rel="noopener" target="_blank">IT-Kamianets GitHub organization</a>.
+					</p>
+				</section>
+			}
+			@case ('installation') {
+				<header>
+					<h1 class="text-4xl font-semibold tracking-[-0.03em] text-[var(--c-text-strong)] sm:text-5xl">Installation</h1>
+					<p class="mt-4 max-w-2xl">The Unity packages are installed through the Unity Package Manager from their Git repositories.</p>
+				</header>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Requirements</h2>
+					<ul class="mt-3 list-disc space-y-1 pl-5">
+						<li>Unity 6000.6</li>
+						<li>Git installed, so Unity can fetch packages by URL</li>
+						<li>For room scanning with <span class="font-mono">3d-unity-spatial</span>: the Meta XR MR Utility Kit (<span class="font-mono">com.meta.xr.mrutilitykit</span>) in your project</li>
+					</ul>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Steps</h2>
+					<ol class="mt-3 list-decimal space-y-1 pl-5">
+						<li>In Unity, open <span class="font-mono">Window &gt; Package Manager</span>.</li>
+						<li>Choose <span class="font-mono">+ &gt; Add package from git URL</span>.</li>
+						<li>Paste the URL of the package from the table below.</li>
+					</ol>
+					<p class="mt-3">Dependencies between engine packages are declared in each <span class="font-mono">package.json</span>. Install <span class="font-mono">3d-unity-core</span> first, and add the package you need.</p>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Packages</h2>
+					<div class="mt-4 overflow-x-auto rounded-[calc(var(--radius-card)*1.2)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)]">
+						<table class="w-full min-w-[40rem] text-left text-sm leading-6">
+							<thead class="border-b border-[var(--c-border)] text-[var(--c-text-muted)]">
+								<tr>
+									<th class="px-4 py-3 font-semibold">Package</th>
+									<th class="px-4 py-3 font-semibold">Package Manager URL</th>
+									<th class="px-4 py-3 font-semibold">Version</th>
+								</tr>
+							</thead>
+							<tbody>
+								@for (item of packages; track item.slug) {
+									<tr class="border-t border-[var(--c-border)] align-top">
+										<td class="px-4 py-3 font-mono">
+											<a class="font-semibold text-[var(--c-text-strong)] hover:text-[var(--c-primary)]" [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
+										</td>
+										<td class="px-4 py-3 font-mono">
+											@if (item.packageId) {
+												{{ repoUrl(item.slug) }}.git
+											} @else if (item.slug === '3d-scene-schema') {
+												JSON Schema files, not a Unity package
+											} @else {
+												Not installable yet
+											}
+										</td>
+										<td class="px-4 py-3">{{ item.version || '-' }}</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</section>
+			}
+			@case ('architecture') {
+				<header>
+					<h1 class="text-4xl font-semibold tracking-[-0.03em] text-[var(--c-text-strong)] sm:text-5xl">Architecture</h1>
+					<p class="mt-4 max-w-2xl">The ecosystem is split into three layers, and scenes are kept in an engine-independent format.</p>
+				</header>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Layers</h2>
+					<ol class="mt-3 list-decimal space-y-2 pl-5">
+						<li><span class="font-semibold">Core packages</span> (<span class="font-mono">3d-*</span>): shared engine functionality such as scenes, assets, interaction, XR, and spatial data.</li>
+						<li><span class="font-semibold">Constructors</span> (<span class="font-mono">3d-constructor-*</span>): a starting architecture for one type of game, built on the core packages.</li>
+						<li><span class="font-semibold">Game-specific packages</span> (<span class="font-mono">game-&lt;name&gt;-*</span>): the rules, content, and assets of one game.</li>
+					</ol>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Scenes and the schema</h2>
+					<p class="mt-3">
+						<span class="font-mono">3d-scene-schema</span> is the source of truth for a scene. Unity is not the permanent owner of scene data:
+					</p>
+					<p class="mt-3 overflow-x-auto rounded-[calc(var(--radius-card)*1.2)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] px-4 py-3 font-mono text-sm text-[var(--c-text-strong)]">
+						Scene Schema → Unity Scene → Scene Changes → Scene Schema
+					</p>
+					<p class="mt-3">
+						<span class="font-mono">3d-unity-scene</span> converts between the two. <span class="font-mono">3d-unity-xr</span> handles how users interact through XR hardware, while <span class="font-mono">3d-unity-spatial</span> understands the physical room and turns it into scene data.
+					</p>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Package dependencies</h2>
+					<p class="mt-3">Packages are grouped by dependency depth. Each package depends only on packages from earlier columns, as declared in its <span class="font-mono">package.json</span>.</p>
+					<div class="mt-4 grid gap-4 sm:grid-cols-2">
+						@for (level of levels; track level.level) {
+							<div class="rounded-[calc(var(--radius-card)*1.4)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-4">
+								<p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--c-text-muted)]">
+									@if (level.level === 0) {
+										No dependencies
+									} @else {
+										Depth {{ level.level }}
+									}
+								</p>
+								<ul class="mt-3 space-y-3">
+									@for (item of level.packages; track item.slug) {
+										<li>
+											<a class="font-mono text-sm font-semibold text-[var(--c-text-strong)] hover:text-[var(--c-primary)]" [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
+											@if (item.dependencies.length) {
+												<p class="text-xs leading-5 text-[var(--c-text-muted)]">needs {{ item.dependencies.join(', ') }}</p>
+											}
+										</li>
+									}
+								</ul>
+							</div>
+						}
+					</div>
+				</section>
+				<section>
+					<h2 class="text-xl font-semibold text-[var(--c-text-strong)]">Principles</h2>
+					<ul class="mt-3 list-disc space-y-1 pl-5">
+						<li>Keep core packages reusable and product-independent.</li>
+						<li>Keep constructors focused on reusable gameplay architecture.</li>
+						<li>Keep game-specific logic outside the framework.</li>
+						<li>Prefer shared scene and asset structures between engines.</li>
+						<li>Let constructors compose existing packages instead of duplicating them.</li>
+						<li>Make generated projects easy to understand, modify, and extend.</li>
+					</ul>
+				</section>
+			}
+			@default never;
+		}
+	</article>
+</div>

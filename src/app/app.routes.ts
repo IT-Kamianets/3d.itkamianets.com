@@ -47,6 +47,15 @@ export const routes: Routes = [
 				(m) => m.ConstructorDetailComponent,
 			),
 	})),
+	...[
+		{ path: 'docs', page: 'overview' },
+		{ path: 'docs/installation', page: 'installation' },
+		{ path: 'docs/architecture', page: 'architecture' },
+	].map(({ path, page }) => ({
+		path,
+		data: { ...metaFor(`/${path}`), page },
+		loadComponent: () => import('./pages/docs/docs.component').then((m) => m.DocsComponent),
+	})),
 	{
 		path: '**',
 		redirectTo: '',

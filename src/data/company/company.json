@@ -81,6 +81,18 @@
 		"/constructors/god-camera": {
 			"title": "God / Free Camera constructor",
 			"description": "For games where the user controls the world from a free, strategic, or god-like camera. Examples: Civilization, Cities: Skylines, Total War."
+		},
+		"/docs": {
+			"title": "Documentation",
+			"description": "Documentation for the IT Kamianets 3D Engine: overview, installation, and architecture."
+		},
+		"/docs/installation": {
+			"title": "Installation",
+			"description": "Install the IT Kamianets 3D Engine Unity packages with the Unity Package Manager."
+		},
+		"/docs/architecture": {
+			"title": "Architecture",
+			"description": "The three layers of the IT Kamianets 3D Engine, the scene schema flow, and the package dependency graph."
 		}
 	},
 	"structuredData": {

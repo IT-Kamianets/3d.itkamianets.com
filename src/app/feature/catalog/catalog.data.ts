@@ -69,3 +69,29 @@ export const findConstructor = (slug: string) =>
 
 /** Game-specific package names a generated project would contain, e.g. `game-<name>-core`. */
 export const GENERATED_PACKAGE_SUFFIXES = ['core', 'world', 'units', 'ui'];
+
+export interface DependencyLevel {
+	level: number;
+	packages: CatalogPackage[];
+}
+
+/** Groups packages by dependency depth: level 0 has no dependencies, level 1 depends on level 0, and so on. */
+export const dependencyLevels: DependencyLevel[] = (() => {
+	const levels = new Map<string, number>();
+	const levelOf = (slug: string): number => {
+		const known = levels.get(slug);
+		if (known !== undefined) {
+			return known;
+		}
+		const dependencies = findPackage(slug)?.dependencies ?? [];
+		const level = dependencies.length ? Math.max(...dependencies.map(levelOf)) + 1 : 0;
+		levels.set(slug, level);
+		return level;
+	};
+	catalogPackages.forEach((item) => levelOf(item.slug));
+	const max = Math.max(...levels.values());
+	return Array.from({ length: max + 1 }, (_, level) => ({
+		level,
+		packages: catalogPackages.filter((item) => levels.get(item.slug) === level),
+	}));
+})();

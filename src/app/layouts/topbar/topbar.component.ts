@@ -23,6 +23,7 @@ export class TopbarComponent {
 	protected readonly links = [
 		{ label: 'Packages', path: '/packages' },
 		{ label: 'Constructors', path: '/constructors' },
+		{ label: 'Docs', path: '/docs' },
 	];
 	protected readonly mode = computed(() => this._themeService.mode() ?? 'light');
 	protected readonly languageMenuOpen = signal(false);
