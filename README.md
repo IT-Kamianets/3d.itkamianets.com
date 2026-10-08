@@ -1,6 +1,6 @@
-# IT Kamianets 3D
+# IT Kamianets 3D Engine
 
-**IT Kamianets 3D** is a framework ecosystem for building reusable 3D applications and games.
+**IT Kamianets 3D Engine** is a framework ecosystem for building reusable 3D applications and games.
 
 Website: `3d.itkamianets.com`
 
@@ -37,7 +37,7 @@ The website is primarily a landing page and documentation/catalog interface for 
 
 ### Landing Page
 
-Introduces IT Kamianets 3D and explains:
+Introduces IT Kamianets 3D Engine and explains:
 
 - what the framework is
 - how the package architecture works

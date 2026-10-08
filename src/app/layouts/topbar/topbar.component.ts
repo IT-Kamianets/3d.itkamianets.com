@@ -21,7 +21,6 @@ export class TopbarComponent {
 	private readonly _router = inject(Router);
 
 	protected readonly links = [
-		{ label: 'Home', path: '/' },
 		{ label: 'Packages', path: '/packages' },
 		{ label: 'Constructors', path: '/constructors' },
 	];

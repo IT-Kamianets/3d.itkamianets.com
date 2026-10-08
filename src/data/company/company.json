@@ -1,7 +1,7 @@
 {
 	"_id": "itkamianets-3d",
-	"name": "IT Kamianets 3D",
-	"title": "IT Kamianets 3D — framework for reusable 3D apps and games",
+	"name": "IT Kamianets 3D Engine",
+	"title": "IT Kamianets 3D Engine — framework for reusable 3D apps and games",
 	"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
 	"image": "https://3d.itkamianets.com/logo.png",
 	"siteUrl": "https://3d.itkamianets.com",
@@ -9,7 +9,7 @@
 	"locale": "en_US",
 	"logo": "/logo.png",
 	"defaultSeo": {
-		"title": "IT Kamianets 3D — framework for reusable 3D apps and games",
+		"title": "IT Kamianets 3D Engine — framework for reusable 3D apps and games",
 		"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
 		"keywords": [
 			"3D framework",
