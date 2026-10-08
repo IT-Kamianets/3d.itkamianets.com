@@ -1,7 +1,7 @@
 import constructorsData from '../../../data/catalog/constructors.json';
 import packagesData from '../../../data/catalog/packages.json';
 
-export const GITHUB_ORG_URL = 'https://github.com/itkamianets';
+export const GITHUB_ORG_URL = 'https://github.com/IT-Kamianets';
 
 export interface CatalogPackage {
 	slug: string;
@@ -11,8 +11,12 @@ export interface CatalogPackage {
 	summary: string;
 	purpose: string;
 	dependencies: string[];
+	version: string;
+	license: string;
+	packageId: string;
 	install: string;
 	usage: string;
+	current: string[];
 	features: string[];
 	examples: string[];
 	roadmap: string[];

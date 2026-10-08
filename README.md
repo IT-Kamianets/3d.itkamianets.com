@@ -276,4 +276,4 @@ The built site is written to `dist/app/browser`; the production domain is set in
 
 Routes, prerendering, and the sitemap are generated from the catalog JSON, so adding an entry creates its page automatically. Add matching `pageSeo` entries in `company.json` for its title and description.
 
-Package status is shown on each page; packages and constructors are marked **Planned** until their repositories are published.
+Package status is shown on each page; package content is taken from the `IT-Kamianets/3d-*` repository READMEs and `package.json` files. Constructors are marked **Planned** because their repositories do not exist yet.

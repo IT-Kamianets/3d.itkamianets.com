@@ -32,31 +32,31 @@
 		},
 		"/packages/3d-scene-schema": {
 			"title": "3d-scene-schema",
-			"description": "Engine-independent description of scenes, objects, and components. Defines one shared, serializable scene structure so that content authored once can be loaded by any engine integration and read by constructors, tools, and agents."
+			"description": "Engine-independent scene specification: the shared structure for scenes, objects, transforms, materials, assets, and metadata."
 		},
 		"/packages/3d-unity-core": {
 			"title": "3d-unity-core",
-			"description": "Shared Unity foundation used by every other 3d-unity package. Provides the small, product-independent base that the rest of the Unity packages build on, so each package stays focused on one responsibility."
+			"description": "Core runtime package of the IT-Kamianets 3D Engine: shared Unity systems, configuration, utilities, and base architecture."
 		},
 		"/packages/3d-unity-scene": {
 			"title": "3d-unity-scene",
-			"description": "Scene handling for Unity, driven by the shared scene schema. Builds and manages Unity scenes from the engine-independent structures defined in 3d-scene-schema."
+			"description": "Scene runtime package: loads, saves, synchronizes, and rebuilds 3D scenes in Unity from the shared scene schema."
 		},
 		"/packages/3d-unity-assets": {
 			"title": "3d-unity-assets",
-			"description": "Asset loading and organization for Unity projects. Gives constructors and games one consistent way to reference, load, and organize models, textures, audio, and other assets."
+			"description": "Asset management package: 3D models, materials, textures, metadata, and runtime asset loading."
 		},
 		"/packages/3d-unity-interaction": {
 			"title": "3d-unity-interaction",
-			"description": "Input and interaction building blocks for Unity. Provides reusable interaction primitives such as selecting, activating, and moving things, so constructors can compose them into camera- and gameplay-specific controls."
+			"description": "Object editing package: selection, movement, rotation, scaling, snapping, duplication, and deletion."
 		},
 		"/packages/3d-unity-xr": {
 			"title": "3d-unity-xr",
-			"description": "XR support for Unity experiences. Brings VR and AR capabilities into the same package architecture, so a constructor can target XR without game code touching device specifics."
+			"description": "XR package: Meta Quest / VR interaction, controllers, hand tracking, locomotion, and XR tools."
 		},
 		"/packages/3d-unity-spatial": {
 			"title": "3d-unity-spatial",
-			"description": "Spatial data and queries for Unity. Handles spatial structures such as grids, regions, and positional queries that strategy, isometric, and open-world games all need."
+			"description": "Spatial computing package: room scanning, spatial anchors, boundaries, surfaces, and real-world environment mapping."
 		},
 		"/constructors/character-view": {
 			"title": "Character View constructor",
@@ -88,7 +88,7 @@
 		"addressLocality": "Kamianets-Podilskyi",
 		"addressCountry": "UA",
 		"sameAs": [
-			"https://github.com/itkamianets"
+			"https://github.com/IT-Kamianets"
 		]
 	}
 }
