@@ -1,0 +1,132 @@
+[
+	{
+		"slug": "3d-scene-schema",
+		"name": "3d-scene-schema",
+		"group": "Scene",
+		"status": "Planned",
+		"summary": "Engine-independent description of scenes, objects, and components.",
+		"purpose": "Defines one shared, serializable scene structure so that content authored once can be loaded by any engine integration and read by constructors, tools, and agents.",
+		"dependencies": [],
+		"install": "npm install 3d-scene-schema",
+		"usage": "Constructors and game packages describe their worlds with this schema. Engine integrations such as 3d-unity-scene read it and build the matching scene at runtime.",
+		"features": [
+			"Scene, object, and component definitions",
+			"Engine-independent, serializable format",
+			"Versioned schema with validation",
+			"Shared by every engine integration"
+		],
+		"examples": [
+			"A level described as data and loaded by Unity",
+			"A constructor generating a starter scene for a new game"
+		],
+		"roadmap": ["Draft schema", "Validation tooling", "Schema versioning", "Additional engine mappings"],
+		"related": ["3d-unity-scene", "3d-unity-assets"]
+	},
+	{
+		"slug": "3d-unity-core",
+		"name": "3d-unity-core",
+		"group": "Core",
+		"status": "Planned",
+		"summary": "Shared Unity foundation used by every other 3d-unity package.",
+		"purpose": "Provides the small, product-independent base that the rest of the Unity packages build on, so each package stays focused on one responsibility.",
+		"dependencies": [],
+		"install": "https://github.com/itkamianets/3d-unity-core.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Add it first. Every other 3d-unity package declares it as a dependency, so installing any of them pulls it in automatically.",
+		"features": [
+			"Common base types and conventions",
+			"Package bootstrapping",
+			"Lightweight utilities shared across packages",
+			"No game-specific logic"
+		],
+		"examples": ["Used as the dependency root of all 3d-unity packages"],
+		"roadmap": ["Base types", "Bootstrapping", "Documentation", "Compatibility information"],
+		"related": ["3d-unity-scene", "3d-unity-assets", "3d-unity-interaction", "3d-unity-xr", "3d-unity-spatial"]
+	},
+	{
+		"slug": "3d-unity-scene",
+		"name": "3d-unity-scene",
+		"group": "Scene",
+		"status": "Planned",
+		"summary": "Scene handling for Unity, driven by the shared scene schema.",
+		"purpose": "Builds and manages Unity scenes from the engine-independent structures defined in 3d-scene-schema.",
+		"dependencies": ["3d-unity-core", "3d-scene-schema"],
+		"install": "https://github.com/itkamianets/3d-unity-scene.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Point it at a scene description and it creates the matching objects and components. Constructors use it to assemble starter scenes.",
+		"features": [
+			"Scene loading from the shared schema",
+			"Object and component lifecycle",
+			"Scene composition for constructors"
+		],
+		"examples": ["Loading a generated starter scene for a top-down game"],
+		"roadmap": ["Schema loader", "Runtime scene management", "Editor tooling"],
+		"related": ["3d-scene-schema", "3d-unity-core", "3d-unity-assets"]
+	},
+	{
+		"slug": "3d-unity-assets",
+		"name": "3d-unity-assets",
+		"group": "Assets",
+		"status": "Planned",
+		"summary": "Asset loading and organization for Unity projects.",
+		"purpose": "Gives constructors and games one consistent way to reference, load, and organize models, textures, audio, and other assets.",
+		"dependencies": ["3d-unity-core"],
+		"install": "https://github.com/itkamianets/3d-unity-assets.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Scene descriptions reference assets by key; this package resolves and loads them so game code never depends on file paths.",
+		"features": [
+			"Asset references by key",
+			"Loading and lifetime management",
+			"Shared asset conventions across packages"
+		],
+		"examples": ["Resolving the prefab for a unit defined in a scene description"],
+		"roadmap": ["Asset registry", "Async loading", "Starter asset packs"],
+		"related": ["3d-unity-scene", "3d-unity-core"]
+	},
+	{
+		"slug": "3d-unity-interaction",
+		"name": "3d-unity-interaction",
+		"group": "Interaction",
+		"status": "Planned",
+		"summary": "Input and interaction building blocks for Unity.",
+		"purpose": "Provides reusable interaction primitives such as selecting, activating, and moving things, so constructors can compose them into camera- and gameplay-specific controls.",
+		"dependencies": ["3d-unity-core"],
+		"install": "https://github.com/itkamianets/3d-unity-interaction.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Constructors combine these primitives into the control scheme of a given camera style, for example click-to-move for isometric games.",
+		"features": [
+			"Reusable interaction primitives",
+			"Input abstraction",
+			"Composable by constructors"
+		],
+		"examples": ["Click-to-move in an isometric constructor", "Direct movement in a top-down constructor"],
+		"roadmap": ["Input abstraction", "Selection and activation", "Gamepad and touch support"],
+		"related": ["3d-unity-core", "3d-unity-xr"]
+	},
+	{
+		"slug": "3d-unity-xr",
+		"name": "3d-unity-xr",
+		"group": "XR",
+		"status": "Planned",
+		"summary": "XR support for Unity experiences.",
+		"purpose": "Brings VR and AR capabilities into the same package architecture, so a constructor can target XR without game code touching device specifics.",
+		"dependencies": ["3d-unity-core", "3d-unity-interaction"],
+		"install": "https://github.com/itkamianets/3d-unity-xr.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Add it to a project that targets headsets or AR devices; interaction primitives are adapted to XR input automatically.",
+		"features": ["XR device abstraction", "XR-aware interaction", "Optional: only installed when needed"],
+		"examples": ["A character-view game playable in a headset"],
+		"roadmap": ["Device abstraction", "Interaction adapters", "Reference XR scene"],
+		"related": ["3d-unity-interaction", "3d-unity-spatial"]
+	},
+	{
+		"slug": "3d-unity-spatial",
+		"name": "3d-unity-spatial",
+		"group": "Spatial",
+		"status": "Planned",
+		"summary": "Spatial data and queries for Unity.",
+		"purpose": "Handles spatial structures such as grids, regions, and positional queries that strategy, isometric, and open-world games all need.",
+		"dependencies": ["3d-unity-core"],
+		"install": "https://github.com/itkamianets/3d-unity-spatial.git (Unity Package Manager, Add package from git URL)",
+		"usage": "Used by constructors that need to reason about space, such as grid-based placement in god-camera games.",
+		"features": ["Grids and regions", "Positional queries", "Reusable across camera styles"],
+		"examples": ["Grid placement for a city builder", "Region queries for a strategy game"],
+		"roadmap": ["Grid and region types", "Queries", "Visualization helpers"],
+		"related": ["3d-unity-core", "3d-unity-xr", "3d-unity-scene"]
+	}
+]

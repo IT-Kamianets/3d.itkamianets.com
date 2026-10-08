@@ -1,0 +1,94 @@
+{
+	"_id": "itkamianets-3d",
+	"name": "IT Kamianets 3D",
+	"title": "IT Kamianets 3D — framework for reusable 3D apps and games",
+	"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
+	"image": "https://3d.itkamianets.com/logo.png",
+	"siteUrl": "https://3d.itkamianets.com",
+	"lang": "en",
+	"locale": "en_US",
+	"logo": "/logo.png",
+	"defaultSeo": {
+		"title": "IT Kamianets 3D — framework for reusable 3D apps and games",
+		"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
+		"keywords": [
+			"3D framework",
+			"Unity packages",
+			"game constructors",
+			"3D games",
+			"IT Kamianets"
+		],
+		"author": "IT Kamianets",
+		"image": "https://3d.itkamianets.com/logo.png"
+	},
+	"pageSeo": {
+		"/packages": {
+			"title": "Packages",
+			"description": "Catalog of reusable 3d-* framework packages: core, scene, assets, interaction, XR, and spatial."
+		},
+		"/constructors": {
+			"title": "Constructors",
+			"description": "Game constructors for character view, top-down, isometric, side view, fixed camera, and god camera games."
+		},
+		"/packages/3d-scene-schema": {
+			"title": "3d-scene-schema",
+			"description": "Engine-independent description of scenes, objects, and components. Defines one shared, serializable scene structure so that content authored once can be loaded by any engine integration and read by constructors, tools, and agents."
+		},
+		"/packages/3d-unity-core": {
+			"title": "3d-unity-core",
+			"description": "Shared Unity foundation used by every other 3d-unity package. Provides the small, product-independent base that the rest of the Unity packages build on, so each package stays focused on one responsibility."
+		},
+		"/packages/3d-unity-scene": {
+			"title": "3d-unity-scene",
+			"description": "Scene handling for Unity, driven by the shared scene schema. Builds and manages Unity scenes from the engine-independent structures defined in 3d-scene-schema."
+		},
+		"/packages/3d-unity-assets": {
+			"title": "3d-unity-assets",
+			"description": "Asset loading and organization for Unity projects. Gives constructors and games one consistent way to reference, load, and organize models, textures, audio, and other assets."
+		},
+		"/packages/3d-unity-interaction": {
+			"title": "3d-unity-interaction",
+			"description": "Input and interaction building blocks for Unity. Provides reusable interaction primitives such as selecting, activating, and moving things, so constructors can compose them into camera- and gameplay-specific controls."
+		},
+		"/packages/3d-unity-xr": {
+			"title": "3d-unity-xr",
+			"description": "XR support for Unity experiences. Brings VR and AR capabilities into the same package architecture, so a constructor can target XR without game code touching device specifics."
+		},
+		"/packages/3d-unity-spatial": {
+			"title": "3d-unity-spatial",
+			"description": "Spatial data and queries for Unity. Handles spatial structures such as grids, regions, and positional queries that strategy, isometric, and open-world games all need."
+		},
+		"/constructors/character-view": {
+			"title": "Character View constructor",
+			"description": "For games where the player directly controls a character from first-person or third-person perspective. Examples: GTA V, Cyberpunk 2077, Elden Ring."
+		},
+		"/constructors/top-down": {
+			"title": "Top-Down constructor",
+			"description": "For games viewed primarily from above, with direct player movement and action-focused gameplay. Examples: Hades, Vampire Survivors, Hotline Miami."
+		},
+		"/constructors/isometric": {
+			"title": "Isometric constructor",
+			"description": "For games using an angled isometric-style camera, commonly used for RPGs, strategy games, and action RPGs. Examples: Baldur's Gate 3, Diablo IV, Path of Exile 2."
+		},
+		"/constructors/side-view": {
+			"title": "Side View constructor",
+			"description": "For games viewed from the side, including platformers, metroidvanias, action games, and sandbox games. Examples: Hollow Knight, Dead Cells, Terraria."
+		},
+		"/constructors/fixed-camera": {
+			"title": "Fixed Camera constructor",
+			"description": "For games where camera positions are predefined or controlled by the scene rather than directly by the player. Examples: Resident Evil, INSIDE, Little Nightmares."
+		},
+		"/constructors/god-camera": {
+			"title": "God / Free Camera constructor",
+			"description": "For games where the user controls the world from a free, strategic, or god-like camera. Examples: Civilization, Cities: Skylines, Total War."
+		}
+	},
+	"structuredData": {
+		"type": "Organization",
+		"addressLocality": "Kamianets-Podilskyi",
+		"addressCountry": "UA",
+		"sameAs": [
+			"https://github.com/itkamianets"
+		]
+	}
+}

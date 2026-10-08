@@ -1,0 +1,25 @@
+<div class="mx-auto max-w-[var(--container)] px-4 py-10 sm:px-6 sm:py-14">
+	<h1 class="text-4xl font-semibold tracking-[-0.03em] text-[var(--c-text-strong)] sm:text-5xl" translate>
+		Constructors
+	</h1>
+	<p class="mt-4 max-w-2xl leading-8" translate>
+		Each constructor is a reusable starting point for a camera and gameplay style, and can be used to generate a new game project.
+	</p>
+
+	<ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		@for (item of constructors; track item.slug) {
+			<li>
+				<a
+					class="theme-interactive theme-focus flex h-full flex-col rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-sm)] hover:border-[var(--c-primary)]"
+					[routerLink]="['/constructors', item.slug]"
+				>
+					<span class="text-3xl" aria-hidden="true">{{ item.icon }}</span>
+					<span class="mt-3 text-lg font-semibold text-[var(--c-text-strong)]">{{ item.name }}</span>
+					<span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--c-text-muted)]">{{ item.tagline }}</span>
+					<span class="mt-3 text-sm leading-6">{{ item.description }}</span>
+					<span class="mt-4 text-sm text-[var(--c-text-muted)]">{{ item.examples.join(' · ') }}</span>
+				</a>
+			</li>
+		}
+	</ul>
+</div>
