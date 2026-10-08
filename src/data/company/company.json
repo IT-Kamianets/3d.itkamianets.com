@@ -3,7 +3,7 @@
 	"name": "IT Kamianets 3D Engine",
 	"title": "IT Kamianets 3D Engine — фреймворк для багаторазових 3D-застосунків та ігор",
 	"description": "Екосистема фреймворків для створення багаторазових 3D-застосунків та ігор: базові пакети, конструктори ігор і згенеровані ігрові проєкти.",
-	"image": "https://3d.itkamianets.com/logo.png",
+	"image": "https://3d.itkamianets.com/logo-512.png",
 	"siteUrl": "https://3d.itkamianets.com",
 	"lang": "uk",
 	"locale": "uk_UA",
@@ -19,7 +19,7 @@
 			"IT Kamianets"
 		],
 		"author": "IT Kamianets",
-		"image": "https://3d.itkamianets.com/logo.png"
+		"image": "https://3d.itkamianets.com/logo-512.png"
 	},
 	"pageSeo": {
 		"/packages": {

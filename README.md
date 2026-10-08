@@ -216,13 +216,13 @@ The exact package split can evolve as constructors are implemented.
 
 ### Phase 1: Website
 
-- Landing page
-- Packages catalog
-- Package detail page
-- Constructors catalog
-- Constructor detail page
-- Documentation structure
-- GitHub repository links
+- [x] Landing page
+- [x] Packages catalog
+- [x] Package detail page
+- [x] Constructors catalog
+- [x] Constructor detail page (content is planned until the constructor repositories exist)
+- [x] Documentation structure (`/docs`, `/docs/installation`, `/docs/architecture`)
+- [x] GitHub repository links (package pages link to `https://github.com/IT-Kamianets`)
 
 ### Phase 2: Framework Documentation
 
