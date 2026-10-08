@@ -1,95 +1,84 @@
-<article class="mx-auto max-w-[var(--container)] px-4 py-10 sm:px-6 sm:py-14">
-	<a class="theme-focus rounded-md text-sm font-semibold text-[var(--c-text-muted)] hover:text-[var(--c-primary)]" routerLink="/constructors">
-		← <span translate>Constructors</span>
+<article class="container-x py-12 sm:py-16">
+	<a class="ds-btn ds-btn-ghost ds-btn-sm -ml-3" routerLink="/constructors">
+		<app-icon name="arrow-left" size="1rem" />
+		<span translate>Constructors</span>
 	</a>
 
-	<header class="mt-5 max-w-3xl">
-		<p class="text-4xl" aria-hidden="true">{{ item.icon }}</p>
-		<h1 class="mt-2 text-3xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-4xl">
-			{{ item.name }}
-		</h1>
-		<p class="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--c-text-muted)]">{{ item.tagline }}</p>
-		<p class="mt-4 text-lg leading-8">{{ item.description }}</p>
-		<div class="mt-6 flex flex-wrap items-center gap-3">
-			<span
-				class="inline-flex min-h-11 items-center rounded-full border border-dashed border-[var(--c-border)] px-5 py-2 text-sm text-[var(--c-text-muted)]"
-				translate
-			>
-				Repository: not created yet
-			</span>
-			<span
-				class="inline-flex min-h-11 items-center rounded-full border border-dashed border-[var(--c-border)] px-5 py-2 text-sm text-[var(--c-text-muted)]"
-				translate
-			>
-				Create project: coming in Phase 4
-			</span>
+	<header class="mt-4 flex max-w-[48rem] flex-col gap-5 sm:flex-row sm:gap-6">
+		<span class="icon-tile h-14 w-14"><app-icon [name]="item.icon" size="1.75rem" /></span>
+		<div>
+			<h1 class="ds-page-title">{{ item.name }}</h1>
+			<p class="ds-lead mt-3">{{ item.description }}</p>
+			<div class="mt-5 flex flex-wrap items-center gap-2">
+				<span class="ds-badge ds-badge-outline" translate>Planned</span>
+				<span class="ds-badge ds-badge-outline" translate>Repository not created yet</span>
+			</div>
+			<div class="mt-6 flex flex-wrap items-center gap-3">
+				<button class="ds-btn ds-btn-primary ds-btn-lg" type="button" disabled translate>Create project</button>
+				<span class="ds-supporting" translate>Project generation arrives in Phase 4.</span>
+			</div>
 		</div>
 	</header>
 
-	<div class="mt-12 grid gap-10 lg:grid-cols-2">
+	<div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-x-16 gap-y-12 lg:grid-cols-2">
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Suitable game types</h2>
-			<ul class="mt-3 list-disc space-y-1 pl-5 leading-7">
+			<h2 class="ds-section-title text-[1.25rem]" translate>Suitable game types</h2>
+			<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
 				@for (type of item.gameTypes; track type) {
 					<li>{{ type }}</li>
 				}
 			</ul>
 		</section>
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Example games</h2>
-			<ul class="mt-3 list-disc space-y-1 pl-5 leading-7">
+			<h2 class="ds-section-title text-[1.25rem]" translate>Example games</h2>
+			<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
 				@for (example of item.examples; track example) {
 					<li>{{ example }}</li>
 				}
 			</ul>
 		</section>
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Planned framework packages</h2>
-			<ul class="mt-3 space-y-2">
+			<h2 class="ds-section-title text-[1.25rem]" translate>Planned framework packages</h2>
+			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 				@for (name of item.packages; track name) {
 					<li>
-						<a
-							class="theme-focus rounded-md font-mono text-sm font-medium text-[var(--c-text-strong)] hover:text-[var(--c-primary)]"
-							[routerLink]="['/packages', name]"
-						>
-							{{ name }}
-						</a>
+						<a class="ds-mono" [routerLink]="['/packages', name]">{{ name }}</a>
 					</li>
 				}
 			</ul>
 		</section>
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Generated package structure</h2>
-			<ul class="mt-3 space-y-2 font-mono text-sm text-[var(--c-text-strong)]">
-				@for (name of generated; track name) {
-					<li>{{ name }}</li>
-				}
-			</ul>
+			<h2 class="ds-section-title text-[1.25rem]" translate>Generated package structure</h2>
+			<div class="mt-3 max-w-[28rem]">
+				<app-code-block [code]="generated" />
+			</div>
 		</section>
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Configurable features</h2>
-			<ul class="mt-3 list-disc space-y-1 pl-5 leading-7">
+			<h2 class="ds-section-title text-[1.25rem]" translate>Configurable features</h2>
+			<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
 				@for (feature of item.features; track feature) {
 					<li>{{ feature }}</li>
 				}
 			</ul>
 		</section>
 		<section>
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Setup guide</h2>
-			<ol class="mt-3 list-decimal space-y-1 pl-5 leading-7">
-				<li translate>Install the included framework packages.</li>
+			<h2 class="ds-section-title text-[1.25rem]" translate>Setup guide</h2>
+			<ol class="mt-3 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+				<li translate>Install the framework packages.</li>
 				<li translate>Generate the game packages from this constructor.</li>
-				<li translate>Add your game rules, world, units, UI, and assets.</li>
+				<li translate>Add your rules, world, units, UI, and assets.</li>
 			</ol>
 		</section>
 		<section class="lg:col-span-2">
-			<h2 class="text-xl font-semibold text-[var(--c-text-strong)]" translate>Roadmap</h2>
-			<ol class="mt-3 list-decimal space-y-1 pl-5 leading-7">
-				<li translate>Constructor architecture</li>
-				<li translate>Configuration options</li>
-				<li translate>Starter assets and demo</li>
-				<li translate>Project generation</li>
-			</ol>
+			<details class="ds-card max-w-[40rem]">
+				<summary class="flex cursor-pointer items-center justify-between gap-3 p-4 font-medium" translate>Roadmap</summary>
+				<ol class="m-0 flex list-decimal flex-col gap-1 px-4 pb-4 pl-9 leading-7 marker:text-[var(--muted-foreground)]">
+					<li translate>Constructor architecture</li>
+					<li translate>Configuration options</li>
+					<li translate>Starter assets and demo</li>
+					<li translate>Project generation</li>
+				</ol>
+			</details>
 		</section>
 	</div>
 </article>

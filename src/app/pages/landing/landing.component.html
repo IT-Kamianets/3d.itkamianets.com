@@ -1,192 +1,150 @@
-<section class="relative overflow-hidden">
-	<div class="landing-mesh" aria-hidden="true"></div>
-	<div class="landing-orb landing-orb--primary" aria-hidden="true"></div>
-	<div class="landing-orb landing-orb--secondary" aria-hidden="true"></div>
+<!-- Hero: one message, one figure only this engine could draw -->
+<section class="container-x grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:py-24">
+	<div>
+		<h1 class="ds-display" translate>Build 3D games from reusable packages</h1>
+		<p class="ds-lead mt-6 max-w-[34ch]" translate>
+			Unity packages, a shared scene schema, and constructors for every camera style.
+		</p>
+		<div class="mt-8 flex flex-wrap gap-3">
+			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/packages">
+				<span translate>Browse packages</span>
+				<app-icon name="arrow-right" />
+			</a>
+			<a class="ds-btn ds-btn-outline ds-btn-lg" routerLink="/docs" translate>Read the docs</a>
+		</div>
+		<div class="mt-10 max-w-[34rem]">
+			<p class="ds-supporting mb-2" translate>Unity Package Manager › Add package from git URL</p>
+			<app-code-block [code]="coreUrl" />
+		</div>
+	</div>
 
-	<div class="relative mx-auto max-w-[var(--container)] space-y-16 px-4 py-8 sm:space-y-20 sm:px-6 sm:py-12">
-		<!-- Hero -->
-		<section class="max-w-4xl">
-			<p
-				class="inline-flex items-center gap-2 rounded-full border border-[var(--c-border)] bg-[var(--c-bg-secondary)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--c-text-muted)]"
-			>
-				<span class="h-2 w-2 rounded-full bg-[var(--c-primary)]" aria-hidden="true"></span>
-				<span translate>Framework ecosystem</span>
-			</p>
-			<h1
-				class="mt-6 text-4xl font-semibold tracking-[-0.04em] text-[var(--c-text-strong)] sm:text-5xl lg:text-6xl"
-				translate
-			>
-				Build 3D apps and games from reusable packages
-			</h1>
-			<p class="mt-5 max-w-2xl text-base leading-8 text-[var(--c-text)] sm:text-lg" translate>
-				IT Kamianets 3D Engine is a framework ecosystem of core packages, game constructors, and generated game projects, so you do not rebuild the same systems for every new game.
-			</p>
-			<div class="mt-8 flex flex-wrap gap-3">
-				<a
-					class="theme-interactive theme-focus inline-flex min-h-12 items-center rounded-full bg-[var(--c-primary)] px-6 py-3 text-sm font-semibold text-[var(--c-text-strong)] hover:bg-[var(--c-primary-hover)]"
-					routerLink="/packages"
-					translate
-				>
-					Browse packages
-				</a>
-				<a
-					class="theme-interactive theme-focus inline-flex min-h-12 items-center rounded-full border border-[var(--c-border)] bg-[var(--c-bg-secondary)] px-6 py-3 text-sm font-semibold text-[var(--c-text-strong)] hover:bg-[var(--c-bg-tertiary)]"
-					routerLink="/constructors"
-					translate
-				>
-					Explore constructors
-				</a>
-			</div>
-		</section>
+	<app-room-scan />
+</section>
 
-		<!-- Architecture -->
-		<section aria-labelledby="architecture-title">
-			<h2
-				id="architecture-title"
-				class="text-2xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-3xl"
-				translate
-			>
-				How the architecture works
-			</h2>
-			<p class="mt-3 max-w-2xl leading-7" translate>
-				The ecosystem is divided into three layers. Each layer builds on the one below it.
+<!-- Scene format: the one idea that makes the engine different -->
+<section class="border-t border-[var(--border)]" aria-labelledby="scene-title">
+	<div class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-16 lg:grid-cols-2 lg:gap-16 lg:py-24">
+		<div>
+			<h2 id="scene-title" class="ds-section-title" translate>One scene format, any engine</h2>
+			<p class="ds-lead mt-4 max-w-[36ch]" translate>
+				Scenes live as JSON. Unity reads and writes them, so the data outlives the engine.
 			</p>
-			<ol class="mt-8 grid gap-4 lg:grid-cols-3">
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-sm)]">
-					<p class="text-sm font-semibold text-[var(--c-text-muted)]">1</p>
-					<h3 class="mt-2 text-lg font-semibold text-[var(--c-text-strong)]" translate>Core packages</h3>
-					<p class="mt-2 text-sm leading-7" translate>
-						Reusable 3d-* packages with shared engine functionality: scene handling, assets, interaction, XR, spatial data, and engine-independent scene structures.
-					</p>
+			<ol class="m-0 mt-8 grid list-none gap-x-6 gap-y-3 p-0 leading-7 sm:grid-cols-[13rem_minmax(0,1fr)]">
+				<li class="contents">
+					<span class="ds-mono">3d-scene-schema</span>
+					<span class="ds-muted" translate>defines the scene</span>
 				</li>
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-sm)]">
-					<p class="text-sm font-semibold text-[var(--c-text-muted)]">2</p>
-					<h3 class="mt-2 text-lg font-semibold text-[var(--c-text-strong)]" translate>Constructors</h3>
-					<p class="mt-2 text-sm leading-7" translate>
-						Higher-level packages built on the core framework. Each constructor is a starting architecture for one type of 3D game or experience.
-					</p>
+				<li class="contents">
+					<span class="ds-mono">3d-unity-scene</span>
+					<span class="ds-muted" translate>loads and saves it in Unity</span>
 				</li>
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-sm)]">
-					<p class="text-sm font-semibold text-[var(--c-text-muted)]">3</p>
-					<h3 class="mt-2 text-lg font-semibold text-[var(--c-text-strong)]" translate>Game-specific packages</h3>
-					<p class="mt-2 text-sm leading-7" translate>
-						Packages generated or created from a constructor for one game. They hold the rules, content, assets, and configuration unique to that project.
-					</p>
+				<li class="contents">
+					<span class="ds-mono">3d-unity-spatial</span>
+					<span class="ds-muted" translate>turns a scanned room into a scene</span>
 				</li>
 			</ol>
-			<p
-				class="mt-6 overflow-x-auto rounded-[calc(var(--radius-card)*1.2)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] px-5 py-4 font-mono text-sm text-[var(--c-text-strong)]"
-			>
-				3d-* core packages → 3d-constructor-* packages → game-specific packages → final game
-			</p>
-		</section>
+		</div>
+		<app-code-block [code]="schemaExcerpt" />
+	</div>
+</section>
 
-		<!-- Constructor to game -->
-		<section aria-labelledby="flow-title">
-			<h2
-				id="flow-title"
-				class="text-2xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-3xl"
-				translate
-			>
-				From constructor to game
-			</h2>
-			<ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-					<h3 class="font-semibold text-[var(--c-text-strong)]" translate>Pick a constructor</h3>
-					<p class="mt-2 text-sm leading-7" translate>Choose the camera and gameplay style closest to your game.</p>
-				</li>
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-					<h3 class="font-semibold text-[var(--c-text-strong)]" translate>Generate the project</h3>
-					<p class="mt-2 text-sm leading-7" translate>The constructor produces game-specific packages composed from core packages.</p>
-				</li>
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-					<h3 class="font-semibold text-[var(--c-text-strong)]" translate>Add your content</h3>
-					<p class="mt-2 text-sm leading-7" translate>Put rules, world, units, UI, and assets into your own packages.</p>
-				</li>
-				<li class="rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5">
-					<h3 class="font-semibold text-[var(--c-text-strong)]" translate>Ship the game</h3>
-					<p class="mt-2 text-sm leading-7" translate>Game logic stays outside the framework, so it is easy to modify and extend.</p>
-				</li>
-			</ol>
-		</section>
+<!-- Layers -->
+<section class="border-t border-[var(--border)]" aria-labelledby="layers-title">
+	<div class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16 lg:py-24">
+		<div>
+			<h2 id="layers-title" class="ds-section-title" translate>Three layers, one direction</h2>
+			<p class="ds-lead mt-4 max-w-[30ch]" translate>Each layer builds on the one below it.</p>
+		</div>
+		<ol class="ds-card m-0 list-none p-0">
+			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
+				<div>
+					<h3 class="text-base" translate>Core packages</h3>
+					<p class="ds-supporting mt-1" translate>Scenes, assets, interaction, XR, and spatial data.</p>
+				</div>
+				<span class="ds-mono ds-muted">3d-*</span>
+			</li>
+			<li class="ds-divider" aria-hidden="true"></li>
+			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
+				<div>
+					<h3 class="text-base" translate>Constructors</h3>
+					<p class="ds-supporting mt-1" translate>A starting architecture for one type of game.</p>
+				</div>
+				<span class="ds-mono ds-muted">3d-constructor-*</span>
+			</li>
+			<li class="ds-divider" aria-hidden="true"></li>
+			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
+				<div>
+					<h3 class="text-base" translate>Your game</h3>
+					<p class="ds-supporting mt-1" translate>Rules, content, and assets stay outside the framework.</p>
+				</div>
+				<span class="ds-mono ds-muted">game-&lt;name&gt;-*</span>
+			</li>
+		</ol>
+	</div>
+</section>
 
-		<!-- Getting started -->
-		<section
-			aria-labelledby="start-title"
-			class="rounded-[calc(var(--radius-card)*2.4)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-6 shadow-[var(--shadow-md)] sm:p-8"
-		>
-			<h2
-				id="start-title"
-				class="text-2xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-3xl"
-				translate
-			>
-				How to start
-			</h2>
-			<ol class="mt-5 list-decimal space-y-2 pl-5 leading-7">
-				<li translate>Browse the package catalog and open the packages you need.</li>
-				<li translate>Follow the installation section on each package page.</li>
-				<li translate>Or start from a constructor that already composes the packages for your game type.</li>
-			</ol>
-		</section>
-
-		<!-- Featured packages -->
-		<section aria-labelledby="packages-title">
-			<div class="flex flex-wrap items-end justify-between gap-3">
-				<h2
-					id="packages-title"
-					class="text-2xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-3xl"
-					translate
-				>
-					Featured packages
-				</h2>
-				<a class="theme-focus rounded-md text-sm font-semibold text-[var(--c-text-strong)] hover:text-[var(--c-primary)]" routerLink="/packages" translate>
-					All packages
-				</a>
-			</div>
-			<ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				@for (item of featuredPackages; track item.slug) {
-					<li>
-						<a
-							class="theme-interactive theme-focus flex h-full flex-col rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5 shadow-[var(--shadow-sm)] hover:border-[var(--c-primary)]"
-							[routerLink]="['/packages', item.slug]"
-						>
-							<span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--c-text-muted)]">{{ item.group }}</span>
-							<span class="mt-2 font-mono text-sm font-semibold text-[var(--c-text-strong)]">{{ item.name }}</span>
-							<span class="mt-2 text-sm leading-6">{{ item.summary }}</span>
-						</a>
-					</li>
+<!-- Packages -->
+<section class="border-t border-[var(--border)]" aria-labelledby="packages-title">
+	<div class="container-x py-16 lg:py-24">
+		<div class="flex flex-wrap items-end justify-between gap-4">
+			<h2 id="packages-title" class="ds-section-title" translate>Packages</h2>
+			<a class="ds-btn ds-btn-ghost" routerLink="/packages">
+				<span translate>All packages</span>
+				<app-icon name="arrow-right" />
+			</a>
+		</div>
+		<ul class="ds-card m-0 mt-8 list-none p-0">
+			@for (item of packages; track item.slug) {
+				@if (!$first) {
+					<li class="ds-divider" aria-hidden="true"></li>
 				}
-			</ul>
-		</section>
+				<li>
+					<a
+						class="row-link ds-plain md:grid-cols-[14rem_minmax(0,1fr)_auto_1.25rem]"
+						[routerLink]="['/packages', item.slug]"
+					>
+						<span class="ds-mono font-medium">{{ item.name }}</span>
+						<span class="ds-supporting md:truncate">{{ item.summary }}</span>
+						<span class="ds-badge ds-badge-outline justify-self-start md:justify-self-end">{{ item.status }}</span>
+						<app-icon class="hidden text-[var(--muted-foreground)] md:inline-flex" name="arrow-right" />
+					</a>
+				</li>
+			}
+		</ul>
+	</div>
+</section>
 
-		<!-- Constructors + examples -->
-		<section aria-labelledby="constructors-title">
-			<div class="flex flex-wrap items-end justify-between gap-3">
-				<h2
-					id="constructors-title"
-					class="text-2xl font-semibold tracking-[-0.02em] text-[var(--c-text-strong)] sm:text-3xl"
-					translate
-				>
-					Constructors and example games
-				</h2>
-				<a class="theme-focus rounded-md text-sm font-semibold text-[var(--c-text-strong)] hover:text-[var(--c-primary)]" routerLink="/constructors" translate>
-					All constructors
-				</a>
-			</div>
-			<ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-				@for (item of constructors; track item.slug) {
-					<li>
-						<a
-							class="theme-interactive theme-focus flex h-full flex-col rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5 shadow-[var(--shadow-sm)] hover:border-[var(--c-primary)]"
-							[routerLink]="['/constructors', item.slug]"
-						>
-							<span class="text-2xl" aria-hidden="true">{{ item.icon }}</span>
-							<span class="mt-2 font-semibold text-[var(--c-text-strong)]">{{ item.name }}</span>
-							<span class="mt-1 text-sm leading-6">{{ item.examples.join(', ') }}</span>
-						</a>
-					</li>
-				}
-			</ul>
-		</section>
+<!-- Constructors -->
+<section class="border-t border-[var(--border)]" aria-labelledby="constructors-title">
+	<div class="container-x py-16 lg:py-24">
+		<div class="flex flex-wrap items-end justify-between gap-4">
+			<h2 id="constructors-title" class="ds-section-title" translate>Constructors</h2>
+			<a class="ds-btn ds-btn-ghost" routerLink="/constructors">
+				<span translate>All constructors</span>
+				<app-icon name="arrow-right" />
+			</a>
+		</div>
+		<ul class="m-0 mt-8 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+			@for (item of constructors; track item.slug) {
+				<li class="ds-card">
+					<a class="tile-link ds-plain" [routerLink]="['/constructors', item.slug]">
+						<span class="icon-tile"><app-icon [name]="item.icon" /></span>
+						<span class="text-base font-medium">{{ item.name }}</span>
+						<span class="ds-supporting">{{ item.examples.join(', ') }}</span>
+					</a>
+				</li>
+			}
+		</ul>
+	</div>
+</section>
+
+<!-- Closing action -->
+<section class="border-t border-[var(--border)]" aria-labelledby="start-title">
+	<div class="container-x flex flex-wrap items-center justify-between gap-6 py-16 lg:py-20">
+		<h2 id="start-title" class="ds-section-title" translate>Start with the docs</h2>
+		<div class="flex flex-wrap gap-3">
+			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/docs/installation" translate>Install packages</a>
+			<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="orgUrl" rel="noopener" target="_blank" translate>View on GitHub</a>
+		</div>
 	</div>
 </section>

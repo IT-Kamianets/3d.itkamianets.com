@@ -4,16 +4,15 @@
     <meta charset="utf-8" />
     <title>IT Kamianets 3D Engine — framework for reusable 3D apps and games</title>
     <base href="/" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
       try {
-        const storedMode = localStorage.getItem('app-mode');
+        const storedMode = localStorage.getItem('theme.mode');
         const preferredMode =
           storedMode === 'dark' || storedMode === 'light'
             ? storedMode
-            : window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
+            : 'dark';
         document.documentElement.setAttribute('data-mode', preferredMode);
       } catch {}
     </script>
@@ -24,8 +23,7 @@
     />
     <meta name="author" content="IT Kamianets" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#1b1f2b" />
 
     <meta itemprop="name" content="IT Kamianets 3D Engine" />
     <meta
@@ -55,16 +53,12 @@
     <meta name="twitter:image:src" content="https://3d.itkamianets.com/logo.png" />
 
     <link rel="canonical" href="https://3d.itkamianets.com/" />
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
   </head>

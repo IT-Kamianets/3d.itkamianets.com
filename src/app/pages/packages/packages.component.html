@@ -1,35 +1,36 @@
-<div class="mx-auto max-w-[var(--container)] px-4 py-10 sm:px-6 sm:py-14">
-	<h1 class="text-4xl font-semibold tracking-[-0.03em] text-[var(--c-text-strong)] sm:text-5xl" translate>
-		Packages
-	</h1>
-	<p class="mt-4 max-w-2xl leading-8" translate>
-		Catalog of reusable framework packages, grouped by area. Open a package for its purpose, dependencies, installation, and roadmap.
+<div class="container-x py-12 sm:py-16">
+	<h1 class="ds-page-title" translate>Packages</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]" translate>
+		Reusable building blocks, grouped by area. Open one for install steps and roadmap.
 	</p>
 
-	@for (group of groups; track group.name) {
-		<section class="mt-12" [attr.aria-labelledby]="'group-' + group.name">
-			<h2
-				class="text-xl font-semibold text-[var(--c-text-strong)]"
-				[id]="'group-' + group.name"
-			>
-				{{ group.name }}
-			</h2>
-			<ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-				@for (item of group.packages; track item.slug) {
-					<li>
-						<a
-							class="theme-interactive theme-focus flex h-full flex-col rounded-[calc(var(--radius-card)*1.6)] border border-[var(--c-border)] bg-[var(--c-bg-secondary)] p-5 shadow-[var(--shadow-sm)] hover:border-[var(--c-primary)]"
-							[routerLink]="['/packages', item.slug]"
-						>
-							<span class="flex items-center justify-between gap-2">
-								<span class="font-mono text-sm font-semibold text-[var(--c-text-strong)]">{{ item.name }}</span>
-								<span class="rounded-full border border-[var(--c-border)] px-2 py-0.5 text-xs text-[var(--c-text-muted)]">{{ item.status }}</span>
-							</span>
-							<span class="mt-3 text-sm leading-6">{{ item.summary }}</span>
-						</a>
-					</li>
-				}
-			</ul>
-		</section>
-	}
+	<div class="mt-8 flex flex-wrap gap-2" role="group" [translate]="{ ariaLabel: 'Filter by area' }">
+		<button class="ds-chip" type="button" [attr.aria-pressed]="!group()" (click)="select(null)" translate>All</button>
+		@for (name of groups; track name) {
+			<button class="ds-chip" type="button" [attr.aria-pressed]="group() === name" (click)="select(name)">
+				{{ name }}
+			</button>
+		}
+	</div>
+
+	<ul class="m-0 mt-8 grid list-none gap-4 p-0 md:grid-cols-2">
+		@for (item of visible(); track item.slug) {
+			<li class="ds-card">
+				<a class="tile-link ds-plain" [routerLink]="['/packages', item.slug]">
+					<span class="flex items-center justify-between gap-3">
+						<span class="ds-mono text-base font-medium">{{ item.name }}</span>
+						<span class="ds-badge ds-badge-outline">{{ item.status }}</span>
+					</span>
+					<span class="ds-supporting">{{ item.summary }}</span>
+					<span class="ds-mono ds-muted mt-auto pt-2">
+						@if (item.dependencies.length) {
+							<span translate>Needs</span> {{ item.dependencies.join(', ') }}
+						} @else {
+							<span translate>No dependencies</span>
+						}
+					</span>
+				</a>
+			</li>
+		}
+	</ul>
 </div>

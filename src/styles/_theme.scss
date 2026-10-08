@@ -1,113 +1,101 @@
-/* Design tokens (CSS variables). Runtime-themable; keep SCSS using var(--token) */
-:root {
+/*
+ * Design tokens: Voltage (dark first) with a derived light mode.
+ * Components read semantic tokens only. The action color (--primary) marks buttons,
+ * selection, the active nav indicator, and focus. It is never used for headings or decoration.
+ */
+:root,
+html[data-mode='dark'] {
+  color-scheme: dark;
+
+  --background: oklch(0.18 0.022 264);
+  --foreground: oklch(0.97 0.006 250);
+  --card: oklch(0.215 0.024 264);
+  --card-foreground: oklch(0.97 0.006 250);
+  --popover: oklch(0.222 0.025 264);
+  --primary: oklch(0.905 0.196 110);
+  --primary-foreground: oklch(0.2 0.02 110);
+  --secondary: oklch(0.262 0.026 264);
+  --secondary-foreground: oklch(0.86 0.012 250);
+  --muted: oklch(0.238 0.022 264);
+  --muted-foreground: oklch(0.72 0.018 256);
+  --accent: oklch(0.292 0.028 264);
+  --accent-foreground: oklch(0.97 0.006 250);
+  --destructive: oklch(0.62 0.21 24);
+  --border: oklch(0.305 0.026 264);
+  --input: oklch(0.245 0.024 264);
+  --ring: oklch(0.905 0.196 110);
+  /* Line color of the room figure: the action yellow on dark, a deeper gold on light. */
+  --figure: oklch(0.905 0.196 110);
+
+  --shadow-xs: 0 0.0625rem 0.125rem 0 oklch(0 0 0 / 0.5), 0 0 0 0.0625rem oklch(1 0 0 / 0.03);
+  --shadow-sm: 0 0.0625rem 0.1875rem 0 oklch(0 0 0 / 0.5), 0 0.0625rem 0.125rem -0.0625rem oklch(0 0 0 / 0.4), 0 0 0 0.0625rem oklch(1 0 0 / 0.03);
+  --shadow-md: 0 0.25rem 0.625rem -0.0625rem oklch(0 0 0 / 0.6), 0 0.125rem 0.3125rem -0.125rem oklch(0 0 0 / 0.45), 0 0 0 0.0625rem oklch(1 0 0 / 0.04);
+  --shadow-popover: 0 0.5rem 1.5rem -0.375rem oklch(0 0 0 / 0.7), 0 0.125rem 0.375rem -0.125rem oklch(0 0 0 / 0.5), 0 0 0 0.0625rem oklch(1 0 0 / 0.05);
+  --shadow-inset: inset 0 0.0625rem 0.125rem 0 oklch(0 0 0 / 0.35);
+  --shadow-chip: 0 0 0 0.0625rem color-mix(in oklch, var(--primary) 60%, transparent), 0 0.0625rem 0.1875rem 0 oklch(0 0 0 / 0.5), inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.28);
+  --shadow-chip-hover: 0 0 0 0.0625rem color-mix(in oklch, var(--primary) 78%, transparent), 0 0.1875rem 0.625rem -0.125rem color-mix(in oklch, var(--primary) 40%, transparent), inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.34);
+  --shadow-card: 0 0.0625rem 0.1875rem 0 oklch(0 0 0 / 0.4), 0 0 0 0.0625rem oklch(1 0 0 / 0.03), inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.04);
+}
+
+/* Derived from the Voltage structure: same action color, light surfaces. */
+html[data-mode='light'] {
   color-scheme: light;
 
-  /* brand / actions */
-  --c-primary: #d7d71d;
-  --c-primary-hover: #c5c519;
-  --c-secondary: #c53d3d;
-  --c-secondary-hover: #962a2a;
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.2 0.025 264);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.025 264);
+  --popover: oklch(1 0 0);
+  --secondary: oklch(0.955 0.006 250);
+  --secondary-foreground: oklch(0.3 0.02 264);
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.45 0.02 262);
+  --accent: oklch(0.93 0.01 250);
+  --accent-foreground: oklch(0.2 0.025 264);
+  --border: oklch(0.88 0.01 255);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.55 0.15 105);
+  --figure: oklch(0.55 0.13 100);
 
-  /* surfaces */
-  --c-bg-primary: #f3f4f7;
-  --c-bg-secondary: #ffffff;
-  --c-bg-tertiary: #fcfdfe;
+  --shadow-xs: 0 0.0625rem 0.125rem 0 oklch(0.2 0.03 264 / 0.08);
+  --shadow-sm: 0 0.0625rem 0.1875rem 0 oklch(0.2 0.03 264 / 0.1), 0 0.0625rem 0.125rem -0.0625rem oklch(0.2 0.03 264 / 0.08);
+  --shadow-md: 0 0.25rem 0.75rem -0.125rem oklch(0.2 0.03 264 / 0.14);
+  --shadow-popover: 0 0.5rem 1.5rem -0.375rem oklch(0.2 0.03 264 / 0.25);
+  --shadow-inset: inset 0 0.0625rem 0.125rem 0 oklch(0.2 0.03 264 / 0.08);
+  --shadow-chip: 0 0 0 0.0625rem color-mix(in oklch, var(--primary) 70%, oklch(0.5 0.1 105)), 0 0.0625rem 0.1875rem 0 oklch(0.2 0.03 264 / 0.18), inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.5);
+  --shadow-chip-hover: 0 0 0 0.0625rem color-mix(in oklch, var(--primary) 70%, oklch(0.5 0.1 105)), 0 0.1875rem 0.625rem -0.125rem oklch(0.2 0.03 264 / 0.28), inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.6);
+  --shadow-card: 0 0.0625rem 0.1875rem 0 oklch(0.2 0.03 264 / 0.1), 0 0 0 0.0625rem oklch(0.2 0.03 264 / 0.02);
+}
 
-  /* content */
-  --c-text: #5f6066;
-  --c-text-strong: #17224f;
-  --c-text-muted: #8b8d94;
-  --c-placeholder: #313335ab;
+:root {
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* borders & elevation */
-  --c-border: #eceef5;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --radius: 0.625rem;
+  --radius-pill: 624.9375rem;
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
 
-  /* typography */
-  --ff-base: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  --fs: 16px;
-  --letter-spacing: 0.3px;
-
-  /* radius (default rounded) */
-  --radius: 8px;
-  --radius-card: 10px;
-  --radius-btn: 10px;
-
-  /* spacing (default comfortable) */
-  --sp-0: 0px;
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-7: 32px;
-  --sp-8: 40px;
-  --sp-10: 48px;
-  --sp-12: 56px;
-  --sp-16: 72px;
-  --sp-20: 96px;
-
-  /* layout */
-  --container: 1210px;
-  --gutter: 10px;
+  --container: 72rem;
+  --measure: 68ch;
 
   /* motion */
   --easing: cubic-bezier(0.25, 0.8, 0.25, 1);
   --motion-fast: 0.15s;
-  --motion: 0.25s;
-  --motion-slow: 0.4s;
 
-  /* focus */
-  --focus-ring: 0 0 0 3px rgba(215, 215, 29, 0.35);
-}
-
-/* ========= modes ========= */
-html[data-mode='dark'] {
-  color-scheme: dark;
-
-  /* surfaces */
-  --c-bg-primary: #282828;
-  --c-bg-secondary: #343434;
-  --c-bg-tertiary: #404040;
-
-  /* borders & elevation */
-  --c-border: #404040;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.45);
-
-  /* content */
-  --c-text: #e8e8e8;
-  --c-text-strong: #ffffff;
-  --c-text-muted: #b7b7b7;
-  --c-placeholder: #d3cdcd;
-
-  /* focus (keeps using primary) */
-  --focus-ring: 0 0 0 3px rgba(215, 215, 29, 0.35);
-}
-
-/* ========= density ========= */
-html[data-density='compact'] {
-  --sp-1: 2px;
-  --sp-2: 6px;
-  --sp-3: 10px;
-  --sp-4: 14px;
-  --sp-5: 18px;
-  --sp-6: 22px;
-  --sp-7: 28px;
-  --sp-8: 36px;
-  --sp-10: 42px;
-  --sp-12: 48px;
-  --sp-16: 64px;
-  --sp-20: 84px;
-
-  --gutter: 8px;
-}
-
-/* ========= radius ========= */
-html[data-radius='square'] {
-  --radius: 0px;
-  --radius-card: 0px;
-  --radius-btn: 0px;
+  /* Legacy names, consumed by @wawjs/ngx-ui styles */
+  --c-bg-primary: var(--background);
+  --c-bg-secondary: var(--card);
+  --c-bg-tertiary: var(--secondary);
+  --c-border: var(--border);
+  --c-text: var(--foreground);
+  --c-text-strong: var(--foreground);
+  --c-text-muted: var(--muted-foreground);
+  --c-placeholder: var(--muted-foreground);
+  --c-primary: var(--primary);
+  --c-primary-hover: var(--primary);
+  --c-on-primary: var(--primary-foreground);
+  --c-danger: var(--destructive);
 }

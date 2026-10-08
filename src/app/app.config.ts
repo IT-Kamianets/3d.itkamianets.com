@@ -49,7 +49,10 @@ export const appConfig: ApplicationConfig = {
 		provideNgxDefaultSeo({
 			siteUrl: companyProfile.siteUrl,
 		}),
-		provideNgxUi(),
+		provideNgxUi({
+			mode: 'dark',
+			roundedTokens: { radius: '0.625rem', radiusPill: '624.9375rem' },
+		}),
 		provideRouter(routes),
 		provideClientHydration(withEventReplay()),
 		provideTranslate({

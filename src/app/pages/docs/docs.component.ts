@@ -1,17 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateDirective } from '@wawjs/ngx-translate';
-import {
-	catalogPackages,
-	dependencyLevels,
-	GITHUB_ORG_URL,
-	repoUrl,
-} from '../../feature/catalog/catalog.data';
+import { catalogPackages, GITHUB_ORG_URL, repoUrl } from '../../feature/catalog/catalog.data';
+import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
+import { DependencyGraphComponent } from '../../shared/dependency-graph/dependency-graph.component';
 
 type DocsPage = 'overview' | 'installation' | 'architecture';
 
 @Component({
-	imports: [RouterLink, RouterLinkActive, TranslateDirective],
+	imports: [
+		RouterLink,
+		RouterLinkActive,
+		TranslateDirective,
+		CodeBlockComponent,
+		DependencyGraphComponent,
+	],
 	templateUrl: './docs.component.html',
 })
 export class DocsComponent {
@@ -23,6 +26,6 @@ export class DocsComponent {
 	];
 	protected readonly orgUrl = GITHUB_ORG_URL;
 	protected readonly packages = catalogPackages;
-	protected readonly levels = dependencyLevels;
 	protected readonly repoUrl = repoUrl;
+	protected readonly flow = 'Scene Schema → Unity Scene → Scene Changes → Scene Schema';
 }

@@ -1,3 +1,4 @@
+import type { IconName } from '../../shared/icon/icons';
 import constructorsData from '../../../data/catalog/constructors.json';
 import packagesData from '../../../data/catalog/packages.json';
 
@@ -15,6 +16,7 @@ export interface CatalogPackage {
 	license: string;
 	packageId: string;
 	install: string;
+	requirements: string[];
 	usage: string;
 	current: string[];
 	features: string[];
@@ -26,7 +28,7 @@ export interface CatalogPackage {
 export interface CatalogConstructor {
 	slug: string;
 	name: string;
-	icon: string;
+	icon: IconName;
 	tagline: string;
 	repo: string;
 	description: string;

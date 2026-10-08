@@ -1,0 +1,299 @@
+/*
+ * Voltage component classes (ds-*), ported from the Better Design kit for Angular.
+ * Custom CSS elsewhere is layout only; do not restyle these components in feature code.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.ds {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  background: var(--background);
+  line-height: 1.5;
+}
+
+.ds h1,
+.ds h2,
+.ds h3,
+.ds h4 {
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.ds .ds-display {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.ds .ds-page-title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.ds .ds-section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.ds .ds-lead {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  text-wrap: pretty;
+}
+
+.ds .ds-supporting {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.ds .ds-muted {
+  color: var(--muted-foreground);
+}
+
+.ds .ds-mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0;
+}
+
+/* Links: foreground + underline. The action color is reserved for actions. */
+.ds a:not(.ds-btn) {
+  color: inherit;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: auto;
+}
+.ds a.ds-btn,
+.ds a.ds-plain {
+  text-decoration: none;
+}
+
+/* Button */
+.ds-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  padding: 0.65rem 1rem;
+  min-height: 2.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-decoration: none;
+  transition: background-color 0.15s, box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.ds-btn:focus-visible,
+.ds-chip:focus-visible,
+.ds .nav-link:focus-visible,
+.ds a:focus-visible,
+.ds summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.ds-btn:disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+.ds-btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: var(--shadow-chip);
+}
+.ds-btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border-color: var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.ds-btn-outline {
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.ds-btn-ghost {
+  background: transparent;
+  color: var(--muted-foreground);
+}
+.ds-btn-lg {
+  padding: 0.8rem 1.35rem;
+  min-height: 3rem;
+  font-size: 1rem;
+}
+.ds-btn-sm {
+  padding: 0.4rem 0.7rem;
+  min-height: 2rem;
+  font-size: 0.875rem;
+}
+.ds-btn-icon {
+  padding: 0;
+  width: 2.5rem;
+}
+.ds-btn-icon.ds-btn-sm {
+  width: 2rem;
+}
+
+/* Card */
+.ds-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* Badge */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.1rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.ds-badge-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+}
+.ds-badge-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Chip (filter toggle) */
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font: inherit;
+  font-size: 0.875rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.ds .ds-chip[aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* Keyboard key / inline code */
+.ds-kbd {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+/* Table */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.ds-table th,
+.ds-table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.ds-table th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.ds-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ds-divider {
+  height: 1px;
+  background: var(--border);
+  border: 0;
+  margin: 0;
+}
+
+/* Fine-pointer hover is a neutral cue, never a second selection color. */
+@media (hover: hover) and (pointer: fine) {
+  .ds-btn-primary:hover {
+    box-shadow: var(--shadow-chip-hover);
+  }
+  .ds-btn-secondary:hover {
+    background: var(--accent);
+  }
+  .ds-btn-outline:hover,
+  .ds-btn-ghost:hover {
+    background: var(--secondary);
+    color: var(--foreground);
+  }
+  .ds .ds-chip:hover:not([aria-pressed='true']) {
+    background: var(--secondary);
+    border-color: color-mix(in oklab, var(--foreground) 28%, var(--border));
+  }
+  .ds a:not(.ds-btn):not(.ds-plain):hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+@media (pointer: coarse) {
+  .ds-btn,
+  .ds-chip {
+    min-height: 44px;
+  }
+  .ds-btn-icon {
+    width: 44px;
+  }
+}
+
+.ds ::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds *,
+  .ds *::before,
+  .ds *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

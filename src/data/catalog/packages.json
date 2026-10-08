@@ -25,7 +25,10 @@
 			"A per-scene origin so several scenes can share one coordinate frame",
 			"Versioned schema with semver schemaVersion"
 		],
-		"examples": ["A scanned room described as one scene", "A corridor scan sharing a coordinate frame with a room scan"],
+		"examples": [
+			"A scanned room described as one scene",
+			"A corridor scan sharing a coordinate frame with a room scan"
+		],
 		"roadmap": [
 			"Scene definition",
 			"Object definition",
@@ -52,7 +55,12 @@
 			"Documentation and examples",
 			"Stable Scene Schema v1"
 		],
-		"related": ["3d-unity-scene", "3d-unity-spatial", "3d-unity-assets"]
+		"related": [
+			"3d-unity-scene",
+			"3d-unity-spatial",
+			"3d-unity-assets"
+		],
+		"requirements": []
 	},
 	{
 		"slug": "3d-unity-core",
@@ -77,7 +85,9 @@
 			"Logging and utilities",
 			"Product-independent base for every Unity package"
 		],
-		"examples": ["Declared as a dependency by 3d-unity-scene, 3d-unity-xr, and 3d-unity-spatial"],
+		"examples": [
+			"Declared as a dependency by 3d-unity-scene, 3d-unity-xr, and 3d-unity-spatial"
+		],
 		"roadmap": [
 			"Initial Unity package structure",
 			"Global engine configuration",
@@ -92,7 +102,16 @@
 			"Tests and example project",
 			"Stable v1 API"
 		],
-		"related": ["3d-unity-scene", "3d-unity-assets", "3d-unity-interaction", "3d-unity-xr", "3d-unity-spatial"]
+		"related": [
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction",
+			"3d-unity-xr",
+			"3d-unity-spatial"
+		],
+		"requirements": [
+			"Unity 6000.6"
+		]
 	},
 	{
 		"slug": "3d-unity-scene",
@@ -104,7 +123,10 @@
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-scene",
-		"dependencies": ["3d-unity-core", "3d-scene-schema"],
+		"dependencies": [
+			"3d-unity-core",
+			"3d-scene-schema"
+		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-scene.git. It also uses com.unity.nuget.newtonsoft-json 3.2.1.",
 		"usage": "The package sits between Unity and 3d-scene-schema: Scene Schema → Unity Scene → Scene Changes → Scene Schema. Use SceneJson to convert the C# scene data model to and from the schema's JSON.",
 		"current": [
@@ -117,7 +139,9 @@
 			"JSON conversion matching the schema's camelCase field names",
 			"Designed so the shared scene format can also serve Unreal, web viewers, and AI tools"
 		],
-		"examples": ["A Quest room scan converted to SceneData, then to JSON for upload"],
+		"examples": [
+			"A Quest room scan converted to SceneData, then to JSON for upload"
+		],
 		"roadmap": [
 			"Scene loader",
 			"Scene saver",
@@ -137,7 +161,16 @@
 			"Example scenes",
 			"Stable v1 scene runtime"
 		],
-		"related": ["3d-scene-schema", "3d-unity-core", "3d-unity-spatial", "3d-unity-interaction"]
+		"related": [
+			"3d-scene-schema",
+			"3d-unity-core",
+			"3d-unity-spatial",
+			"3d-unity-interaction"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.nuget.newtonsoft-json 3.2.1, resolved by the Package Manager"
+		]
 	},
 	{
 		"slug": "3d-unity-assets",
@@ -152,14 +185,18 @@
 		"dependencies": [],
 		"install": "Not installable yet: the repository currently contains only a README and a license. Installation instructions will appear here once the Unity package is published.",
 		"usage": "It is the bridge between asset metadata and actual Unity runtime objects: a scene object references an asset by ID, and this package resolves it.",
-		"current": ["README and roadmap only; no package code yet"],
+		"current": [
+			"README and roadmap only; no package code yet"
+		],
 		"features": [
 			"Asset metadata and IDs",
 			"Local and remote loading",
 			"GLB/glTF and Unity prefab support",
 			"Caching, async loading, and unloading"
 		],
-		"examples": ["Resolving the model for an object that references a chair asset"],
+		"examples": [
+			"Resolving the model for an object that references a chair asset"
+		],
 		"roadmap": [
 			"Asset definition format",
 			"Local asset loading",
@@ -180,7 +217,12 @@
 			"Performance optimization",
 			"Stable v1 asset API"
 		],
-		"related": ["3d-unity-scene", "3d-unity-core", "3d-scene-schema"]
+		"related": [
+			"3d-unity-scene",
+			"3d-unity-core",
+			"3d-scene-schema"
+		],
+		"requirements": []
 	},
 	{
 		"slug": "3d-unity-interaction",
@@ -195,7 +237,9 @@
 		"dependencies": [],
 		"install": "Not installable yet: the repository currently contains only a README and a license. Installation instructions will appear here once the Unity package is published.",
 		"usage": "It operates on objects managed by 3d-unity-scene and keeps editing changes in sync with the scene.",
-		"current": ["README and roadmap only; no package code yet"],
+		"current": [
+			"README and roadmap only; no package code yet"
+		],
 		"features": [
 			"Selection and multi-selection",
 			"Move, rotate, scale, duplicate, and delete",
@@ -203,7 +247,10 @@
 			"Undo, redo, and copy/paste",
 			"Keyboard, mouse, and touch controls"
 		],
-		"examples": ["Moving and snapping furniture in a scanned room", "Editing objects in a game level"],
+		"examples": [
+			"Moving and snapping furniture in a scanned room",
+			"Editing objects in a game level"
+		],
 		"roadmap": [
 			"Object selection",
 			"Multi-selection",
@@ -228,7 +275,12 @@
 			"Scene synchronization",
 			"Stable v1 editing API"
 		],
-		"related": ["3d-unity-scene", "3d-unity-xr", "3d-unity-core"]
+		"related": [
+			"3d-unity-scene",
+			"3d-unity-xr",
+			"3d-unity-core"
+		],
+		"requirements": []
 	},
 	{
 		"slug": "3d-unity-xr",
@@ -240,7 +292,9 @@
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-xr",
-		"dependencies": ["3d-unity-core"],
+		"dependencies": [
+			"3d-unity-core"
+		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-xr.git. It also uses com.unity.textmeshpro 3.0.6.",
 		"usage": "Add it to a Quest project. XRPrimaryButtonAction fires once per controller button press without knowing what the button does, and StatusHud shows world-space text through SetStatus(string) without knowing what it reports on.",
 		"current": [
@@ -254,7 +308,9 @@
 			"Product-independent: no scanning-specific logic",
 			"Meta Quest first, other XR platforms later"
 		],
-		"examples": ["Triggering a room scan with a controller button and showing progress in a HUD"],
+		"examples": [
+			"Triggering a room scan with a controller button and showing progress in a HUD"
+		],
 		"roadmap": [
 			"OpenXR foundation",
 			"Meta Quest support",
@@ -275,7 +331,15 @@
 			"Stable Quest release",
 			"Additional XR platform support"
 		],
-		"related": ["3d-unity-interaction", "3d-unity-spatial", "3d-unity-core"]
+		"related": [
+			"3d-unity-interaction",
+			"3d-unity-spatial",
+			"3d-unity-core"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.textmeshpro 3.0.6, resolved by the Package Manager"
+		]
 	},
 	{
 		"slug": "3d-unity-spatial",
@@ -287,7 +351,10 @@
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-spatial",
-		"dependencies": ["3d-unity-core", "3d-unity-scene"],
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-scene"
+		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-spatial.git. Install the Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) in your project too; without it the package compiles to a no-op and ScanFailed fires with an explanatory message.",
 		"usage": "RoomScanner requests the Quest Scene API permission, loads the current room through MR Utility Kit, and converts it into a SceneData from 3d-unity-scene. One MRUKRoom becomes one SceneData.",
 		"current": [
@@ -300,7 +367,9 @@
 			"One scanned room converted to one scene",
 			"Graceful no-op when MRUK is not installed"
 		],
-		"examples": ["Turning a real room into the initial digital scene for VRoom"],
+		"examples": [
+			"Turning a real room into the initial digital scene for VRoom"
+		],
 		"roadmap": [
 			"Meta Quest Scene API integration",
 			"MRUK integration",
@@ -322,6 +391,15 @@
 			"Alignment between virtual and physical scenes",
 			"Stable room-scanning API"
 		],
-		"related": ["3d-unity-xr", "3d-unity-scene", "3d-scene-schema", "3d-unity-core"]
+		"related": [
+			"3d-unity-xr",
+			"3d-unity-scene",
+			"3d-scene-schema",
+			"3d-unity-core"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) installed in your project. Without it the package compiles to a no-op."
+		]
 	}
 ]

@@ -1,41 +1,31 @@
-<header
-	class="relative z-50 border-b border-[var(--c-border)] bg-[var(--c-bg-secondary)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--c-bg-secondary)]/80"
->
-	<div
-		class="mx-auto flex min-h-16 w-full max-w-[var(--container)] flex-wrap items-center justify-between gap-y-2 overflow-visible px-4 py-3 sm:px-6"
-	>
+<header class="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]">
+	<div class="container-x flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-2 md:flex-nowrap">
 		<a
-			[translate]="{ ariaLabel: 'Go to homepage' }"
-			class="inline-flex items-center gap-3"
+			class="ds-plain inline-flex items-center gap-3 rounded-[var(--radius-md)]"
 			routerLink="/"
+			[translate]="{ ariaLabel: 'Go to homepage' }"
 		>
 			<img
-				class="h-10 w-auto"
-				[translate]="{ alt: 'Project logo' }"
+				class="h-9 w-9 rounded-full"
 				ngSrc="logo.png"
-				width="132"
-				height="40"
+				width="72"
+				height="72"
 				priority
+				[translate]="{ alt: 'Project logo' }"
 			/>
-			@if (company().name) {
-				<span class="hidden text-sm font-semibold tracking-[0.16em] text-[var(--c-text-strong)] sm:inline">
-					{{ company().name }}
-				</span>
-			}
+			<span class="hidden text-base font-semibold tracking-[-0.01em] sm:inline">{{ company().name }}</span>
 		</a>
 
-
 		<nav
-			class="order-last flex w-full items-center gap-1 text-sm font-medium md:order-none md:w-auto"
+			class="order-last -mx-3 flex w-full items-center gap-1 md:order-none md:mx-0 md:mr-auto md:w-auto"
 			[translate]="{ ariaLabel: 'Main navigation' }"
 		>
 			@for (link of links; track link.path) {
 				<a
-					class="theme-interactive theme-focus rounded-full px-4 py-2 text-[var(--c-text)] hover:bg-[var(--c-bg-tertiary)] hover:text-[var(--c-text-strong)]"
-					activeClass="!bg-[var(--c-bg-tertiary)] !text-[var(--c-text-strong)]"
-					[routerLink]="link.path"
-					[routerLinkActiveOptions]="{ exact: link.path === '/' }"
+					class="nav-link"
+					ariaCurrentWhenActive="page"
 					routerLinkActive
+					[routerLink]="link.path"
 					[translate]="link.label"
 				>
 					{{ link.label }}
@@ -43,70 +33,38 @@
 			}
 		</nav>
 
-		<div class="flex items-center gap-2">
-			<div
-				class="relative flex items-center gap-1 rounded-full border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-1 shadow-[var(--shadow-sm)]"
+		<div class="flex items-center gap-1">
+			<a
+				class="ds-btn ds-btn-ghost ds-btn-icon"
+				[href]="githubUrl"
+				rel="noopener"
+				target="_blank"
+				[translate]="{ ariaLabel: 'IT-Kamianets on GitHub' }"
 			>
-				<button
-					class="theme-interactive theme-focus inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium text-[var(--c-text)] hover:bg-[var(--c-bg-tertiary)]"
-					[attr.aria-label]="languageCycleLabel()"
-					(click)="nextLanguage()"
-					type="button"
-				>
-					<img
-						class="h-5 w-7 rounded-[4px] border border-black/10 object-cover"
-						[alt]="currentLanguage().nativeName"
-						[ngSrc]="currentLanguage().flagSrc"
-						width="28"
-						height="20"
-					/>
-				</button>
-
-				<button
-					class="theme-interactive theme-focus inline-flex h-9 w-9 items-center justify-center rounded-full text-[var(--c-text-strong)] hover:bg-[var(--c-bg-tertiary)]"
-					[attr.aria-expanded]="languageMenuOpen()"
-					[attr.aria-label]="languageMenuLabel()"
-					(click)="toggleLanguageMenu()"
-					type="button"
-				>
-					<span class="material-symbols-outlined text-[20px]" aria-hidden="true">
-						arrow_drop_down
-					</span>
-				</button>
-
-				@if (languageMenuOpen()) {
-					<div
-						class="absolute right-0 top-[calc(100%+0.5rem)] z-50 min-w-48 overflow-hidden rounded-2xl border border-[var(--c-border)] bg-[var(--c-bg-primary)] p-1 shadow-[var(--shadow-md)]"
-					>
-						@for (language of languages(); track language.code) {
-							<button
-								class="theme-interactive theme-focus flex w-full items-center gap-3 rounded-[calc(var(--radius-btn)-0.25rem)] px-3 py-2 text-left text-sm text-[var(--c-text)] hover:bg-[var(--c-bg-tertiary)]"
-								(click)="setLanguage(language)"
-								type="button"
-							>
-								<img
-									class="h-5 w-7 rounded-[4px] border border-black/10 object-cover"
-									[alt]="language.nativeName"
-									[ngSrc]="language.flagSrc"
-									width="28"
-									height="20"
-								/>
-								<span>{{ language.nativeName }}</span>
-							</button>
-						}
-					</div>
-				}
-			</div>
-
+				<app-icon name="git-branch" />
+			</a>
 			<button
-				class="theme-interactive theme-focus inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--c-border)] bg-[var(--c-bg-primary)] text-[var(--c-text-strong)] hover:bg-[var(--c-bg-tertiary)]"
+				class="ds-btn ds-btn-ghost gap-2 px-2"
+				type="button"
+				[attr.aria-label]="languageLabel()"
+				(click)="switchLanguage()"
+			>
+				<img
+					class="h-4 w-6 rounded-[3px] object-cover"
+					[alt]="''"
+					[ngSrc]="currentLanguage().flagSrc"
+					width="24"
+					height="16"
+				/>
+				<span class="ds-mono uppercase">{{ currentLanguage().code }}</span>
+			</button>
+			<button
+				class="ds-btn ds-btn-ghost ds-btn-icon"
+				type="button"
 				[attr.aria-label]="toggleLabel()"
 				(click)="toggleMode()"
-				type="button"
 			>
-				<span class="material-symbols-outlined text-[22px]" aria-hidden="true">
-					{{ toggleIcon() }}
-				</span>
+				<app-icon [name]="mode() === 'dark' ? 'sun' : 'moon'" />
 			</button>
 		</div>
 	</div>

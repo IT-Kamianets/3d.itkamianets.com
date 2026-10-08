@@ -2,73 +2,181 @@
 	{
 		"slug": "character-view",
 		"name": "Character View",
-		"icon": "🎮",
+		"icon": "user",
 		"tagline": "1st + 3rd Person",
 		"repo": "3d-constructor-character",
 		"description": "For games where the player directly controls a character from first-person or third-person perspective.",
-		"gameTypes": ["Open-world action", "Action RPG", "Adventure", "Shooters"],
-		"examples": ["GTA V", "Cyberpunk 2077", "Elden Ring"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction", "3d-unity-xr"],
-		"features": ["First- and third-person camera modes", "Character movement and look controls", "Optional XR support"]
+		"gameTypes": [
+			"Open-world action",
+			"Action RPG",
+			"Adventure",
+			"Shooters"
+		],
+		"examples": [
+			"GTA V",
+			"Cyberpunk 2077",
+			"Elden Ring"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction",
+			"3d-unity-xr"
+		],
+		"features": [
+			"First- and third-person camera modes",
+			"Character movement and look controls",
+			"Optional XR support"
+		]
 	},
 	{
 		"slug": "top-down",
 		"name": "Top-Down",
-		"icon": "🔝",
+		"icon": "map",
 		"tagline": "Viewed from above",
 		"repo": "3d-constructor-top-down",
 		"description": "For games viewed primarily from above, with direct player movement and action-focused gameplay.",
-		"gameTypes": ["Action roguelikes", "Arena survivors", "Twin-stick shooters"],
-		"examples": ["Hades", "Vampire Survivors", "Hotline Miami"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction"],
-		"features": ["Fixed overhead camera", "Direct movement controls", "Action-focused interaction"]
+		"gameTypes": [
+			"Action roguelikes",
+			"Arena survivors",
+			"Twin-stick shooters"
+		],
+		"examples": [
+			"Hades",
+			"Vampire Survivors",
+			"Hotline Miami"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction"
+		],
+		"features": [
+			"Fixed overhead camera",
+			"Direct movement controls",
+			"Action-focused interaction"
+		]
 	},
 	{
 		"slug": "isometric",
 		"name": "Isometric",
-		"icon": "💎",
+		"icon": "layers",
 		"tagline": "Angled camera",
 		"repo": "3d-constructor-isometric",
 		"description": "For games using an angled isometric-style camera, commonly used for RPGs, strategy games, and action RPGs.",
-		"gameTypes": ["Role-playing games", "Action RPGs", "Tactical strategy"],
-		"examples": ["Baldur's Gate 3", "Diablo IV", "Path of Exile 2"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction", "3d-unity-spatial"],
-		"features": ["Angled isometric camera", "Click-to-move interaction", "Grid and spatial queries"]
+		"gameTypes": [
+			"Role-playing games",
+			"Action RPGs",
+			"Tactical strategy"
+		],
+		"examples": [
+			"Baldur's Gate 3",
+			"Diablo IV",
+			"Path of Exile 2"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction",
+			"3d-unity-spatial"
+		],
+		"features": [
+			"Angled isometric camera",
+			"Click-to-move interaction",
+			"Grid and spatial queries"
+		]
 	},
 	{
 		"slug": "side-view",
 		"name": "Side View",
-		"icon": "↔️",
+		"icon": "transfer-horizontal",
 		"tagline": "Viewed from the side",
 		"repo": "3d-constructor-side-view",
 		"description": "For games viewed from the side, including platformers, metroidvanias, action games, and sandbox games.",
-		"gameTypes": ["Platformers", "Metroidvanias", "Action games", "Sandbox games"],
-		"examples": ["Hollow Knight", "Dead Cells", "Terraria"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction"],
-		"features": ["Side-scrolling camera", "Platforming movement", "Layered 2.5D scenes"]
+		"gameTypes": [
+			"Platformers",
+			"Metroidvanias",
+			"Action games",
+			"Sandbox games"
+		],
+		"examples": [
+			"Hollow Knight",
+			"Dead Cells",
+			"Terraria"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction"
+		],
+		"features": [
+			"Side-scrolling camera",
+			"Platforming movement",
+			"Layered 2.5D scenes"
+		]
 	},
 	{
 		"slug": "fixed-camera",
 		"name": "Fixed Camera",
-		"icon": "🎥",
+		"icon": "camera",
 		"tagline": "Scene-controlled camera",
 		"repo": "3d-constructor-fixed-camera",
 		"description": "For games where camera positions are predefined or controlled by the scene rather than directly by the player.",
-		"gameTypes": ["Survival horror", "Cinematic platformers", "Atmospheric adventures"],
-		"examples": ["Resident Evil", "INSIDE", "Little Nightmares"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction"],
-		"features": ["Predefined camera angles", "Scene-driven camera switching", "Character control relative to the shot"]
+		"gameTypes": [
+			"Survival horror",
+			"Cinematic platformers",
+			"Atmospheric adventures"
+		],
+		"examples": [
+			"Resident Evil",
+			"INSIDE",
+			"Little Nightmares"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction"
+		],
+		"features": [
+			"Predefined camera angles",
+			"Scene-driven camera switching",
+			"Character control relative to the shot"
+		]
 	},
 	{
 		"slug": "god-camera",
 		"name": "God / Free Camera",
-		"icon": "🌍",
+		"icon": "planet",
 		"tagline": "Strategic, free camera",
 		"repo": "3d-constructor-god-camera",
 		"description": "For games where the user controls the world from a free, strategic, or god-like camera.",
-		"gameTypes": ["Grand strategy", "City builders", "Simulation", "Real-time strategy"],
-		"examples": ["Civilization", "Cities: Skylines", "Total War"],
-		"packages": ["3d-unity-core", "3d-unity-scene", "3d-unity-assets", "3d-unity-interaction", "3d-unity-spatial"],
-		"features": ["Free pan, zoom, and rotate camera", "Selection and placement", "Grid, region, and spatial data"]
+		"gameTypes": [
+			"Grand strategy",
+			"City builders",
+			"Simulation",
+			"Real-time strategy"
+		],
+		"examples": [
+			"Civilization",
+			"Cities: Skylines",
+			"Total War"
+		],
+		"packages": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets",
+			"3d-unity-interaction",
+			"3d-unity-spatial"
+		],
+		"features": [
+			"Free pan, zoom, and rotate camera",
+			"Selection and placement",
+			"Grid, region, and spatial data"
+		]
 	}
 ]
