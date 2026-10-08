@@ -1,0 +1,135 @@
+{
+	"overview": {
+		"title": "Documentation",
+		"lead": "How the engine fits together, and how to install it.",
+		"sections": [
+			{
+				"title": "Where to start",
+				"blocks": [
+					{
+						"type": "links",
+						"items": [
+							{ "label": "Architecture", "path": "/docs/architecture", "text": "the three layers, and how scenes move between Unity and the schema." },
+							{ "label": "Installation", "path": "/docs/installation", "text": "Unity requirements and a Package Manager URL for each package." },
+							{ "label": "Packages", "path": "/packages", "text": "one page per package, with its current state and roadmap." },
+							{ "label": "Constructors", "path": "/constructors", "text": "planned starting points for each camera and gameplay style." }
+						]
+					}
+				]
+			},
+			{
+				"title": "Project status",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The Unity packages are in early development and the scene schema has a first version. Constructors and game generation are planned and have no repositories yet. Every package page states what exists today."
+					},
+					{
+						"type": "p",
+						"text": "Source code lives in the [IT-Kamianets GitHub organization](https://github.com/IT-Kamianets)."
+					}
+				]
+			}
+		]
+	},
+	"installation": {
+		"title": "Installation",
+		"lead": "Install through the Unity Package Manager from Git.",
+		"sections": [
+			{
+				"title": "Requirements",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"Unity 6000.6",
+							"Git installed, so Unity can fetch packages by URL",
+							"For room scanning with `3d-unity-spatial`: the Meta XR MR Utility Kit (`com.meta.xr.mrutilitykit`) in your project"
+						]
+					}
+				]
+			},
+			{
+				"title": "Steps",
+				"blocks": [
+					{
+						"type": "ol",
+						"items": [
+							"In Unity, open `Window › Package Manager`.",
+							"Choose `+ › Add package from git URL`.",
+							"Paste the URL of a package from the table below."
+						]
+					},
+					{
+						"type": "p",
+						"text": "Dependencies are declared in each `package.json` and resolved by the Package Manager. Start with `3d-unity-core`."
+					},
+					{ "type": "code", "code": "https://github.com/IT-Kamianets/3d-unity-core.git" }
+				]
+			},
+			{
+				"title": "Packages",
+				"blocks": [{ "type": "packages" }]
+			}
+		]
+	},
+	"architecture": {
+		"title": "Architecture",
+		"lead": "Three layers, and scenes kept in an engine-independent format.",
+		"sections": [
+			{
+				"title": "Layers",
+				"blocks": [
+					{
+						"type": "ol",
+						"items": [
+							"**Core packages** (`3d-*`): shared engine functionality such as scenes, assets, interaction, XR, and spatial data.",
+							"**Constructors** (`3d-constructor-*`): a starting architecture for one type of game, built on the core packages.",
+							"**Game-specific packages** (`game-<name>-*`): the rules, content, and assets of one game."
+						]
+					}
+				]
+			},
+			{
+				"title": "Scenes and the schema",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "`3d-scene-schema` is the source of truth for a scene. Unity is not its permanent owner."
+					},
+					{ "type": "code", "code": "Scene Schema → Unity Scene → Scene Changes → Scene Schema" },
+					{
+						"type": "p",
+						"text": "`3d-unity-scene` converts between the two. `3d-unity-xr` handles how people interact through XR hardware, and `3d-unity-spatial` understands the physical room and turns it into scene data."
+					}
+				]
+			},
+			{
+				"title": "Package dependencies",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Each line joins a package to one that needs it, as declared in each `package.json`."
+					},
+					{ "type": "graph" }
+				]
+			},
+			{
+				"title": "Principles",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"Keep core packages reusable and product-independent.",
+							"Keep constructors focused on reusable gameplay architecture.",
+							"Keep game-specific logic outside the framework.",
+							"Prefer shared scene and asset structures between engines.",
+							"Let constructors compose existing packages instead of duplicating them.",
+							"Make generated projects easy to understand, modify, and extend."
+						]
+					}
+				]
+			}
+		]
+	}
+}

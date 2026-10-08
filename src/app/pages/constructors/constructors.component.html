@@ -1,8 +1,6 @@
 <div class="container-x py-12 sm:py-16">
-	<h1 class="ds-page-title" translate>Constructors</h1>
-	<p class="ds-lead mt-4 max-w-[44ch]" translate>
-		A starting point for each camera and gameplay style.
-	</p>
+	<h1 class="ds-page-title">{{ 'Constructors' | tr }}</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]">{{ 'A starting point for each camera and gameplay style.' | tr }}</p>
 
 	<ul class="m-0 mt-10 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
 		@for (item of constructors; track item.slug) {
@@ -10,10 +8,10 @@
 				<a class="tile-link ds-plain" [routerLink]="['/constructors', item.slug]">
 					<span class="icon-tile"><app-icon [name]="item.icon" /></span>
 					<span>
-						<span class="block text-base font-medium">{{ item.name }}</span>
-						<span class="ds-supporting block">{{ item.tagline }}</span>
+						<span class="block text-base font-medium">{{ item.name | tr }}</span>
+						<span class="ds-supporting block">{{ item.tagline | tr }}</span>
 					</span>
-					<span class="ds-supporting">{{ item.description }}</span>
+					<span class="ds-supporting">{{ item.description | tr }}</span>
 					<span class="ds-supporting mt-auto pt-2">{{ item.examples.join(', ') }}</span>
 				</a>
 			</li>

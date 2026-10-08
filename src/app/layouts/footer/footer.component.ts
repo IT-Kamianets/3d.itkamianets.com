@@ -1,12 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateDirective, TranslateService } from '@wawjs/ngx-translate';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
 import { CompanyService } from '../../feature/company/company.service';
+import { TrPipe } from '../../shared/translate/tr.pipe';
 
 @Component({
 	selector: 'app-footer',
-	imports: [RouterLink, TranslateDirective],
+	imports: [RouterLink, TrPipe],
 	templateUrl: './footer.component.html',
 })
 export class FooterComponent {

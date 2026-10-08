@@ -18,6 +18,7 @@ import { provideNgxCore } from '@wawjs/ngx-core';
 import { provideTranslate } from '@wawjs/ngx-translate';
 import { provideNgxUi } from '@wawjs/ngx-ui';
 import { environment } from '../environments/environment';
+import uaTranslations from '../i18n/ua.json';
 import { routes } from './app.routes';
 import { BootstrapService } from './feature/bootstrap/bootstrap.service';
 import { companyProfile } from './feature/company/company.data';
@@ -58,7 +59,8 @@ export const appConfig: ApplicationConfig = {
 		provideTranslate({
 			defaultLanguage: environment.defaultLanguage,
 			languages: environment.languages,
-			folder: '/i18n/',
+			// Bundled so prerendered pages are already in the default language.
+			translations: { ua: uaTranslations, en: {} },
 		}),
 		{
 			provide: APP_INITIALIZER,

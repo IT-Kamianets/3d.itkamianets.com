@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TranslateDirective } from '@wawjs/ngx-translate';
+import {  } from '@wawjs/ngx-translate';
+import { TrPipe } from '../../shared/translate/tr.pipe';
 import { findConstructor, GENERATED_PACKAGE_SUFFIXES } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
-	imports: [RouterLink, TranslateDirective, IconComponent, CodeBlockComponent],
+	imports: [RouterLink, IconComponent, CodeBlockComponent, TrPipe],
 	templateUrl: './constructor-detail.component.html',
 })
 export class ConstructorDetailComponent {

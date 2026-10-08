@@ -5,19 +5,19 @@
 			<p class="ds-supporting mt-2 max-w-[44ch]">{{ companyDescription() }}</p>
 		</div>
 
-		<nav [translate]="{ ariaLabel: 'Pages footer navigation' }">
-			<p class="ds-supporting" translate>Pages</p>
+		<nav [attr.aria-label]="'Pages footer navigation' | tr">
+			<p class="ds-supporting">{{ 'Pages' | tr }}</p>
 			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 				@for (page of pageLinks; track page.path) {
 					<li>
-						<a [routerLink]="page.path" [translate]="page.label">{{ page.label }}</a>
+						<a [routerLink]="page.path">{{ page.label | tr }}</a>
 					</li>
 				}
 			</ul>
 		</nav>
 
 		<div>
-			<p class="ds-supporting" translate>Source</p>
+			<p class="ds-supporting">{{ 'Source' | tr }}</p>
 			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 				<li><a [href]="githubUrl" rel="noopener" target="_blank">GitHub</a></li>
 			</ul>
@@ -26,7 +26,7 @@
 
 	<div class="border-t border-[var(--border)]">
 		<p class="container-x ds-supporting py-5">
-			&copy; {{ currentYear }} {{ company().name }}. <span translate>All rights reserved.</span>
+			&copy; {{ currentYear }} {{ company().name }}. <span>{{ 'All rights reserved.' | tr }}</span>
 		</p>
 	</div>
 </footer>

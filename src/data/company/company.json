@@ -5,8 +5,8 @@
 	"description": "A framework ecosystem for building reusable 3D applications and games: core packages, game constructors, and generated game projects.",
 	"image": "https://3d.itkamianets.com/logo.png",
 	"siteUrl": "https://3d.itkamianets.com",
-	"lang": "en",
-	"locale": "en_US",
+	"lang": "uk",
+	"locale": "uk_UA",
 	"logo": "/logo.png",
 	"defaultSeo": {
 		"title": "IT Kamianets 3D Engine — framework for reusable 3D apps and games",

@@ -1,23 +1,24 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
-import { TranslateDirective } from '@wawjs/ngx-translate';
+import {  } from '@wawjs/ngx-translate';
+import { TrPipe } from '../translate/tr.pipe';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'app-code-block',
-	imports: [IconComponent, TranslateDirective],
+	imports: [IconComponent, TrPipe],
 	template: `
 		<div class="code-block">
 			<pre><code>{{ code() }}</code></pre>
 			<button
 				class="ds-btn ds-btn-ghost ds-btn-sm ds-btn-icon copy"
 				type="button"
-				[translate]="{ ariaLabel: 'Copy to clipboard' }"
+				[attr.aria-label]="'Copy to clipboard' | tr"
 				(click)="copy()"
 			>
 				<app-icon [name]="state() === 'copied' ? 'copy-check' : 'copy'" />
 			</button>
-			<span class="sr-only-text" role="status">{{ state() === 'copied' ? 'Copied' : state() === 'failed' ? 'Copy failed. Select the text and copy it manually.' : '' }}</span>
+			<span class="sr-only-text" role="status">{{ (state() === 'copied' ? 'Copied' : state() === 'failed' ? 'Copy failed. Select the text and copy it manually.' : '') | tr }}</span>
 		</div>
 	`,
 })

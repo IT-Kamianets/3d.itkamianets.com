@@ -2,11 +2,12 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { TranslateDirective } from '@wawjs/ngx-translate';
+import {  } from '@wawjs/ngx-translate';
+import { TrPipe } from '../../shared/translate/tr.pipe';
 import { catalogPackages, packageGroups } from '../../feature/catalog/catalog.data';
 
 @Component({
-	imports: [RouterLink, TranslateDirective],
+	imports: [RouterLink, TrPipe],
 	templateUrl: './packages.component.html',
 })
 export class PackagesComponent {

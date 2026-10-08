@@ -3,7 +3,7 @@
 		class="block min-w-[44rem]"
 		[attr.viewBox]="'0 0 ' + width + ' ' + height"
 		role="group"
-		[attr.aria-label]="'Package dependency graph. ' + summary + '.'"
+		[attr.aria-label]="label()"
 	>
 		@for (edge of edges; track edge.id) {
 			<path [attr.d]="edge.path" fill="none" stroke="var(--muted-foreground)" stroke-opacity="0.7" stroke-width="1.5" />

@@ -1,19 +1,17 @@
 <!-- Hero: one message, one figure only this engine could draw -->
 <section class="container-x grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:py-24">
 	<div>
-		<h1 class="ds-display" translate>Build 3D games from reusable packages</h1>
-		<p class="ds-lead mt-6 max-w-[34ch]" translate>
-			Unity packages, a shared scene schema, and constructors for every camera style.
-		</p>
+		<h1 class="ds-display">{{ 'Build 3D games from reusable packages' | tr }}</h1>
+		<p class="ds-lead mt-6 max-w-[34ch]">{{ 'Unity packages, a shared scene schema, and constructors for every camera style.' | tr }}</p>
 		<div class="mt-8 flex flex-wrap gap-3">
 			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/packages">
-				<span translate>Browse packages</span>
+				<span>{{ 'Browse packages' | tr }}</span>
 				<app-icon name="arrow-right" />
 			</a>
-			<a class="ds-btn ds-btn-outline ds-btn-lg" routerLink="/docs" translate>Read the docs</a>
+			<a class="ds-btn ds-btn-outline ds-btn-lg" routerLink="/docs">{{ 'Read the docs' | tr }}</a>
 		</div>
 		<div class="mt-10 max-w-[34rem]">
-			<p class="ds-supporting mb-2" translate>Unity Package Manager › Add package from git URL</p>
+			<p class="ds-supporting mb-2">{{ 'Unity Package Manager › Add package from git URL' | tr }}</p>
 			<app-code-block [code]="coreUrl" />
 		</div>
 	</div>
@@ -25,22 +23,20 @@
 <section class="border-t border-[var(--border)]" aria-labelledby="scene-title">
 	<div class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-16 lg:grid-cols-2 lg:gap-16 lg:py-24">
 		<div>
-			<h2 id="scene-title" class="ds-section-title" translate>One scene format, any engine</h2>
-			<p class="ds-lead mt-4 max-w-[36ch]" translate>
-				Scenes live as JSON. Unity reads and writes them, so the data outlives the engine.
-			</p>
+			<h2 id="scene-title" class="ds-section-title">{{ 'One scene format, any engine' | tr }}</h2>
+			<p class="ds-lead mt-4 max-w-[36ch]">{{ 'Scenes live as JSON. Unity reads and writes them, so the data outlives the engine.' | tr }}</p>
 			<ol class="m-0 mt-8 grid list-none gap-x-6 gap-y-3 p-0 leading-7 sm:grid-cols-[13rem_minmax(0,1fr)]">
 				<li class="contents">
 					<span class="ds-mono">3d-scene-schema</span>
-					<span class="ds-muted" translate>defines the scene</span>
+					<span class="ds-muted">{{ 'defines the scene' | tr }}</span>
 				</li>
 				<li class="contents">
 					<span class="ds-mono">3d-unity-scene</span>
-					<span class="ds-muted" translate>loads and saves it in Unity</span>
+					<span class="ds-muted">{{ 'loads and saves it in Unity' | tr }}</span>
 				</li>
 				<li class="contents">
 					<span class="ds-mono">3d-unity-spatial</span>
-					<span class="ds-muted" translate>turns a scanned room into a scene</span>
+					<span class="ds-muted">{{ 'turns a scanned room into a scene' | tr }}</span>
 				</li>
 			</ol>
 		</div>
@@ -52,30 +48,30 @@
 <section class="border-t border-[var(--border)]" aria-labelledby="layers-title">
 	<div class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16 lg:py-24">
 		<div>
-			<h2 id="layers-title" class="ds-section-title" translate>Three layers, one direction</h2>
-			<p class="ds-lead mt-4 max-w-[30ch]" translate>Each layer builds on the one below it.</p>
+			<h2 id="layers-title" class="ds-section-title">{{ 'Three layers, one direction' | tr }}</h2>
+			<p class="ds-lead mt-4 max-w-[30ch]">{{ 'Each layer builds on the one below it.' | tr }}</p>
 		</div>
 		<ol class="ds-card m-0 list-none p-0">
 			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
 				<div>
-					<h3 class="text-base" translate>Core packages</h3>
-					<p class="ds-supporting mt-1" translate>Scenes, assets, interaction, XR, and spatial data.</p>
+					<h3 class="text-base">{{ 'Core packages' | tr }}</h3>
+					<p class="ds-supporting mt-1">{{ 'Scenes, assets, interaction, XR, and spatial data.' | tr }}</p>
 				</div>
 				<span class="ds-mono ds-muted">3d-*</span>
 			</li>
 			<li class="ds-divider" aria-hidden="true"></li>
 			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
 				<div>
-					<h3 class="text-base" translate>Constructors</h3>
-					<p class="ds-supporting mt-1" translate>A starting architecture for one type of game.</p>
+					<h3 class="text-base">{{ 'Constructors' | tr }}</h3>
+					<p class="ds-supporting mt-1">{{ 'A starting architecture for one type of game.' | tr }}</p>
 				</div>
 				<span class="ds-mono ds-muted">3d-constructor-*</span>
 			</li>
 			<li class="ds-divider" aria-hidden="true"></li>
 			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
 				<div>
-					<h3 class="text-base" translate>Your game</h3>
-					<p class="ds-supporting mt-1" translate>Rules, content, and assets stay outside the framework.</p>
+					<h3 class="text-base">{{ 'Your game' | tr }}</h3>
+					<p class="ds-supporting mt-1">{{ 'Rules, content, and assets stay outside the framework.' | tr }}</p>
 				</div>
 				<span class="ds-mono ds-muted">game-&lt;name&gt;-*</span>
 			</li>
@@ -87,9 +83,9 @@
 <section class="border-t border-[var(--border)]" aria-labelledby="packages-title">
 	<div class="container-x py-16 lg:py-24">
 		<div class="flex flex-wrap items-end justify-between gap-4">
-			<h2 id="packages-title" class="ds-section-title" translate>Packages</h2>
+			<h2 id="packages-title" class="ds-section-title">{{ 'Packages' | tr }}</h2>
 			<a class="ds-btn ds-btn-ghost" routerLink="/packages">
-				<span translate>All packages</span>
+				<span>{{ 'All packages' | tr }}</span>
 				<app-icon name="arrow-right" />
 			</a>
 		</div>
@@ -104,8 +100,8 @@
 						[routerLink]="['/packages', item.slug]"
 					>
 						<span class="ds-mono font-medium">{{ item.name }}</span>
-						<span class="ds-supporting md:truncate">{{ item.summary }}</span>
-						<span class="ds-badge ds-badge-outline justify-self-start md:justify-self-end">{{ item.status }}</span>
+						<span class="ds-supporting md:truncate">{{ item.summary | tr }}</span>
+						<span class="ds-badge ds-badge-outline justify-self-start md:justify-self-end">{{ item.status | tr }}</span>
 						<app-icon class="hidden text-[var(--muted-foreground)] md:inline-flex" name="arrow-right" />
 					</a>
 				</li>
@@ -118,9 +114,9 @@
 <section class="border-t border-[var(--border)]" aria-labelledby="constructors-title">
 	<div class="container-x py-16 lg:py-24">
 		<div class="flex flex-wrap items-end justify-between gap-4">
-			<h2 id="constructors-title" class="ds-section-title" translate>Constructors</h2>
+			<h2 id="constructors-title" class="ds-section-title">{{ 'Constructors' | tr }}</h2>
 			<a class="ds-btn ds-btn-ghost" routerLink="/constructors">
-				<span translate>All constructors</span>
+				<span>{{ 'All constructors' | tr }}</span>
 				<app-icon name="arrow-right" />
 			</a>
 		</div>
@@ -129,7 +125,7 @@
 				<li class="ds-card">
 					<a class="tile-link ds-plain" [routerLink]="['/constructors', item.slug]">
 						<span class="icon-tile"><app-icon [name]="item.icon" /></span>
-						<span class="text-base font-medium">{{ item.name }}</span>
+						<span class="text-base font-medium">{{ item.name | tr }}</span>
 						<span class="ds-supporting">{{ item.examples.join(', ') }}</span>
 					</a>
 				</li>
@@ -141,10 +137,10 @@
 <!-- Closing action -->
 <section class="border-t border-[var(--border)]" aria-labelledby="start-title">
 	<div class="container-x flex flex-wrap items-center justify-between gap-6 py-16 lg:py-20">
-		<h2 id="start-title" class="ds-section-title" translate>Start with the docs</h2>
+		<h2 id="start-title" class="ds-section-title">{{ 'Start with the docs' | tr }}</h2>
 		<div class="flex flex-wrap gap-3">
-			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/docs/installation" translate>Install packages</a>
-			<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="orgUrl" rel="noopener" target="_blank" translate>View on GitHub</a>
+			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/docs/installation">{{ 'Install packages' | tr }}</a>
+			<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="orgUrl" rel="noopener" target="_blank">{{ 'View on GitHub' | tr }}</a>
 		</div>
 	</div>
 </section>

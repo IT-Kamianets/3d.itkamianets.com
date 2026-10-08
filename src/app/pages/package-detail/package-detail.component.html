@@ -1,74 +1,74 @@
 <article class="container-x py-12 sm:py-16">
 	<a class="ds-btn ds-btn-ghost ds-btn-sm -ml-3" routerLink="/packages">
 		<app-icon name="arrow-left" size="1rem" />
-		<span translate>Packages</span>
+		<span>{{ 'Packages' | tr }}</span>
 	</a>
 
 	<header class="mt-4 max-w-[48rem]">
 		<h1 class="ds-page-title ds-mono !text-[clamp(1.75rem,4vw,2.5rem)]">{{ item.name }}</h1>
-		<p class="ds-lead mt-4">{{ item.summary }}</p>
+		<p class="ds-lead mt-4">{{ item.summary | tr }}</p>
 		<p class="ds-supporting mt-5">
-			{{ item.group }} package, {{ item.license }} license@if (item.version) {, version {{ item.version }}}
+			{{ item.group | tr }}, {{ item.license }}@if (item.version) {, v{{ item.version }}}
 		</p>
 		<div class="mt-4 flex flex-wrap items-center gap-2">
-			<span class="ds-badge ds-badge-outline">{{ item.status }}</span>
+			<span class="ds-badge ds-badge-outline">{{ item.status | tr }}</span>
 			<a class="ds-btn ds-btn-ghost ds-btn-sm" [href]="repo" rel="noopener" target="_blank">
 				<app-icon name="git-branch" size="1rem" />
-				<span translate>Repository</span>
+				<span>{{ 'Repository' | tr }}</span>
 			</a>
 		</div>
 	</header>
 
 	<!-- Install: the primary task of this page -->
 	<section class="mt-10 max-w-[48rem]" aria-labelledby="install-title">
-		<h2 id="install-title" class="ds-section-title text-[1.25rem]" translate>Installation</h2>
+		<h2 id="install-title" class="ds-section-title text-[1.25rem]">{{ 'Installation' | tr }}</h2>
 		@if (item.packageId) {
-			<p class="ds-supporting mt-3 mb-2" translate>Unity Package Manager › Add package from git URL</p>
+			<p class="ds-supporting mt-3 mb-2">{{ 'Unity Package Manager › Add package from git URL' | tr }}</p>
 			<app-code-block [code]="gitUrl" />
 			<ul class="ds-supporting mt-3 flex list-none flex-col gap-1 p-0">
 				@for (requirement of item.requirements; track requirement) {
-					<li>{{ requirement }}</li>
+					<li>{{ requirement | tr }}</li>
 				}
 			</ul>
 		} @else {
-			<p class="ds-supporting mt-3 max-w-[60ch]">{{ item.install }}</p>
+			<p class="ds-supporting mt-3 max-w-[60ch]">{{ item.install | tr }}</p>
 		}
 	</section>
 
 	<div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
 		<div class="flex flex-col gap-10">
 			<section class="prose-measure">
-				<h2 class="ds-section-title text-[1.25rem]" translate>Purpose</h2>
-				<p class="mt-3 text-pretty leading-7">{{ item.purpose }}</p>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Purpose' | tr }}</h2>
+				<p class="mt-3 text-pretty leading-7">{{ item.purpose | tr }}</p>
 			</section>
 			<section class="prose-measure">
-				<h2 class="ds-section-title text-[1.25rem]" translate>Usage</h2>
-				<p class="mt-3 text-pretty leading-7">{{ item.usage }}</p>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Usage' | tr }}</h2>
+				<p class="mt-3 text-pretty leading-7">{{ item.usage | tr }}</p>
 			</section>
 			<section class="prose-measure">
-				<h2 class="ds-section-title text-[1.25rem]" translate>Current state</h2>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Current state' | tr }}</h2>
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0 leading-7">
 					@for (entry of item.current; track entry) {
 						<li class="flex gap-3">
 							<app-icon class="mt-1 text-[var(--muted-foreground)]" name="check" size="1.125rem" />
-							<span>{{ entry }}</span>
+							<span>{{ entry | tr }}</span>
 						</li>
 					}
 				</ul>
 			</section>
 			<section class="prose-measure">
-				<h2 class="ds-section-title text-[1.25rem]" translate>Main features</h2>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Main features' | tr }}</h2>
 				<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
 					@for (feature of item.features; track feature) {
-						<li>{{ feature }}</li>
+						<li>{{ feature | tr }}</li>
 					}
 				</ul>
 			</section>
 			<section class="prose-measure">
-				<h2 class="ds-section-title text-[1.25rem]" translate>Examples</h2>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Examples' | tr }}</h2>
 				<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
 					@for (example of item.examples; track example) {
-						<li>{{ example }}</li>
+						<li>{{ example | tr }}</li>
 					}
 				</ul>
 			</section>
@@ -76,7 +76,7 @@
 
 		<aside class="flex flex-col gap-8 lg:sticky lg:top-24 lg:self-start">
 			<section>
-				<h2 class="ds-supporting" translate>Dependencies</h2>
+				<h2 class="ds-supporting">{{ 'Dependencies' | tr }}</h2>
 				@if (item.dependencies.length) {
 					<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 						@for (dependency of item.dependencies; track dependency) {
@@ -86,11 +86,11 @@
 						}
 					</ul>
 				} @else {
-					<p class="mt-3" translate>No dependencies</p>
+					<p class="mt-3">{{ 'No dependencies' | tr }}</p>
 				}
 			</section>
 			<section>
-				<h2 class="ds-supporting" translate>Related packages</h2>
+				<h2 class="ds-supporting">{{ 'Related packages' | tr }}</h2>
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 					@for (other of related; track other.slug) {
 						<li>
@@ -102,11 +102,11 @@
 			<section>
 				<details class="ds-card">
 					<summary class="flex cursor-pointer items-center justify-between gap-3 p-4 font-medium">
-						<span><span translate>Roadmap</span> ({{ item.roadmap.length }})</span>
+						<span><span>{{ 'Roadmap' | tr }}</span> ({{ item.roadmap.length }})</span>
 					</summary>
 					<ol class="m-0 flex list-decimal flex-col gap-1 px-4 pb-4 pl-9 text-sm leading-6 marker:text-[var(--muted-foreground)]">
 						@for (step of item.roadmap; track step) {
-							<li>{{ step }}</li>
+							<li>{{ step | tr }}</li>
 						}
 					</ol>
 				</details>

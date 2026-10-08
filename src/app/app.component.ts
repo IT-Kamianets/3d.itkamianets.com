@@ -2,17 +2,18 @@ import { DOCUMENT } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CanonicalService } from '@wawjs/ngx-default';
-import { LanguageService, TranslateDirective } from '@wawjs/ngx-translate';
+import { LanguageService } from '@wawjs/ngx-translate';
 import { environment } from '../environments/environment';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { TopbarComponent } from './layouts/topbar/topbar.component';
+import { TrPipe } from './shared/translate/tr.pipe';
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, TopbarComponent, FooterComponent, TranslateDirective],
+	imports: [RouterOutlet, TopbarComponent, FooterComponent, TrPipe],
 	template: `
 		<div class="ds flex min-h-screen flex-col">
-			<a class="skip-link" href="#main" translate>Skip to content</a>
+			<a class="skip-link" href="#main">{{ 'Skip to content' | tr }}</a>
 			<app-topbar />
 			<main id="main" class="flex-1" tabindex="-1">
 				<router-outlet />

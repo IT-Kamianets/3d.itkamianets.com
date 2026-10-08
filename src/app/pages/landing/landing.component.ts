@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateDirective } from '@wawjs/ngx-translate';
+import {  } from '@wawjs/ngx-translate';
+import { TrPipe } from '../../shared/translate/tr.pipe';
 import {
 	catalogConstructors,
 	catalogPackages,
@@ -12,7 +13,7 @@ import { IconComponent } from '../../shared/icon/icon.component';
 import { RoomScanComponent } from '../../shared/room-scan/room-scan.component';
 
 @Component({
-	imports: [RouterLink, TranslateDirective, IconComponent, CodeBlockComponent, RoomScanComponent],
+	imports: [RouterLink, IconComponent, CodeBlockComponent, RoomScanComponent, TrPipe],
 	templateUrl: './landing.component.html',
 })
 export class LandingComponent {

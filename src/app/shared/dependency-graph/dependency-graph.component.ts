@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { TranslateService } from '@wawjs/ngx-translate';
 import { catalogPackages, dependencyLevels } from '../../feature/catalog/catalog.data';
 
 const NODE = { width: 196, height: 40 };
@@ -25,6 +25,7 @@ interface Edge {
 })
 export class DependencyGraphComponent {
 	private readonly _router = inject(Router);
+	private readonly _translateService = inject(TranslateService);
 
 	protected readonly node = NODE;
 	protected readonly nodes: Node[] = dependencyLevels.flatMap((level) =>
@@ -58,10 +59,16 @@ export class DependencyGraphComponent {
 			return [{ id: `${dependency}>${item.slug}`, path: `M${x1},${y1} C${mid},${y1} ${mid},${y2} ${x2},${y2}` }];
 		}),
 	);
-	protected readonly summary = catalogPackages
-		.filter((item) => item.dependencies.length)
-		.map((item) => `${item.name} needs ${item.dependencies.join(', ')}`)
-		.join('. ');
+	protected readonly label = computed(() => {
+		const t = (text: string) => this._translateService.translate(text)();
+		const needs = t('needs');
+		const details = catalogPackages
+			.filter((item) => item.dependencies.length)
+			.map((item) => `${item.name} ${needs} ${item.dependencies.join(', ')}`)
+			.join('. ');
+
+		return `${t('Package dependency graph')}. ${details}.`;
+	});
 
 	protected open(slug: string) {
 		void this._router.navigate(['/packages', slug]);

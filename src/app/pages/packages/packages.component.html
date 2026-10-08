@@ -1,14 +1,12 @@
 <div class="container-x py-12 sm:py-16">
-	<h1 class="ds-page-title" translate>Packages</h1>
-	<p class="ds-lead mt-4 max-w-[44ch]" translate>
-		Reusable building blocks, grouped by area. Open one for install steps and roadmap.
-	</p>
+	<h1 class="ds-page-title">{{ 'Packages' | tr }}</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]">{{ 'Reusable building blocks, grouped by area. Open one for install steps and roadmap.' | tr }}</p>
 
-	<div class="mt-8 flex flex-wrap gap-2" role="group" [translate]="{ ariaLabel: 'Filter by area' }">
-		<button class="ds-chip" type="button" [attr.aria-pressed]="!group()" (click)="select(null)" translate>All</button>
+	<div class="mt-8 flex flex-wrap gap-2" role="group" [attr.aria-label]="'Filter by area' | tr">
+		<button class="ds-chip" type="button" [attr.aria-pressed]="!group()" (click)="select(null)">{{ 'All' | tr }}</button>
 		@for (name of groups; track name) {
 			<button class="ds-chip" type="button" [attr.aria-pressed]="group() === name" (click)="select(name)">
-				{{ name }}
+				{{ name | tr }}
 			</button>
 		}
 	</div>
@@ -19,14 +17,14 @@
 				<a class="tile-link ds-plain" [routerLink]="['/packages', item.slug]">
 					<span class="flex items-center justify-between gap-3">
 						<span class="ds-mono text-base font-medium">{{ item.name }}</span>
-						<span class="ds-badge ds-badge-outline">{{ item.status }}</span>
+						<span class="ds-badge ds-badge-outline">{{ item.status | tr }}</span>
 					</span>
-					<span class="ds-supporting">{{ item.summary }}</span>
+					<span class="ds-supporting">{{ item.summary | tr }}</span>
 					<span class="ds-mono ds-muted mt-auto pt-2">
 						@if (item.dependencies.length) {
-							<span translate>Needs</span> {{ item.dependencies.join(', ') }}
+							<span>{{ 'Needs' | tr }}</span> {{ item.dependencies.join(', ') }}
 						} @else {
-							<span translate>No dependencies</span>
+							<span>{{ 'No dependencies' | tr }}</span>
 						}
 					</span>
 				</a>

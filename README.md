@@ -35,6 +35,8 @@ final game
 
 The website is primarily a landing page and documentation/catalog interface for the framework.
 
+It is a fully static, prerendered Angular site with no backend and no runtime API calls. Ukrainian is the default language and English is available through the language switch. All page text, including the package, constructor, and documentation content, is translated.
+
 ### Landing Page
 
 Introduces IT Kamianets 3D Engine and explains:
@@ -272,7 +274,8 @@ The built site is written to `dist/app/browser`; the production domain is set in
 - Packages: `src/data/catalog/packages.json`
 - Constructors: `src/data/catalog/constructors.json`
 - Company name, SEO defaults, and per-page SEO: `src/data/company/company.json`
-- UI strings: `src/i18n/en.json` and `src/i18n/ua.json` (index-based; keep both files in the same order)
+- Documentation pages: `src/data/docs/docs.json`
+- Translations: `src/i18n/ua.json` maps each English source string to its Ukrainian text (English needs no entry). Every string shown from package, constructor, or docs data must have an entry. Strings are bundled into the app so prerendered pages are already Ukrainian
 
 Routes, prerendering, and the sitemap are generated from the catalog JSON, so adding an entry creates its page automatically. Add matching `pageSeo` entries in `company.json` for its title and description.
 

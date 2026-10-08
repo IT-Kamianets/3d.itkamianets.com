@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TrPipe } from '../translate/tr.pipe';
 
 type Point = [number, number];
 
@@ -39,6 +40,7 @@ const tag = (label: string, anchor: Point, x: number, y: number, side: 'left' | 
  */
 @Component({
 	selector: 'app-room-scan',
+	imports: [TrPipe],
 	templateUrl: './room-scan.component.html',
 })
 export class RoomScanComponent {

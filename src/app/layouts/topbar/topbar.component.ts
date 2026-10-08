@@ -1,17 +1,18 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LanguageService, TranslateDirective, TranslateService } from '@wawjs/ngx-translate';
+import { LanguageService, TranslateService } from '@wawjs/ngx-translate';
 import { ThemeService } from '@wawjs/ngx-ui';
 import type { Language } from '@wawjs/ngx-translate';
 import type { AppLanguage } from '../../../environments/environment.prod';
 import { GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
 import { CompanyService } from '../../feature/company/company.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+import { TrPipe } from '../../shared/translate/tr.pipe';
 
 @Component({
 	selector: 'app-topbar',
-	imports: [NgOptimizedImage, RouterLink, RouterLinkActive, TranslateDirective, IconComponent],
+	imports: [NgOptimizedImage, RouterLink, RouterLinkActive, IconComponent, TrPipe],
 	templateUrl: './topbar.component.html',
 })
 export class TopbarComponent {
