@@ -1,0 +1,109 @@
+{
+  "generator": "Built-in image_gen",
+  "size": {
+    "width": 1200,
+    "height": 630
+  },
+  "images": [
+    {
+      "route": "/",
+      "file": "src/assets/seo/home.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: website SEO / Open Graph share image, wide landscape 1200x630 composition. Create a polished cinematic 3D illustration for IT Kamianets 3D Engine homepage, an ecosystem of reusable 3D application and game building blocks. Subject: an elegant exploded modular cube framework floating over a miniature 3D world with architectural rooms, terrain and simple game objects, connected by precise thin luminous lines. Dark graphite navy background #1b1f2b, restrained cool cyan and warm amber highlights, matte white and charcoal materials, studio lighting, realistic depth, generous breathing room, visually readable at thumbnail size. One strong central focal point, keep all important objects inside the central 80 percent. No text, no lettering, no logos, no watermark. This is an editorial conceptual illustration, not a screenshot."
+    },
+    {
+      "route": "/packages",
+      "file": "src/assets/seo/packages.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A curated library of seven distinct modular 3D building blocks on floating shelves, including a core cube, room scene, asset objects, manipulation gizmo, VR headset and scanned room. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-scene-schema",
+      "file": "src/assets/seo/scene-schema.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A transparent architectural room scene surrounded by neatly connected translucent data containers and geometric object nodes, suggesting a shared engine-independent scene contract. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-core",
+      "file": "src/assets/seo/unity-core.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A precise central luminous core cube with strong structural framework and several satellite modules neatly attached, the foundation powering reusable 3D systems. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-scene",
+      "file": "src/assets/seo/unity-scene.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An exploded miniature interior room with chair, floor, walls and lights transforming from transparent wireframe on one side to fully rendered geometry on the other. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-assets",
+      "file": "src/assets/seo/unity-assets.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An organized set of beautiful 3D assets: chair, tree, vehicle, wall module and material spheres on discrete floating plinths, arranged as a reusable asset library. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-interaction",
+      "file": "src/assets/seo/unity-interaction.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A simple matte cube selected inside a precise 3D manipulation gizmo, with visible colored axis arrows, rotation arcs and scale handles, surrounded by a minimal editable room. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-xr",
+      "file": "src/assets/seo/unity-xr.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A sleek unbranded VR headset and two controllers floating beside a translucent hand gently manipulating a luminous virtual cube, immersive 3D interaction. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/packages/3d-unity-spatial",
+      "file": "src/assets/seo/unity-spatial.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A cutaway physical room reconstructed as a fine cyan point cloud, with highlighted wall and floor planes, spatial anchor markers, and partial solid furniture. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors",
+      "file": "src/assets/seo/constructors.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: Six elegant miniature game-world dioramas with visible camera viewpoint indicators: character, overhead, isometric, side-view, fixed-camera and aerial strategy, all composed into one coherent scene. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/character-view",
+      "file": "src/assets/seo/character-view.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A third-person view behind an original unbranded adventurer standing on a stone path in a small atmospheric 3D world, clear character-focused camera perspective. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/top-down",
+      "file": "src/assets/seo/top-down.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A directly overhead view of a compact stylized game arena with an original small player figure, pathways and obstacles, strict top-down camera perspective. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/isometric",
+      "file": "src/assets/seo/isometric.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An elegant isometric fantasy village diorama with stone paths, tiny original adventurer, trees and a tower, crisp orthographic 45-degree game viewpoint. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/side-view",
+      "file": "src/assets/seo/side-view.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A beautifully modeled side-scrolling platform game diorama, layered rock ledges, simple original character jumping between platforms, strict side-on camera. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/fixed-camera",
+      "file": "src/assets/seo/fixed-camera.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A cinematic miniature mysterious interior corridor with an original small character and dramatic doorway light, composed from a fixed elevated corner camera. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/constructors/god-camera",
+      "file": "src/assets/seo/god-camera.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An aerial strategy-world diorama of a growing small city, roads, fields and river with a subtle floating camera orbit arc, emphasizing free world-scale control. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/docs",
+      "file": "src/assets/seo/docs.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An open technical reference book rendered as a 3D object with a small modular cube scene hovering above its pages and neatly arranged tabs, no readable writing. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/docs/installation",
+      "file": "src/assets/seo/installation.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: Three separated 3D modular components aligning precisely into a prepared foundation slot with subtle downward arrows made of light, illustrating simple package installation. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/docs/architecture",
+      "file": "src/assets/seo/architecture.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: An elegant three-tier exploded 3D architecture: reusable foundation modules at the bottom, game-constructor dioramas in the middle, finished game worlds above, thin vertical connections. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    },
+    {
+      "route": "/docs/examples",
+      "file": "src/assets/seo/examples.jpg",
+      "prompt": "Use case: stylized-concept. Asset type: SEO Open Graph share image for IT Kamianets 3D Engine, wide landscape 1200x630 composition. Subject: A clear miniature workflow showing a scanned room point cloud, a transparent structured scene and a completed rendered room on three connected plinths. Style: premium cinematic 3D editorial illustration, dark graphite navy background #1b1f2b, restrained cool cyan and warm amber illumination, matte white and charcoal objects, realistic materials and depth, clean studio lighting. Match a coherent modular game-engine visual series. Strong central focal point and generous negative space, legible at thumbnail size, important objects within central 80 percent. No text, letters, logos, watermarks or screenshots."
+    }
+  ]
+}

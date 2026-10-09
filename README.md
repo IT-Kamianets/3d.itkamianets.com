@@ -226,11 +226,11 @@ The exact package split can evolve as constructors are implemented.
 
 ### Phase 2: Framework Documentation
 
-- Document existing `3d-*` packages
-- Package dependency visualization
-- Installation guides
-- Architecture documentation
-- Examples
+- [x] Document existing `3d-*` packages (purpose, install, usage, current state, roadmap per package page)
+- [x] Package dependency visualization (graph on `/docs/architecture`)
+- [x] Installation guides (`/docs/installation`)
+- [x] Architecture documentation (`/docs/architecture`)
+- [x] Examples (`/docs/examples`: schema example scenes, room-scan workflow, examples per package)
 
 ### Phase 3: Constructors
 

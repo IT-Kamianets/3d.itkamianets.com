@@ -1,15 +1,15 @@
 {
 	"_id": "itkamianets-3d",
 	"name": "IT Kamianets 3D Engine",
-	"title": "IT Kamianets 3D Engine — фреймворк для багаторазових 3D-застосунків та ігор",
+	"title": "IT Kamianets 3D Engine: фреймворк для багаторазових 3D-застосунків та ігор",
 	"description": "Екосистема фреймворків для створення багаторазових 3D-застосунків та ігор: базові пакети, конструктори ігор і згенеровані ігрові проєкти.",
-	"image": "https://3d.itkamianets.com/logo-512.png",
+	"image": "https://3d.itkamianets.com/seo/home.jpg",
 	"siteUrl": "https://3d.itkamianets.com",
 	"lang": "uk",
 	"locale": "uk_UA",
 	"logo": "/logo.png",
 	"defaultSeo": {
-		"title": "IT Kamianets 3D Engine — фреймворк для багаторазових 3D-застосунків та ігор",
+		"title": "IT Kamianets 3D Engine: фреймворк для багаторазових 3D-застосунків та ігор",
 		"description": "Екосистема фреймворків для створення багаторазових 3D-застосунків та ігор: базові пакети, конструктори ігор і згенеровані ігрові проєкти.",
 		"keywords": [
 			"3D-фреймворк",
@@ -19,80 +19,103 @@
 			"IT Kamianets"
 		],
 		"author": "IT Kamianets",
-		"image": "https://3d.itkamianets.com/logo-512.png"
+		"image": "https://3d.itkamianets.com/seo/home.jpg"
 	},
 	"pageSeo": {
 		"/packages": {
 			"title": "Пакети",
-			"description": "Каталог багаторазових пакетів фреймворку 3d-*: ядро, сцена, ресурси, взаємодія, XR і простір."
+			"description": "Каталог багаторазових пакетів фреймворку 3d-*: ядро, сцена, ресурси, взаємодія, XR і простір.",
+			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/constructors": {
 			"title": "Конструктори",
-			"description": "Конструктори ігор для видів від персонажа, зверху, ізометрії, збоку, фіксованої та вільної камери."
+			"description": "Конструктори ігор для видів від персонажа, зверху, ізометрії, збоку, фіксованої та вільної камери.",
+			"image": "https://3d.itkamianets.com/seo/constructors.jpg"
 		},
 		"/docs": {
 			"title": "Документація",
-			"description": "Документація IT Kamianets 3D Engine: огляд, встановлення та архітектура."
+			"description": "Документація IT Kamianets 3D Engine: огляд, встановлення, архітектура та приклади.",
+			"image": "https://3d.itkamianets.com/seo/docs.jpg"
 		},
 		"/docs/installation": {
 			"title": "Встановлення",
-			"description": "Встановіть пакети Unity IT Kamianets 3D Engine через Unity Package Manager."
+			"description": "Встановіть пакети Unity IT Kamianets 3D Engine через Unity Package Manager.",
+			"image": "https://3d.itkamianets.com/seo/installation.jpg"
 		},
 		"/docs/architecture": {
 			"title": "Архітектура",
-			"description": "Три шари IT Kamianets 3D Engine, потік сцен через схему та граф залежностей пакетів."
+			"description": "Три шари IT Kamianets 3D Engine, потік сцен через схему та граф залежностей пакетів.",
+			"image": "https://3d.itkamianets.com/seo/architecture.jpg"
+		},
+		"/docs/examples": {
+			"title": "Приклади",
+			"description": "Приклади сцен і робочих процесів IT Kamianets 3D Engine: від скану кімнати до документа сцени.",
+			"image": "https://3d.itkamianets.com/seo/examples.jpg"
 		},
 		"/packages/3d-scene-schema": {
 			"title": "3d-scene-schema",
-			"description": "Незалежна від рушія специфікація сцен: спільна структура сцен, об'єктів, трансформацій, матеріалів, ресурсів і метаданих."
+			"description": "Незалежна від рушія специфікація сцен: спільна структура сцен, об'єктів, трансформацій, матеріалів, ресурсів і метаданих.",
+			"image": "https://3d.itkamianets.com/seo/scene-schema.jpg"
 		},
 		"/packages/3d-unity-core": {
 			"title": "3d-unity-core",
-			"description": "Базовий пакет виконання IT-Kamianets 3D Engine: спільні системи Unity, конфігурація, утиліти та базова архітектура."
+			"description": "Базовий пакет виконання IT-Kamianets 3D Engine: спільні системи Unity, конфігурація, утиліти та базова архітектура.",
+			"image": "https://3d.itkamianets.com/seo/unity-core.jpg"
 		},
 		"/packages/3d-unity-scene": {
 			"title": "3d-unity-scene",
-			"description": "Пакет виконання сцен: завантажує, зберігає, синхронізує й перебудовує 3D-сцени в Unity зі спільної схеми сцен."
+			"description": "Пакет виконання сцен: завантажує, зберігає, синхронізує й перебудовує 3D-сцени в Unity зі спільної схеми сцен.",
+			"image": "https://3d.itkamianets.com/seo/unity-scene.jpg"
 		},
 		"/packages/3d-unity-assets": {
 			"title": "3d-unity-assets",
-			"description": "Пакет керування ресурсами: 3D-моделі, матеріали, текстури, метадані та завантаження ресурсів під час виконання."
+			"description": "Пакет керування ресурсами: 3D-моделі, матеріали, текстури, метадані та завантаження ресурсів під час виконання.",
+			"image": "https://3d.itkamianets.com/seo/unity-assets.jpg"
 		},
 		"/packages/3d-unity-interaction": {
 			"title": "3d-unity-interaction",
-			"description": "Пакет редагування об'єктів: вибір, переміщення, обертання, масштабування, прив'язка, дублювання та видалення."
+			"description": "Пакет редагування об'єктів: вибір, переміщення, обертання, масштабування, прив'язка, дублювання та видалення.",
+			"image": "https://3d.itkamianets.com/seo/unity-interaction.jpg"
 		},
 		"/packages/3d-unity-xr": {
 			"title": "3d-unity-xr",
-			"description": "Пакет XR: взаємодія в Meta Quest / VR, контролери, відстеження рук, пересування та інструменти XR."
+			"description": "Пакет XR: взаємодія в Meta Quest / VR, контролери, відстеження рук, пересування та інструменти XR.",
+			"image": "https://3d.itkamianets.com/seo/unity-xr.jpg"
 		},
 		"/packages/3d-unity-spatial": {
 			"title": "3d-unity-spatial",
-			"description": "Пакет просторових обчислень: сканування кімнат, просторові якорі, межі, поверхні та картографування реального середовища."
+			"description": "Пакет просторових обчислень: сканування кімнат, просторові якорі, межі, поверхні та картографування реального середовища.",
+			"image": "https://3d.itkamianets.com/seo/unity-spatial.jpg"
 		},
 		"/constructors/character-view": {
 			"title": "Конструктор: Вид від персонажа",
-			"description": "Для ігор, де гравець напряму керує персонажем від першої або третьої особи. Приклади: GTA V, Cyberpunk 2077, Elden Ring."
+			"description": "Для ігор, де гравець напряму керує персонажем від першої або третьої особи. Приклади: GTA V, Cyberpunk 2077, Elden Ring.",
+			"image": "https://3d.itkamianets.com/seo/character-view.jpg"
 		},
 		"/constructors/top-down": {
 			"title": "Конструктор: Вид зверху",
-			"description": "Для ігор із видом переважно згори, прямим рухом гравця та екшн-геймплеєм. Приклади: Hades, Vampire Survivors, Hotline Miami."
+			"description": "Для ігор із видом переважно згори, прямим рухом гравця та екшн-геймплеєм. Приклади: Hades, Vampire Survivors, Hotline Miami.",
+			"image": "https://3d.itkamianets.com/seo/top-down.jpg"
 		},
 		"/constructors/isometric": {
 			"title": "Конструктор: Ізометрія",
-			"description": "Для ігор із ізометричною камерою під кутом, яку часто використовують в RPG, стратегіях і екшн-RPG. Приклади: Baldur's Gate 3, Diablo IV, Path of Exile 2."
+			"description": "Для ігор із ізометричною камерою під кутом, яку часто використовують в RPG, стратегіях і екшн-RPG. Приклади: Baldur's Gate 3, Diablo IV, Path of Exile 2.",
+			"image": "https://3d.itkamianets.com/seo/isometric.jpg"
 		},
 		"/constructors/side-view": {
 			"title": "Конструктор: Вид збоку",
-			"description": "Для ігор із видом збоку: платформерів, метроідваній, екшн-ігор і пісочниць. Приклади: Hollow Knight, Dead Cells, Terraria."
+			"description": "Для ігор із видом збоку: платформерів, метроідваній, екшн-ігор і пісочниць. Приклади: Hollow Knight, Dead Cells, Terraria.",
+			"image": "https://3d.itkamianets.com/seo/side-view.jpg"
 		},
 		"/constructors/fixed-camera": {
 			"title": "Конструктор: Фіксована камера",
-			"description": "Для ігор, де положення камери задане наперед або керується сценою, а не гравцем напряму. Приклади: Resident Evil, INSIDE, Little Nightmares."
+			"description": "Для ігор, де положення камери задане наперед або керується сценою, а не гравцем напряму. Приклади: Resident Evil, INSIDE, Little Nightmares.",
+			"image": "https://3d.itkamianets.com/seo/fixed-camera.jpg"
 		},
 		"/constructors/god-camera": {
 			"title": "Конструктор: Камера «бога» / вільна камера",
-			"description": "Для ігор, де користувач керує світом із вільної, стратегічної чи «божественної» камери. Приклади: Civilization, Cities: Skylines, Total War."
+			"description": "Для ігор, де користувач керує світом із вільної, стратегічної чи «божественної» камери. Приклади: Civilization, Cities: Skylines, Total War.",
+			"image": "https://3d.itkamianets.com/seo/god-camera.jpg"
 		}
 	},
 	"structuredData": {

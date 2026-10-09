@@ -16,6 +16,7 @@ const staticRoutes = [
 	'/docs',
 	'/docs/installation',
 	'/docs/architecture',
+	'/docs/examples',
 	'/constructors',
 	...constructors.map((item) => `/constructors/${item.slug}`),
 ];
@@ -32,6 +33,7 @@ await Promise.all(
 		await mkdir(outputDir, { recursive: true });
 		await writeFile(path.join(outputDir, 'sitemap.xml'), buildSitemap(routes, siteUrl, lastmod));
 		await writeFile(path.join(outputDir, 'robots.txt'), buildRobots(siteUrl));
+		await Promise.all(staticRoutes.map((route) => syncOgUrl(outputDir, route, siteUrl)));
 	}),
 );
 
@@ -50,6 +52,25 @@ function buildSitemap(routes, siteUrl, lastmod) {
 ${urls}
 </urlset>
 `;
+}
+
+/** The shared index.html seeds og:url with the home page; point each prerendered page at its own URL. */
+async function syncOgUrl(outputDir, route, siteUrl) {
+	if (route === '/') {
+		return;
+	}
+
+	const file = path.join(outputDir, route, 'index.html');
+	const html = await readFile(file, 'utf8');
+	const url = escapeXml(toAbsoluteUrl(siteUrl, route));
+	const updated = html.replace(
+		/(<meta\s+property="og:url"\s+content=")[^"]*(")/,
+		(_, start, end) => `${start}${url}${end}`,
+	);
+
+	if (updated !== html) {
+		await writeFile(file, updated);
+	}
 }
 
 function buildRobots(siteUrl) {

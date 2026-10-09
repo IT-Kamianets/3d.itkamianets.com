@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
-import {  } from '@wawjs/ngx-translate';
 import docsData from '../../../data/docs/docs.json';
 import { catalogPackages, repoUrl } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { DependencyGraphComponent } from '../../shared/dependency-graph/dependency-graph.component';
 import { RichPipe, TrPipe } from '../../shared/translate/tr.pipe';
 
-type DocsPage = 'overview' | 'installation' | 'architecture';
+type DocsPage = 'overview' | 'installation' | 'architecture' | 'examples';
 
 type DocBlock =
 	| { type: 'p'; text: string }
@@ -16,7 +15,8 @@ type DocBlock =
 	| { type: 'links'; items: { label: string; path: string; text: string }[] }
 	| { type: 'code'; code: string }
 	| { type: 'graph' }
-	| { type: 'packages' };
+	| { type: 'packages' }
+	| { type: 'examples' };
 
 interface DocPageContent {
 	title: string;
@@ -43,6 +43,7 @@ export class DocsComponent {
 		{ label: 'Overview', path: '/docs' },
 		{ label: 'Installation', path: '/docs/installation' },
 		{ label: 'Architecture', path: '/docs/architecture' },
+		{ label: 'Examples', path: '/docs/examples' },
 	];
 	protected readonly packages = catalogPackages;
 	protected readonly repoUrl = repoUrl;

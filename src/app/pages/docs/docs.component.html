@@ -64,6 +64,22 @@
 								<app-dependency-graph />
 							</div>
 						}
+						@case ('examples') {
+							<ul class="prose-measure m-0 mt-4 flex list-none flex-col gap-4 p-0 leading-7">
+								@for (item of packages; track item.slug) {
+									@if (item.examples.length) {
+										<li>
+											<a class="ds-mono" [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
+											<ul class="mt-1 list-disc pl-5 marker:text-[var(--muted-foreground)]">
+												@for (example of item.examples; track example) {
+													<li>{{ example | tr }}</li>
+												}
+											</ul>
+										</li>
+									}
+								}
+							</ul>
+						}
 						@case ('packages') {
 							<div class="ds-card mt-4 overflow-x-auto">
 								<table class="ds-table min-w-[40rem]">

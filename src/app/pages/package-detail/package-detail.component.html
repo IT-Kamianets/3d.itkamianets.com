@@ -1,10 +1,5 @@
 <article class="container-x py-12 sm:py-16">
-	<a class="ds-btn ds-btn-ghost ds-btn-sm -ml-3" routerLink="/packages">
-		<app-icon name="arrow-left" size="1rem" />
-		<span>{{ 'Packages' | tr }}</span>
-	</a>
-
-	<header class="mt-4 max-w-[48rem]">
+	<header class="max-w-[48rem]">
 		<h1 class="ds-page-title ds-mono !text-[clamp(1.75rem,4vw,2.5rem)]">{{ item.name }}</h1>
 		<p class="ds-lead mt-4">{{ item.summary | tr }}</p>
 		<p class="ds-supporting mt-5">

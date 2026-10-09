@@ -1,10 +1,5 @@
 <article class="container-x py-12 sm:py-16">
-	<a class="ds-btn ds-btn-ghost ds-btn-sm -ml-3" routerLink="/constructors">
-		<app-icon name="arrow-left" size="1rem" />
-		<span>{{ 'Constructors' | tr }}</span>
-	</a>
-
-	<header class="mt-4 flex max-w-[48rem] flex-col gap-5 sm:flex-row sm:gap-6">
+	<header class="flex max-w-[48rem] flex-col gap-5 sm:flex-row sm:gap-6">
 		<span class="icon-tile h-14 w-14"><app-icon [name]="item.icon" size="1.75rem" /></span>
 		<div>
 			<h1 class="ds-page-title">{{ item.name | tr }}</h1>
@@ -13,9 +8,8 @@
 				<span class="ds-badge ds-badge-outline">{{ 'Planned' | tr }}</span>
 				<span class="ds-badge ds-badge-outline">{{ 'Repository not created yet' | tr }}</span>
 			</div>
-			<div class="mt-6 flex flex-wrap items-center gap-3">
+			<div class="mt-6">
 				<button class="ds-btn ds-btn-primary ds-btn-lg" type="button" disabled>{{ 'Create project' | tr }}</button>
-				<span class="ds-supporting">{{ 'Project generation arrives in Phase 4.' | tr }}</span>
 			</div>
 		</div>
 	</header>

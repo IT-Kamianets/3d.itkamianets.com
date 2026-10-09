@@ -51,6 +51,7 @@ export const routes: Routes = [
 		{ path: 'docs', page: 'overview' },
 		{ path: 'docs/installation', page: 'installation' },
 		{ path: 'docs/architecture', page: 'architecture' },
+		{ path: 'docs/examples', page: 'examples' },
 	].map(({ path, page }) => ({
 		path,
 		data: { ...metaFor(`/${path}`), page },

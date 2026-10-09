@@ -1,27 +1,47 @@
 <footer class="mt-24 border-t border-[var(--border)]">
-	<div class="container-x grid gap-10 py-12 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)]">
+	<div class="container-x grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-16">
 		<div>
 			<p class="text-base font-semibold">{{ company().name }}</p>
 			<p class="ds-supporting mt-2 max-w-[44ch]">{{ companyDescription() }}</p>
+			<p class="mt-4">
+				<a [href]="githubUrl" rel="noopener" target="_blank">GitHub</a>
+			</p>
 		</div>
 
-		<nav [attr.aria-label]="'Pages footer navigation' | tr">
-			<p class="ds-supporting">{{ 'Pages' | tr }}</p>
-			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
-				@for (page of pageLinks; track page.path) {
-					<li>
-						<a [routerLink]="page.path">{{ page.label | tr }}</a>
-					</li>
-				}
-			</ul>
+		<nav class="grid gap-8 sm:grid-cols-3" [attr.aria-label]="'Pages footer navigation' | tr">
+			<div>
+				<p class="ds-supporting"><a class="ds-plain" routerLink="/packages">{{ 'Packages' | tr }}</a></p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (item of packages; track item.slug) {
+						<li>
+							<a class="ds-mono" [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
+						</li>
+					}
+				</ul>
+			</div>
+
+			<div>
+				<p class="ds-supporting"><a class="ds-plain" routerLink="/constructors">{{ 'Constructors' | tr }}</a></p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (item of constructors; track item.slug) {
+						<li>
+							<a [routerLink]="['/constructors', item.slug]">{{ item.name | tr }}</a>
+						</li>
+					}
+				</ul>
+			</div>
+
+			<div>
+				<p class="ds-supporting"><a class="ds-plain" routerLink="/docs">{{ 'Documentation' | tr }}</a></p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (link of docLinks; track link.path) {
+						<li>
+							<a [routerLink]="link.path">{{ link.label | tr }}</a>
+						</li>
+					}
+				</ul>
+			</div>
 		</nav>
-
-		<div>
-			<p class="ds-supporting">{{ 'Source' | tr }}</p>
-			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
-				<li><a [href]="githubUrl" rel="noopener" target="_blank">GitHub</a></li>
-			</ul>
-		</div>
 	</div>
 
 	<div class="border-t border-[var(--border)]">

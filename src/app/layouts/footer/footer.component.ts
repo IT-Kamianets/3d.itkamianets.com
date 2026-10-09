@@ -1,7 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService } from '@wawjs/ngx-translate';
-import { GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
+import {
+	GITHUB_ORG_URL,
+	catalogConstructors,
+	catalogPackages,
+} from '../../feature/catalog/catalog.data';
 import { CompanyService } from '../../feature/company/company.service';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 
@@ -20,10 +24,13 @@ export class FooterComponent {
 	protected readonly company = inject(CompanyService).company;
 	protected readonly currentYear = new Date().getFullYear();
 	protected readonly githubUrl = GITHUB_ORG_URL;
-	protected readonly pageLinks = [
-		{ label: 'Packages', path: '/packages' },
-		{ label: 'Constructors', path: '/constructors' },
-		{ label: 'Docs', path: '/docs' },
+	protected readonly packages = catalogPackages;
+	protected readonly constructors = catalogConstructors;
+	protected readonly docLinks = [
+		{ label: 'Overview', path: '/docs' },
+		{ label: 'Installation', path: '/docs/installation' },
+		{ label: 'Architecture', path: '/docs/architecture' },
+		{ label: 'Examples', path: '/docs/examples' },
 	];
 	protected readonly companyDescription = computed(() =>
 		this._translateService.translate(FOOTER_DESCRIPTION)(),

@@ -11,6 +11,7 @@
 						"items": [
 							{ "label": "Architecture", "path": "/docs/architecture", "text": "the three layers, and how scenes move between Unity and the schema." },
 							{ "label": "Installation", "path": "/docs/installation", "text": "Unity requirements and a Package Manager URL for each package." },
+							{ "label": "Examples", "path": "/docs/examples", "text": "example scenes and a room-scan workflow, with examples for each package." },
 							{ "label": "Packages", "path": "/packages", "text": "one page per package, with its current state and roadmap." },
 							{ "label": "Constructors", "path": "/constructors", "text": "planned starting points for each camera and gameplay style." }
 						]
@@ -129,6 +130,50 @@
 						]
 					}
 				]
+			}
+		]
+	},
+	"examples": {
+		"title": "Examples",
+		"lead": "Scenes and workflows the packages are built for.",
+		"sections": [
+			{
+				"title": "Scene documents",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "`3d-scene-schema` ships example scene documents in the `examples/` folder of its [repository](https://github.com/IT-Kamianets/3d-scene-schema). Each one validates against the v1 schema."
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`room-scan.example.json`: a scanned room described as one scene",
+							"`corridor-scan.example.json`: a corridor scan sharing a coordinate frame with the room scan"
+						]
+					}
+				]
+			},
+			{
+				"title": "From a room scan to a scene",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The main workflow today: scan a real room on a Meta Quest, convert it to scene data, and store it as JSON."
+					},
+					{
+						"type": "ol",
+						"items": [
+							"`3d-unity-xr` triggers a scan from a controller button and shows progress in a HUD.",
+							"`3d-unity-spatial` reads the physical room and produces scene data.",
+							"`3d-unity-scene` converts it to a scene document that follows `3d-scene-schema`."
+						]
+					},
+					{ "type": "code", "code": "Room scan → SceneData → Scene JSON" }
+				]
+			},
+			{
+				"title": "Examples by package",
+				"blocks": [{ "type": "examples" }]
 			}
 		]
 	}
