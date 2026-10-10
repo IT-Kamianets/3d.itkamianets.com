@@ -22,6 +22,10 @@
 		"image": "https://3d.itkamianets.com/seo/home.jpg"
 	},
 	"pageSeo": {
+		"/pitch": {
+			"title": "Презентація",
+			"description": "Презентація IT Kamianets 3D Engine: пакети, схема сцени та конструктори ігор."
+		},
 		"/packages": {
 			"title": "Пакети",
 			"description": "Каталог багаторазових пакетів фреймворку 3d-*: ядро, сцена, ресурси, взаємодія, XR і простір.",

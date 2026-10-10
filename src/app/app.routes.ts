@@ -58,6 +58,11 @@ export const routes: Routes = [
 		loadComponent: () => import('./pages/docs/docs.component').then((m) => m.DocsComponent),
 	})),
 	{
+		path: 'pitch',
+		data: metaFor('/pitch'),
+		loadComponent: () => import('./pages/pitch/pitch.component').then((m) => m.PitchComponent),
+	},
+	{
 		path: '**',
 		redirectTo: '',
 	},
