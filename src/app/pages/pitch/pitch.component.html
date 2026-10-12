@@ -65,28 +65,7 @@
 				@case (2) {
 					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Phase 1: the packages' | tr }}</h2>
 					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'From generic to specific. Each column builds on the one before it.' | tr }}</p>
-					<!-- Each column is a subgrid over two shared rows, so the card lists start level even when one description wraps. -->
-					<ol class="m-0 mt-6 grid list-none gap-6 p-0 lg:grid-cols-3 lg:grid-rows-[auto_auto]">
-						@for (column of packageColumns; track column.title; let i = $index) {
-							<li class="grid content-start gap-2.5 lg:row-span-2 lg:grid-rows-subgrid">
-								<div class="grid content-start gap-1">
-									<h3 class="flex items-baseline gap-3 text-[clamp(1.25rem,2vw,1.75rem)]">
-										<span class="ds-mono ds-muted !text-[clamp(1rem,1.4vw,1.25rem)]">{{ i + 1 }}</span>
-										{{ column.title | tr }}
-									</h3>
-									<p class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ column.text | tr }}</p>
-								</div>
-								<ul class="m-0 grid list-none content-start gap-2 p-0">
-									@for (item of column.packages; track item.slug) {
-										<li class="ds-card gap-0.5 px-5 py-3">
-											<span class="ds-mono break-all !text-[clamp(1rem,1.15vw,1.125rem)] font-semibold">{{ item.slug }}</span>
-											<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text | tr }}</span>
-										</li>
-									}
-								</ul>
-							</li>
-						}
-					</ol>
+					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: null, columns: packageColumns }" />
 				}
 
 				<!-- 4. Constructors, in the same card style -->
@@ -111,30 +90,17 @@
 					</ul>
 				}
 
-				<!-- 5. Phase 3: what a game takes from each layer, and what the team writes -->
+				<!-- 5. One constructor explained on the same package grid -->
 				@case (4) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Phase 3: the games' | tr }}</h2>
-					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'A new game starts from a constructor. The team writes only what makes it unique.' | tr }}</p>
-					<!-- Same subgrid as the packages slide, so the three lists start level. -->
-					<ol class="m-0 mt-6 grid list-none gap-6 p-0 lg:grid-cols-3 lg:grid-rows-[auto_auto]">
-						@for (column of gameColumns; track column.title; let i = $index; let last = $last) {
-							<li class="grid content-start gap-2.5 lg:row-span-2 lg:grid-rows-subgrid">
-								<div class="grid content-start gap-1">
-									<h3 class="flex items-baseline gap-3 text-[clamp(1.25rem,2vw,1.75rem)]">
-										<span class="ds-mono ds-muted !text-[clamp(1rem,1.4vw,1.25rem)]">{{ i + 1 }}</span>
-										{{ column.title | tr }}
-									</h3>
-									<p class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ column.text | tr }}</p>
-								</div>
-								<ul class="m-0 grid list-none content-start gap-2 p-0">
-									@for (item of column.items; track item) {
-										<!-- The last column is the team's own work, the point of the slide. -->
-										<li class="ds-card px-5 py-3.5 text-[clamp(1rem,1.3vw,1.1875rem)] leading-snug" [class.!border-[color:var(--primary)]]="last">{{ item | tr }}</li>
-									}
-								</ul>
-							</li>
-						}
-					</ol>
+					<h2 class="ds-page-title flex flex-wrap items-center gap-x-4 !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">
+						<app-icon [name]="example.icon" size="0.9em" />
+						{{ example.name | tr }}
+					</h2>
+					<p class="mt-3 text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">
+						{{ 'Highlighted: what this game is built from.' | tr }}
+						{{ 'Games like' | tr }} {{ example.examples.join(', ') }}.
+					</p>
+					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: exampleUses, columns: exampleColumns, compact: true }" />
 				}
 
 				<!-- 6. Conclusions -->
@@ -158,9 +124,9 @@
 							</ol>
 						</div>
 						<div class="ds-card items-center gap-4 p-6 text-center sm:p-8">
-							<app-qr-code class="!hidden w-[clamp(10.5rem,15vw,15rem)] md:!block" [value]="orgUrl" [ariaLabel]="('QR code that opens our GitHub' | tr) + ': ' + orgUrl" />
-							<span class="text-[clamp(1.25rem,2vw,1.875rem)] font-semibold leading-snug">{{ 'Join us: pick a package and start' | tr }}</span>
-							<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="orgUrl" rel="noopener" target="_blank">GitHub: IT-Kamianets</a>
+							<app-qr-code class="!hidden w-[clamp(10.5rem,15vw,15rem)] md:!block" [value]="telegramUrl" [ariaLabel]="('QR code that opens my Telegram' | tr) + ': ' + telegramUrl" />
+							<span class="text-[clamp(1.25rem,2vw,1.875rem)] font-semibold leading-snug">{{ 'Join us: message me on Telegram' | tr }}</span>
+							<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="telegramUrl" rel="noopener" target="_blank">t.me/wawceo</a>
 						</div>
 					</div>
 				}
@@ -196,3 +162,48 @@
 		</div>
 	</div>
 </div>
+
+<!--
+	The package grid, shared by the packages slide and the constructor example.
+	Pass a set of slugs to highlight what one constructor uses and fade the rest; null shows all evenly.
+	The example adds the constructor's and the sample game's own packages as two more columns, and
+	`compact` hides the column descriptions slide 3 already gave, so five columns fit one screen.
+-->
+<ng-template #packageGrid let-uses let-columns="columns" let-compact="compact">
+	<!-- Each column is a subgrid over two shared rows, so the card lists start level even when one description wraps. -->
+	<ol
+		class="m-0 mt-6 grid list-none gap-6 p-0 lg:grid-rows-[auto_auto]"
+		[class.lg:grid-cols-3]="columns.length === 3"
+		[class.lg:grid-cols-5]="columns.length === 5"
+		[class.lg:gap-x-4]="columns.length === 5"
+	>
+		@for (column of columns; track column.title; let i = $index) {
+			<li class="grid content-start gap-2.5 lg:row-span-2 lg:grid-rows-subgrid">
+				<div class="grid content-start gap-1">
+					<h3 class="flex items-baseline gap-3 text-[clamp(1.25rem,2vw,1.75rem)]">
+						<span class="ds-mono ds-muted !text-[clamp(1rem,1.4vw,1.25rem)]">{{ i + 1 }}</span>
+						{{ column.title | tr }}
+					</h3>
+					@if (!compact) {
+						<p class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ column.text | tr }}</p>
+					}
+				</div>
+				<ul class="m-0 grid list-none content-start gap-2 p-0">
+					@for (item of column.packages; track item.slug) {
+						<li
+							class="ds-card gap-0.5 py-3"
+							[class.px-5]="!compact"
+							[class.px-4]="compact"
+							[class.!border-[color:var(--primary)]]="uses?.has(item.slug)"
+							[class.opacity-35]="uses && !uses.has(item.slug)"
+						>
+							<!-- Long names break after a hyphen first, never mid-word unless they must. -->
+							<span class="ds-mono !text-[clamp(1rem,1.15vw,1.125rem)] font-semibold [overflow-wrap:anywhere]">{{ item.slug }}</span>
+							<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text | tr }}</span>
+						</li>
+					}
+				</ul>
+			</li>
+		}
+	</ol>
+</ng-template>

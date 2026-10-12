@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
 	computed,
@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catalogConstructors, GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
+import { catalogConstructors } from '../../feature/catalog/catalog.data';
 import { companyProfile } from '../../feature/company/company.data';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { QrCodeComponent } from '../../shared/qr-code/qr-code.component';
@@ -25,7 +25,7 @@ const SWIPE_MIN = 50;
 
 /** A full-screen slide deck explaining how the framework is built. Arrow keys, space, Home/End, F for fullscreen, swipe on touch. */
 @Component({
-	imports: [IconComponent, QrCodeComponent, RoomScanComponent, TrPipe],
+	imports: [IconComponent, NgTemplateOutlet, QrCodeComponent, RoomScanComponent, TrPipe],
 	templateUrl: './pitch.component.html',
 	styles: `
 		@keyframes slide-in {
@@ -54,7 +54,7 @@ export class PitchComponent {
 	private _touchStart: { x: number; y: number } | null = null;
 
 	protected readonly constructors = catalogConstructors;
-	protected readonly orgUrl = GITHUB_ORG_URL;
+	protected readonly telegramUrl = 'https://t.me/wawceo';
 	protected readonly pitchUrl = `${companyProfile.siteUrl}/pitch`;
 	protected readonly pitchUrlLabel = this.pitchUrl.replace(/^https?:\/\//, '');
 	protected readonly slideNumbers = Array.from({ length: TOTAL_SLIDES }, (_, i) => i);
@@ -166,33 +166,64 @@ export class PitchComponent {
 		},
 	];
 
-	/** A top-down game as the example: what it gets from each layer, and what is left to write. */
-	protected readonly gameColumns = [
-		{
-			title: 'From the packages',
-			text: 'What every game gets for free.',
-			items: [
-				'Levels saved and loaded as Scene JSON',
-				'Input from mouse, keyboard, touch or gamepad',
-				'Selecting and moving objects',
-				'Models and textures loaded by id',
-			],
-		},
-		{
-			title: 'From the constructor',
-			text: 'What this type of game gets, here a top-down one.',
-			items: [
-				'Camera that looks from above',
-				'Player movement made for that camera',
-				'Ready project structure',
-			],
-		},
-		{
-			title: 'The team writes',
-			text: 'Only what makes this game unique.',
-			items: ['Rules and game state', 'Levels and characters', 'Art, music and story'],
-		},
+	/** The constructor explained on slide 5, on the same grid as the packages slide. */
+	protected readonly example = catalogConstructors.find(
+		(item) => item.slug === 'character-view',
+	)!;
+
+	/** The example constructor's own packages: what it adds on top of the shared ones. */
+	private readonly _exampleConstructor = {
+		title: 'Constructor',
+		text: '3d-constructor-character',
+		packages: [
+			{
+				slug: '3d-constructor-character-camera',
+				title: 'Camera',
+				text: 'First- and third-person camera.',
+			},
+			{
+				slug: '3d-constructor-character-movement',
+				title: 'Movement',
+				text: 'Walking, running, jumping, looking around.',
+			},
+			{
+				slug: '3d-constructor-character-template',
+				title: 'Template',
+				text: 'Ready project structure and package list.',
+			},
+		],
+	};
+
+	/** The sample game: its own packages, named the way a generated project names them. */
+	private readonly _exampleGame = {
+		title: 'The game',
+		text: 'The only part the team writes.',
+		packages: [
+			{ slug: 'game-fortress-core', title: 'Core', text: 'Rules, quests and game state.' },
+			{ slug: 'game-fortress-world', title: 'World', text: 'Levels stored as Scene JSON.' },
+			{ slug: 'game-fortress-units', title: 'Units', text: 'The hero, enemies and items.' },
+			{ slug: 'game-fortress-ui', title: 'UI', text: 'HUD and menus.' },
+		],
+	};
+
+	protected readonly exampleColumns = [
+		...this.packageColumns,
+		this._exampleConstructor,
+		this._exampleGame,
 	];
+
+	/**
+	 * Packages the example uses. The catalog lists the Unity ones; the schemas and input sit under
+	 * every game, and the constructor's and the game's own packages are all in.
+	 */
+	protected readonly exampleUses = new Set([
+		'3d-scene-schema',
+		'3d-asset-schema',
+		'3d-unity-input',
+		...this.example.packages,
+		...this._exampleConstructor.packages.map((item) => item.slug),
+		...this._exampleGame.packages.map((item) => item.slug),
+	]);
 
 	protected readonly conclusions = [
 		{
