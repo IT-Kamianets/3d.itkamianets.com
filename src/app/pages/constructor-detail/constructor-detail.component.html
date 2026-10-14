@@ -4,12 +4,13 @@
 		<div>
 			<h1 class="ds-page-title">{{ item.name | tr }}</h1>
 			<p class="ds-lead mt-3">{{ item.description | tr }}</p>
-			<div class="mt-5 flex flex-wrap items-center gap-2">
-				<span class="ds-badge ds-badge-outline">{{ 'Planned' | tr }}</span>
-				<span class="ds-badge ds-badge-outline">{{ 'Repository not created yet' | tr }}</span>
-			</div>
+			<!-- Every constructor has a starter repository: a game of this style is cloned from it. -->
 			<div class="mt-6">
-				<button class="ds-btn ds-btn-primary ds-btn-lg" type="button" disabled>{{ 'Create project' | tr }}</button>
+				<a class="ds-btn ds-btn-primary ds-btn-lg" [href]="repo" rel="noopener" target="_blank">
+					<app-icon name="git-branch" size="1.125rem" />
+					<span>{{ 'Starter repository' | tr }}</span>
+				</a>
+				<p class="ds-supporting ds-mono mt-3">git clone {{ repo }} &lt;game-name&gt;</p>
 			</div>
 		</div>
 	</header>
@@ -31,8 +32,21 @@
 				}
 			</ul>
 		</section>
+		@if (item.parts.length) {
+			<section>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Constructor packages' | tr }}</h2>
+				<p class="ds-supporting mt-2">{{ 'What this constructor adds on top of the engine packages.' | tr }}</p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (name of item.parts; track name) {
+						<li>
+							<a class="ds-mono" [routerLink]="['/packages', name]">{{ name }}</a>
+						</li>
+					}
+				</ul>
+			</section>
+		}
 		<section>
-			<h2 class="ds-section-title text-[1.25rem]">{{ 'Planned framework packages' | tr }}</h2>
+			<h2 class="ds-section-title text-[1.25rem]">{{ 'Engine packages' | tr }}</h2>
 			<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 				@for (name of item.packages; track name) {
 					<li>
@@ -58,9 +72,13 @@
 		<section>
 			<h2 class="ds-section-title text-[1.25rem]">{{ 'Setup guide' | tr }}</h2>
 			<ol class="mt-3 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]">
-				<li>{{ 'Install the framework packages.' | tr }}</li>
-				<li>{{ 'Generate the game packages from this constructor.' | tr }}</li>
-				<li>{{ 'Add your rules, world, units, UI, and assets.' | tr }}</li>
+				<li>{{ 'Clone the starter repository under your game name and follow its AGENTS.md to create the Unity project.' | tr }}</li>
+				@if (ready) {
+					<li>{{ 'Add the engine packages and the player prefab; the camera and controls already work.' | tr }}</li>
+				} @else {
+					<li>{{ 'Build the camera and controls packages for this style; the starter AGENTS.md lists them.' | tr }}</li>
+				}
+				<li>{{ 'Add your game packages: menus and HUD, then rules, maps and assets.' | tr }}</li>
 			</ol>
 		</section>
 		<section class="lg:col-span-2">

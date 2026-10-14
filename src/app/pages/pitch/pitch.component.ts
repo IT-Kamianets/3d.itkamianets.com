@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catalogConstructors } from '../../feature/catalog/catalog.data';
+import { catalogConstructors, repoUrl } from '../../feature/catalog/catalog.data';
 import { companyProfile } from '../../feature/company/company.data';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { QrCodeComponent } from '../../shared/qr-code/qr-code.component';
@@ -54,7 +54,7 @@ export class PitchComponent {
 	private _touchStart: { x: number; y: number } | null = null;
 
 	protected readonly constructors = catalogConstructors;
-	protected readonly telegramUrl = 'https://t.me/wawceo';
+	protected readonly telegramUrl = 'https://t.me/itkp3d';
 	protected readonly pitchUrl = `${companyProfile.siteUrl}/pitch`;
 	protected readonly pitchUrlLabel = this.pitchUrl.replace(/^https?:\/\//, '');
 	protected readonly slideNumbers = Array.from({ length: TOTAL_SLIDES }, (_, i) => i);
@@ -105,6 +105,11 @@ export class PitchComponent {
 					title: 'Asset schema',
 					text: 'What things are: models, materials, textures.',
 				},
+				{
+					slug: '3d-network-schema',
+					title: 'Network schema',
+					text: 'What happens between players: sessions, events, results.',
+				},
 			],
 		},
 		{
@@ -127,21 +132,32 @@ export class PitchComponent {
 					text: 'One set of actions for mouse, keyboard, touch, gamepad and VR.',
 				},
 				{
-					slug: '3d-unity-interaction',
-					title: 'Interaction',
-					text: 'Select, move, rotate and scale objects.',
+					slug: '3d-unity-character',
+					title: 'Character',
+					text: 'Walking, running, jumping, slopes. Shared by every constructor.',
 				},
 				{
 					slug: '3d-unity-assets',
 					title: 'Assets',
 					text: 'Loads models, materials and textures by id.',
 				},
+				{
+					slug: '3d-unity-audio',
+					title: 'Audio',
+					text: '3D sound, sound events, volume groups, music.',
+				},
 			],
 		},
 		{
+			// Interaction sits here, not in Core: editing objects is a tool some games need, not all.
 			title: 'Specific',
-			text: 'Devices, platforms and services.',
+			text: 'Editing tools, devices, platforms and services.',
 			packages: [
+				{
+					slug: '3d-unity-interaction',
+					title: 'Interaction',
+					text: 'Select, move, rotate and scale objects.',
+				},
 				{
 					slug: '3d-unity-spatial',
 					title: 'Spatial',
@@ -153,14 +169,14 @@ export class PitchComponent {
 					text: 'Meta Quest controllers and an in-VR display.',
 				},
 				{
-					slug: '3d-web-viewer',
-					title: 'Web viewer',
-					text: 'Opens Scene JSON in the browser, no Unity needed.',
-				},
-				{
 					slug: '3d-unity-firebase',
 					title: 'Firebase',
 					text: 'Sign-in, saved progress and stored scenes in Firebase.',
+				},
+				{
+					slug: '3d-unity-network',
+					title: 'Network',
+					text: 'Real-time multiplayer: the server decides, players stay in sync.',
 				},
 			],
 		},
@@ -171,38 +187,71 @@ export class PitchComponent {
 		(item) => item.slug === 'character-view',
 	)!;
 
-	/** The example constructor's own packages: what it adds on top of the shared ones. */
+	/**
+	 * The example constructor's own packages: what it adds on top of the shared ones. Movement lives
+	 * in `3d-unity-character`; the constructor only decides how input and the camera drive it.
+	 */
 	private readonly _exampleConstructor = {
 		title: 'Constructor',
-		text: '3d-constructor-character',
+		text: '3d-constructor-character-view',
 		packages: [
 			{
-				slug: '3d-constructor-character-camera',
+				slug: '3d-constructor-character-view-camera',
 				title: 'Camera',
 				text: 'First- and third-person camera.',
 			},
 			{
-				slug: '3d-constructor-character-movement',
-				title: 'Movement',
-				text: 'Walking, running, jumping, looking around.',
+				slug: '3d-constructor-character-view-controls',
+				title: 'Controls',
+				text: 'Moves where the camera looks; looking turns the character.',
 			},
 			{
-				slug: '3d-constructor-character-template',
+				slug: '3d-constructor-character-view-template',
 				title: 'Template',
 				text: 'Ready project structure and package list.',
 			},
 		],
 	};
 
-	/** The sample game: its own packages, named the way a generated project names them. */
+	/**
+	 * The sample game, Temnorid Arena: round-based team matches like CS2, with spells instead of
+	 * guns. Split the way a player meets it: the interface around a match, then the gameplay itself.
+	 * Arenas are levels, so they get a package of their own, stored as Scene JSON.
+	 */
 	private readonly _exampleGame = {
 		title: 'The game',
 		text: 'The only part the team writes.',
 		packages: [
-			{ slug: 'game-fortress-core', title: 'Core', text: 'Rules, quests and game state.' },
-			{ slug: 'game-fortress-world', title: 'World', text: 'Levels stored as Scene JSON.' },
-			{ slug: 'game-fortress-units', title: 'Units', text: 'The hero, enemies and items.' },
-			{ slug: 'game-fortress-ui', title: 'UI', text: 'HUD and menus.' },
+			{
+				group: 'Interface',
+				slug: 'temnorid-arena-menus',
+				title: 'Menus',
+				text: 'Start, find a match, lobby, settings, results.',
+			},
+			{
+				group: 'Interface',
+				slug: 'temnorid-arena-hud',
+				title: 'HUD',
+				text: 'Health, mana, spells, spell shop, scoreboard.',
+			},
+			{
+				group: 'Gameplay',
+				slug: 'temnorid-arena-core',
+				title: 'Core',
+				text: 'Rounds, teams, economy and match state.',
+			},
+			{
+				group: 'Gameplay',
+				slug: 'temnorid-arena-spells',
+				title: 'Spells',
+				text: 'Spells instead of guns: casting, mana, hits.',
+			},
+			{
+				group: 'Gameplay',
+				slug: 'temnorid-arena-maps',
+				title: 'Maps',
+				text: 'Arenas as Scene JSON: spawns and objective sites.',
+			},
 		],
 	};
 
@@ -213,14 +262,21 @@ export class PitchComponent {
 	];
 
 	/**
-	 * Packages the example uses. The catalog lists the Unity ones; the schemas and input sit under
-	 * every game, and the constructor's and the game's own packages are all in.
+	 * Packages the sample game uses. An arena shooter needs no object editing, VR or room
+	 * scans, so those fade; Firebase keeps accounts and match stats, the network runs the match.
 	 */
 	protected readonly exampleUses = new Set([
 		'3d-scene-schema',
 		'3d-asset-schema',
+		'3d-network-schema',
+		'3d-unity-core',
+		'3d-unity-scene',
 		'3d-unity-input',
-		...this.example.packages,
+		'3d-unity-character',
+		'3d-unity-assets',
+		'3d-unity-audio',
+		'3d-unity-firebase',
+		'3d-unity-network',
 		...this._exampleConstructor.packages.map((item) => item.slug),
 		...this._exampleGame.packages.map((item) => item.slug),
 	]);
@@ -252,6 +308,11 @@ export class PitchComponent {
 				untracked(() => this.index.set(next));
 			}
 		});
+	}
+
+	/** The starter repository a game of this style is cloned from, e.g. for `git clone <url> <game>`. */
+	protected cloneUrl(repo: string) {
+		return repoUrl(repo);
 	}
 
 	/** `3d-unity-core` becomes `core`, so constructor rows stay short. */

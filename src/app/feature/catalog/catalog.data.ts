@@ -8,7 +8,6 @@ export interface CatalogPackage {
 	slug: string;
 	name: string;
 	group: string;
-	status: string;
 	summary: string;
 	purpose: string;
 	dependencies: string[];
@@ -23,6 +22,12 @@ export interface CatalogPackage {
 	examples: string[];
 	roadmap: string[];
 	related: string[];
+	/** Optional SDKs or packages the code supports when present, one sentence each. */
+	optional: string[];
+	/** The most useful public members (or schema files and fields), with one sentence each. */
+	api: { name: string; text: string }[];
+	/** A short code sample using the real API (JSON for schemas); empty when there is none. */
+	example: string;
 }
 
 export interface CatalogConstructor {
@@ -30,11 +35,15 @@ export interface CatalogConstructor {
 	name: string;
 	icon: IconName;
 	tagline: string;
+	/** The starter repository developers clone to start a game of this style (constructors/ in the workspace). */
 	repo: string;
 	description: string;
 	gameTypes: string[];
 	examples: string[];
+	/** Engine packages the constructor builds on. */
 	packages: string[];
+	/** The constructor's own packages (camera, controls, template); empty until it is built. */
+	parts: string[];
 	features: string[];
 }
 
@@ -46,16 +55,8 @@ export interface PackageGroup {
 export const catalogPackages = packagesData as CatalogPackage[];
 export const catalogConstructors = constructorsData as CatalogConstructor[];
 
-const PACKAGE_GROUP_ORDER = [
-	'Core',
-	'Scene',
-	'Assets',
-	'Interaction',
-	'XR',
-	'Spatial',
-	'Engine integrations',
-	'Utilities',
-];
+/** From generic to specific, the same order as the architecture: schemas, then Unity core, then specific, then constructor parts. */
+const PACKAGE_GROUP_ORDER = ['Schemas', 'Core', 'Specific', 'Constructor'];
 
 export const packageGroups: PackageGroup[] = PACKAGE_GROUP_ORDER.map((name) => ({
 	name,
@@ -69,8 +70,11 @@ export const findPackage = (slug: string) => catalogPackages.find((item) => item
 export const findConstructor = (slug: string) =>
 	catalogConstructors.find((item) => item.slug === slug);
 
-/** Game-specific package names a generated project would contain, e.g. `game-<name>-core`. */
-export const GENERATED_PACKAGE_SUFFIXES = ['core', 'world', 'units', 'ui'];
+/**
+ * Game-specific packages a new project starts with, named `<game>-<suffix>` (e.g. `temnorid-arena-core`):
+ * the interface first, then the gameplay.
+ */
+export const GENERATED_PACKAGE_SUFFIXES = ['menus', 'hud', 'core', 'maps'];
 
 export interface DependencyLevel {
 	level: number;

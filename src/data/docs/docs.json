@@ -9,21 +9,64 @@
 					{
 						"type": "links",
 						"items": [
-							{ "label": "Architecture", "path": "/docs/architecture", "text": "the three layers, and how scenes move between Unity and the schema." },
-							{ "label": "Installation", "path": "/docs/installation", "text": "Unity requirements and a Package Manager URL for each package." },
-							{ "label": "Examples", "path": "/docs/examples", "text": "example scenes and a room-scan workflow, with examples for each package." },
-							{ "label": "Packages", "path": "/packages", "text": "one page per package, with its current state and roadmap." },
-							{ "label": "Constructors", "path": "/constructors", "text": "planned starting points for each camera and gameplay style." }
+							{
+								"label": "Start a game",
+								"path": "/docs/start-a-game",
+								"text": "clone a constructor’s starter repository, set up the project with an AI agent, and send engine changes back as pull requests."
+							},
+							{
+								"label": "Installation",
+								"path": "/docs/installation",
+								"text": "Unity requirements, the install order, and a Package Manager URL for each package."
+							},
+							{
+								"label": "Architecture",
+								"path": "/docs/architecture",
+								"text": "the layers, the three schemas, and how character, camera and multiplayer fit together."
+							},
+							{
+								"label": "Examples",
+								"path": "/docs/examples",
+								"text": "a first-person game from a starter repository, a multiplayer match, and a room scan, step by step."
+							},
+							{
+								"label": "Packages",
+								"path": "/packages",
+								"text": "one page per package, with what it includes and its roadmap."
+							},
+							{
+								"label": "Constructors",
+								"path": "/constructors",
+								"text": "starting points for each camera style, each with a starter repository."
+							}
+						]
+					},
+					{
+						"type": "p",
+						"text": "Every package in one file, for quick reading or for an AI agent choosing packages for a new game: [packages.md](https://3d.itkamianets.com/packages.md)."
+					}
+				]
+			},
+			{
+				"title": "What is in the engine",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"**Schemas** (3): `3d-scene-schema`, `3d-asset-schema`, `3d-network-schema`. Plain JSON, readable without Unity.",
+							"**Core** (6): `3d-unity-core`, `-scene`, `-input`, `-character`, `-assets`, `-audio`. What every 3D game in Unity needs.",
+							"**Specific** (5): `3d-unity-interaction`, `-spatial`, `-xr`, `-firebase`, `-network`. Editing tools, devices, platforms and services that only some games need.",
+							"**Constructor** (3): the Character View camera, controls and template, for first- and third-person games."
 						]
 					}
 				]
 			},
 			{
-				"title": "Project status",
+				"title": "Platform and source",
 				"blocks": [
 					{
 						"type": "p",
-						"text": "The Unity packages are in early development and the scene schema has a first version. Constructors and game generation are planned and have no repositories yet. Every package page states what exists today."
+						"text": "The engine targets Unity only for now. The schemas stay engine-independent, so other runtimes can be added later."
 					},
 					{
 						"type": "p",
@@ -33,9 +76,172 @@
 			}
 		]
 	},
+	"start": {
+		"title": "Start a game",
+		"lead": "Clone a constructor’s starter repository under your game’s name, and it becomes your game.",
+		"sections": [
+			{
+				"title": "1. Pick a constructor",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Pick the one that matches your game’s camera. Each has a starter repository in the IT-Kamianets organization:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`3d-constructor-character-view`: first and third person, like GTA V or Elden Ring.",
+							"`3d-constructor-top-down`: viewed from above, like Hades or Vampire Survivors.",
+							"`3d-constructor-isometric`: angled camera, like Baldur’s Gate 3 or Diablo IV.",
+							"`3d-constructor-side-view`: viewed from the side, like Hollow Knight or Dead Cells.",
+							"`3d-constructor-fixed-view`: cameras placed by the level, like Resident Evil or INSIDE.",
+							"`3d-constructor-free-view`: free strategic camera, like Civilization or Cities: Skylines."
+						]
+					},
+					{
+						"type": "p",
+						"text": "Each starter’s AGENTS.md says what to build first for its style."
+					}
+				]
+			},
+			{
+				"title": "2. Clone it under your game’s name",
+				"blocks": [
+					{
+						"type": "code",
+						"code": "git clone https://github.com/IT-Kamianets/3d-constructor-<style> <game-name>"
+					},
+					{
+						"type": "p",
+						"text": "The clone is your game’s own repository. Point it at a new repository of yours before the first push:"
+					},
+					{
+						"type": "code",
+						"code": "cd <game-name>\ngit remote set-url origin https://github.com/<you>/<game-name>.git"
+					},
+					{
+						"type": "p",
+						"text": "A starter holds no Unity project, only what every game needs from day one:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`AGENTS.md`: the guide for you and your AI agent: creating the project, packages to add, what to build first, the engine’s rules",
+							"`CLAUDE.md`: one line that points Claude Code to `AGENTS.md`",
+							"`README.md`: a short start for people",
+							"`.gitignore`: Unity’s standard set, editor and OS files, and `/3d-*/` for engine repos you clone in",
+							"`.gitattributes`: scenes and prefabs as text (Unity Smart Merge once configured), art and audio as binary, Git LFS ready to switch on",
+							"`LICENSE`: MIT"
+						]
+					}
+				]
+			},
+			{
+				"title": "3. Create the Unity project",
+				"blocks": [
+					{
+						"type": "ol",
+						"items": [
+							"In Unity Hub, create a project with the **Universal 3D** template and Unity 6000.6, in a temporary folder.",
+							"Move its `Assets/`, `Packages/` and `ProjectSettings/` into your game’s repository. Leave `Library/` behind.",
+							"Open the repository’s folder in Unity Hub and set Product Name and the application identifier (`com.itkamianets.<game>`) in Player settings."
+						]
+					}
+				]
+			},
+			{
+				"title": "4. Add the engine packages",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The starter’s AGENTS.md has a ready block for `Packages/manifest.json` with every engine package the style needs, including indirect ones, because Unity does not fetch git dependencies of a git package. For Character View:"
+					},
+					{
+						"type": "code",
+						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git\",\n\"com.itkamianets.3d-unity-input\": \"https://github.com/IT-Kamianets/3d-unity-input.git\",\n\"com.itkamianets.3d-unity-character\": \"https://github.com/IT-Kamianets/3d-unity-character.git\",\n\"com.itkamianets.3d-constructor-character-view-camera\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git\",\n\"com.itkamianets.3d-constructor-character-view-controls\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git\""
+					},
+					{
+						"type": "p",
+						"text": "Unity downloads them itself: there is nothing to clone. Optional packages (multiplayer, Firebase, VR) are listed in the same file with when to add them."
+					}
+				]
+			},
+			{
+				"title": "5. Build the game",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"**Interface first, then gameplay.** Start with `<game>-menus` and `<game>-hud` for a playable loop, then `<game>-core`, `<game>-maps` and what your game is about.",
+							"**Name game packages `<game>-<part>`**, package id `com.itkamianets.<game>-<part>`, e.g. `temnorid-arena-core`.",
+							"Game packages live in their own repositories, so several games can share one (several Temnorid games share Temnorid packages).",
+							"Scenes, prefabs that wire packages together, and build settings stay in the game; reusable code goes into packages."
+						]
+					}
+				]
+			},
+			{
+				"title": "Working with an AI agent",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Open the game’s folder in your agent and ask for what you want to build. The agent learns the rest from files, not from memory:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`AGENTS.md` in the repository: read automatically by Codex, Cursor, Copilot and others; Claude Code reads it through `CLAUDE.md`.",
+							"[packages.md](https://3d.itkamianets.com/packages.md): every package with its purpose, dependencies, install order and git URL, generated from this website, so it is always current.",
+							"[llms.txt](https://3d.itkamianets.com/llms.txt): a short index of these docs for AI tools."
+						]
+					},
+					{
+						"type": "p",
+						"text": "If you only describe the game, for example a team arena like CS2 but with wizards, the agent can pick the constructor and the optional packages from packages.md."
+					}
+				]
+			},
+			{
+				"title": "Changing an engine package",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The `3d-*` packages are shared by every game, so changes go back to them through a pull request, never as a copy inside your game. Clone the package inside your game’s repository; `.gitignore` keeps it out of the game’s history."
+					},
+					{
+						"type": "code",
+						"code": "<game-name>/               your game\n  Assets/ Packages/ ProjectSettings/\n  AGENTS.md  README.md\n  3d-unity-character/      cloned engine repo, git-ignored"
+					},
+					{
+						"type": "ol",
+						"items": [
+							"Clone the package: `git clone https://github.com/IT-Kamianets/3d-unity-character`. Without write access to IT-Kamianets, fork it on GitHub first and clone your fork.",
+							"Create a branch for the change.",
+							"Point your game at the copy: `\"com.itkamianets.3d-unity-character\": \"file:../3d-unity-character\"` in `Packages/manifest.json`.",
+							"Open a pull request to the package’s `master` branch. Keep game rules out of it: the change must make sense for every game.",
+							"After the merge, switch the manifest back to the git URL, pinned to the new tag, and delete the clone."
+						]
+					}
+				]
+			},
+			{
+				"title": "Before a release",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Pin every engine package to a tag, so the game does not change when a package does:"
+					},
+					{
+						"type": "code",
+						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0\""
+					}
+				]
+			}
+		]
+	},
 	"installation": {
 		"title": "Installation",
-		"lead": "Install through the Unity Package Manager from Git.",
+		"lead": "Start from a starter repository, or install packages one by one from Git.",
 		"sections": [
 			{
 				"title": "Requirements",
@@ -45,13 +251,35 @@
 						"items": [
 							"Unity 6000.6",
 							"Git installed, so Unity can fetch packages by URL",
-							"For room scanning with `3d-unity-spatial`: the Meta XR MR Utility Kit (`com.meta.xr.mrutilitykit`) in your project"
+							"For room scanning with `3d-unity-spatial`: the Meta XR MR Utility Kit (`com.meta.xr.mrutilitykit`)",
+							"For `3d-unity-firebase`: the Firebase Unity SDK"
 						]
+					},
+					{
+						"type": "p",
+						"text": "Without the optional SDKs, `3d-unity-spatial` and `3d-unity-firebase` still compile and report that the feature is unavailable."
 					}
 				]
 			},
 			{
-				"title": "Steps",
+				"title": "Fastest start: a starter repository",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Each constructor has a starter repository: git settings and an AGENTS.md that walks you or your AI agent through creating the Unity project, adding the right packages and building the game. Clone the one for your camera style under your game name."
+					},
+					{
+						"type": "code",
+						"code": "git clone https://github.com/IT-Kamianets/3d-constructor-character-view <game-name>"
+					},
+					{
+						"type": "p",
+						"text": "The whole flow, from choosing a constructor to sending engine changes back, is in [Start a game](https://3d.itkamianets.com/docs/start-a-game)."
+					}
+				]
+			},
+			{
+				"title": "Installing packages one by one",
 				"blocks": [
 					{
 						"type": "ol",
@@ -63,20 +291,35 @@
 					},
 					{
 						"type": "p",
-						"text": "Dependencies are declared in each `package.json` and resolved by the Package Manager. Start with `3d-unity-core`."
+						"text": "**Add dependencies first.** Unity resolves a package’s Unity dependencies (such as the Input System), but not other git packages. So add each engine package a package needs before it: every package page lists them under Dependencies."
 					},
-					{ "type": "code", "code": "https://github.com/IT-Kamianets/3d-unity-core.git" }
+					{
+						"type": "p",
+						"text": "A typical order for a game:"
+					},
+					{
+						"type": "code",
+						"code": "3d-unity-core\n3d-unity-scene\n3d-unity-input\n3d-unity-character\n3d-unity-assets\n3d-unity-audio\n3d-unity-network"
+					},
+					{
+						"type": "p",
+						"text": "Pin a version by adding a tag to the URL, for example `https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0`."
+					}
 				]
 			},
 			{
 				"title": "Packages",
-				"blocks": [{ "type": "packages" }]
+				"blocks": [
+					{
+						"type": "packages"
+					}
+				]
 			}
 		]
 	},
 	"architecture": {
 		"title": "Architecture",
-		"lead": "Three layers, and scenes kept in an engine-independent format.",
+		"lead": "Layers that point one way, and data kept in engine-independent formats.",
 		"sections": [
 			{
 				"title": "Layers",
@@ -84,24 +327,81 @@
 					{
 						"type": "ol",
 						"items": [
-							"**Core packages** (`3d-*`): shared engine functionality such as scenes, assets, interaction, XR, and spatial data.",
-							"**Constructors** (`3d-constructor-*`): a starting architecture for one type of game, built on the core packages.",
-							"**Game-specific packages** (`game-<name>-*`): the rules, content, and assets of one game."
+							"**Schemas** (`3d-*-schema`): JSON formats for scenes, assets and multiplayer sessions. No engine.",
+							"**Unity packages** (`3d-unity-*`): core systems every game needs, plus specific ones for editing, VR, room scans, Firebase and multiplayer.",
+							"**Constructors** (`3d-constructor-<style>-*`): one per camera style. Each adds only its camera, controls and a starter template.",
+							"**Game packages** (`<game>-*`, e.g. `temnorid-arena-*`): the interface (menus, HUD) and the gameplay (rules, maps, content) of one game."
+						]
+					},
+					{
+						"type": "p",
+						"text": "Each layer only uses the ones below it, so a fix in a package reaches every game built on it."
+					}
+				]
+			},
+			{
+				"title": "Three schemas",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"`3d-scene-schema`: **where** things are. Read and written by `3d-unity-scene`.",
+							"`3d-asset-schema`: **what** things are. Resolved by `3d-unity-assets`.",
+							"`3d-network-schema`: **what happens between players**. Spoken by `3d-unity-network`."
+						]
+					},
+					{
+						"type": "p",
+						"text": "Unity is never the permanent owner of this data:"
+					},
+					{
+						"type": "code",
+						"code": "Scene Schema → Unity Scene → Scene Changes → Scene Schema"
+					},
+					{
+						"type": "p",
+						"text": "Audio has no schema of its own: sound files are assets, and sounds placed in the world belong to the scene."
+					}
+				]
+			},
+			{
+				"title": "Character, camera and controls",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Movement is shared; the camera style is not. One character serves every constructor, and each constructor decides where forward is."
+					},
+					{
+						"type": "code",
+						"code": "3d-unity-input → 3d-constructor-character-view-controls → 3d-unity-character\n                                   ↕\n                  3d-constructor-character-view-camera"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`3d-unity-input` turns any device into actions: move, look, jump.",
+							"`3d-unity-character` walks, runs, jumps and handles slopes, with no camera of its own.",
+							"The constructor’s controls make forward follow the camera; its camera follows the character."
 						]
 					}
 				]
 			},
 			{
-				"title": "Scenes and the schema",
+				"title": "Multiplayer",
 				"blocks": [
 					{
 						"type": "p",
-						"text": "`3d-scene-schema` is the source of truth for a scene. Unity is not its permanent owner."
+						"text": "`3d-unity-network` is server-authoritative: clients send input, the server decides hits, health and score. Two kinds of traffic stay separate:"
 					},
-					{ "type": "code", "code": "Scene Schema → Unity Scene → Scene Changes → Scene Schema" },
+					{
+						"type": "ul",
+						"items": [
+							"**Per-tick state** (positions, inputs): small binary data inside the networking backend.",
+							"**Session messages** (joins, state changes, game events, results): JSON in `3d-network-schema`, readable by servers, spectators and stats without Unity."
+						]
+					},
 					{
 						"type": "p",
-						"text": "`3d-unity-scene` converts between the two. `3d-unity-xr` handles how people interact through XR hardware, and `3d-unity-spatial` understands the physical room and turns it into scene data."
+						"text": "`3d-unity-firebase` keeps accounts and stats between matches; `3d-unity-network` runs the match itself."
 					}
 				]
 			},
@@ -110,9 +410,11 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Each line joins a package to one that needs it, as declared in each `package.json`."
+						"text": "Each line joins a package to one that needs it, as declared in each package."
 					},
-					{ "type": "graph" }
+					{
+						"type": "graph"
+					}
 				]
 			},
 			{
@@ -121,12 +423,12 @@
 					{
 						"type": "ul",
 						"items": [
-							"Keep core packages reusable and product-independent.",
-							"Keep constructors focused on reusable gameplay architecture.",
-							"Keep game-specific logic outside the framework.",
-							"Prefer shared scene and asset structures between engines.",
-							"Let constructors compose existing packages instead of duplicating them.",
-							"Make generated projects easy to understand, modify, and extend."
+							"Shared before specific: if more than one constructor could use it, it belongs in a `3d-unity-*` package.",
+							"Dependencies point one way, down the layers.",
+							"Input only through `3d-unity-input`; no package reads devices directly.",
+							"No game rules in engine or constructor packages.",
+							"Schemas are the source of truth; engine models mirror them field by field.",
+							"Optional SDKs (Meta MRUK, Firebase) never block compilation."
 						]
 					}
 				]
@@ -135,21 +437,45 @@
 	},
 	"examples": {
 		"title": "Examples",
-		"lead": "Scenes and workflows the packages are built for.",
+		"lead": "Games and workflows the packages are built for.",
 		"sections": [
 			{
-				"title": "Scene documents",
+				"title": "A first-person game from the template",
+				"blocks": [
+					{
+						"type": "ol",
+						"items": [
+							"Clone `3d-constructor-character-view` under your game name and follow its AGENTS.md: create the Unity project, add the engine packages, and make the player prefab.",
+							"Press Play: `3d-unity-character` walks, the camera follows in first person, and keyboard, gamepad or a Quest controller all work through `3d-unity-input`.",
+							"Switch to third person in the camera settings, or let players switch at runtime.",
+							"Add your own packages, interface first: `<game>-menus` and `<game>-hud`, then `<game>-core` and `<game>-maps`."
+						]
+					}
+				]
+			},
+			{
+				"title": "A multiplayer match: Temnorid Arena",
 				"blocks": [
 					{
 						"type": "p",
-						"text": "`3d-scene-schema` ships example scene documents in the `examples/` folder of its [repository](https://github.com/IT-Kamianets/3d-scene-schema). Each one validates against the v1 schema."
+						"text": "Temnorid Arena is a round-based team game like CS2, with spells instead of guns. It is built from the Character View constructor plus:"
 					},
 					{
 						"type": "ul",
 						"items": [
-							"`room-scan.example.json`: a scanned room described as one scene",
-							"`corridor-scan.example.json`: a corridor scan sharing a coordinate frame with the room scan"
+							"`3d-unity-network` runs the match on the server; `3d-unity-firebase` keeps accounts and ranks.",
+							"`3d-unity-audio` makes footsteps and spells audible by direction and distance.",
+							"Interface: `temnorid-arena-menus` (start, find a match, lobby, settings, results) and `temnorid-arena-hud`.",
+							"Gameplay: `temnorid-arena-core` (rounds, teams, economy), `-spells` and `-maps`."
 						]
+					},
+					{
+						"type": "p",
+						"text": "Every match produces a replay in `3d-network-schema`. The repository ships one in `examples/arena-replay.example.json`:"
+					},
+					{
+						"type": "code",
+						"code": "{\n  \"seq\": 4,\n  \"from\": \"server\",\n  \"type\": \"temnorid-arena.round-ended\",\n  \"payload\": { \"round\": 1, \"winnerTeamId\": \"light\" }\n}"
 					}
 				]
 			},
@@ -157,23 +483,43 @@
 				"title": "From a room scan to a scene",
 				"blocks": [
 					{
-						"type": "p",
-						"text": "The main workflow today: scan a real room on a Meta Quest, convert it to scene data, and store it as JSON."
-					},
-					{
 						"type": "ol",
 						"items": [
 							"`3d-unity-xr` triggers a scan from a controller button and shows progress in a HUD.",
 							"`3d-unity-spatial` reads the physical room and produces scene data.",
-							"`3d-unity-scene` converts it to a scene document that follows `3d-scene-schema`."
+							"`3d-unity-scene` converts it to a scene document that follows `3d-scene-schema`.",
+							"`3d-unity-firebase` uploads it, and `3d-unity-interaction` lets people rearrange the furniture later."
 						]
 					},
-					{ "type": "code", "code": "Room scan → SceneData → Scene JSON" }
+					{
+						"type": "code",
+						"code": "Room scan → SceneData → Scene JSON → Firebase"
+					}
+				]
+			},
+			{
+				"title": "Schema documents",
+				"blocks": [
+					{
+						"type": "ul",
+						"items": [
+							"`3d-scene-schema`: `room-scan.example.json` and `corridor-scan.example.json`, two scenes sharing a coordinate frame",
+							"`3d-network-schema`: `arena-replay.example.json` (a full match) and `join-request.example.json`"
+						]
+					},
+					{
+						"type": "p",
+						"text": "Each example validates against its schema, so it doubles as a test fixture."
+					}
 				]
 			},
 			{
 				"title": "Examples by package",
-				"blocks": [{ "type": "examples" }]
+				"blocks": [
+					{
+						"type": "examples"
+					}
+				]
 			}
 		]
 	}

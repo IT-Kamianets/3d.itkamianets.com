@@ -4,7 +4,7 @@
 		"name": "Character View",
 		"icon": "user",
 		"tagline": "1st + 3rd Person",
-		"repo": "3d-constructor-character",
+		"repo": "3d-constructor-character-view",
 		"description": "For games where the player directly controls a character from first-person or third-person perspective.",
 		"gameTypes": [
 			"Open-world action",
@@ -20,9 +20,16 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-assets",
-			"3d-unity-interaction",
+			"3d-unity-audio",
 			"3d-unity-xr"
+		],
+		"parts": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-constructor-character-view-template"
 		],
 		"features": [
 			"First- and third-person camera modes",
@@ -50,9 +57,12 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-assets",
-			"3d-unity-interaction"
+			"3d-unity-audio"
 		],
+		"parts": [],
 		"features": [
 			"Fixed overhead camera",
 			"Direct movement controls",
@@ -79,10 +89,12 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-assets",
-			"3d-unity-interaction",
-			"3d-unity-spatial"
+			"3d-unity-audio"
 		],
+		"parts": [],
 		"features": [
 			"Angled isometric camera",
 			"Click-to-move interaction",
@@ -110,9 +122,12 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-assets",
-			"3d-unity-interaction"
+			"3d-unity-audio"
 		],
+		"parts": [],
 		"features": [
 			"Side-scrolling camera",
 			"Platforming movement",
@@ -120,11 +135,11 @@
 		]
 	},
 	{
-		"slug": "fixed-camera",
+		"slug": "fixed-view",
 		"name": "Fixed Camera",
 		"icon": "camera",
 		"tagline": "Scene-controlled camera",
-		"repo": "3d-constructor-fixed-camera",
+		"repo": "3d-constructor-fixed-view",
 		"description": "For games where camera positions are predefined or controlled by the scene rather than directly by the player.",
 		"gameTypes": [
 			"Survival horror",
@@ -139,9 +154,12 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-assets",
-			"3d-unity-interaction"
+			"3d-unity-audio"
 		],
+		"parts": [],
 		"features": [
 			"Predefined camera angles",
 			"Scene-driven camera switching",
@@ -149,11 +167,11 @@
 		]
 	},
 	{
-		"slug": "god-camera",
+		"slug": "free-view",
 		"name": "God / Free Camera",
 		"icon": "planet",
 		"tagline": "Strategic, free camera",
-		"repo": "3d-constructor-god-camera",
+		"repo": "3d-constructor-free-view",
 		"description": "For games where the user controls the world from a free, strategic, or god-like camera.",
 		"gameTypes": [
 			"Grand strategy",
@@ -169,10 +187,12 @@
 		"packages": [
 			"3d-unity-core",
 			"3d-unity-scene",
+			"3d-unity-input",
 			"3d-unity-assets",
-			"3d-unity-interaction",
-			"3d-unity-spatial"
+			"3d-unity-audio",
+			"3d-unity-interaction"
 		],
+		"parts": [],
 		"features": [
 			"Free pan, zoom, and rotate camera",
 			"Selection and placement",

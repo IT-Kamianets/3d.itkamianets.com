@@ -99,10 +99,10 @@
 												<td class="ds-mono">
 													@if (item.packageId) {
 														{{ repoUrl(item.slug) }}.git
-													} @else if (item.slug === '3d-scene-schema') {
+													} @else if (item.group === 'Schemas') {
 														<span class="ds-muted">{{ 'JSON Schema files, not a Unity package' | tr }}</span>
 													} @else {
-														<span class="ds-muted">{{ 'Not installable yet' | tr }}</span>
+														<span class="ds-muted">{{ 'Unity project: clone the repository' | tr }}</span>
 													}
 												</td>
 												<td>{{ item.version || '-' }}</td>

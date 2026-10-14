@@ -28,6 +28,7 @@ export class FooterComponent {
 	protected readonly constructors = catalogConstructors;
 	protected readonly docLinks = [
 		{ label: 'Overview', path: '/docs' },
+		{ label: 'Start a game', path: '/docs/start-a-game' },
 		{ label: 'Installation', path: '/docs/installation' },
 		{ label: 'Architecture', path: '/docs/architecture' },
 		{ label: 'Examples', path: '/docs/examples' },

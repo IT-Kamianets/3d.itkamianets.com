@@ -14,6 +14,7 @@ const staticRoutes = [
 	'/packages',
 	...packages.map((item) => `/packages/${item.slug}`),
 	'/docs',
+	'/docs/start-a-game',
 	'/docs/installation',
 	'/docs/architecture',
 	'/docs/examples',

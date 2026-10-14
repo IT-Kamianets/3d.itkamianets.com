@@ -2,7 +2,7 @@
 <section class="container-x grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:py-24">
 	<div>
 		<h1 class="ds-display">{{ 'Build 3D games from reusable packages' | tr }}</h1>
-		<p class="ds-lead mt-6 max-w-[34ch]">{{ 'Unity packages, a shared scene schema, and constructors for every camera style.' | tr }}</p>
+		<p class="ds-lead mt-6 max-w-[34ch]">{{ 'Unity packages, shared JSON schemas, and constructors for every camera style.' | tr }}</p>
 		<div class="mt-8 flex flex-wrap gap-3">
 			<a class="ds-btn ds-btn-primary ds-btn-lg" routerLink="/packages">
 				<span>{{ 'Browse packages' | tr }}</span>
@@ -55,7 +55,7 @@
 			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
 				<div>
 					<h3 class="text-base">{{ 'Core packages' | tr }}</h3>
-					<p class="ds-supporting mt-1">{{ 'Scenes, assets, interaction, XR, and spatial data.' | tr }}</p>
+					<p class="ds-supporting mt-1">{{ 'Schemas and Unity packages: scenes, input, character, audio, multiplayer and more.' | tr }}</p>
 				</div>
 				<span class="ds-mono ds-muted">3d-*</span>
 			</li>
@@ -71,9 +71,9 @@
 			<li class="grid gap-1 p-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
 				<div>
 					<h3 class="text-base">{{ 'Your game' | tr }}</h3>
-					<p class="ds-supporting mt-1">{{ 'Rules, content, and assets stay outside the framework.' | tr }}</p>
+					<p class="ds-supporting mt-1">{{ 'Menus, HUD, rules and content stay outside the framework.' | tr }}</p>
 				</div>
-				<span class="ds-mono ds-muted">game-&lt;name&gt;-*</span>
+				<span class="ds-mono ds-muted">&lt;game&gt;-*</span>
 			</li>
 		</ol>
 	</div>
@@ -96,12 +96,11 @@
 				}
 				<li>
 					<a
-						class="row-link ds-plain md:grid-cols-[14rem_minmax(0,1fr)_auto_1.25rem]"
+						class="row-link ds-plain md:grid-cols-[14rem_minmax(0,1fr)_1.25rem]"
 						[routerLink]="['/packages', item.slug]"
 					>
 						<span class="ds-mono font-medium">{{ item.name }}</span>
 						<span class="ds-supporting md:truncate">{{ item.summary | tr }}</span>
-						<span class="ds-badge ds-badge-outline justify-self-start md:justify-self-end">{{ item.status | tr }}</span>
 						<app-icon class="hidden text-[var(--muted-foreground)] md:inline-flex" name="arrow-right" />
 					</a>
 				</li>

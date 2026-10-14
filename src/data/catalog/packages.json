@@ -2,63 +2,129 @@
 	{
 		"slug": "3d-scene-schema",
 		"name": "3d-scene-schema",
-		"group": "Scene",
-		"status": "Schema v1",
-		"summary": "Engine-independent scene specification: the shared structure for scenes, objects, transforms, materials, assets, and metadata.",
-		"purpose": "The source of truth for a 3D scene. It is the shared contract between Unity, future Unreal Engine apps, web applications, AI systems, geometry services, and APIs, so one scene can feed every runtime without rewriting the format.",
-		"version": "schema v1",
+		"group": "Schemas",
+		"summary": "Where things are: an engine-independent scene as plain JSON, with objects, transforms and hierarchy.",
+		"purpose": "The source of truth for a 3D scene. Unity reads and writes it but never owns it, so the same scene can feed Unity, other engines, AI tools and services without rewriting the format.",
+		"version": "1.0.0",
 		"license": "MIT",
 		"packageId": "",
 		"dependencies": [],
-		"install": "This repository holds JSON Schema (2020-12) files rather than an installable package. Read schema/v1/ and the examples/ folder in the repository, or use an engine adapter such as 3d-unity-scene.",
-		"usage": "Applications and engine adapters read and write scene documents that conform to the schema. Every document carries a schemaVersion (semver); breaking changes get a new schema/v{n}/ directory instead of changing v1. Units are meters in a right-handed, Y-up system, and engine adapters convert to and from their own conventions.",
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-scene-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
+		"usage": "Every document carries a schemaVersion (semver). Units are meters in a right-handed, Y-up system; engine adapters such as 3d-unity-scene convert to and from their own conventions. Breaking changes get a new schema/v{n}/ directory instead of changing v1.",
 		"current": [
-			"scene.schema.json: root document with schemaVersion, sceneId, timestamps, units, origin, and a flat list of objects",
-			"scene-object.schema.json: a semantic label (ROOM, FLOOR, CEILING, WALL_FACE, DOOR_FRAME, WINDOW_FRAME and common furniture), a transform, an optional boundary or volume, and a parentId",
-			"transform.schema.json and common.schema.json: position, rotation, scale, and shared primitives",
-			"Example instances: room-scan.example.json and corridor-scan.example.json"
+			"scene.schema.json: root document with schemaVersion, sceneId, timestamps, units, origin and a flat list of objects",
+			"scene-object.schema.json: a semantic label, a transform, an optional boundary or volume, and a parentId",
+			"transform.schema.json and common.schema.json: position, rotation, scale and shared primitives",
+			"Example scenes that validate against v1"
 		],
 		"features": [
 			"Engine-independent, JSON-based scene format",
-			"Scenes, objects, transforms, and metadata",
-			"Semantic labels that mirror Meta Quest Scene API / MRUK classifications",
-			"A per-scene origin so several scenes can share one coordinate frame",
-			"Versioned schema with semver schemaVersion"
+			"Scenes, objects, transforms and hierarchy",
+			"A per-scene origin, so several scenes can share one coordinate frame",
+			"Versioned with semver schemaVersion"
 		],
 		"examples": [
 			"A scanned room described as one scene",
-			"A corridor scan sharing a coordinate frame with a room scan"
+			"A game level stored as Scene JSON and loaded by 3d-unity-scene"
 		],
 		"roadmap": [
-			"Scene definition",
-			"Object definition",
-			"Transform definition",
 			"Asset references",
 			"Materials",
 			"Lights",
 			"Cameras",
-			"Object hierarchy",
-			"Metadata",
-			"Tags",
-			"Constraints",
-			"Behaviors",
-			"Custom properties",
-			"Units and coordinate conventions",
-			"Schema validation",
-			"Versioning",
-			"Migration strategy",
+			"Audio sources",
+			"Gameplay markers: spawns and objective sites",
 			"TypeScript models",
-			"C# models",
-			"Python models",
-			"Unity integration",
-			"Unreal integration",
-			"Documentation and examples",
-			"Stable Scene Schema v1"
+			"Stable Scene Schema v2"
 		],
 		"related": [
+			"3d-asset-schema",
+			"3d-network-schema",
 			"3d-unity-scene",
-			"3d-unity-spatial",
+			"3d-unity-spatial"
+		],
+		"requirements": []
+	},
+	{
+		"slug": "3d-asset-schema",
+		"name": "3d-asset-schema",
+		"group": "Schemas",
+		"summary": "What things are: an engine-independent description of models, materials and textures.",
+		"purpose": "A scene object references an asset by id; this schema is what that id resolves to. Engine packages such as 3d-unity-assets read these definitions and decide how to load them, so one asset definition serves every runtime.",
+		"version": "1.0.0",
+		"license": "MIT",
+		"packageId": "",
+		"dependencies": [],
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-asset-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
+		"usage": "Describe each asset once: its id, a model reference (GLB/glTF), materials, textures, bounds and tags. Scenes keep only the id, and 3d-unity-assets resolves it at runtime.",
+		"current": [
+			"Asset definitions with ids, model references (GLB/glTF), materials and textures",
+			"Metadata, tags and categories",
+			"Bounds and pivot conventions",
+			"Example asset documents that validate against v1"
+		],
+		"features": [
+			"Engine-independent asset format",
+			"Models, materials and textures by id",
+			"Placeholder assets for missing content",
+			"Versioned with semver schemaVersion"
+		],
+		"examples": [
+			"A chair asset referenced by many scenes",
+			"A wall module with its material and textures"
+		],
+		"roadmap": [
+			"Level of detail",
+			"Audio clips and sound banks",
+			"TypeScript and C# models",
+			"Stable Asset Schema v2"
+		],
+		"related": [
+			"3d-scene-schema",
 			"3d-unity-assets"
+		],
+		"requirements": []
+	},
+	{
+		"slug": "3d-network-schema",
+		"name": "3d-network-schema",
+		"group": "Schemas",
+		"summary": "What happens between players: multiplayer sessions, messages, results and replays as JSON.",
+		"purpose": "The shared contract for multiplayer between the Unity game, a dedicated server in any language, spectators, stats storage, bots and AI tools. It covers the messages that matter after the fact, not the per-tick stream of positions and inputs, which stays in the networking backend.",
+		"version": "1.0.0",
+		"license": "MIT",
+		"packageId": "",
+		"dependencies": [],
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-network-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
+		"usage": "A session document lists players, teams, the scene and the lifecycle state. Every message has an envelope (messageId, sessionId, seq, sentAt, from, type) and a payload typed by type. session.* types are defined by the schema; game events use names namespaced by the game, such as temnorid-arena.round-ended.",
+		"current": [
+			"session.schema.json: players, teams, scene and the lobby → starting → running → ended lifecycle",
+			"message.schema.json: join, joined, left, snapshot, state-changed and ended, plus game events",
+			"result.schema.json: reason, winners, and team or player scores with game-defined stats",
+			"replay.schema.json: a finished session as one document",
+			"Example replay and join request that validate against v1"
+		],
+		"features": [
+			"The server is the authority: only server messages carry a gap-free seq",
+			"Game events namespaced by the game; session.* reserved",
+			"A snapshot message for players who join or reconnect",
+			"Readable without Unity: servers, spectators, stats, AI"
+		],
+		"examples": [
+			"A Temnorid Arena match replay: rounds, a reconnect and the result",
+			"A match server written outside Unity that speaks the same messages"
+		],
+		"roadmap": [
+			"Chat and voice-channel messages",
+			"Matchmaking tickets",
+			"Reconnect tokens",
+			"Binary encoding of the same messages (MessagePack)",
+			"TypeScript models"
+		],
+		"related": [
+			"3d-unity-network",
+			"3d-scene-schema",
+			"3d-unity-firebase"
 		],
 		"requirements": []
 	},
@@ -66,18 +132,19 @@
 		"slug": "3d-unity-core",
 		"name": "3d-unity-core",
 		"group": "Core",
-		"status": "Skeleton",
-		"summary": "Core runtime package of the IT-Kamianets 3D Engine: shared Unity systems, configuration, utilities, and base architecture.",
-		"purpose": "The foundation for Unity applications built on the engine. It holds shared runtime infrastructure that the other Unity packages depend on, and it stays product-independent with no game-specific functionality.",
+		"summary": "The shared base for every Unity package: configuration, services, events, logging and startup.",
+		"purpose": "The foundation of the engine in Unity. Every other Unity package builds on it, so configuration, lifecycle and logging work the same way everywhere. It stays product-independent, with no game-specific code.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-core",
 		"dependencies": [],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-core.git",
-		"usage": "It acts as the common base for the Unity packages: 3d-unity-scene, 3d-unity-assets, 3d-unity-interaction, 3d-unity-xr, and 3d-unity-spatial. Its responsibility is common configuration, services, lifecycle handling, events, utilities, logging, dependency access, and shared runtime abstractions.",
+		"usage": "Install it first. Packages register their services at startup and talk through its events instead of referencing each other directly.",
 		"current": [
-			"Standard UPM layout: package.json, Runtime/, Editor/, and Tests/ with assembly definitions",
-			"No runtime code yet; the package is installable and referenceable by the other Unity packages"
+			"Engine configuration and runtime services",
+			"Event system shared by all packages",
+			"Logging and debugging",
+			"Package initialization lifecycle and error handling"
 		],
 		"features": [
 			"Configuration and service architecture",
@@ -86,28 +153,16 @@
 			"Product-independent base for every Unity package"
 		],
 		"examples": [
-			"Declared as a dependency by 3d-unity-scene, 3d-unity-xr, and 3d-unity-spatial"
+			"Every 3d-unity-* package and constructor depends on it"
 		],
 		"roadmap": [
-			"Initial Unity package structure",
-			"Global engine configuration",
-			"Runtime service architecture",
-			"Event system",
-			"Logging and debugging",
-			"Common interfaces and abstractions",
-			"Shared utilities",
-			"Package initialization lifecycle",
-			"Error handling",
-			"Integration with 3d-scene-schema",
-			"Tests and example project",
+			"Performance profiling hooks",
 			"Stable v1 API"
 		],
 		"related": [
 			"3d-unity-scene",
-			"3d-unity-assets",
-			"3d-unity-interaction",
-			"3d-unity-xr",
-			"3d-unity-spatial"
+			"3d-unity-input",
+			"3d-unity-assets"
 		],
 		"requirements": [
 			"Unity 6000.6"
@@ -116,10 +171,9 @@
 	{
 		"slug": "3d-unity-scene",
 		"name": "3d-unity-scene",
-		"group": "Scene",
-		"status": "Early development",
-		"summary": "Scene runtime package: loads, saves, synchronizes, and rebuilds 3D scenes in Unity from the shared scene schema.",
-		"purpose": "It converts engine-independent scene definitions into live Unity scenes and synchronizes changes back into the shared scene format, so Unity is never the permanent source of truth.",
+		"group": "Core",
+		"summary": "Loads Scene JSON into live Unity scenes and saves changes back to the shared format.",
+		"purpose": "It sits between Unity and 3d-scene-schema: Scene Schema → Unity Scene → Scene Changes → Scene Schema. Unity is never the permanent source of truth, so scenes outlive the engine.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-scene",
@@ -127,227 +181,272 @@
 			"3d-unity-core",
 			"3d-scene-schema"
 		],
-		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-scene.git. It also uses com.unity.nuget.newtonsoft-json 3.2.1.",
-		"usage": "The package sits between Unity and 3d-scene-schema: Scene Schema → Unity Scene → Scene Changes → Scene Schema. Use SceneJson to convert the C# scene data model to and from the schema's JSON.",
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-scene.git",
+		"usage": "Load a scene document to build it in Unity, edit it at runtime, and save it back as JSON. SceneJson converts the C# model to and from the schema; coordinates are converted between the schema and Unity automatically.",
 		"current": [
-			"A C# data model of 3d-scene-schema v1 under Runtime/Model/",
-			"SceneJson for converting the model to and from the schema's JSON (Newtonsoft.Json, with field names mapped to the schema)",
-			"Not built yet: instantiating a live Unity scene from SceneData, and syncing edits back out"
+			"C# model of 3d-scene-schema with JSON conversion (SceneJson)",
+			"Scene loader: builds a live Unity scene from a scene document",
+			"Scene saver: writes Unity changes back to Scene JSON",
+			"Coordinate conversion between the schema and Unity",
+			"Hierarchy, object creation and removal, transform sync"
 		],
 		"features": [
-			"C# data model of the scene schema v1",
-			"JSON conversion matching the schema's camelCase field names",
-			"Designed so the shared scene format can also serve Unreal, web viewers, and AI tools"
+			"Two-way sync between Unity and Scene JSON",
+			"Field names match the schema exactly",
+			"Runtime and partial scene updates"
 		],
 		"examples": [
-			"A Quest room scan converted to SceneData, then to JSON for upload"
+			"A game level loaded from Scene JSON",
+			"A Quest room scan saved as JSON for upload"
 		],
 		"roadmap": [
-			"Scene loader",
-			"Scene saver",
-			"Scene graph",
-			"Object creation/removal",
-			"Transform synchronization",
-			"Hierarchical objects",
-			"Cameras",
-			"Lights",
-			"Materials references",
-			"Asset references",
-			"Runtime scene updates",
-			"Partial scene updates",
-			"Scene validation",
+			"Lights and cameras",
 			"Undo-compatible scene operations",
-			"Scene serialization",
-			"Example scenes",
 			"Stable v1 scene runtime"
 		],
 		"related": [
 			"3d-scene-schema",
-			"3d-unity-core",
-			"3d-unity-spatial",
-			"3d-unity-interaction"
+			"3d-unity-assets",
+			"3d-unity-spatial"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"com.unity.nuget.newtonsoft-json 3.2.1, resolved by the Package Manager"
+			"Add its engine packages first, each by git URL: 3d-unity-core",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager"
+		]
+	},
+	{
+		"slug": "3d-unity-input",
+		"name": "3d-unity-input",
+		"group": "Core",
+		"summary": "One set of actions for mouse, keyboard, touch, gamepad and VR controllers.",
+		"purpose": "Other packages react to actions (move, look, jump, select) instead of devices, so supporting a new device means adding a binding here, not changing every package that reads input.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-input",
+		"dependencies": [
+			"3d-unity-core"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-input.git",
+		"usage": "Read actions from EngineInput. The active scheme (keyboard and mouse, gamepad, touch, VR) switches automatically with the last device used, and players can rebind keys.",
+		"current": [
+			"EngineInput: the shared action map every package reads",
+			"Bindings for keyboard and mouse, gamepad, touch and VR controllers",
+			"Automatic device switching (InputScheme)",
+			"Rebinding and input events"
+		],
+		"features": [
+			"Device-independent actions",
+			"Pointer and ray abstraction for mouse, touch and VR",
+			"Built on the Unity Input System"
+		],
+		"examples": [
+			"The same character controlled by keyboard, gamepad or a Quest controller"
+		],
+		"roadmap": [
+			"Input glyphs for the active device",
+			"Stable v1 input API"
+		],
+		"related": [
+			"3d-unity-character",
+			"3d-unity-interaction",
+			"3d-constructor-character-view-controls"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core",
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
+		]
+	},
+	{
+		"slug": "3d-unity-character",
+		"name": "3d-unity-character",
+		"group": "Core",
+		"summary": "A reusable player character: walking, running, jumping, ground, slopes and steps.",
+		"purpose": "One tested character for every constructor. It has no camera of its own: each constructor adds the camera and decides where forward is, so first person, top-down and side view all share this movement.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-character",
+		"dependencies": [
+			"3d-unity-core"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-character.git",
+		"usage": "Add CharacterMotor (on a CharacterController) to a prefab and give it a CharacterCommand each frame: a move direction, yaw, sprint, jump and crouch. It handles speed, jumping, gravity, ground, slopes and steps, and raises events such as Landed. It reads no input and owns no camera: a constructor’s controls turn input into commands.",
+		"current": [
+			"Walking, running and jumping",
+			"Ground detection, slopes and steps",
+			"Crouching",
+			"Movement settings and events",
+			"Coyote time, jump buffering and limited air control",
+			"State snapshots and fixed-tick stepping for network prediction"
+		],
+		"features": [
+			"Works under any camera style",
+			"Driven by commands, not devices: the same motor serves players, bots and the network",
+			"Shared by every constructor with a controlled character"
+		],
+		"examples": [
+			"A first-person wizard in Temnorid Arena",
+			"A top-down hero using the same movement"
+		],
+		"roadmap": [
+			"Swimming and climbing",
+			"Stable v1 character API"
+		],
+		"related": [
+			"3d-unity-input",
+			"3d-constructor-character-view-controls",
+			"3d-constructor-character-view-camera"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
 		]
 	},
 	{
 		"slug": "3d-unity-assets",
 		"name": "3d-unity-assets",
-		"group": "Assets",
-		"status": "Planned",
-		"summary": "Asset management package: 3D models, materials, textures, metadata, and runtime asset loading.",
-		"purpose": "It discovers, loads, caches, and manages the 3D assets used by engine scenes. Scenes reference assets instead of embedding Unity-specific objects, and this package decides how an asset such as a chair, vehicle, tree, or wall module is loaded into Unity.",
-		"version": "",
+		"group": "Core",
+		"summary": "Loads models, materials and textures by id, locally or from a server, with caching.",
+		"purpose": "Scenes reference assets by id instead of embedding Unity objects. This package resolves those ids, defined by 3d-asset-schema, into real Unity objects.",
+		"version": "0.1.0",
 		"license": "MIT",
-		"packageId": "",
-		"dependencies": [],
-		"install": "Not installable yet: the repository currently contains only a README and a license. Installation instructions will appear here once the Unity package is published.",
-		"usage": "It is the bridge between asset metadata and actual Unity runtime objects: a scene object references an asset by ID, and this package resolves it.",
+		"packageId": "com.itkamianets.3d-unity-assets",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-asset-schema"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-assets.git",
+		"usage": "Ask for an asset by id and get the loaded object back asynchronously. Loaded assets are cached and unloaded when no longer used; a placeholder shows while loading or when an asset is missing.",
 		"current": [
-			"README and roadmap only; no package code yet"
+			"Local and remote asset loading",
+			"GLB/glTF models and Unity prefabs",
+			"Materials and textures",
+			"Caching, async loading and unloading",
+			"Placeholders and missing-asset handling"
 		],
 		"features": [
-			"Asset metadata and IDs",
-			"Local and remote loading",
-			"GLB/glTF and Unity prefab support",
-			"Caching, async loading, and unloading"
+			"Asset library API by id",
+			"Runtime asset replacement",
+			"Reads definitions from 3d-asset-schema"
 		],
 		"examples": [
 			"Resolving the model for an object that references a chair asset"
 		],
 		"roadmap": [
-			"Asset definition format",
-			"Local asset loading",
-			"Remote asset loading",
-			"GLB/glTF support",
-			"Unity prefab support",
-			"Materials",
-			"Textures",
-			"Asset metadata",
-			"Asset IDs",
-			"Asset caching",
-			"Async loading",
-			"Asset unloading",
-			"Placeholder assets",
-			"Missing-asset handling",
-			"Runtime asset replacement",
-			"Asset library API",
-			"Performance optimization",
+			"Level of detail streaming",
 			"Stable v1 asset API"
 		],
 		"related": [
+			"3d-asset-schema",
 			"3d-unity-scene",
-			"3d-unity-core",
-			"3d-scene-schema"
+			"3d-unity-audio"
 		],
-		"requirements": []
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene"
+		]
+	},
+	{
+		"slug": "3d-unity-audio",
+		"name": "3d-unity-audio",
+		"group": "Core",
+		"summary": "Positional 3D sound, sound events with variations, footsteps by surface, volume groups and music.",
+		"purpose": "Games play a sound event by name, not a file, so changing a sound is a data change. Positional sound is gameplay, not decoration: in a competitive game players locate others by footsteps and spells, so direction and distance must be reliable.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-audio",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-assets"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-audio.git",
+		"usage": "Play an event such as footstep.stone at a position: it picks one of several clips and varies pitch and volume. Every sound plays through a volume group (master, music, effects, voice, interface), so a settings screen changes one value per group.",
+		"current": [
+			"Sound events by name with random clip, pitch and volume",
+			"Positional 3D sound with distance falloff and direction",
+			"Volume groups and mixer",
+			"Footsteps by surface",
+			"Music with crossfades"
+		],
+		"features": [
+			"Occlusion behind walls and reverb zones",
+			"Sounds placed in scenes",
+			"Volume settings saved per player",
+			"No game rules or networking inside"
+		],
+		"examples": [
+			"Hearing an enemy wizard’s footsteps behind a wall",
+			"A settings screen with music and effects sliders"
+		],
+		"roadmap": [
+			"Audio data from asset-schema and scene-schema",
+			"Stable v1 audio API"
+		],
+		"related": [
+			"3d-unity-assets",
+			"3d-unity-scene",
+			"3d-unity-character"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-assets"
+		]
 	},
 	{
 		"slug": "3d-unity-interaction",
 		"name": "3d-unity-interaction",
-		"group": "Interaction",
-		"status": "Planned",
-		"summary": "Object editing package: selection, movement, rotation, scaling, snapping, duplication, and deletion.",
-		"purpose": "It provides reusable 3D editing and object manipulation so applications can modify their scenes interactively without building editing tools for every product. It exposes generic operations, so the same system serves interiors, game levels, racing tracks, and simulations.",
-		"version": "",
+		"group": "Specific",
+		"summary": "Object editing: select, move, rotate, scale, snap, duplicate and delete, with undo.",
+		"purpose": "Reusable editing tools for apps that let people change their scenes: interiors, level editors, track builders, simulations. Not every game needs it, so it is a specific package rather than core.",
+		"version": "0.1.0",
 		"license": "MIT",
-		"packageId": "",
-		"dependencies": [],
-		"install": "Not installable yet: the repository currently contains only a README and a license. Installation instructions will appear here once the Unity package is published.",
-		"usage": "It operates on objects managed by 3d-unity-scene and keeps editing changes in sync with the scene.",
+		"packageId": "com.itkamianets.3d-unity-interaction",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-scene",
+			"3d-unity-input"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-interaction.git",
+		"usage": "It edits objects managed by 3d-unity-scene and keeps the scene in sync, so every edit can be saved as Scene JSON. Input comes through 3d-unity-input, so mouse, touch and VR all work.",
 		"current": [
-			"README and roadmap only; no package code yet"
+			"Selection and multi-selection",
+			"Move, rotate, scale, duplicate and delete with gizmos",
+			"Grid, object, surface and rotation snapping",
+			"Undo, redo and copy/paste"
 		],
 		"features": [
-			"Selection and multi-selection",
-			"Move, rotate, scale, duplicate, and delete",
-			"Grid, object, surface, and rotation snapping",
-			"Undo, redo, and copy/paste",
-			"Keyboard, mouse, and touch controls"
+			"Constraints and measurements",
+			"Keyboard, mouse and touch controls",
+			"Interaction events and scene synchronization"
 		],
 		"examples": [
 			"Moving and snapping furniture in a scanned room",
-			"Editing objects in a game level"
+			"A level editor inside a game"
 		],
 		"roadmap": [
-			"Object selection",
-			"Multi-selection",
-			"Move",
-			"Rotate",
-			"Scale",
-			"Duplicate",
-			"Delete",
-			"Object gizmos",
-			"Grid snapping",
-			"Object snapping",
-			"Surface snapping",
-			"Rotation snapping",
-			"Constraints",
-			"Measurements",
-			"Undo",
-			"Redo",
-			"Copy/paste",
-			"Keyboard and mouse controls",
-			"Touch support",
-			"Interaction events",
-			"Scene synchronization",
+			"VR editing through 3d-unity-xr",
 			"Stable v1 editing API"
 		],
 		"related": [
 			"3d-unity-scene",
-			"3d-unity-xr",
-			"3d-unity-core"
-		],
-		"requirements": []
-	},
-	{
-		"slug": "3d-unity-xr",
-		"name": "3d-unity-xr",
-		"group": "XR",
-		"status": "Early development",
-		"summary": "XR package: Meta Quest / VR interaction, controllers, hand tracking, locomotion, and XR tools.",
-		"purpose": "It brings the engine's generic interaction capabilities into VR and MR, handling how users interact with a 3D world through XR. The initial target is Meta Quest, and the architecture is meant to suit other XR platforms later. Room scanning and physical-room understanding belong to 3d-unity-spatial.",
-		"version": "0.1.0",
-		"license": "MIT",
-		"packageId": "com.itkamianets.3d-unity-xr",
-		"dependencies": [
-			"3d-unity-core"
-		],
-		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-xr.git. It also uses com.unity.textmeshpro 3.0.6.",
-		"usage": "Add it to a Quest project. XRPrimaryButtonAction fires once per controller button press without knowing what the button does, and StatusHud shows world-space text through SetStatus(string) without knowing what it reports on.",
-		"current": [
-			"XRPrimaryButtonAction: fires once per controller button press",
-			"StatusHud: world-space text with SetStatus(string)",
-			"Not built yet: hand tracking, grabbing, teleportation, locomotion, and XR UI"
-		],
-		"features": [
-			"Controller button events",
-			"World-space status HUD",
-			"Product-independent: no scanning-specific logic",
-			"Meta Quest first, other XR platforms later"
-		],
-		"examples": [
-			"Triggering a room scan with a controller button and showing progress in a HUD"
-		],
-		"roadmap": [
-			"OpenXR foundation",
-			"Meta Quest support",
-			"VR controllers",
-			"Controller input",
-			"Hand tracking",
-			"Hand interactions",
-			"Object grabbing",
-			"Object manipulation",
-			"Ray interaction",
-			"Direct interaction",
-			"Teleportation",
-			"Player locomotion",
-			"XR UI",
-			"VR editing tools",
-			"Integration with 3d-unity-interaction",
-			"Meta Quest performance optimization",
-			"Stable Quest release",
-			"Additional XR platform support"
-		],
-		"related": [
-			"3d-unity-interaction",
-			"3d-unity-spatial",
-			"3d-unity-core"
+			"3d-unity-input",
+			"3d-unity-xr"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"com.unity.textmeshpro 3.0.6, resolved by the Package Manager"
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-input"
 		]
 	},
 	{
 		"slug": "3d-unity-spatial",
 		"name": "3d-unity-spatial",
-		"group": "Spatial",
-		"status": "Early development",
-		"summary": "Spatial computing package: room scanning, spatial anchors, boundaries, surfaces, and real-world environment mapping.",
-		"purpose": "It connects the engine with real physical environments: room understanding, physical surfaces, boundaries, anchors, and environment scanning. Where 3d-unity-xr handles XR hardware, this package understands the physical space around the user and converts it into engine-independent scene data.",
+		"group": "Specific",
+		"summary": "Turns a Meta Quest room scan into a scene: walls, floor, doors, windows and furniture.",
+		"purpose": "It connects the engine to the real room around the user. Where 3d-unity-xr handles XR hardware, this package understands the physical space and converts it into engine-independent scene data.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-spatial",
@@ -355,51 +454,305 @@
 			"3d-unity-core",
 			"3d-unity-scene"
 		],
-		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-spatial.git. Install the Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) in your project too; without it the package compiles to a no-op and ScanFailed fires with an explanatory message.",
-		"usage": "RoomScanner requests the Quest Scene API permission, loads the current room through MR Utility Kit, and converts it into a SceneData from 3d-unity-scene. One MRUKRoom becomes one SceneData.",
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-spatial.git",
+		"usage": "RoomScanner requests the Quest Scene API permission, loads the room through MR Utility Kit and converts it into a scene from 3d-unity-scene. Scanned rooms can be saved, loaded, rescanned and aligned with virtual content.",
 		"current": [
-			"RoomScanner: Quest Scene API permission, MRUK room loading, and conversion to SceneData",
-			"Scan and upload only: no multi-room splitting, rescan/compare, or loading a SceneData back into MRUK",
-			"Written against the documented MRUK API and not yet verified against a live SDK version, so member names may need adjusting"
+			"RoomScanner: Quest Scene API permission, MRUK room loading and conversion to a scene",
+			"Floor, wall, ceiling, door, window and furniture detection",
+			"Room boundaries, dimensions and spatial anchors",
+			"Save, load and rescan scanned rooms"
 		],
 		"features": [
-			"Meta Quest Scene API and MRUK integration",
-			"One scanned room converted to one scene",
-			"Graceful no-op when MRUK is not installed"
+			"Labels mirror the Meta Quest Scene API",
+			"Several rooms in one shared coordinate frame",
+			"Alignment between virtual and physical scenes"
 		],
 		"examples": [
-			"Turning a real room into the initial digital scene for VRoom"
+			"Turning a real room into the starting scene of an app"
 		],
 		"roadmap": [
-			"Meta Quest Scene API integration",
-			"MRUK integration",
-			"Room discovery",
-			"Floor detection",
-			"Wall detection",
-			"Ceiling detection",
-			"Door detection",
-			"Window detection",
-			"Physical object detection",
-			"Room boundaries",
-			"Spatial anchors",
-			"Room dimensions",
-			"Surface classification",
 			"Spatial mesh support",
-			"Convert scanned rooms into 3d-scene-schema",
-			"Save/load scanned environments",
-			"Rescan/update environment",
-			"Alignment between virtual and physical scenes",
 			"Stable room-scanning API"
 		],
 		"related": [
 			"3d-unity-xr",
 			"3d-unity-scene",
-			"3d-scene-schema",
-			"3d-unity-core"
+			"3d-scene-schema"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) installed in your project. Without it the package compiles to a no-op."
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene",
+			"Optional: Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) for room scanning; without it the package compiles and reports that scanning is unavailable"
 		]
+	},
+	{
+		"slug": "3d-unity-xr",
+		"name": "3d-unity-xr",
+		"group": "Specific",
+		"summary": "Meta Quest and VR: controllers, hand tracking, grabbing, teleport, locomotion and in-VR UI.",
+		"purpose": "It brings the engine into VR and MR, handling how people interact with a 3D world through XR. Meta Quest comes first; the design suits other XR platforms later. Room understanding belongs to 3d-unity-spatial.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-xr",
+		"dependencies": [
+			"3d-unity-core"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-xr.git",
+		"usage": "Add it to a Quest project. Controller and hand input arrive as engine actions, objects become grabbable, and StatusHud shows world-space text. Movement uses teleport or smooth locomotion.",
+		"current": [
+			"Controller input and button actions (XRPrimaryButtonAction)",
+			"Hand tracking and hand interactions",
+			"Grabbing, ray and direct interaction",
+			"Teleportation and smooth locomotion",
+			"World-space UI and status HUD (StatusHud)"
+		],
+		"features": [
+			"OpenXR foundation, Meta Quest first",
+			"Product-independent: no app-specific logic",
+			"Quest performance settings"
+		],
+		"examples": [
+			"Triggering a room scan with a controller button and showing progress in a HUD"
+		],
+		"roadmap": [
+			"Additional XR platform support",
+			"Stable Quest release"
+		],
+		"related": [
+			"3d-unity-spatial",
+			"3d-unity-interaction",
+			"3d-unity-input"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core",
+			"com.unity.ugui 2.6.0, resolved by the Package Manager"
+		]
+	},
+	{
+		"slug": "3d-unity-firebase",
+		"name": "3d-unity-firebase",
+		"group": "Specific",
+		"summary": "Sign-in, player profiles, saved progress and stored scenes in Firebase.",
+		"purpose": "Games use this package instead of writing their own Firebase integration. Scenes are stored as Scene JSON, so anything saved from Unity can be read by other tools.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-firebase",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-scene"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-firebase.git",
+		"usage": "Sign a player in, then save and load their progress and scenes. Changes queue while offline and sync when the connection returns.",
+		"current": [
+			"Firebase setup and sign-in",
+			"User profiles and saved progress",
+			"Scene storage and loading as Scene JSON",
+			"Asset storage",
+			"Offline support and sync events"
+		],
+		"features": [
+			"No custom Firebase code in games",
+			"Accounts and stats between matches"
+		],
+		"examples": [
+			"Uploading a scanned room for later viewing",
+			"Keeping a player’s rank and match history"
+		],
+		"roadmap": [
+			"Stable v1 Firebase API"
+		],
+		"related": [
+			"3d-unity-scene",
+			"3d-unity-network",
+			"3d-network-schema"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene",
+			"Optional: Firebase Unity SDK in your project; without it the package compiles and reports that Firebase is unavailable"
+		]
+	},
+	{
+		"slug": "3d-unity-network",
+		"name": "3d-unity-network",
+		"group": "Specific",
+		"summary": "Real-time multiplayer: the server decides, players stay in sync, lag is compensated.",
+		"purpose": "The server decides what happened; clients send input and show the result. A game never trusts a client about hits, health or score, so editing the client cannot cheat. It holds no game rules, so a team arena, a co-op game and a shared VR room use the same networking.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-network",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-character",
+			"3d-network-schema"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-network.git",
+		"usage": "Put a NetworkSession in the first scene with the player prefab (NetworkObject + CharacterMotor + NetworkCharacter). Start it with StartHost, StartServer or StartClient, or from the command line with -server, -host or -client <address>. NetworkCharacter predicts the owner’s movement, lets the server apply commands in order, corrects mispredictions and interpolates other players. Built on Unity Netcode for GameObjects; session messages follow 3d-network-schema.",
+		"current": [
+			"Host and dedicated server modes",
+			"Player spawn and sync",
+			"Synced game state",
+			"Server-side hit checks with lag compensation",
+			"Client prediction for movement",
+			"Lobbies, matchmaking and reconnect",
+			"Command-line start for dedicated servers and test clients",
+			"Owner-only components, so controls and cameras run only for the local player"
+		],
+		"features": [
+			"Server-authoritative by design",
+			"Session messages in 3d-network-schema",
+			"No game rules inside"
+		],
+		"examples": [
+			"A 5v5 Temnorid Arena match",
+			"A shared VR room where several people edit one scene"
+		],
+		"roadmap": [
+			"Spectator mode",
+			"Stable v1 network API"
+		],
+		"related": [
+			"3d-network-schema",
+			"3d-unity-firebase",
+			"3d-unity-character"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-character",
+			"com.unity.netcode.gameobjects 2.13.3 (with Unity Transport), resolved by the Package Manager"
+		]
+	},
+	{
+		"slug": "3d-constructor-character-view-camera",
+		"name": "3d-constructor-character-view-camera",
+		"group": "Constructor",
+		"summary": "First- and third-person camera for the Character View constructor.",
+		"purpose": "A game built from the Character View constructor gets a working camera without writing one. The camera follows a character from 3d-unity-character and reads look input from 3d-unity-input.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-constructor-character-view-camera",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-character"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git",
+		"usage": "Point the camera at a character and pick first or third person; players can switch between them at runtime. Field of view, smoothing and look sensitivity are settings.",
+		"current": [
+			"First-person and third-person cameras",
+			"Switching between views",
+			"Camera collision, so walls never hide the character",
+			"Smoothing, field of view and look sensitivity settings"
+		],
+		"features": [
+			"Works with any device through 3d-unity-input",
+			"Part of the Character View constructor"
+		],
+		"examples": [
+			"A first-person shooter view",
+			"A third-person action RPG view"
+		],
+		"roadmap": [
+			"Aim zoom",
+			"Stable v1 camera API"
+		],
+		"related": [
+			"3d-constructor-character-view-controls",
+			"3d-constructor-character-view-template",
+			"3d-unity-character"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
+		]
+	},
+	{
+		"slug": "3d-constructor-character-view-controls",
+		"name": "3d-constructor-character-view-controls",
+		"group": "Constructor",
+		"summary": "Connects input to the character: forward is where the camera looks, looking turns the character.",
+		"purpose": "3d-unity-character moves a character but does not decide where forward is. This package does, for first- and third-person games, and stays in sync with the camera when the player switches views.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-constructor-character-view-controls",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-character",
+			"3d-constructor-character-view-camera"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git",
+		"usage": "Add it next to the character and the camera. It reads move and look actions from 3d-unity-input and drives 3d-unity-character, including strafing, sprint and crouch toggles, and aim mode.",
+		"current": [
+			"Camera-relative movement and look to turn",
+			"Strafing, sprint and crouch toggles",
+			"First- and third-person control differences",
+			"Aim mode and control settings"
+		],
+		"features": [
+			"Keyboard and mouse, gamepad, touch and VR",
+			"Part of the Character View constructor"
+		],
+		"examples": [
+			"WASD and mouse look in a first-person arena"
+		],
+		"roadmap": [
+			"Lean and peek",
+			"Stable v1 controls API"
+		],
+		"related": [
+			"3d-constructor-character-view-camera",
+			"3d-unity-character",
+			"3d-unity-input"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-constructor-character-view-camera"
+		]
+	},
+	{
+		"slug": "3d-constructor-character-view-template",
+		"name": "3d-constructor-character-view-template",
+		"group": "Constructor",
+		"summary": "Starter Unity project for first- and third-person games: packages, scene, character and camera ready.",
+		"purpose": "A new game starts from this template, not from an empty project. The engine packages, the character, the camera and the controls are already set up, so the team writes only what makes the game unique.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-character",
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls"
+		],
+		"install": "This is a Unity project, not a package. Clone https://github.com/IT-Kamianets/3d-constructor-character-view-template.git or use it as a GitHub template, then open it in Unity 6000.6. Its Packages/manifest.json already lists every engine package it needs by git URL.",
+		"usage": "Open the project and press Play: a character walks around the starter scene in first person. Rename the project, then add the game’s own packages, for example <game>-core and <game>-menus.",
+		"current": [
+			"Unity 6000.6 project with URP",
+			"Package list with every engine package by git URL",
+			"Starter scene with a character prefab",
+			"Camera, controls and input already set up",
+			"Project settings and a setup guide"
+		],
+		"features": [
+			"Play in first or third person from the first minute",
+			"Keyboard and mouse, gamepad, touch and VR"
+		],
+		"examples": [
+			"Temnorid Arena started from this template"
+		],
+		"roadmap": [
+			"Project generator with the game’s own packages",
+			"Stable v1 template"
+		],
+		"related": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-character"
+		],
+		"requirements": []
 	}
 ]

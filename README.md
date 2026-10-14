@@ -54,16 +54,12 @@ Introduces IT Kamianets 3D Engine and explains:
 
 Catalog of reusable framework packages.
 
-Packages should be grouped by areas such as:
+Packages are grouped from generic to specific:
 
-- Core
-- Scene
-- Assets
-- Interaction
-- XR
-- Spatial
-- Engine integrations
-- Utilities
+- Schemas: JSON formats with no engine (scene, asset, network)
+- Core: Unity systems every 3D game needs
+- Specific: editing tools, devices, platforms and services
+- Constructor: the parts of one constructor (camera, controls, template)
 
 Each package links to its dedicated package page.
 
@@ -180,24 +176,38 @@ Example ecosystem:
 
 ```text
 3d-scene-schema
+3d-asset-schema
+3d-network-schema
+
 3d-unity-core
 3d-unity-scene
+3d-unity-input
+3d-unity-character
 3d-unity-assets
-3d-unity-interaction
-3d-unity-xr
-3d-unity-spatial
+3d-unity-audio
 
-3d-constructor-character
+3d-unity-interaction
+3d-unity-spatial
+3d-unity-xr
+3d-unity-firebase
+3d-unity-network
+
+3d-constructor-character-view-camera
+3d-constructor-character-view-controls
+3d-constructor-character-view-template
+
+3d-constructor-character-view
 3d-constructor-top-down
 3d-constructor-isometric
 3d-constructor-side-view
-3d-constructor-fixed-camera
-3d-constructor-god-camera
+3d-constructor-fixed-view
+3d-constructor-free-view
 
-game-temnorid-core
-game-temnorid-world
-game-temnorid-units
-game-temnorid-ui
+temnorid-arena-menus
+temnorid-arena-hud
+temnorid-arena-core
+temnorid-arena-spells
+temnorid-arena-maps
 ```
 
 The exact package split can evolve as constructors are implemented.
@@ -220,7 +230,7 @@ The exact package split can evolve as constructors are implemented.
 - [x] Packages catalog
 - [x] Package detail page
 - [x] Constructors catalog
-- [x] Constructor detail page (content is planned until the constructor repositories exist)
+- [x] Constructor detail page with its starter repository and clone command
 - [x] Documentation structure (`/docs`, `/docs/installation`, `/docs/architecture`)
 - [x] GitHub repository links (package pages link to `https://github.com/IT-Kamianets`)
 
@@ -264,7 +274,8 @@ The exact package split can evolve as constructors are implemented.
 ```bash
 npm install
 npm start        # dev server
-npm run build    # production build, prerender, and sitemap.xml/robots.txt generation
+npm run build    # packages.md, production build, prerender, and sitemap.xml/robots.txt generation
+npm run catalog  # regenerate src/assets/packages.md only
 ```
 
 The built site is written to `dist/app/browser`; the production domain is set in `CNAME`.
@@ -279,4 +290,9 @@ The built site is written to `dist/app/browser`; the production domain is set in
 
 Routes, prerendering, and the sitemap are generated from the catalog JSON, so adding an entry creates its page automatically. Add matching `pageSeo` entries in `company.json` for its title and description.
 
-Package status is shown on each page; package content is taken from the `IT-Kamianets/3d-*` repository READMEs and `package.json` files. Constructors are marked **Planned** because their repositories do not exist yet.
+Package content is taken from the `IT-Kamianets/3d-*` repository READMEs and `package.json` files. The site shows no ready/planned status for packages or constructors. Each constructor has `repo`, its starter repository, and `parts`, its own packages (camera, controls); the setup steps on its page depend on whether `parts` is empty.
+
+### Files for developers and AI agents
+
+- `src/assets/packages.md`, served at `/packages.md`: every package in one Markdown file, with purpose, usage, what it includes, dependencies, install order and git URL, plus the constructors. **Generated** from the catalog by `tools/catalog/generate-packages-md.mjs` on every build: edit `packages.json` / `constructors.json`, never the file itself.
+- `src/assets/llms.txt`, served at `/llms.txt`: the short entry point AI tools look for, linking to `packages.md` and the docs. Hand-written; update it when docs pages are added or renamed.

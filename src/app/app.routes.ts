@@ -49,6 +49,7 @@ export const routes: Routes = [
 	})),
 	...[
 		{ path: 'docs', page: 'overview' },
+		{ path: 'docs/start-a-game', page: 'start' },
 		{ path: 'docs/installation', page: 'installation' },
 		{ path: 'docs/architecture', page: 'architecture' },
 		{ path: 'docs/examples', page: 'examples' },

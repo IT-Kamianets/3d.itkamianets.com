@@ -6,7 +6,7 @@ import { CodeBlockComponent } from '../../shared/code-block/code-block.component
 import { DependencyGraphComponent } from '../../shared/dependency-graph/dependency-graph.component';
 import { RichPipe, TrPipe } from '../../shared/translate/tr.pipe';
 
-type DocsPage = 'overview' | 'installation' | 'architecture' | 'examples';
+type DocsPage = 'overview' | 'start' | 'installation' | 'architecture' | 'examples';
 
 type DocBlock =
 	| { type: 'p'; text: string }
@@ -41,6 +41,7 @@ export class DocsComponent {
 	];
 	protected readonly nav = [
 		{ label: 'Overview', path: '/docs' },
+		{ label: 'Start a game', path: '/docs/start-a-game' },
 		{ label: 'Installation', path: '/docs/installation' },
 		{ label: 'Architecture', path: '/docs/architecture' },
 		{ label: 'Examples', path: '/docs/examples' },

@@ -6,7 +6,6 @@
 			{{ item.group | tr }}, {{ item.license }}@if (item.version) {, v{{ item.version }}}
 		</p>
 		<div class="mt-4 flex flex-wrap items-center gap-2">
-			<span class="ds-badge ds-badge-outline">{{ item.status | tr }}</span>
 			<a class="ds-btn ds-btn-ghost ds-btn-sm" [href]="repo" rel="noopener" target="_blank">
 				<app-icon name="git-branch" size="1rem" />
 				<span>{{ 'Repository' | tr }}</span>
@@ -25,6 +24,14 @@
 					<li>{{ requirement | tr }}</li>
 				}
 			</ul>
+			@if (item.optional.length) {
+				<p class="ds-supporting mt-4 mb-1">{{ 'Optional' | tr }}</p>
+				<ul class="ds-supporting flex list-none flex-col gap-1 p-0">
+					@for (entry of item.optional; track entry) {
+						<li>{{ entry | tr }}</li>
+					}
+				</ul>
+			}
 		} @else {
 			<p class="ds-supporting mt-3 max-w-[60ch]">{{ item.install | tr }}</p>
 		}
@@ -40,6 +47,27 @@
 				<h2 class="ds-section-title text-[1.25rem]">{{ 'Usage' | tr }}</h2>
 				<p class="mt-3 text-pretty leading-7">{{ item.usage | tr }}</p>
 			</section>
+			@if (item.example) {
+				<section class="min-w-0">
+					<h2 class="ds-section-title text-[1.25rem]">{{ 'Example' | tr }}</h2>
+					<div class="mt-3 max-w-[48rem]">
+						<app-code-block [code]="item.example" />
+					</div>
+				</section>
+			}
+			@if (item.api.length) {
+				<section class="prose-measure">
+					<h2 class="ds-section-title text-[1.25rem]">{{ 'API' | tr }}</h2>
+					<dl class="m-0 mt-3 flex flex-col gap-4">
+						@for (entry of item.api; track entry.name) {
+							<div class="grid gap-1">
+								<dt class="ds-mono text-sm font-medium [overflow-wrap:anywhere]">{{ entry.name }}</dt>
+								<dd class="m-0 leading-7 text-[var(--muted-foreground)]">{{ entry.text | tr }}</dd>
+							</div>
+						}
+					</dl>
+				</section>
+			}
 			<section class="prose-measure">
 				<h2 class="ds-section-title text-[1.25rem]">{{ 'Current state' | tr }}</h2>
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0 leading-7">

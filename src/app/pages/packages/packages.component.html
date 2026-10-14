@@ -15,10 +15,7 @@
 		@for (item of visible(); track item.slug) {
 			<li class="ds-card">
 				<a class="tile-link ds-plain" [routerLink]="['/packages', item.slug]">
-					<span class="flex items-center justify-between gap-3">
-						<span class="ds-mono text-base font-medium">{{ item.name }}</span>
-						<span class="ds-badge ds-badge-outline">{{ item.status | tr }}</span>
-					</span>
+					<span class="ds-mono text-base font-medium">{{ item.name }}</span>
 					<span class="ds-supporting">{{ item.summary | tr }}</span>
 					<span class="ds-mono ds-muted mt-auto pt-2">
 						@if (item.dependencies.length) {
