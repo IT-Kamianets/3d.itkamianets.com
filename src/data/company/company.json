@@ -63,37 +63,37 @@
 		},
 		"/packages/3d-scene-schema": {
 			"title": "3d-scene-schema",
-			"description": "Де що стоїть: сцена як простий JSON без рушія, з обʼєктами, трансформаціями та ієрархією.",
+			"description": "Де що стоїть: сцена як простий JSON з обʼєктами, трансформами, ієрархією, тегами та id ассетів.",
 			"image": "https://3d.itkamianets.com/seo/scene-schema.jpg"
 		},
 		"/packages/3d-unity-core": {
 			"title": "3d-unity-core",
-			"description": "Спільна основа для всіх Unity-пакетів: налаштування, сервіси, події, логування та запуск.",
+			"description": "Спільна основа пакетів рушія для Unity: логування, налаштування гравця, типізовані події та сервіси.",
 			"image": "https://3d.itkamianets.com/seo/unity-core.jpg"
 		},
 		"/packages/3d-unity-scene": {
 			"title": "3d-unity-scene",
-			"description": "Завантажує Scene JSON у живі сцени Unity і зберігає зміни назад у спільний формат.",
+			"description": "Будує живі сцени Unity з JSON за 3d-scene-schema і зберігає їх назад у той самий формат.",
 			"image": "https://3d.itkamianets.com/seo/unity-scene.jpg"
 		},
 		"/packages/3d-unity-assets": {
 			"title": "3d-unity-assets",
-			"description": "Завантажує моделі, матеріали й текстури за id, локально чи з сервера, з кешуванням.",
+			"description": "Завантажує ассети 3d-asset-schema за id в Unity: моделі, матеріали, текстури та звуки із заглушками.",
 			"image": "https://3d.itkamianets.com/seo/unity-assets.jpg"
 		},
 		"/packages/3d-unity-interaction": {
 			"title": "3d-unity-interaction",
-			"description": "Редагування обʼєктів: вибір, переміщення, обертання, масштабування, привʼязка, дублювання й видалення зі скасуванням.",
+			"description": "Редагування сцени: вибір, переміщення, поворот, масштаб, дублювання й видалення обʼєктів зі snapping та undo.",
 			"image": "https://3d.itkamianets.com/seo/unity-interaction.jpg"
 		},
 		"/packages/3d-unity-xr": {
 			"title": "3d-unity-xr",
-			"description": "Meta Quest і VR: контролери, відстеження рук, захоплення, телепорт, пересування та інтерфейс у VR.",
+			"description": "Будівельні блоки для XR: дії кнопок контролера, стан гарнітури та статусний дисплей у просторі сцени.",
 			"image": "https://3d.itkamianets.com/seo/unity-xr.jpg"
 		},
 		"/packages/3d-unity-spatial": {
 			"title": "3d-unity-spatial",
-			"description": "Перетворює скан кімнати з Meta Quest на сцену: стіни, підлогу, двері, вікна та меблі.",
+			"description": "Перетворює скан кімнати з Meta Quest на сцену, вимірює скановані кімнати й будує їх як тверду геометрію.",
 			"image": "https://3d.itkamianets.com/seo/unity-spatial.jpg"
 		},
 		"/constructors/character-view": {
@@ -128,52 +128,52 @@
 		},
 		"/packages/3d-asset-schema": {
 			"title": "3d-asset-schema",
-			"description": "Що це за обʼєкти: опис моделей, матеріалів і текстур, незалежний від рушія.",
+			"description": "Що це за речі: моделі, матеріали, текстури та звуки, описані як бібліотеки ассетів у JSON.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-network-schema": {
 			"title": "3d-network-schema",
-			"description": "Що відбувається між гравцями: мультиплеєрні сесії, повідомлення, результати й повтори як JSON.",
+			"description": "Що відбувається між гравцями: сесії мультиплеєра, повідомлення, результати й повтори у JSON.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-unity-input": {
 			"title": "3d-unity-input",
-			"description": "Єдиний набір дій для миші, клавіатури, дотику, геймпада та VR-контролерів.",
+			"description": "Один набір дій вводу для клавіатури й миші, геймпада, сенсорного екрана та VR-контролерів.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-unity-character": {
 			"title": "3d-unity-character",
-			"description": "Повторно використовуваний персонаж гравця: ходьба, біг, стрибки, ґрунт, схили та сходинки.",
+			"description": "Спільний рушій персонажа: ходьба, біг, стрибки, присідання, схили та сходинки для будь-якої камери.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-unity-audio": {
 			"title": "3d-unity-audio",
-			"description": "Просторовий звук, звукові події з варіаціями, кроки за типом поверхні, групи гучності та музика.",
+			"description": "Позиційний 3D-звук, звукові події з варіаціями, кроки за поверхнею, групи гучності та музика.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-unity-firebase": {
 			"title": "3d-unity-firebase",
-			"description": "Вхід, профілі гравців, збережений прогрес і сцени у Firebase.",
+			"description": "Firebase через REST API: вхід, профілі гравців, збережений прогрес і збережені сцени.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-unity-network": {
 			"title": "3d-unity-network",
-			"description": "Мультиплеєр у реальному часі: рішення ухвалює сервер, гравці синхронізовані, затримка компенсується.",
+			"description": "Мультиплеєр у реальному часі на Netcode: сесії, персонажі під контролем сервера, повідомлення за схемою.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-constructor-character-view-camera": {
 			"title": "3d-constructor-character-view-camera",
-			"description": "Камера від першої та третьої особи для конструктора «Вид від персонажа».",
+			"description": "Камера від першої та третьої особи, що стежить за персонажем і визначає, куди дивиться гравець.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-constructor-character-view-controls": {
 			"title": "3d-constructor-character-view-controls",
-			"description": "Повʼязує ввід із персонажем: «вперед» — туди, куди дивиться камера, а погляд повертає персонажа.",
+			"description": "Перетворює ввід гравця на команди персонажа: вперед там, куди дивиться камера, а погляд повертає персонажа.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
 		"/packages/3d-constructor-character-view-template": {
 			"title": "3d-constructor-character-view-template",
-			"description": "Стартовий Unity-проєкт для ігор від першої та третьої особи: пакети, сцена, персонаж і камера готові.",
+			"description": "Стартовий Unity-проєкт для ігор від першої та третьої особи з тестовим рівнем і готовим персонажем.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		}
 	},

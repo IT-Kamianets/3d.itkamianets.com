@@ -51,6 +51,33 @@ const gitUrl = (slug) => `${orgUrl}/${slug}.git`;
 const kindOf = (item) =>
 	item.packageId ? `Unity package \`${item.packageId}\`` : item.group === 'Schemas' ? 'JSON Schema (2020-12)' : 'Unity project';
 
+const FENCE = '```';
+
+/** The package's main public members as a table; pipes in member names are escaped for Markdown. */
+const apiTable = (item) =>
+	item.api.length
+		? [
+				'',
+				'**API:**',
+				'',
+				'| Member | What it does |',
+				'|---|---|',
+				...item.api.map((entry) => `| \`${entry.name.replace(/\|/g, '\\|')}\` | ${entry.text} |`),
+				'',
+			].join('\n')
+		: '';
+
+/** A short code sample: JSON for schemas, C# for Unity packages, plain text for the template. */
+const exampleBlock = (item) => {
+	if (!item.example) {
+		return '';
+	}
+
+	const language = item.group === 'Schemas' ? 'json' : item.packageId ? 'csharp' : 'json';
+
+	return ['', '**Example:**', '', `${FENCE}${language}`, item.example, FENCE, ''].join('\n');
+};
+
 const packageSection = (item) => {
 	const order = installOrder(item.slug);
 	// The install order above already covers the catalog's "add its engine packages first" requirement.
@@ -90,20 +117,7 @@ ${item.summary}
 **Includes:**
 
 ${list(item.current)}
-${item.api.length ? `
-**API:**
-
-| Member | What it does |
-|---|---|
-${item.api.map((entry) => `| `${entry.name.replace(/|/g, '\|')}` | ${entry.text} |`).join('
-')}
-` : ''}${item.example ? `
-**Example:**
-
-```${item.group === 'Schemas' ? 'json' : item.packageId ? 'csharp' : 'text'}
-${item.example}
-```
-` : ''}
+${apiTable(item)}${exampleBlock(item)}
 **Install:**
 
 ${install}

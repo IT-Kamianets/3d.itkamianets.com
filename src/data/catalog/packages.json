@@ -3,177 +3,382 @@
 		"slug": "3d-scene-schema",
 		"name": "3d-scene-schema",
 		"group": "Schemas",
-		"summary": "Where things are: an engine-independent scene as plain JSON, with objects, transforms and hierarchy.",
-		"purpose": "The source of truth for a 3D scene. Unity reads and writes it but never owns it, so the same scene can feed Unity, other engines, AI tools and services without rewriting the format.",
-		"version": "1.0.0",
+		"summary": "Where things are: a scene as plain JSON, with objects, transforms, hierarchy, tags and asset ids.",
+		"purpose": "The source of truth for a 3D scene, independent of any engine. It describes both room scans and authored game levels, so the same document can feed Unity, other engines, web tools and AI. It carries no Unity or Unreal fields and no business context such as which building or product a scene belongs to.",
+		"version": "1.1.0",
 		"license": "MIT",
 		"packageId": "",
 		"dependencies": [],
-		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-scene-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
-		"usage": "Every document carries a schemaVersion (semver). Units are meters in a right-handed, Y-up system; engine adapters such as 3d-unity-scene convert to and from their own conventions. Breaking changes get a new schema/v{n}/ directory instead of changing v1.",
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and examples/ at https://github.com/IT-Kamianets/3d-scene-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-scene reads and writes this format.",
+		"usage": "A scene document holds a schemaVersion, a sceneId, an origin and a flat list of objects linked by parentId. Each SceneObject has a semantic type, a transform, an optional boundary or volume, an optional asset id and metadata tags that carry game roles such as spawn or team:a. Units are meters in a right-handed, Y-up system; 3d-unity-scene converts to and from Unity.",
 		"current": [
-			"scene.schema.json: root document with schemaVersion, sceneId, timestamps, units, origin and a flat list of objects",
-			"scene-object.schema.json: a semantic label, a transform, an optional boundary or volume, and a parentId",
-			"transform.schema.json and common.schema.json: position, rotation, scale and shared primitives",
-			"Example scenes that validate against v1"
+			"scene.schema.json: the root document with schemaVersion, sceneId, timestamps, units, coordinate system, origin, objects and metadata.",
+			"scene-object.schema.json: an object with an id, name, semantic type, parentId, transform, boundary polygon, volume bounds, asset id and metadata.",
+			"Scan types that mirror Meta Quest scene labels: ROOM, FLOOR, CEILING, WALL_FACE, INVISIBLE_WALL_FACE, DOOR_FRAME, WINDOW_FRAME and common furniture.",
+			"Level types since 1.1.0: GROUP for containers, MARKER for points whose meaning is in tags, PROP for objects shown with an asset.",
+			"transform.schema.json and common.schema.json: position, rotation, scale, Vector2, Vector3, Quaternion, Polygon2D, Bounds3D and Metadata.",
+			"Examples that validate: an arena level with team spawns, an objective zone and crates, plus two room scans that share one coordinate frame."
 		],
 		"features": [
-			"Engine-independent, JSON-based scene format",
-			"Scenes, objects, transforms and hierarchy",
-			"A per-scene origin, so several scenes can share one coordinate frame",
-			"Versioned with semver schemaVersion"
+			"Engine-independent: right-handed Y-up meters, and each engine adapter converts to its own conventions.",
+			"Fixed facing rules: objects and planar surfaces face their local -Z, which is +Z in Unity, the same as Meta Quest scene anchors.",
+			"Game roles live in tags, not in new types, so the schema stays free of game rules.",
+			"A per-scene origin lets several scenes share one parent frame without the schema knowing what that frame is.",
+			"Additive versioning: every 1.0.0 document is valid 1.1.0, and breaking changes get a new schema/v{n}/ folder."
 		],
 		"examples": [
-			"A scanned room described as one scene",
-			"A game level stored as Scene JSON and loaded by 3d-unity-scene"
+			"A Temnorid Arena map stored as Scene JSON, with MARKER spawns tagged team:a and team:b and a MARKER volume tagged as an objective site.",
+			"A room scanned on Meta Quest saved as one scene of walls, floor, ceiling and furniture.",
+			"A level editor that loads, changes and saves the same JSON, which stays readable outside Unity."
 		],
 		"roadmap": [
-			"Asset references",
-			"Materials",
-			"Lights",
-			"Cameras",
-			"Audio sources",
-			"Gameplay markers: spawns and objective sites",
-			"TypeScript models",
-			"Stable Scene Schema v2"
+			"Materials, lights and cameras in the scene",
+			"Constraints and behaviors",
+			"A migration strategy between schema versions",
+			"TypeScript and Python models",
+			"Unreal integration",
+			"Stable Scene Schema v1"
 		],
 		"related": [
 			"3d-asset-schema",
-			"3d-network-schema",
 			"3d-unity-scene",
-			"3d-unity-spatial"
+			"3d-unity-spatial",
+			"3d-network-schema"
 		],
-		"requirements": []
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "scene.schema.json",
+				"text": "The root document: schemaVersion, sceneId, units, coordinateSystem, origin and objects are required."
+			},
+			{
+				"name": "Scene.schemaVersion",
+				"text": "The schema version the document follows: 1.0.0 or 1.1.0."
+			},
+			{
+				"name": "Scene.origin",
+				"text": "The scene's transform in a shared parent frame; identity when the scene stands alone."
+			},
+			{
+				"name": "scene-object.schema.json",
+				"text": "One SceneObject: id, type and transform are required."
+			},
+			{
+				"name": "SceneObject.type",
+				"text": "The SemanticLabel: a scan label such as WALL_FACE, or GROUP, MARKER or PROP for levels."
+			},
+			{
+				"name": "SceneObject.parentId",
+				"text": "The id of the containing object, or null for a top-level object."
+			},
+			{
+				"name": "SceneObject.boundary",
+				"text": "A Polygon2D of at least three points in the object's local X/Y plane, for planar surfaces."
+			},
+			{
+				"name": "SceneObject.volume",
+				"text": "A Bounds3D box in local space, for furniture, props and trigger zones."
+			},
+			{
+				"name": "SceneObject.asset",
+				"text": "The id of a 3d-asset-schema asset the object is shown with, such as props/crate-wood."
+			},
+			{
+				"name": "SceneObject.metadata.tags",
+				"text": "Strings with the roles a game reads, such as spawn and team:a."
+			},
+			{
+				"name": "transform.schema.json",
+				"text": "Position and rotation, plus an optional scale, in the parent's local space."
+			}
+		],
+		"example": "{\n  \"schemaVersion\": \"1.1.0\",\n  \"sceneId\": \"example-arena\",\n  \"units\": \"meters\",\n  \"coordinateSystem\": \"right-handed-y-up\",\n  \"origin\": { \"position\": { \"x\": 0, \"y\": 0, \"z\": 0 }, \"rotation\": { \"x\": 0, \"y\": 0, \"z\": 0, \"w\": 1 } },\n  \"objects\": [\n    {\n      \"id\": \"spawn-a-1\",\n      \"type\": \"MARKER\",\n      \"parentId\": \"spawns\",\n      \"transform\": {\n        \"position\": { \"x\": -8, \"y\": 0, \"z\": 0 },\n        \"rotation\": { \"x\": 0, \"y\": -0.7071068, \"z\": 0, \"w\": 0.7071068 }\n      },\n      \"metadata\": { \"tags\": [\"spawn\", \"team:a\"] }\n    },\n    {\n      \"id\": \"crate-1\",\n      \"type\": \"PROP\",\n      \"asset\": \"props/crate-wood\",\n      \"transform\": { \"position\": { \"x\": 2, \"y\": 0, \"z\": 2 }, \"rotation\": { \"x\": 0, \"y\": 0.258819, \"z\": 0, \"w\": 0.9659258 } }\n    }\n  ]\n}"
 	},
 	{
 		"slug": "3d-asset-schema",
 		"name": "3d-asset-schema",
 		"group": "Schemas",
-		"summary": "What things are: an engine-independent description of models, materials and textures.",
-		"purpose": "A scene object references an asset by id; this schema is what that id resolves to. Engine packages such as 3d-unity-assets read these definitions and decide how to load them, so one asset definition serves every runtime.",
+		"summary": "What things are: models, materials, textures and sounds described as JSON asset libraries.",
+		"purpose": "A scene object names an asset by id; this schema says what that id resolves to. It describes files in standard formats (glTF/GLB, PNG/JPG, WAV/OGG/MP3) and a glTF-style material, but never says how an engine loads them. That decision belongs to engine packages such as 3d-unity-assets.",
 		"version": "1.0.0",
 		"license": "MIT",
 		"packageId": "",
 		"dependencies": [],
-		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-asset-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
-		"usage": "Describe each asset once: its id, a model reference (GLB/glTF), materials, textures, bounds and tags. Scenes keep only the id, and 3d-unity-assets resolves it at runtime.",
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and examples/ at https://github.com/IT-Kamianets/3d-asset-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-assets reads this format.",
+		"usage": "Write an asset library: a schemaVersion, a libraryId, units and a list of assets. Each Asset has a path-like id, a kind (model, material, texture or audio), a source file, and for models optional materials, bounds and a placeholder. Scenes keep only the id, and 3d-unity-assets loads the file or shows the placeholder at runtime.",
 		"current": [
-			"Asset definitions with ids, model references (GLB/glTF), materials and textures",
-			"Metadata, tags and categories",
-			"Bounds and pivot conventions",
-			"Example asset documents that validate against v1"
+			"asset-library.schema.json: the root document with schemaVersion, libraryId, units, assets and metadata.",
+			"asset.schema.json: one asset with an id, name, kind, source, material, materials, bounds, placeholder and metadata.",
+			"A metallic/roughness material like glTF's: base color, base color texture, metallic, roughness, emission and transparency.",
+			"Placeholders: a box, sphere or capsule with a color, sized to the bounds, shown while loading or when a file is missing.",
+			"Rules per kind: a material needs material, a texture or sound needs source, a model needs source or placeholder.",
+			"An example library with real files: a 1 m crate (GLB), a wood texture (PNG), a footstep (WAV) and a barrel with only a placeholder."
 		],
 		"features": [
-			"Engine-independent asset format",
-			"Models, materials and textures by id",
-			"Placeholder assets for missing content",
-			"Versioned with semver schemaVersion"
+			"Engine-independent: only standard file formats that every engine and the web can read.",
+			"Stable, lowercase, path-like ids such as props/crate-wood, unique across every library a project loads.",
+			"A level can be laid out before any model exists: bounds and placeholders stand in for it.",
+			"Fixed conventions: meters, +Y up, the model's origin at its bottom center and its front along glTF's +Z.",
+			"Vector3, Bounds3D and Metadata match 3d-scene-schema, so tools can share code."
 		],
 		"examples": [
-			"A chair asset referenced by many scenes",
-			"A wall module with its material and textures"
+			"A Temnorid Arena map lists its crates and pillars in one library, and each PROP in the scene points to them by id.",
+			"A footstep sound stored as a WAV asset with the tags footstep and surface:stone, so tools can group sounds by ground type.",
+			"A level designer places capsule placeholders for barrels that an artist has not modeled yet."
 		],
 		"roadmap": [
 			"Level of detail",
-			"Audio clips and sound banks",
-			"TypeScript and C# models",
-			"Stable Asset Schema v2"
+			"Audio settings: loop, default volume and 3D range",
+			"Lights as assets",
+			"TypeScript models",
+			"Stable Asset Schema v1"
 		],
 		"related": [
 			"3d-scene-schema",
-			"3d-unity-assets"
+			"3d-unity-assets",
+			"3d-unity-audio"
 		],
-		"requirements": []
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "asset-library.schema.json",
+				"text": "The root document: schemaVersion, libraryId, units and assets are required."
+			},
+			{
+				"name": "Asset.id",
+				"text": "A lowercase, path-like AssetId such as props/crate-wood or sounds/footstep-stone-1."
+			},
+			{
+				"name": "Asset.kind",
+				"text": "What the asset is: model, material, texture or audio."
+			},
+			{
+				"name": "Asset.source",
+				"text": "The file: a uri relative to the library or an http(s) URL, and its format (glb, gltf, png, jpg, wav, ogg or mp3)."
+			},
+			{
+				"name": "Asset.material",
+				"text": "For a material: baseColor, baseColorTexture, metallic, roughness, emission and transparent."
+			},
+			{
+				"name": "Asset.materials",
+				"text": "For a model: material asset ids that replace the model's own materials, in order."
+			},
+			{
+				"name": "Asset.bounds",
+				"text": "For a model: the Bounds3D space it takes, used for placement and placeholders before it loads."
+			},
+			{
+				"name": "Asset.placeholder",
+				"text": "A shape (box, sphere or capsule) and a color shown instead of the asset while it loads or fails."
+			},
+			{
+				"name": "Asset.metadata.tags",
+				"text": "Free tags such as footstep and surface:stone that games and tools read."
+			},
+			{
+				"name": "common.schema.json Color",
+				"text": "An sRGB color with r, g, b and an optional a, each from 0 to 1."
+			}
+		],
+		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"libraryId\": \"example-props\",\n  \"units\": \"meters\",\n  \"assets\": [\n    {\n      \"id\": \"props/crate-wood\",\n      \"kind\": \"model\",\n      \"source\": { \"uri\": \"files/crate.glb\", \"format\": \"glb\" },\n      \"materials\": [\"materials/wood\"],\n      \"bounds\": { \"min\": { \"x\": -0.5, \"y\": 0, \"z\": -0.5 }, \"max\": { \"x\": 0.5, \"y\": 1, \"z\": 0.5 } },\n      \"placeholder\": { \"shape\": \"box\", \"color\": { \"r\": 0.55, \"g\": 0.36, \"b\": 0.2 } }\n    },\n    {\n      \"id\": \"materials/wood\",\n      \"kind\": \"material\",\n      \"material\": { \"baseColorTexture\": \"textures/wood\", \"metallic\": 0, \"roughness\": 0.8 }\n    },\n    { \"id\": \"textures/wood\", \"kind\": \"texture\", \"source\": { \"uri\": \"files/wood.png\", \"format\": \"png\" } }\n  ]\n}"
 	},
 	{
 		"slug": "3d-network-schema",
 		"name": "3d-network-schema",
 		"group": "Schemas",
 		"summary": "What happens between players: multiplayer sessions, messages, results and replays as JSON.",
-		"purpose": "The shared contract for multiplayer between the Unity game, a dedicated server in any language, spectators, stats storage, bots and AI tools. It covers the messages that matter after the fact, not the per-tick stream of positions and inputs, which stays in the networking backend.",
+		"purpose": "The shared contract for multiplayer between the Unity game, a dedicated server in any language, web spectators, stats storage, bots and AI tools. It covers the messages that matter after the fact: joins, leaves, lifecycle changes, game events and results. The per-tick stream of positions and inputs is not part of it; that stays in the networking backend.",
 		"version": "1.0.0",
 		"license": "MIT",
 		"packageId": "",
 		"dependencies": [],
-		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and the examples/ folder at https://github.com/IT-Kamianets/3d-network-schema, validate documents with any JSON Schema validator, or use the Unity package that reads it.",
-		"usage": "A session document lists players, teams, the scene and the lifecycle state. Every message has an envelope (messageId, sessionId, seq, sentAt, from, type) and a payload typed by type. session.* types are defined by the schema; game events use names namespaced by the game, such as temnorid-arena.round-ended.",
+		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and examples/ at https://github.com/IT-Kamianets/3d-network-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-network reads and writes this format.",
+		"usage": "A session document lists the mode, the sceneId, the lifecycle state, teams and players. Every message has an envelope (messageId, sessionId, seq, tick, sentAt, from, type) and a payload typed by type. session.* types belong to the schema; game events use names namespaced by the game, such as temnorid-arena.round-ended. In Unity, SessionChannel in 3d-unity-network sends and records these messages.",
 		"current": [
-			"session.schema.json: players, teams, scene and the lobby → starting → running → ended lifecycle",
-			"message.schema.json: join, joined, left, snapshot, state-changed and ended, plus game events",
-			"result.schema.json: reason, winners, and team or player scores with game-defined stats",
-			"replay.schema.json: a finished session as one document",
-			"Example replay and join request that validate against v1"
+			"session.schema.json: sessionId, mode, sceneId, state (lobby, starting, running, ended), maxPlayers, teams, players, timestamps and game settings.",
+			"Players with a role (player, spectator or bot), a team and a connected flag.",
+			"message.schema.json: session.join, session.joined, session.left, session.snapshot, session.state-changed and session.ended, plus game events.",
+			"result.schema.json: when and why a session ended (completed, abandoned or cancelled), the winners, and team or player scores with game-defined stats.",
+			"replay.schema.json: the session as it started, then every server message in seq order.",
+			"Examples that validate: a short Temnorid Arena match replay with a disconnect, a reconnect and the result, and a client join request."
 		],
 		"features": [
-			"The server is the authority: only server messages carry a gap-free seq",
-			"Game events namespaced by the game; session.* reserved",
-			"A snapshot message for players who join or reconnect",
-			"Readable without Unity: servers, spectators, stats, AI"
+			"The server is the authority: every server message has a seq that starts at 1 with no gaps, and a client message has none.",
+			"Clients may only send session.join and game events; the schema rejects other session.* messages from a client.",
+			"No game rules: modes, settings, event payloads and stats are game-defined data, and the session namespace is reserved.",
+			"A snapshot message gives a joining or reconnecting player the whole session, so no history is needed.",
+			"Readable without Unity: servers, spectators, stats and AI tools use the same JSON."
 		],
 		"examples": [
-			"A Temnorid Arena match replay: rounds, a reconnect and the result",
-			"A match server written outside Unity that speaks the same messages"
+			"A Temnorid Arena match replay that rebuilds rounds, defeats and the scoreboard without running the game.",
+			"A match server written in Go or Node that speaks the same messages as the Unity host.",
+			"A stats page that reads match results with kills, deaths and spells cast to build player profiles."
 		],
 		"roadmap": [
 			"Chat and voice-channel messages",
 			"Matchmaking tickets",
 			"Reconnect tokens",
 			"Binary encoding of the same messages (MessagePack)",
-			"TypeScript models"
+			"TypeScript models",
+			"Stable Network Schema v1"
 		],
 		"related": [
 			"3d-unity-network",
 			"3d-scene-schema",
 			"3d-unity-firebase"
 		],
-		"requirements": []
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "session.schema.json",
+				"text": "The session document: schemaVersion, sessionId, mode, state, players and createdAt are required."
+			},
+			{
+				"name": "Session.state",
+				"text": "The lifecycle: lobby, starting, running or ended."
+			},
+			{
+				"name": "Session.mode",
+				"text": "A game-namespaced name of the game and mode, such as temnorid-arena.competitive."
+			},
+			{
+				"name": "Player",
+				"text": "playerId and connected are required; displayName, teamId and role (player, spectator or bot) are optional."
+			},
+			{
+				"name": "message.schema.json",
+				"text": "One message: schemaVersion, messageId, sessionId, sentAt, from, type and payload are required."
+			},
+			{
+				"name": "Message.type",
+				"text": "A session.* type defined by the schema, or a game event named <game>.<name>."
+			},
+			{
+				"name": "Message.seq",
+				"text": "The server-set order within the session: starts at 1 with no gaps, absent on client messages."
+			},
+			{
+				"name": "Message.from",
+				"text": "server, or the playerId of the sending client."
+			},
+			{
+				"name": "Message.tick",
+				"text": "The server simulation tick the message belongs to, when the game runs on ticks."
+			},
+			{
+				"name": "result.schema.json Result",
+				"text": "endedAt, reason, winners and scores; each Score has a teamId or a playerId, a score and optional stats."
+			},
+			{
+				"name": "replay.schema.json",
+				"text": "A finished session: the starting session and its server messages ordered by seq."
+			}
+		],
+		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"messageId\": \"m-2\",\n  \"sessionId\": \"match-7f3a\",\n  \"seq\": 2,\n  \"tick\": 2210,\n  \"sentAt\": \"2026-10-14T18:02:04Z\",\n  \"from\": \"server\",\n  \"type\": \"temnorid-arena.player-defeated\",\n  \"payload\": { \"playerId\": \"p-oleh\", \"byPlayerId\": \"p-ira\", \"spell\": \"fireball\" }\n}"
 	},
 	{
 		"slug": "3d-unity-core",
 		"name": "3d-unity-core",
 		"group": "Core",
-		"summary": "The shared base for every Unity package: configuration, services, events, logging and startup.",
-		"purpose": "The foundation of the engine in Unity. Every other Unity package builds on it, so configuration, lifecycle and logging work the same way everywhere. It stays product-independent, with no game-specific code.",
+		"summary": "Shared base for the engine's Unity packages: logging, player settings, typed events and services.",
+		"purpose": "Other engine packages need the same few basics: a log with categories, a place to save player settings, a way to talk without references, and a way to swap a default. This package gives exactly that and nothing more. It holds no game, scene or device logic.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-core",
 		"dependencies": [],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-core.git",
-		"usage": "Install it first. Packages register their services at startup and talk through its events instead of referencing each other directly.",
+		"usage": "Write log lines with EngineLog.Info(category, message) and its sibling methods. Save player settings through EngineStorage.Current, which uses PlayerPrefs unless a game registers its own IEngineStorage. Publish and subscribe to plain structs with EngineEvents, and replace defaults with EngineServices.Set.",
 		"current": [
-			"Engine configuration and runtime services",
-			"Event system shared by all packages",
-			"Logging and debugging",
-			"Package initialization lifecycle and error handling"
+			"EngineLog: Debug, Info, Warning and Error lines prefixed with a category, such as [Network] Client 1 joined.",
+			"A minimum log level: Debug in the Editor and development builds, Info in release builds, changeable at runtime.",
+			"IEngineStorage for per-device player settings, with a PlayerPrefs implementation used by default.",
+			"Storage helpers for bool values and for objects saved as JSON with Unity's JsonUtility.",
+			"EngineEvents: typed publish and subscribe, where the event type is the channel.",
+			"EngineServices: one replaceable instance per type, with Get, TryGet and Remove."
 		],
 		"features": [
-			"Configuration and service architecture",
-			"Lifecycle handling and events",
-			"Logging and utilities",
-			"Product-independent base for every Unity package"
+			"No dependencies beyond Unity itself, so every engine package can use it.",
+			"A failing event subscriber is logged and does not stop the other subscribers.",
+			"Events and services are cleared when Play mode starts, so nothing leaks between sessions with fast Enter Play Mode.",
+			"Storage keys are namespaced by package, such as input.bindings, so packages never overwrite each other.",
+			"Events stay inside the process: they never cross the network."
 		],
 		"examples": [
-			"Every 3d-unity-* package and constructor depends on it"
+			"Temnorid Arena publishes RoundEnded, and the HUD and the audio react without knowing about the match code.",
+			"3d-unity-input saves the player's rebound keys to EngineStorage, and 3d-unity-audio saves volume levels the same way.",
+			"A dedicated server raises the minimum log level to Warning to keep its log short."
 		],
 		"roadmap": [
-			"Performance profiling hooks",
+			"Global engine configuration",
+			"Package initialization lifecycle",
+			"Shared error handling and utilities",
+			"Tests and an example project",
 			"Stable v1 API"
 		],
 		"related": [
-			"3d-unity-scene",
 			"3d-unity-input",
-			"3d-unity-assets"
+			"3d-unity-firebase",
+			"3d-unity-network",
+			"3d-unity-audio"
 		],
 		"requirements": [
 			"Unity 6000.6"
-		]
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "EngineLog.Info(category, message, context)",
+				"text": "Writes an Info line prefixed with the category; Debug, Warning and Error work the same way."
+			},
+			{
+				"name": "EngineLog.MinimumLevel",
+				"text": "Lines below this LogLevel are dropped; None turns logging off."
+			},
+			{
+				"name": "EngineStorage.Current",
+				"text": "The storage packages use: the registered IEngineStorage, or PlayerPrefs if none is set."
+			},
+			{
+				"name": "IEngineStorage",
+				"text": "Get and set strings, floats and ints by key, check and delete keys, and Save to disk."
+			},
+			{
+				"name": "storage.GetJson<T>(key, fallback) / SetJson<T>(key, value)",
+				"text": "Reads and writes an object as JSON using Unity's JsonUtility."
+			},
+			{
+				"name": "storage.GetBool(key, fallback) / SetBool(key, value)",
+				"text": "Reads and writes a bool stored as an int."
+			},
+			{
+				"name": "EngineEvents.Subscribe<T>(handler) / Unsubscribe<T>(handler)",
+				"text": "Adds or removes a handler for events of type T."
+			},
+			{
+				"name": "EngineEvents.Publish<T>(message)",
+				"text": "Calls every handler subscribed to T with the message."
+			},
+			{
+				"name": "EngineServices.Set<T>(service)",
+				"text": "Registers or replaces the service for type T; null removes it."
+			},
+			{
+				"name": "EngineServices.TryGet<T>(out service)",
+				"text": "Returns the registered service for T, or false if there is none."
+			}
+		],
+		"example": "using ITKamianets.Engine.Core;\n\npublic struct RoundEnded { public int WinnerTeam; }\n\nEngineLog.Info(\"Arena\", \"Round 3 started\");\n\nvar storage = EngineStorage.Current;\nstorage.SetFloat(\"camera.sensitivity\", 1.4f);\nstorage.SetBool(\"hud.showFps\", true);\n\nEngineEvents.Subscribe<RoundEnded>(e => EngineLog.Info(\"Hud\", $\"Team {e.WinnerTeam} wins\"));\nEngineEvents.Publish(new RoundEnded { WinnerTeam = 1 });\n\nEngineServices.Set<IEngineStorage>(new MyCloudStorage());"
 	},
 	{
 		"slug": "3d-unity-scene",
 		"name": "3d-unity-scene",
 		"group": "Core",
-		"summary": "Loads Scene JSON into live Unity scenes and saves changes back to the shared format.",
-		"purpose": "It sits between Unity and 3d-scene-schema: Scene Schema → Unity Scene → Scene Changes → Scene Schema. Unity is never the permanent source of truth, so scenes outlive the engine.",
+		"summary": "Builds live Unity scenes from 3d-scene-schema JSON and saves them back to the same format.",
+		"purpose": "Levels and room scans are stored as engine-independent Scene JSON, not as Unity scenes. This package turns that JSON into GameObjects and captures the result back after changes. It does not load models or textures: it hands asset ids to a resolver, such as 3d-unity-assets.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-scene",
@@ -182,45 +387,102 @@
 			"3d-scene-schema"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-scene.git",
-		"usage": "Load a scene document to build it in Unity, edit it at runtime, and save it back as JSON. SceneJson converts the C# model to and from the schema; coordinates are converted between the schema and Unity automatically.",
+		"usage": "Call SceneLoader.Load with a JSON string or a SceneData and get a LoadedScene. Find objects with FindById, FindByTag or FindByType, and read roles from each SceneObject's tags. SceneLoadOptions sets the surface material, colliders and the ISceneAssetResolver. SceneSaver.CaptureJson writes the scene as it is now.",
 		"current": [
-			"C# model of 3d-scene-schema with JSON conversion (SceneJson)",
-			"Scene loader: builds a live Unity scene from a scene document",
-			"Scene saver: writes Unity changes back to Scene JSON",
-			"Coordinate conversion between the schema and Unity",
-			"Hierarchy, object creation and removal, transform sync"
+			"A C# model of 3d-scene-schema 1.1.0 with exact field names, and SceneJson to read and write it; 1.0.0 documents load too.",
+			"One GameObject per scene object in the document's hierarchy, with the scene origin applied to the root.",
+			"A SceneObject component on each object with its id, type, asset id and tags, including key:value tags such as team:a.",
+			"Double-sided surface meshes and mesh colliders from boundaries, with concave outlines triangulated; invisible walls get a collider only.",
+			"Box colliders from volumes, and trigger colliders for MARKER volumes such as objective zones.",
+			"Saving: moved objects get new transforms, removed and inactive ones are left out, and runtime objects with a SceneObject are added.",
+			"CoordinateConversion between the schema's right-handed space and Unity's left-handed space."
 		],
 		"features": [
-			"Two-way sync between Unity and Scene JSON",
-			"Field names match the schema exactly",
-			"Runtime and partial scene updates"
+			"The JSON stays the source of truth, so the same level can later open in other engines, web viewers or tools.",
+			"No knowledge of how assets are stored: an ISceneAssetResolver fills in content, even when it arrives later.",
+			"Tolerant loading: objects listed before their parent are placed correctly, and missing parents or duplicate ids are logged instead of failing.",
+			"Round trips without drift: unchanged objects save with zero position error."
 		],
 		"examples": [
-			"A game level loaded from Scene JSON",
-			"A Quest room scan saved as JSON for upload"
+			"Temnorid Arena loads an arena from JSON, then finds spawn points with FindByTag(\"spawn\") and reads each one's team tag.",
+			"A level editor moves, deletes and adds objects, then saves the level with SceneSaver.CaptureJson.",
+			"A room scanning app loads a scanned room as walls and floors with colliders to place content on."
 		],
 		"roadmap": [
-			"Lights and cameras",
+			"Cameras and lights",
+			"Material references",
+			"Runtime and partial scene updates",
+			"Scene validation",
 			"Undo-compatible scene operations",
 			"Stable v1 scene runtime"
 		],
 		"related": [
 			"3d-scene-schema",
 			"3d-unity-assets",
+			"3d-unity-interaction",
 			"3d-unity-spatial"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core",
-			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager"
-		]
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "SceneLoader.Load(json, parent, options)",
+				"text": "Builds a scene from JSON or a SceneData under an optional parent and returns its LoadedScene."
+			},
+			{
+				"name": "SceneLoadOptions",
+				"text": "Sets BuildSurfaces, SurfaceMaterial, BuildColliders, MarkerVolumesAsTriggers and AssetResolver."
+			},
+			{
+				"name": "LoadedScene.FindById(id)",
+				"text": "Returns the scene object with this id, or null."
+			},
+			{
+				"name": "LoadedScene.FindByTag(tag) / FindByType(type)",
+				"text": "Returns every object with this tag or this semantic type."
+			},
+			{
+				"name": "LoadedScene.Unload()",
+				"text": "Destroys the scene's GameObjects."
+			},
+			{
+				"name": "SceneObject.HasTag(tag)",
+				"text": "Tells whether the object has a tag such as spawn."
+			},
+			{
+				"name": "SceneObject.TryGetTag(key, out value)",
+				"text": "Reads a key:value tag, so TryGetTag(\"team\", out var team) gives a for team:a."
+			},
+			{
+				"name": "ISceneAssetResolver.Resolve(target)",
+				"text": "Called for every object with an asset id so another package can show its content."
+			},
+			{
+				"name": "SceneSaver.Capture(scene) / CaptureJson(scene)",
+				"text": "Turns a LoadedScene back into a SceneData or a JSON string as it is now."
+			},
+			{
+				"name": "SceneJson.Serialize(scene) / Deserialize(json)",
+				"text": "Converts between SceneData and the schema's JSON."
+			},
+			{
+				"name": "CoordinateConversion.FromSchema(value) / ToSchema(value)",
+				"text": "Converts positions and rotations between schema space and Unity space."
+			}
+		],
+		"example": "using ITKamianets.Engine.Scene;\n\nvar level = SceneLoader.Load(json, null, new SceneLoadOptions\n{\n    SurfaceMaterial = floorMaterial,\n    AssetResolver = assets,\n});\n\nforeach (var spawn in level.FindByTag(\"spawn\"))\n{\n    spawn.TryGetTag(\"team\", out var team);   // \"a\" or \"b\"\n}\n\nstring saved = SceneSaver.CaptureJson(level);"
 	},
 	{
 		"slug": "3d-unity-input",
 		"name": "3d-unity-input",
 		"group": "Core",
-		"summary": "One set of actions for mouse, keyboard, touch, gamepad and VR controllers.",
-		"purpose": "Other packages react to actions (move, look, jump, select) instead of devices, so supporting a new device means adding a binding here, not changing every package that reads input.",
+		"summary": "One set of input actions for keyboard and mouse, gamepad, touch and VR controllers.",
+		"purpose": "Other packages read actions such as Move, Look and Primary instead of devices. Supporting a new device means adding a binding here, not changing every package that reacts to input. Actions are named by intent, never by device or game.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-input",
@@ -228,26 +490,36 @@
 			"3d-unity-core"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-input.git",
-		"usage": "Read actions from EngineInput. The active scheme (keyboard and mouse, gamepad, touch, VR) switches automatically with the last device used, and players can rebind keys.",
+		"usage": "Use EngineInput.Default and read actions from its Player and UI maps. ReadLookDegrees gives the same rotation from a mouse, a stick or an XR controller. Turn gameplay input off with PlayerEnabled while a menu is open. A game adds its own actions with AddMap, and they rebind and save like the engine actions.",
 		"current": [
-			"EngineInput: the shared action map every package reads",
-			"Bindings for keyboard and mouse, gamepad, touch and VR controllers",
-			"Automatic device switching (InputScheme)",
-			"Rebinding and input events"
+			"Player map: Move, Look, Jump, Sprint, Crouch, Primary, Secondary, Interact, ToggleView and Slot1 to Slot4.",
+			"UI map: Navigate, Submit, Cancel, Point, Click, ScrollWheel and Pause, named as Unity's InputSystemUIInputModule expects.",
+			"Bindings for keyboard and mouse, gamepad and XR controllers; touch covers menus.",
+			"Detection of the device kind in use, with a SchemeChanged event when the player switches.",
+			"Look normalized to degrees: pointer movement per pixel, stick tilt per second, with optional inverted Y.",
+			"Interactive rebinding with Escape to cancel, saved to EngineStorage under input.bindings and loaded on start.",
+			"Game-specific action maps added to the same asset at runtime."
 		],
 		"features": [
-			"Device-independent actions",
-			"Pointer and ray abstraction for mouse, touch and VR",
-			"Built on the Unity Input System"
+			"No project-wide .inputactions asset: the actions are built in code, so every project gets the same set.",
+			"The same action means different things per game: Primary casts a spell in one and places an object in another.",
+			"Pause lives in the UI map, so it still works while gameplay input is off.",
+			"Binding display strings follow the current scheme, so hints show Space or A as fits.",
+			"Built on the Unity Input System; other packages never read devices directly."
 		],
 		"examples": [
-			"The same character controlled by keyboard, gamepad or a Quest controller"
+			"In Temnorid Arena, Slot1 to Slot4 pick a spell and Primary casts it, from the keyboard, a gamepad or a Quest controller.",
+			"The game adds a Scoreboard action on Tab with AddMap, and players can rebind it in the settings menu.",
+			"The HUD switches its button hints when SchemeChanged reports that the player picked up a gamepad."
 		],
 		"roadmap": [
-			"Input glyphs for the active device",
+			"On-screen touch controls for gameplay",
+			"Pointer and ray abstraction for mouse, touch and VR",
+			"Input events",
 			"Stable v1 input API"
 		],
 		"related": [
+			"3d-unity-core",
 			"3d-unity-character",
 			"3d-unity-interaction",
 			"3d-constructor-character-view-controls"
@@ -256,14 +528,66 @@
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core",
 			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
-		]
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "EngineInput.Default",
+				"text": "The shared instance, created and enabled on first use."
+			},
+			{
+				"name": "EngineInput.Player / UI",
+				"text": "The Player and UI action maps, with one InputAction property per action."
+			},
+			{
+				"name": "EngineInput.ReadLookDegrees()",
+				"text": "This frame's look rotation in degrees, the same for every device."
+			},
+			{
+				"name": "Player.SlotPressedThisFrame()",
+				"text": "Returns the hotbar slot pressed this frame, from 1 to 4, or 0 if none."
+			},
+			{
+				"name": "EngineInput.PlayerEnabled",
+				"text": "Turns gameplay input on or off while the UI map stays on."
+			},
+			{
+				"name": "EngineInput.Scheme / SchemeChanged",
+				"text": "The InputScheme used last (KeyboardMouse, Gamepad, Touch or XR) and the event raised when it changes."
+			},
+			{
+				"name": "EngineInput.AddMap(name, define)",
+				"text": "Adds a map of game actions to the shared asset, so they rebind and save like the engine actions."
+			},
+			{
+				"name": "EngineInput.StartRebind(action, bindingIndex, done)",
+				"text": "Waits for the player to press a new control for one binding and saves the result."
+			},
+			{
+				"name": "EngineInput.GetBindingDisplay(action)",
+				"text": "The binding shown to the player for the current scheme, such as Space or A."
+			},
+			{
+				"name": "EngineInput.SaveBindingOverrides() / LoadBindingOverrides(json)",
+				"text": "Exports or imports the player's changed bindings as JSON, for example to sync a cloud profile."
+			},
+			{
+				"name": "EngineInput.ResetBindingOverrides()",
+				"text": "Restores the default bindings and saves the change."
+			},
+			{
+				"name": "EngineInputActions.Groups",
+				"text": "Binding group names for each scheme, used when a game adds its own bindings."
+			}
+		],
+		"example": "using ITKamianets.Engine.Input;\nusing UnityEngine.InputSystem;\n\nvar input = EngineInput.Default;\n\nVector2 move = input.Player.Move.ReadValue<Vector2>();\nVector2 look = input.ReadLookDegrees();\nif (input.Player.Jump.WasPressedThisFrame()) { /* jump */ }\nint slot = input.Player.SlotPressedThisFrame();  // 1..4, or 0\n\ninput.PlayerEnabled = false;                     // a menu is open\ninput.SchemeChanged += scheme => { /* show gamepad or keyboard hints */ };\n\ninput.AddMap(\"TemnoridArena\", map =>\n    map.AddAction(\"Scoreboard\", InputActionType.Button, \"<Keyboard>/tab\",\n        groups: EngineInputActions.Groups.KeyboardMouse));"
 	},
 	{
 		"slug": "3d-unity-character",
 		"name": "3d-unity-character",
 		"group": "Core",
-		"summary": "A reusable player character: walking, running, jumping, ground, slopes and steps.",
-		"purpose": "One tested character for every constructor. It has no camera of its own: each constructor adds the camera and decides where forward is, so first person, top-down and side view all share this movement.",
+		"summary": "A reusable character motor: walking, sprinting, jumping, crouching, slopes and steps, for any camera style.",
+		"purpose": "Every game style needs a character that moves well, so one implementation is shared by all constructors. The character does not read input and does not own a camera. It only follows a movement command, so player controls, an AI and the network can all drive it.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-character",
@@ -271,45 +595,103 @@
 			"3d-unity-core"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-character.git",
-		"usage": "Add CharacterMotor (on a CharacterController) to a prefab and give it a CharacterCommand each frame: a move direction, yaw, sprint, jump and crouch. It handles speed, jumping, gravity, ground, slopes and steps, and raises events such as Landed. It reads no input and owns no camera: a constructor’s controls turn input into commands.",
+		"usage": "Add a CharacterMotor to an object with its origin at the feet; it adds a Unity CharacterController. Each frame, build a CharacterCommand (world-space move direction, yaw, sprint, jump and crouch) and pass it to SetCommand. For a fixed network tick, turn SimulateInUpdate off and call Simulate yourself, using GetState and SetState to correct a predicted character.",
 		"current": [
-			"Walking, running and jumping",
-			"Ground detection, slopes and steps",
-			"Crouching",
-			"Movement settings and events",
-			"Coyote time, jump buffering and limited air control",
-			"State snapshots and fixed-tick stepping for network prediction"
+			"Walk, sprint and crouch speeds with ground acceleration, deceleration and limited air control.",
+			"Jumps to a set height, with coyote time and jump buffering.",
+			"Ground detection that treats step and ledge edges as walkable; slopes up to a limit, steeper ground slides the character down.",
+			"Walks up steps to a set height without jumping.",
+			"Crouching that stays crouched until there is room to stand, with the eye height easing between the two.",
+			"Teleport for spawns, GetState and SetState (including jump timers) for network correction, ConsumeCommand for fixed-tick stepping.",
+			"Events and values for other packages: Jumped, Landed, LeftGround, CrouchChanged, EyePosition, GroundCollider, Velocity, IsSprinting."
 		],
 		"features": [
-			"Works under any camera style",
-			"Driven by commands, not devices: the same motor serves players, bots and the network",
-			"Shared by every constructor with a controlled character"
+			"Command-driven: no input or camera code inside, so it works under any camera style.",
+			"Deterministic steps: the server and client prediction run the same Simulate(command, deltaTime).",
+			"All movement values sit in one CharacterSettings block, in meters and meters per second.",
+			"Knows nothing about sound, animation or networking, but exposes what those packages need."
 		],
 		"examples": [
-			"A first-person wizard in Temnorid Arena",
-			"A top-down hero using the same movement"
+			"A Temnorid Arena wizard runs, jumps and crouch-walks around cover, driven by the player's controls.",
+			"A bot moves with the same motor by building its own CharacterCommand each frame.",
+			"A client predicts its own wizard and snaps back to the server's CharacterState when they disagree."
 		],
 		"roadmap": [
-			"Swimming and climbing",
+			"Moving platforms",
+			"Pushing physics objects",
+			"Animation parameters",
 			"Stable v1 character API"
 		],
 		"related": [
-			"3d-unity-input",
 			"3d-constructor-character-view-controls",
-			"3d-constructor-character-view-camera"
+			"3d-constructor-character-view-camera",
+			"3d-unity-network",
+			"3d-unity-audio"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core",
 			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
-		]
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "CharacterMotor",
+				"text": "Component that moves a character on Unity's CharacterController, with its origin at the feet."
+			},
+			{
+				"name": "CharacterCommand",
+				"text": "One step's intent: Move (world-space direction), Yaw, Sprint, Jump and Crouch."
+			},
+			{
+				"name": "SetCommand(command)",
+				"text": "Sets the command used by the next Update step."
+			},
+			{
+				"name": "Simulate(command, deltaTime)",
+				"text": "Advances the character by one step; used for fixed-tick and network stepping."
+			},
+			{
+				"name": "SimulateInUpdate",
+				"text": "When on (the default), the motor steps itself in Update; turn it off to drive it with a fixed tick."
+			},
+			{
+				"name": "ConsumeCommand()",
+				"text": "Returns the command set since the last call and clears its jump press, so a jump between two ticks is not lost."
+			},
+			{
+				"name": "Teleport(position, yaw)",
+				"text": "Moves the character instantly, for example to a spawn point, and clears its speed."
+			},
+			{
+				"name": "GetState() / SetState(state)",
+				"text": "Saves and restores a CharacterState (position, yaw, velocity, ground and crouch, jump timers) without raising events."
+			},
+			{
+				"name": "Jumped, Landed(impactSpeed), LeftGround, CrouchChanged(isCrouching)",
+				"text": "Movement events for footstep, landing and animation code."
+			},
+			{
+				"name": "EyePosition",
+				"text": "World position of the eyes, easing between standing and crouching height, for a first-person camera."
+			},
+			{
+				"name": "GroundCollider",
+				"text": "The collider the character stands on, so sounds can pick the surface."
+			},
+			{
+				"name": "CharacterSettings",
+				"text": "Speeds, acceleration, jump height, gravity, coyote time, slope limit, step height and body sizes."
+			}
+		],
+		"example": "var motor = GetComponent<CharacterMotor>();   // origin at the feet\nmotor.SetCommand(new CharacterCommand\n{\n    Move = cameraForwardFlat * input.y + cameraRightFlat * input.x,\n    Yaw = cameraYaw,\n    Sprint = sprintHeld,\n    Jump = jumpPressedThisFrame,\n    Crouch = crouchHeld,\n});\nmotor.Landed += impactSpeed => { /* play landing sound */ };\nmotor.Teleport(spawn.position, spawn.eulerAngles.y);"
 	},
 	{
 		"slug": "3d-unity-assets",
 		"name": "3d-unity-assets",
 		"group": "Core",
-		"summary": "Loads models, materials and textures by id, locally or from a server, with caching.",
-		"purpose": "Scenes reference assets by id instead of embedding Unity objects. This package resolves those ids, defined by 3d-asset-schema, into real Unity objects.",
+		"summary": "Loads 3d-asset-schema assets by id in Unity: models, materials, textures and sounds, with placeholders.",
+		"purpose": "Scenes refer to assets by id instead of embedding Unity objects. This package turns those ids into Unity objects: it finds, loads, caches and unloads them. It does not place objects in a scene; 3d-unity-scene does that and asks this package for the content.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-assets",
@@ -319,24 +701,29 @@
 			"3d-asset-schema"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-assets.git",
-		"usage": "Ask for an asset by id and get the loaded object back asynchronously. Loaded assets are cached and unloaded when no longer used; a placeholder shows while loading or when an asset is missing.",
+		"usage": "Load an asset library with EngineAssets.Default.LoadLibrary or LoadLibraryFromUrl, and optionally add an AssetCatalog of Unity prefabs, materials, textures and AudioClips. Place a model with Instantiate(id, parent), or get any asset with Load<T>(id, done). Pass EngineAssets.Default as the scene loader's AssetResolver, and scene objects show their assets.",
 		"current": [
-			"Local and remote asset loading",
-			"GLB/glTF models and Unity prefabs",
-			"Materials and textures",
-			"Caching, async loading and unloading",
-			"Placeholders and missing-asset handling"
+			"C# model of the 3d-asset-schema library (AssetLibraryData, AssetData and others), read and written by AssetJson.",
+			"Libraries from disk or a URL, with source files resolved relative to the library.",
+			"For each id it tries a catalog entry first, then the library file: GLB/glTF models, PNG/JPG textures, WAV/OGG/MP3 sounds, and materials built from their values (URP Lit).",
+			"A placed model shows its placeholder (a shape and color sized to its bounds) until the real model replaces it.",
+			"An unknown asset or a model with no placeholder that fails to load shows a magenta stand-in and a warning.",
+			"Model materials listed in the library replace the model's own, in order.",
+			"Loaded assets are cached and shared; Unload, UnloadAll and a LoadFailed event."
 		],
 		"features": [
-			"Asset library API by id",
-			"Runtime asset replacement",
-			"Reads definitions from 3d-asset-schema"
+			"Engine-independent ids: an id can point at a hand-built Unity prefab while other engines read the same id's GLB.",
+			"A missing asset is obvious, never invisible.",
+			"Asynchronous loading: objects appear at once and fill in when their content arrives.",
+			"glTFast is optional, so the package compiles and runs without it."
 		],
 		"examples": [
-			"Resolving the model for an object that references a chair asset"
+			"A Temnorid Arena map loads from Scene JSON and its crates and pillars get their models by id.",
+			"A level editor places a prop at once as a placeholder while its GLB downloads.",
+			"A sound bank loads footstep clips by asset id instead of linking the files in Unity."
 		],
 		"roadmap": [
-			"Level of detail streaming",
+			"Performance optimization",
 			"Stable v1 asset API"
 		],
 		"related": [
@@ -346,62 +733,183 @@
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene"
-		]
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager",
+			"com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.unitywebrequesttexture 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.unitywebrequestaudio 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.audio 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.imageconversion 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [
+			"glTFast (com.unity.cloud.gltfast) loads GLB and glTF models; without it models show their placeholders and a warning."
+		],
+		"api": [
+			{
+				"name": "EngineAssets.Default",
+				"text": "The shared asset loader and the scene loader's ISceneAssetResolver."
+			},
+			{
+				"name": "LoadLibrary(path)",
+				"text": "Reads a library file from disk; its sources are relative to the file's folder."
+			},
+			{
+				"name": "LoadLibraryFromUrl(url, done)",
+				"text": "Downloads a library over http(s) or a platform path such as StreamingAssets on Android."
+			},
+			{
+				"name": "AddLibrary(library, baseUri)",
+				"text": "Adds an already parsed AssetLibraryData; a later definition of the same id wins."
+			},
+			{
+				"name": "AddCatalog(catalog)",
+				"text": "Adds an AssetCatalog, checked before any file is loaded."
+			},
+			{
+				"name": "Load<T>(id, done)",
+				"text": "Loads an asset as a GameObject prototype, Material, Texture2D or AudioClip; calls done with null when it cannot."
+			},
+			{
+				"name": "Instantiate(id, parent, ready)",
+				"text": "Places a model right away, showing its placeholder until the model has loaded."
+			},
+			{
+				"name": "Unload(id) / UnloadAll()",
+				"text": "Frees loaded assets; objects already placed keep their copies."
+			},
+			{
+				"name": "LoadFailed",
+				"text": "Event raised with the id and the reason when an asset cannot be loaded."
+			},
+			{
+				"name": "MaterialShader",
+				"text": "Shader for materials and placeholders, URP Lit by default; set it if builds strip that shader."
+			},
+			{
+				"name": "AssetCatalog (Assets > Create > IT-Kamianets > Asset Catalog)",
+				"text": "Maps asset ids to prefabs, materials, textures and AudioClips made in Unity."
+			},
+			{
+				"name": "AssetJson.Deserialize(json) / Serialize(library)",
+				"text": "Reads and writes asset libraries in the schema's JSON shape."
+			}
+		],
+		"example": "var assets = EngineAssets.Default;\nassets.LoadLibrary(Path.Combine(Application.streamingAssetsPath, \"props.library.json\"));\nassets.AddCatalog(myCatalog);\nassets.LoadFailed += (id, reason) => Debug.LogWarning($\"{id}: {reason}\");\n\nvar level = SceneLoader.Load(json, null, new SceneLoadOptions { AssetResolver = assets });\nassets.Instantiate(\"props/crate-wood\", parent);\nassets.Load<AudioClip>(\"sounds/footstep-stone-1\", clip => source.PlayOneShot(clip));"
 	},
 	{
 		"slug": "3d-unity-audio",
 		"name": "3d-unity-audio",
 		"group": "Core",
 		"summary": "Positional 3D sound, sound events with variations, footsteps by surface, volume groups and music.",
-		"purpose": "Games play a sound event by name, not a file, so changing a sound is a data change. Positional sound is gameplay, not decoration: in a competitive game players locate others by footsteps and spells, so direction and distance must be reliable.",
+		"purpose": "A game plays a sound event by name, not a file, so changing how something sounds is a data change. Positional sound is part of gameplay: players locate others by footsteps and spell casts, so direction and distance must be reliable. The package knows nothing about game rules or networking; it plays what it is told.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-audio",
 		"dependencies": [
 			"3d-unity-core",
 			"3d-unity-scene",
-			"3d-unity-assets"
+			"3d-unity-assets",
+			"3d-unity-character"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-audio.git",
-		"usage": "Play an event such as footstep.stone at a position: it picks one of several clips and varies pitch and volume. Every sound plays through a volume group (master, music, effects, voice, interface), so a settings screen changes one value per group.",
+		"usage": "Define SoundEvents in a SoundBank asset or in code, and add the bank to EngineAudio.Default. Play events with Play, PlayAttached or Play2D, set volumes with SetVolume, and play music with PlayMusic. Put a FootstepPlayer next to a CharacterMotor for footsteps and landings, and use AudioSceneResolver when loading a scene so placed audio assets become looping 3D sources.",
 		"current": [
-			"Sound events by name with random clip, pitch and volume",
-			"Positional 3D sound with distance falloff and direction",
-			"Volume groups and mixer",
-			"Footsteps by surface",
-			"Music with crossfades"
+			"Sound events: clips (AudioClips or audio asset ids), volume and pitch ranges, group, 2D or 3D with min and max distance, loop, voice limit, minimum interval, priority.",
+			"A pool of 32 voices; never the same clip twice in a row; when all voices are busy, the oldest or lowest-priority one is replaced.",
+			"A name with no event plays the audio asset with that id through 3d-unity-assets.",
+			"Master volume and four groups (effects, music, voice, interface), applied without a mixer and saved per player through EngineStorage; playing sounds follow changes at once.",
+			"Music that crossfades between tracks and loops.",
+			"FootstepPlayer: footstep.<surface> every stride (longer when sprinting, quieter when crouching) and land.<surface> after a fall, louder for harder landings.",
+			"AudioSceneResolver turns audio assets placed in a scene into looping 3D sources and passes other assets to EngineAssets."
 		],
 		"features": [
-			"Occlusion behind walls and reverb zones",
-			"Sounds placed in scenes",
-			"Volume settings saved per player",
-			"No game rules or networking inside"
+			"Sounds are data: changing an event's clips or ranges needs no code change.",
+			"Footsteps work from how the character moves, so other players' network copies make footsteps too.",
+			"One volume value per group, so a settings screen never touches individual sounds.",
+			"Optional routing of each group to the game's AudioMixer groups for reverb or ducking."
 		],
 		"examples": [
-			"Hearing an enemy wizard’s footsteps behind a wall",
-			"A settings screen with music and effects sliders"
+			"Hearing an enemy wizard's footsteps on stone behind you in Temnorid Arena, and quieter when they crouch.",
+			"A fireball plays its cast sound at the caster and a flying sound attached to the projectile.",
+			"A settings screen with music and effects sliders that are remembered for the player."
 		],
 		"roadmap": [
-			"Audio data from asset-schema and scene-schema",
+			"Occlusion behind walls",
+			"Reverb zones",
+			"Audio settings (loop, volume, range) from 3d-asset-schema when the schema gains them",
+			"Sound events as JSON data for non-Unity tools",
 			"Stable v1 audio API"
 		],
 		"related": [
 			"3d-unity-assets",
+			"3d-unity-character",
 			"3d-unity-scene",
-			"3d-unity-character"
+			"3d-unity-core"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-assets"
-		]
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-assets, 3d-unity-character",
+			"com.unity.modules.audio 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "EngineAudio.Default",
+				"text": "The shared player for sound events, volume groups and music."
+			},
+			{
+				"name": "AddBank(bank) / Define(soundEvent)",
+				"text": "Adds the events of a SoundBank, or one SoundEvent defined in code."
+			},
+			{
+				"name": "Play(name, position, volumeScale)",
+				"text": "Plays an event at a world position and returns a SoundHandle."
+			},
+			{
+				"name": "PlayAttached(name, target, volumeScale)",
+				"text": "Plays an event that follows a transform, such as a projectile."
+			},
+			{
+				"name": "Play2D(name, volumeScale)",
+				"text": "Plays an event straight in the ears, for interface sounds."
+			},
+			{
+				"name": "Stop(handle) / IsPlaying(handle)",
+				"text": "Stops a playing sound or checks whether it still plays."
+			},
+			{
+				"name": "Preload(name)",
+				"text": "Loads an event's asset clips now, so its first play is not delayed."
+			},
+			{
+				"name": "SetVolume(group, volume) / SetMasterVolume(volume)",
+				"text": "Sets and saves a volume from 0 to 1; playing sounds follow at once."
+			},
+			{
+				"name": "PlayMusic(name, fadeSeconds) / StopMusic(fadeSeconds)",
+				"text": "Crossfades to a looping music track, or fades the music out."
+			},
+			{
+				"name": "SetMixerGroup(group, mixerGroup)",
+				"text": "Routes a volume group through a group of the game's AudioMixer."
+			},
+			{
+				"name": "FootstepPlayer",
+				"text": "Component next to a CharacterMotor that plays footsteps and landings by surface."
+			},
+			{
+				"name": "AudioSurface / AudioSceneResolver",
+				"text": "Marks what a collider is made of; resolves audio assets placed in a scene into 3D sources."
+			}
+		],
+		"example": "var audio = EngineAudio.Default;\naudio.AddBank(playerSounds);\naudio.Play(\"spell.fireball.cast\", caster.position);\naudio.PlayAttached(\"spell.fireball.fly\", projectile.transform);\naudio.Play2D(\"ui.click\");\naudio.SetVolume(SoundGroup.Music, 0.4f);   // saved for this player\naudio.PlayMusic(\"music/round-start\");\n\nvar options = new SceneLoadOptions { AssetResolver = new AudioSceneResolver() };"
 	},
 	{
 		"slug": "3d-unity-interaction",
 		"name": "3d-unity-interaction",
 		"group": "Specific",
-		"summary": "Object editing: select, move, rotate, scale, snap, duplicate and delete, with undo.",
-		"purpose": "Reusable editing tools for apps that let people change their scenes: interiors, level editors, track builders, simulations. Not every game needs it, so it is a specific package rather than core.",
+		"summary": "Scene editing: select, move, rotate, scale, duplicate and delete objects, with snapping and undo.",
+		"purpose": "Apps that let people change a scene need the same editing tools: level editors, room layouts, track builders. This package gives them once, on top of the objects that 3d-unity-scene loads. It holds no product rules and does not read devices: input comes through 3d-unity-input.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-interaction",
@@ -411,42 +919,106 @@
 			"3d-unity-input"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-interaction.git",
-		"usage": "It edits objects managed by 3d-unity-scene and keeps the scene in sync, so every edit can be saved as Scene JSON. Input comes through 3d-unity-input, so mouse, touch and VR all work.",
+		"usage": "Add a SceneEditor and set its Scene to a LoadedScene from SceneLoader. Add SceneEditorInput for mouse, keyboard and gamepad controls, and SelectionHighlight to draw a box around the selection. Listen to Changed and save the result with SceneSaver.CaptureJson. Tools, tests or VR controllers can call SceneEditor methods directly, without SceneEditorInput.",
 		"current": [
-			"Selection and multi-selection",
-			"Move, rotate, scale, duplicate and delete with gizmos",
-			"Grid, object, surface and rotation snapping",
-			"Undo, redo and copy/paste"
+			"Selection: single, additive and toggle, plus picking the scene object under a ray.",
+			"Move, rotate around the selection's pivot on the vertical axis, and scale around the pivot.",
+			"Duplicate with new ids and the original scene data, one grid step away; delete hides objects so undo can restore them.",
+			"Grid, rotation and surface snapping: a dragged object rests on whatever surface is under it.",
+			"Dragging on a horizontal plane with a ray, recorded as one undo step, and cancellable.",
+			"Undo and redo history of up to 200 steps, with SelectionChanged and Changed events.",
+			"Default controls: click selects, Shift adds, drag moves, R and Shift+R rotate, Delete, Ctrl+D, Ctrl+Z, Ctrl+Y, Escape; gamepad shoulders rotate."
 		],
 		"features": [
-			"Constraints and measurements",
-			"Keyboard, mouse and touch controls",
-			"Interaction events and scene synchronization"
+			"Edits SceneObject components, so an edited scene saves straight back to Scene JSON; deleted objects are left out.",
+			"Editing logic and input are separate components, so any source can drive the editor.",
+			"Editing keys live in an Editor map of EngineInput and can be rebound like any other action.",
+			"Every change is an IEditCommand, so a project can add its own undoable operations.",
+			"Generic: no game, room or track rules inside."
 		],
 		"examples": [
-			"Moving and snapping furniture in a scanned room",
-			"A level editor inside a game"
+			"A map editor for Temnorid Arena: place crates and pillars on a 0.5 m grid and save the arena as Scene JSON.",
+			"Moving furniture in a scanned room so it rests on the floor, with undo for every step.",
+			"Duplicating a row of track barriers and turning them in 15 degree steps."
 		],
 		"roadmap": [
-			"VR editing through 3d-unity-xr",
-			"Stable v1 editing API"
+			"Move, rotate and scale gizmos (handles).",
+			"Snapping to other objects' edges, constraints and measurements.",
+			"Copy and paste between scenes.",
+			"Touch support and VR editing through 3d-unity-xr.",
+			"Scene synchronization over the network.",
+			"Stable v1 editing API."
 		],
 		"related": [
 			"3d-unity-scene",
 			"3d-unity-input",
+			"3d-unity-spatial",
 			"3d-unity-xr"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-input"
-		]
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene, 3d-unity-input",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "SceneEditor.Scene",
+				"text": "The LoadedScene being edited; when empty, any SceneObject under the picked collider can be edited."
+			},
+			{
+				"name": "SceneEditor.Pick(ray, maxDistance)",
+				"text": "Returns the scene object under a ray, or null."
+			},
+			{
+				"name": "SceneEditor.Select(target, additive)",
+				"text": "Selects an object, replacing the selection or adding to it; Toggle and ClearSelection change it further."
+			},
+			{
+				"name": "SceneEditor.Move(delta) / Rotate(degrees) / Scale(factor)",
+				"text": "Changes the selection as one undo step, with grid and rotation snapping when they are on."
+			},
+			{
+				"name": "SceneEditor.Duplicate() / Delete()",
+				"text": "Copies the selection with new ids and selects the copies, or hides the selection so undo can restore it."
+			},
+			{
+				"name": "SceneEditor.BeginDrag(ray) / UpdateDrag(ray) / EndDrag()",
+				"text": "Moves the selection with a pointer ray and records the whole drag as one undo step; CancelDrag puts it back."
+			},
+			{
+				"name": "SceneEditor.Undo() / Redo()",
+				"text": "Steps back or forward through the edit history."
+			},
+			{
+				"name": "SceneEditor.GridSize, RotationStep, SnapToGrid, SnapRotation, SnapToSurface",
+				"text": "Snapping settings: 0.5 m grid and 15 degree steps by default, all on."
+			},
+			{
+				"name": "SceneEditor.Changed",
+				"text": "Raised after any change, including undo and redo, with the command's name."
+			},
+			{
+				"name": "SceneEditorInput",
+				"text": "Mouse, keyboard and gamepad controls for a SceneEditor through an Editor map in EngineInput."
+			},
+			{
+				"name": "SelectionHighlight",
+				"text": "Draws a box around each selected object, sized to its renderers or colliders."
+			},
+			{
+				"name": "IEditCommand / UndoHistory",
+				"text": "One undoable change, and the history that runs, records, undoes and redoes such changes."
+			}
+		],
+		"example": "var editor = gameObject.AddComponent<SceneEditor>();\neditor.Scene = SceneLoader.Load(json);\neditor.GridSize = 0.5f;\neditor.RotationStep = 15f;\ngameObject.AddComponent<SceneEditorInput>();\ngameObject.AddComponent<SelectionHighlight>();\n\neditor.Changed += change =>\n{\n    EngineLog.Info(\"Editor\", change);\n    saved = SceneSaver.CaptureJson(editor.Scene);\n};"
 	},
 	{
 		"slug": "3d-unity-spatial",
 		"name": "3d-unity-spatial",
 		"group": "Specific",
-		"summary": "Turns a Meta Quest room scan into a scene: walls, floor, doors, windows and furniture.",
-		"purpose": "It connects the engine to the real room around the user. Where 3d-unity-xr handles XR hardware, this package understands the physical space and converts it into engine-independent scene data.",
+		"summary": "Turns a Meta Quest room scan into a scene, measures scanned rooms and builds them as solid geometry.",
+		"purpose": "It connects the engine to the real room around the user and stores that room as engine-independent scene data in 3d-scene-schema form. XR hardware and controllers belong to 3d-unity-xr; this package only deals with the physical space. It holds no product logic.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-spatial",
@@ -455,86 +1027,190 @@
 			"3d-unity-scene"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-spatial.git",
-		"usage": "RoomScanner requests the Quest Scene API permission, loads the room through MR Utility Kit and converts it into a scene from 3d-unity-scene. Scanned rooms can be saved, loaded, rescanned and aligned with virtual content.",
+		"usage": "Add a RoomScanner, subscribe to ScanCompleted and ScanFailed, and call StartScan on a Quest with MR Utility Kit installed. The resulting SceneData can be saved, uploaded or measured with RoomMetrics.Measure. RoomLoader.Load builds any stored scan in Unity, with or without a headset.",
 		"current": [
-			"RoomScanner: Quest Scene API permission, MRUK room loading and conversion to a scene",
-			"Floor, wall, ceiling, door, window and furniture detection",
-			"Room boundaries, dimensions and spatial anchors",
-			"Save, load and rescan scanned rooms"
+			"RoomScanner: asks for the Quest Scene API permission, loads the current room through MR Utility Kit and converts it into one SceneData.",
+			"Each room anchor becomes a scene object with position, rotation, a plane boundary or a volume, under one ROOM object.",
+			"MrukLabelMap: maps MR Utility Kit labels to schema labels: floor, ceiling, walls, doors, windows, furniture, screens, lamps, plants, wall art.",
+			"RoomMetrics.Measure: floor area, ceiling height, overall bounds, and counts of walls, doors, windows and objects per label.",
+			"RoomLoader.Load: builds a scanned room as visible, solid geometry; invisible walls collide but are not drawn.",
+			"RoomLoader.FloorHeight: the floor's world height, to stand a player on it."
 		],
 		"features": [
-			"Labels mirror the Meta Quest Scene API",
-			"Several rooms in one shared coordinate frame",
-			"Alignment between virtual and physical scenes"
+			"A scan becomes plain 3d-scene-schema data, so it can be stored in Firebase and opened anywhere.",
+			"Measuring and loading need no headset: they work on any stored scan.",
+			"MR Utility Kit is optional: the package compiles without it and reports why scanning is unavailable.",
+			"One direction only: physical room to scene data; it never writes back into MR Utility Kit."
 		],
 		"examples": [
-			"Turning a real room into the starting scene of an app"
+			"Scanning a living room on a Quest and using it as the starting scene of a room-planning app.",
+			"Showing the floor area and ceiling height of a stored scan on a PC, without a headset.",
+			"Loading a real room as a playable arena and spawning players on its floor."
 		],
 		"roadmap": [
-			"Spatial mesh support",
-			"Stable room-scanning API"
+			"Checks of the MR Utility Kit conversion on a Quest device.",
+			"Room boundaries and spatial anchors.",
+			"Surface classification and spatial mesh support.",
+			"Rescanning and updating a stored room.",
+			"Alignment between virtual and physical scenes.",
+			"Stable room-scanning API."
 		],
 		"related": [
-			"3d-unity-xr",
+			"3d-scene-schema",
 			"3d-unity-scene",
-			"3d-scene-schema"
+			"3d-unity-xr",
+			"3d-unity-interaction"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene",
-			"Optional: Meta XR MR Utility Kit (com.meta.xr.mrutilitykit) for room scanning; without it the package compiles and reports that scanning is unavailable"
-		]
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene"
+		],
+		"optional": [
+			"Meta XR MR Utility Kit (com.meta.xr.mrutilitykit): lets RoomScanner load the current Meta Quest room and convert it into a scene; without it StartScan reports that scanning is unavailable."
+		],
+		"api": [
+			{
+				"name": "RoomScanner.StartScan()",
+				"text": "Requests the Scene API permission if needed, then loads the current room through MR Utility Kit."
+			},
+			{
+				"name": "RoomScanner.ScanCompleted",
+				"text": "Raised with the room as a SceneData when the scan is converted."
+			},
+			{
+				"name": "RoomScanner.ScanFailed",
+				"text": "Raised with a reason: permission denied, no room found, or MR Utility Kit not installed."
+			},
+			{
+				"name": "MrukLabelMap.ToSemanticLabel(anchor)",
+				"text": "Maps an MR Utility Kit anchor's label to the schema's SemanticLabel, or OTHER; compiled only with MR Utility Kit."
+			},
+			{
+				"name": "RoomMetrics.Measure(scene)",
+				"text": "Measures a scanned room from its SceneData."
+			},
+			{
+				"name": "RoomMetrics.FloorArea, CeilingHeight, Bounds",
+				"text": "Floor area in square meters, floor-to-ceiling height in meters (0 when missing), and a box around everything in Unity world space."
+			},
+			{
+				"name": "RoomMetrics.Walls, Doors, Windows, Objects",
+				"text": "Counts of walls, doors and windows, and of detected objects per SemanticLabel."
+			},
+			{
+				"name": "RoomLoader.Load(room, parent, surfaceMaterial, assets)",
+				"text": "Builds a room through SceneLoader with surfaces and colliders and returns the LoadedScene."
+			},
+			{
+				"name": "RoomLoader.Load(room, out metrics, parent, surfaceMaterial)",
+				"text": "Measures and builds a room in one call."
+			},
+			{
+				"name": "RoomLoader.FloorHeight(room)",
+				"text": "Returns the world height of a loaded room's floor, or 0 when it has no floor."
+			}
+		],
+		"example": "var scanner = gameObject.AddComponent<RoomScanner>();\nscanner.ScanFailed += reason => EngineLog.Warning(\"Spatial\", reason);\nscanner.ScanCompleted += room =>\n{\n    var loaded = RoomLoader.Load(room, out var metrics);\n    EngineLog.Info(\"Spatial\", $\"{metrics.FloorArea:0.0} m2, ceiling {metrics.CeilingHeight:0.00} m\");\n    player.position = new Vector3(0f, RoomLoader.FloorHeight(loaded), 0f);\n};\nscanner.StartScan();"
 	},
 	{
 		"slug": "3d-unity-xr",
 		"name": "3d-unity-xr",
 		"group": "Specific",
-		"summary": "Meta Quest and VR: controllers, hand tracking, grabbing, teleport, locomotion and in-VR UI.",
-		"purpose": "It brings the engine into VR and MR, handling how people interact with a 3D world through XR. Meta Quest comes first; the design suits other XR platforms later. Room understanding belongs to 3d-unity-spatial.",
+		"summary": "XR building blocks: controller button actions, headset status and a world-space status display.",
+		"purpose": "It handles how people interact with a 3D world through an XR headset, with Meta Quest as the first target. Understanding the physical room belongs to 3d-unity-spatial. It needs no Meta SDK and holds no product logic: its components do not know what a button does or what a status means.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-xr",
 		"dependencies": [
-			"3d-unity-core"
+			"3d-unity-core",
+			"3d-unity-input"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-xr.git",
-		"usage": "Add it to a Quest project. Controller and hand input arrive as engine actions, objects become grabbable, and StatusHud shows world-space text. Movement uses teleport or smooth locomotion.",
+		"usage": "Add an XRPrimaryButtonAction, pick an EngineInput action such as Player/Jump, and hook OnPressed to your own code. Put a StatusHud on a world-space canvas with a TextMeshPro text and call SetStatus; turn on FollowView to keep it in front of the player. Read XRStatus to check whether a headset is active and which one.",
 		"current": [
-			"Controller input and button actions (XRPrimaryButtonAction)",
-			"Hand tracking and hand interactions",
-			"Grabbing, ray and direct interaction",
-			"Teleportation and smooth locomotion",
-			"World-space UI and status HUD (StatusHud)"
+			"XRPrimaryButtonAction: fires OnPressed once per press of any EngineInput action, by default Player/Jump, the right controller's A button.",
+			"The same action answers to Space or a gamepad's A on PC, so XR flows can be tested without a headset.",
+			"StatusHud: world-space text set with SetStatus.",
+			"StatusHud can follow the view: it eases to a level spot in front of the camera instead of being fixed to the head.",
+			"XRStatus: whether a headset is active, the XR plug-in in use and the headset model."
 		],
 		"features": [
-			"OpenXR foundation, Meta Quest first",
-			"Product-independent: no app-specific logic",
-			"Quest performance settings"
+			"Reads EngineInput actions, never devices, so bindings stay rebindable and testable.",
+			"No Meta SDK required: it uses Unity's built-in XR module, and Quest features come from the project's own XR setup.",
+			"Comfort first: the status display follows turning, not head tilt, and catches up smoothly.",
+			"Product-independent: its components carry no app or game logic."
 		],
 		"examples": [
-			"Triggering a room scan with a controller button and showing progress in a HUD"
+			"Starting a room scan with the A button and showing its progress on a StatusHud.",
+			"Showing a headset-only hint when XRStatus.IsHeadsetActive is true, and a keyboard hint otherwise.",
+			"A round timer for a VR arena match that floats in front of the player."
 		],
 		"roadmap": [
-			"Additional XR platform support",
-			"Stable Quest release"
+			"OpenXR and Meta Quest support with controller and hand tracking.",
+			"Grabbing, ray and direct interaction.",
+			"Teleportation and smooth locomotion.",
+			"XR UI and VR editing tools through 3d-unity-interaction.",
+			"Meta Quest performance optimization and a stable Quest release.",
+			"Additional XR platform support."
 		],
 		"related": [
+			"3d-unity-input",
 			"3d-unity-spatial",
-			"3d-unity-interaction",
-			"3d-unity-input"
+			"3d-unity-interaction"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core",
-			"com.unity.ugui 2.6.0, resolved by the Package Manager"
-		]
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input",
+			"com.unity.ugui 2.6.0, resolved by the Package Manager",
+			"com.unity.modules.xr 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "XRPrimaryButtonAction.OnPressed",
+				"text": "UnityEvent raised once per press of the chosen action."
+			},
+			{
+				"name": "XRPrimaryButtonAction.Action",
+				"text": "The action as \"Map/Action\" in EngineInput, such as Player/Jump (A), Player/Primary (trigger) or UI/Pause (menu)."
+			},
+			{
+				"name": "StatusHud.SetStatus(message)",
+				"text": "Sets the displayed text."
+			},
+			{
+				"name": "StatusHud.Status",
+				"text": "The text shown now."
+			},
+			{
+				"name": "StatusHud.FollowView",
+				"text": "When on, the display eases to a spot 1.5 m in front of the view and slightly below eye height."
+			},
+			{
+				"name": "StatusHud.SnapToView()",
+				"text": "Puts the display in front of the view at once, for example when it first appears."
+			},
+			{
+				"name": "XRStatus.IsHeadsetActive",
+				"text": "True when the game runs in an active headset; false on PC without one."
+			},
+			{
+				"name": "XRStatus.DeviceName",
+				"text": "The XR plug-in in use, such as OpenXR Display, or empty."
+			},
+			{
+				"name": "XRStatus.HeadsetModel",
+				"text": "The headset's model when known, such as Oculus Quest 3, or empty."
+			}
+		],
+		"example": "var button = gameObject.AddComponent<XRPrimaryButtonAction>();\nbutton.Action = \"Player/Jump\";\nbutton.OnPressed.AddListener(() =>\n{\n    hud.SetStatus(\"Scanning room...\");\n    scanner.StartScan();\n});\n\nhud.FollowView = true;\nhud.SnapToView();\nif (XRStatus.IsHeadsetActive)\n{\n    EngineLog.Info(\"XR\", $\"Headset: {XRStatus.HeadsetModel}\");\n}"
 	},
 	{
 		"slug": "3d-unity-firebase",
 		"name": "3d-unity-firebase",
 		"group": "Specific",
-		"summary": "Sign-in, player profiles, saved progress and stored scenes in Firebase.",
-		"purpose": "Games use this package instead of writing their own Firebase integration. Scenes are stored as Scene JSON, so anything saved from Unity can be read by other tools.",
+		"summary": "Firebase over its REST API: sign-in, player profiles, saved progress and stored scenes.",
+		"purpose": "Games use this package instead of writing their own Firebase integration. It talks to Firebase Authentication and Cloud Firestore over HTTPS, so the same code runs on Windows, a dedicated server, Android and iOS with no native SDK. It knows no project: the game passes its config and deploys its own security rules, and this package keeps no config or rules.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-firebase",
@@ -543,42 +1219,106 @@
 			"3d-unity-scene"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-firebase.git",
-		"usage": "Sign a player in, then save and load their progress and scenes. Changes queue while offline and sync when the connection returns.",
+		"usage": "Read the project id and API key with FirebaseConfig.FromGoogleServicesJson, then call EngineFirebase.Initialize(config) once. Sign in with Auth.SignInAsync(), which returns the same player on this device every time. Then save and load the profile, progress by key and Scene JSON through EngineFirebase, or work with any document through Firestore.",
 		"current": [
-			"Firebase setup and sign-in",
-			"User profiles and saved progress",
-			"Scene storage and loading as Scene JSON",
-			"Asset storage",
-			"Offline support and sync events"
+			"FirebaseConfig.FromGoogleServicesJson: the project id and API key from the game's google-services.json.",
+			"Anonymous sign-in. The refresh token is kept in EngineStorage, so the device signs back in as the same Uid.",
+			"ID tokens that refresh themselves before they expire, plus SignOut and SignedIn and SignedOut events.",
+			"Firestore get, set, merge, delete and list with plain JSON in and out; Firestore's typed values are converted inside.",
+			"The player's profile at users/{uid}, merged field by field and stamped with updatedAt.",
+			"Saved progress at users/{uid}/progress/{key}: any object saved as JSON and loaded back as its type.",
+			"Scenes at scenes/{sceneId}: the whole Scene JSON with its owner, schema version and update time; save, load, list and delete."
 		],
 		"features": [
-			"No custom Firebase code in games",
-			"Accounts and stats between matches"
+			"No Firebase SDK: plain HTTPS through UnityWebRequest, the same on PC, servers and mobile.",
+			"Project-agnostic: config and security rules live in the game, never in the package.",
+			"Scenes are stored as Scene JSON, so other tools read them exactly as 3d-scene-schema defines.",
+			"Keeps what follows the player; EngineStorage in 3d-unity-core keeps settings on this device."
 		],
 		"examples": [
-			"Uploading a scanned room for later viewing",
-			"Keeping a player’s rank and match history"
+			"Keeping a Temnorid Arena player's name and match stats between sessions.",
+			"A level editor that saves a built arena to the cloud and lists the scenes other players made.",
+			"Uploading a scanned room as Scene JSON for viewing on another device."
 		],
 		"roadmap": [
+			"Google sign-in on PC, linked to the anonymous account",
+			"Match results and replays written by a trusted server",
+			"Asset storage in Cloud Storage for asset libraries and GLB files",
+			"Offline queue",
+			"Sync events",
 			"Stable v1 Firebase API"
 		],
 		"related": [
+			"3d-unity-core",
 			"3d-unity-scene",
-			"3d-unity-network",
-			"3d-network-schema"
+			"3d-scene-schema",
+			"3d-unity-network"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-scene",
-			"Optional: Firebase Unity SDK in your project; without it the package compiles and reports that Firebase is unavailable"
-		]
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager",
+			"com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "FirebaseConfig.FromGoogleServicesJson(json)",
+				"text": "Reads the project id and API key from a google-services.json file."
+			},
+			{
+				"name": "EngineFirebase.Initialize(config)",
+				"text": "Creates the Firebase instance and registers it in EngineServices."
+			},
+			{
+				"name": "EngineFirebase.Current",
+				"text": "The instance made by Initialize, or null."
+			},
+			{
+				"name": "Auth.SignInAsync()",
+				"text": "Signs back in as this device's player, or creates an anonymous account the first time."
+			},
+			{
+				"name": "Auth.Uid / Auth.IsSignedIn",
+				"text": "The signed-in player's id, and whether anyone is signed in."
+			},
+			{
+				"name": "Auth.SignOut()",
+				"text": "Forgets this device's account; its data stays in Firebase."
+			},
+			{
+				"name": "SaveProfileAsync(fields) / LoadProfileAsync()",
+				"text": "Merges fields into the player's profile, or reads it as JSON."
+			},
+			{
+				"name": "SaveProgressAsync<T>(key, value) / LoadProgressAsync<T>(key, fallback)",
+				"text": "Saves an object under a key, or loads it back with a fallback when none is saved."
+			},
+			{
+				"name": "SaveSceneAsync(scene) / LoadSceneAsync(sceneId)",
+				"text": "Stores a SceneData owned by the signed-in player, or loads a stored scene."
+			},
+			{
+				"name": "ListScenesAsync(limit) / DeleteSceneAsync(sceneId)",
+				"text": "Lists stored scenes with their owners and update times, or deletes one."
+			},
+			{
+				"name": "Firestore.GetAsync / SetAsync / MergeAsync / DeleteAsync / ListAsync",
+				"text": "Reads and writes any Firestore document by path with plain JSON."
+			},
+			{
+				"name": "FirebaseException.Status",
+				"text": "The HTTP status of a failed call, such as 403 when the rules deny it."
+			}
+		],
+		"example": "var config = FirebaseConfig.FromGoogleServicesJson(googleServicesJson.text);\nvar firebase = EngineFirebase.Initialize(config);\nawait firebase.Auth.SignInAsync();\n\nawait firebase.SaveProfileAsync(new JObject { [\"displayName\"] = \"Ira\" });\nawait firebase.SaveProgressAsync(\"stats\", new { matches = 12, wins = 7 });\nvar profile = await firebase.LoadProfileAsync();\n\nawait firebase.SaveSceneAsync(SceneSaver.Capture(level));\nvar scenes = await firebase.ListScenesAsync();"
 	},
 	{
 		"slug": "3d-unity-network",
 		"name": "3d-unity-network",
 		"group": "Specific",
-		"summary": "Real-time multiplayer: the server decides, players stay in sync, lag is compensated.",
-		"purpose": "The server decides what happened; clients send input and show the result. A game never trusts a client about hits, health or score, so editing the client cannot cheat. It holds no game rules, so a team arena, a co-op game and a shared VR room use the same networking.",
+		"summary": "Real-time multiplayer on Netcode: sessions, server-authoritative characters, schema messages.",
+		"purpose": "The server decides what happened; clients send input and show the result, so editing the client cannot cheat. The package holds no game rules: it syncs players and the session, so a team arena, a co-op game and a shared VR room use the same networking. Accounts and saved data between matches belong to 3d-unity-firebase.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-network",
@@ -588,47 +1328,106 @@
 			"3d-network-schema"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-network.git",
-		"usage": "Put a NetworkSession in the first scene with the player prefab (NetworkObject + CharacterMotor + NetworkCharacter). Start it with StartHost, StartServer or StartClient, or from the command line with -server, -host or -client <address>. NetworkCharacter predicts the owner’s movement, lets the server apply commands in order, corrects mispredictions and interpolates other players. Built on Unity Netcode for GameObjects; session messages follow 3d-network-schema.",
+		"usage": "Put one NetworkSession in the first scene with a player prefab (NetworkObject, CharacterMotor and NetworkCharacter, with the controls listed as owner-only). Start it with StartHost, StartServer or StartClient(address), or from the command line. On the server, drive the session through NetworkSession.Messages: SetState, Publish game events, End with a result and CreateReplay.",
 		"current": [
-			"Host and dedicated server modes",
-			"Player spawn and sync",
-			"Synced game state",
-			"Server-side hit checks with lag compensation",
-			"Client prediction for movement",
-			"Lobbies, matchmaking and reconnect",
-			"Command-line start for dedicated servers and test clients",
-			"Owner-only components, so controls and cameras run only for the local player"
+			"NetworkSession: host, dedicated server and client on Netcode for GameObjects and Unity Transport, set up on its own object.",
+			"Command-line start with -server, -host, -client <address>, -port <port> and -name <name>, so servers and test clients need no UI.",
+			"NetworkCharacter: the owner predicts its CharacterMotor each tick, and the server applies the commands in order without guessing late ones.",
+			"Reconciliation: beyond 5 cm the owner returns to the server's state, jump timers included, and replays its newer commands.",
+			"Other players shown 3 ticks in the past, interpolated between server results; owner-only components switched off on their copies.",
+			"SessionChannel: the session in 3d-network-schema form with gapless seq numbers, joins, leaves, state changes, teams and game events.",
+			"Results and replays: End(result) sends session.ended, and the server records a replay from the moment the session runs."
 		],
 		"features": [
-			"Server-authoritative by design",
-			"Session messages in 3d-network-schema",
-			"No game rules inside"
+			"Server-authoritative: clients only request game events, and they count once the server publishes them.",
+			"No game rules, controls or cameras inside the package.",
+			"Session messages follow 3d-network-schema, so tools outside Unity can read them; the per-tick stream stays in Netcode's binary RPCs.",
+			"Newcomers get a snapshot numbered as of the latest message, so numbering never has gaps."
 		],
 		"examples": [
-			"A 5v5 Temnorid Arena match",
-			"A shared VR room where several people edit one scene"
+			"A Temnorid Arena match where the server publishes temnorid-arena events and ends the session with team scores.",
+			"A dedicated server started with -server and a test client with -client 127.0.0.1, both without UI.",
+			"A shared VR room where several people move around one scene."
 		],
 		"roadmap": [
-			"Spectator mode",
-			"Stable v1 network API"
+			"Server-side hit checks with lag compensation",
+			"Unreliable commands with redundancy",
+			"Smoothing the local player between ticks on high-refresh screens",
+			"Writing results and replays to storage from a trusted server",
+			"Lobbies and matchmaking with Unity Relay, Lobby and Matchmaker",
+			"Reconnect"
 		],
 		"related": [
 			"3d-network-schema",
+			"3d-unity-character",
 			"3d-unity-firebase",
-			"3d-unity-character"
+			"3d-constructor-character-view-controls"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-character",
-			"com.unity.netcode.gameobjects 2.13.3 (with Unity Transport), resolved by the Package Manager"
-		]
+			"com.unity.netcode.gameobjects 2.13.3, resolved by the Package Manager",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "NetworkSession.Current",
+				"text": "The session component in the scene."
+			},
+			{
+				"name": "StartHost() / StartServer() / StartClient(address) / Stop()",
+				"text": "Starts a host, a dedicated server with no local player, or a client, and stops it."
+			},
+			{
+				"name": "NetworkSession.StartFromCommandLine(args)",
+				"text": "Starts a session from -server, -host, -client, -port and -name flags."
+			},
+			{
+				"name": "Started / Stopped / PlayerJoined / PlayerLeft",
+				"text": "Events for the session's lifecycle and for clients joining and leaving."
+			},
+			{
+				"name": "NetworkSession.Role / TickRate",
+				"text": "Whether this side is offline, host, server or client, and the simulation steps per second."
+			},
+			{
+				"name": "NetworkCharacter",
+				"text": "Runs a CharacterMotor with server authority, client prediction, reconciliation and interpolation."
+			},
+			{
+				"name": "NetworkSession.Messages (SessionChannel)",
+				"text": "The session in 3d-network-schema form, kept in sync over Netcode named messages."
+			},
+			{
+				"name": "SessionChannel.SetState(state, sceneId)",
+				"text": "Moves the session through lobby, starting, running and ended, optionally choosing its scene."
+			},
+			{
+				"name": "SessionChannel.Publish(type, payload, tick)",
+				"text": "Server: sends everyone a numbered message, such as a game event named <game>.<name>."
+			},
+			{
+				"name": "SessionChannel.Request(type, payload) / RequestReceived",
+				"text": "A client asks for a game event; the server decides in RequestReceived whether to publish it."
+			},
+			{
+				"name": "SessionChannel.End(result) / CreateReplay()",
+				"text": "Ends the session with a ResultData, and builds the replay document."
+			},
+			{
+				"name": "SetTeams(teams) / AssignTeam(playerId, teamId)",
+				"text": "Sets the teams or puts a player in one, and sends everyone a fresh snapshot."
+			}
+		],
+		"example": "var session = NetworkSession.Current;\nsession.StartHost();\n\nsession.Messages.RequestReceived += request => session.Messages.Publish(request.Type, request.Payload);\nsession.Messages.SetState(SessionState.Running, \"arena-01\");\n\nsession.Messages.End(new ResultData\n{\n    EndedAt = NetworkJson.Now(),\n    Reason = ResultReason.Completed,\n    Winners = { SessionChannel.PlayerIdFor(0) },\n});\nstring replay = NetworkJson.Serialize(session.Messages.CreateReplay());"
 	},
 	{
 		"slug": "3d-constructor-character-view-camera",
 		"name": "3d-constructor-character-view-camera",
 		"group": "Constructor",
-		"summary": "First- and third-person camera for the Character View constructor.",
-		"purpose": "A game built from the Character View constructor gets a working camera without writing one. The camera follows a character from 3d-unity-character and reads look input from 3d-unity-input.",
+		"summary": "First- and third-person camera that follows a character and owns where the player looks.",
+		"purpose": "A game built from the Character View constructor gets a working camera without writing one. The camera reads look input from 3d-unity-input and follows a CharacterMotor from 3d-unity-character. It does not move the character: turning and camera-relative movement belong to 3d-constructor-character-view-controls, which reads the camera's Yaw and Pitch.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-constructor-character-view-camera",
@@ -638,42 +1437,95 @@
 			"3d-unity-character"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git",
-		"usage": "Point the camera at a character and pick first or third person; players can switch between them at runtime. Field of view, smoothing and look sensitivity are settings.",
+		"usage": "Add CharacterViewCamera to the camera object and set Target to the player's CharacterMotor. Tune it through CharacterViewCameraSettings: sensitivity, pitch limits, field of view, start view, third-person distance, shoulder offset and collision. Call SetLook on spawn and listen to ViewChanged to react to view switches. Use AimRay to aim from the middle of the screen in either view.",
 		"current": [
-			"First-person and third-person cameras",
-			"Switching between views",
-			"Camera collision, so walls never hide the character",
-			"Smoothing, field of view and look sensitivity settings"
+			"First-person camera at the character's eye position, which follows crouching.",
+			"Over-the-shoulder third-person camera with a configurable distance and shoulder offset.",
+			"Smooth switching between views with the ToggleView action, and a ViewChanged event.",
+			"Camera collision: pulls in front of walls at once and eases back out.",
+			"Hides the character's body in first person while it still casts shadows.",
+			"Locks the mouse cursor during gameplay and frees it when a menu turns gameplay input off.",
+			"AimRay through the middle of the screen for aiming in either view."
 		],
 		"features": [
-			"Works with any device through 3d-unity-input",
-			"Part of the Character View constructor"
+			"One camera for both views: distance and shoulder offset blend from zero, so a view switch is a move, not a cut.",
+			"No frame of lag: look input is read before the controls run, and the camera is placed after the character has moved.",
+			"Works with any device through 3d-unity-input, with one sensitivity default for all of them.",
+			"Ignores the character's own colliders when testing for walls."
 		],
 		"examples": [
-			"A first-person shooter view",
-			"A third-person action RPG view"
+			"In Temnorid Arena the player fights in first person and switches to third person to look around a corner.",
+			"A spell is cast along AimRay, so it flies to the crosshair in both views.",
+			"After a respawn the game calls SetLook to face the player toward the arena center."
 		],
 		"roadmap": [
-			"Aim zoom",
-			"Stable v1 camera API"
+			"Head bob and landing dip.",
+			"Aim zoom.",
+			"Spectator mode that follows another player.",
+			"Stable v1 camera API."
 		],
 		"related": [
 			"3d-constructor-character-view-controls",
 			"3d-constructor-character-view-template",
-			"3d-unity-character"
+			"3d-unity-character",
+			"3d-unity-input"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character",
 			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
-		]
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "CharacterViewCamera",
+				"text": "Component on the camera object that follows a character in first or third person."
+			},
+			{
+				"name": "CharacterViewCamera.Target",
+				"text": "The CharacterMotor to follow; setting it takes the character's current yaw."
+			},
+			{
+				"name": "CharacterViewCamera.Yaw / Pitch",
+				"text": "Where the player looks, in degrees; the controls read them to turn and move the character."
+			},
+			{
+				"name": "CharacterViewCamera.PlanarForward / PlanarRight",
+				"text": "The look direction flattened onto the ground: forward and right for movement."
+			},
+			{
+				"name": "CharacterViewCamera.AimRay",
+				"text": "The ray through the middle of the screen, for aiming in either view."
+			},
+			{
+				"name": "CharacterViewCamera.SetView(view)",
+				"text": "Switches to CameraView.FirstPerson or CameraView.ThirdPerson with a smooth move."
+			},
+			{
+				"name": "CharacterViewCamera.SetLook(yaw, pitch)",
+				"text": "Points the view, for example on spawn; pitch is clamped to the settings."
+			},
+			{
+				"name": "CharacterViewCamera.ViewChanged",
+				"text": "Event raised with the new CameraView when the view switches."
+			},
+			{
+				"name": "CharacterViewCamera.LookEnabled",
+				"text": "Turn off to freeze the view, for example during a cutscene."
+			},
+			{
+				"name": "CharacterViewCameraSettings",
+				"text": "Sensitivity, pitch limits, field of view, start view, distance, shoulder offset, collision and cursor locking."
+			}
+		],
+		"example": "var view = Camera.main.gameObject.AddComponent<CharacterViewCamera>();\nview.Target = playerMotor;\nview.Settings.FieldOfView = 80f;\nview.SetLook(spawnYaw, 0f);\nview.ViewChanged += v => Debug.Log($\"View: {v}\");\n\n// Aim a spell through the middle of the screen\nif (Physics.Raycast(view.AimRay, out var hit, 100f))\n{\n    Debug.Log($\"Aiming at {hit.collider.name}\");\n}"
 	},
 	{
 		"slug": "3d-constructor-character-view-controls",
 		"name": "3d-constructor-character-view-controls",
 		"group": "Constructor",
-		"summary": "Connects input to the character: forward is where the camera looks, looking turns the character.",
-		"purpose": "3d-unity-character moves a character but does not decide where forward is. This package does, for first- and third-person games, and stays in sync with the camera when the player switches views.",
+		"summary": "Turns player input into character commands: forward is where the camera looks, looking turns the character.",
+		"purpose": "3d-unity-character moves a character but does not decide where forward is. This package does, for first- and third-person games, and stays in sync with the camera when the player switches views. It only drives the local player: other players get the same commands from the network.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-constructor-character-view-controls",
@@ -684,40 +1536,93 @@
 			"3d-constructor-character-view-camera"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git",
-		"usage": "Add it next to the character and the camera. It reads move and look actions from 3d-unity-input and drives 3d-unity-character, including strafing, sprint and crouch toggles, and aim mode.",
+		"usage": "Add CharacterViewControls next to the local player's CharacterMotor. It finds the CharacterViewCamera on the main camera and sets itself as its target, or you assign View yourself. Each frame it reads actions from 3d-unity-input and sends a CharacterCommand to the motor; LastCommand holds that command for the network. Gameplay sets FaceCamera, for example while casting, and CharacterViewControlsSettings chooses turn speed, aiming and sprint or crouch toggles.",
 		"current": [
-			"Camera-relative movement and look to turn",
-			"Strafing, sprint and crouch toggles",
-			"First- and third-person control differences",
-			"Aim mode and control settings"
+			"Camera-relative movement: forward is the camera's PlanarForward.",
+			"First person: the character always faces the camera and strafes.",
+			"Third person: the character turns toward where it walks; while aiming with Secondary or with FaceCamera set, it faces the camera and strafes.",
+			"Sprint by holding or toggling (toggle by default on gamepad), forward only while facing the camera, and it stops when the player stops.",
+			"Crouch by holding or toggling.",
+			"With gameplay input off, for example when a menu is open, the character stands still.",
+			"LastCommand: the command sent this frame, for the network to send to the server."
 		],
 		"features": [
-			"Keyboard and mouse, gamepad, touch and VR",
-			"Part of the Character View constructor"
+			"Produces plain CharacterCommand values, so the same input works locally and over the network.",
+			"Runs at a fixed point in the frame: after the camera reads look input and before the motor steps.",
+			"Reads only 3d-unity-input actions, so keyboard and mouse and gamepad behave the same way.",
+			"Sprint and crouch toggles are per-device choices, not hard-coded."
 		],
 		"examples": [
-			"WASD and mouse look in a first-person arena"
+			"In Temnorid Arena, casting a spell in third person sets FaceCamera so the mage turns toward the target.",
+			"A network session reads LastCommand every frame and sends it to the server for the local player.",
+			"When the pause menu opens, gameplay input turns off and the player stops in place."
 		],
 		"roadmap": [
-			"Lean and peek",
-			"Stable v1 controls API"
+			"Control settings screen.",
+			"Mobile on-screen sticks.",
+			"Stable v1 controls API."
 		],
 		"related": [
 			"3d-constructor-character-view-camera",
 			"3d-unity-character",
-			"3d-unity-input"
+			"3d-unity-input",
+			"3d-constructor-character-view-template"
 		],
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-constructor-character-view-camera"
-		]
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "CharacterViewControls",
+				"text": "Component next to the local player's CharacterMotor that turns input into a CharacterCommand."
+			},
+			{
+				"name": "CharacterViewControls.View",
+				"text": "The CharacterViewCamera that defines forward; empty means the one on the main camera."
+			},
+			{
+				"name": "CharacterViewControls.FaceCamera",
+				"text": "Set by gameplay, for example while casting, to make the character face the camera in third person."
+			},
+			{
+				"name": "CharacterViewControls.IsAiming",
+				"text": "True while the player holds Secondary to aim."
+			},
+			{
+				"name": "CharacterViewControls.LastCommand",
+				"text": "The command sent to the motor this frame; the network sends the same one to the server."
+			},
+			{
+				"name": "CharacterViewControlsSettings.TurnSpeed",
+				"text": "How fast the character turns toward where it walks in third person, in degrees per second."
+			},
+			{
+				"name": "CharacterViewControlsSettings.AimWithSecondary",
+				"text": "Hold Secondary to aim: in third person the character faces the camera and strafes."
+			},
+			{
+				"name": "CharacterViewControlsSettings.SprintToggle / SprintToggleOnGamepad",
+				"text": "Make sprint a toggle instead of a hold, separately for gamepad."
+			},
+			{
+				"name": "CharacterViewControlsSettings.SprintForwardOnly",
+				"text": "Sprint only while moving forward, not sideways or backwards."
+			},
+			{
+				"name": "CharacterViewControlsSettings.CrouchToggle",
+				"text": "Crouch stays on after one press until pressed again."
+			}
+		],
+		"example": "var controls = player.AddComponent<CharacterViewControls>();\ncontrols.View = Camera.main.GetComponent<CharacterViewCamera>();\ncontrols.Settings.CrouchToggle = true;\n\n// While casting, the mage faces where the camera looks\ncontrols.FaceCamera = true;\n\n// Each frame the network can send what the player did\nCharacterCommand command = controls.LastCommand;"
 	},
 	{
 		"slug": "3d-constructor-character-view-template",
 		"name": "3d-constructor-character-view-template",
 		"group": "Constructor",
-		"summary": "Starter Unity project for first- and third-person games: packages, scene, character and camera ready.",
-		"purpose": "A new game starts from this template, not from an empty project. The engine packages, the character, the camera and the controls are already set up, so the team writes only what makes the game unique.",
+		"summary": "Starter Unity project for first- and third-person games with a test level and a playable character.",
+		"purpose": "A new game starts from this template, not from an empty project. The engine packages, the character, the camera and the controls are already set up, so the team writes only what makes the game unique: rules, levels and art. It holds no game code: everything that moves the player lives in packages, so a game gets fixes by updating package versions.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "",
@@ -728,31 +1633,67 @@
 			"3d-constructor-character-view-camera",
 			"3d-constructor-character-view-controls"
 		],
-		"install": "This is a Unity project, not a package. Clone https://github.com/IT-Kamianets/3d-constructor-character-view-template.git or use it as a GitHub template, then open it in Unity 6000.6. Its Packages/manifest.json already lists every engine package it needs by git URL.",
-		"usage": "Open the project and press Play: a character walks around the starter scene in first person. Rename the project, then add the game’s own packages, for example <game>-core and <game>-menus.",
+		"install": "This is a Unity project, not a package. Clone https://github.com/IT-Kamianets/3d-constructor-character-view-template.git into a folder named after the game (or use it as a GitHub template) and remove its .git folder. Open it with Unity 6000.6 through Unity Hub, Add project from disk. Rename Company Name, Product Name and the package identifier in Project Settings, Player, then press Play in Playground.",
+		"usage": "Copy the repository into a folder named after the game and open it with Unity 6000.6. Press Play in the Playground scene to try the controls in first and third person. Rename the product and package identifier, then build levels and the player's look on top of Player.prefab and add the game's own packages next to the engine ones.",
 		"current": [
-			"Unity 6000.6 project with URP",
-			"Package list with every engine package by git URL",
-			"Starter scene with a character prefab",
-			"Camera, controls and input already set up",
-			"Project settings and a setup guide"
+			"Unity 6000.6 project with URP and PC and mobile render settings.",
+			"Packages/manifest.json lists every com.itkamianets package by git URL, including indirect ones.",
+			"Playground scene: steps, a walkable 30° ramp, a 60° ramp that slides, a low tunnel to crouch through, a wall for camera collision, a crate and a platform to jump on.",
+			"Player.prefab: CharacterController, CharacterMotor and CharacterViewControls with a capsule body and a nose that shows the facing.",
+			"The main camera carries CharacterViewCamera.",
+			"Input comes only from 3d-unity-input; there is no project-wide input actions asset.",
+			"Player setting Run In Background is on."
 		],
 		"features": [
-			"Play in first or third person from the first minute",
-			"Keyboard and mouse, gamepad, touch and VR"
+			"Playable in first or third person from the first minute.",
+			"No game code to copy: the project only wires packages together.",
+			"The test level covers each movement case: steps, slopes, crouching, jumping and camera collision.",
+			"Keyboard and mouse and gamepad work out of the box."
 		],
 		"examples": [
-			"Temnorid Arena started from this template"
+			"Temnorid Arena runs the same Playground scene and Player prefab as its movement test level.",
+			"A team starts a third-person adventure: copy the template, set StartView to third person, and replace the capsule with a character model."
 		],
 		"roadmap": [
-			"Project generator with the game’s own packages",
-			"Stable v1 template"
+			"Pinned package versions after the first tagged release.",
+			"Pause menu and settings screen.",
+			"Unity Hub template package.",
+			"Stable v1 template."
 		],
 		"related": [
 			"3d-constructor-character-view-camera",
 			"3d-constructor-character-view-controls",
-			"3d-unity-character"
+			"3d-unity-character",
+			"3d-unity-input"
 		],
-		"requirements": []
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "Assets/Scenes/Playground.unity",
+				"text": "The build scene: a test level for walking, slopes, crouching, jumping and camera collision."
+			},
+			{
+				"name": "Assets/Prefabs/Player.prefab",
+				"text": "The player: CharacterController, CharacterMotor and CharacterViewControls with a capsule body."
+			},
+			{
+				"name": "Main Camera (Playground)",
+				"text": "Scene camera with CharacterViewCamera, which the controls find and target at start."
+			},
+			{
+				"name": "Packages/manifest.json",
+				"text": "Engine packages by git URL plus Input System, URP, uGUI and AI Navigation."
+			},
+			{
+				"name": "Assets/Settings/",
+				"text": "URP assets and renderers for PC and mobile, and the default volume profile."
+			},
+			{
+				"name": "ProjectSettings/ProjectSettings.asset",
+				"text": "Product name Character Game, identifier com.itkamianets.charactergame, Run In Background on."
+			}
+		],
+		"example": "// Packages/manifest.json: pin engine versions for a stable game\n{\n  \"dependencies\": {\n    \"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0\",\n    \"com.itkamianets.3d-unity-input\": \"https://github.com/IT-Kamianets/3d-unity-input.git#v0.1.0\",\n    \"com.itkamianets.3d-unity-character\": \"https://github.com/IT-Kamianets/3d-unity-character.git#v0.1.0\",\n    \"com.itkamianets.3d-constructor-character-view-camera\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git#v0.1.0\",\n    \"com.itkamianets.3d-constructor-character-view-controls\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git#v0.1.0\",\n    \"com.unity.inputsystem\": \"1.20.0\",\n    \"com.unity.render-pipelines.universal\": \"17.6.0\"\n  }\n}"
 	}
 ]
