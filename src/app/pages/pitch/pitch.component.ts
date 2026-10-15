@@ -18,7 +18,7 @@ import { QrCodeComponent } from '../../shared/qr-code/qr-code.component';
 import { RoomScanComponent } from '../../shared/room-scan/room-scan.component';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 
-const TOTAL_SLIDES = 6;
+const TOTAL_SLIDES = 7;
 
 /** A horizontal swipe shorter than this, in pixels, is treated as a tap or a scroll. */
 const SWIPE_MIN = 50;
@@ -206,6 +206,11 @@ export class PitchComponent {
 				text: 'Moves where the camera looks; looking turns the character.',
 			},
 			{
+				slug: '3d-constructor-vr-controls',
+				title: 'VR controls',
+				text: 'The same for a headset: walk where you look, aim with the hand.',
+			},
+			{
 				slug: '3d-constructor-character-view-template',
 				title: 'Template',
 				text: 'Ready project structure and package list.',
@@ -214,8 +219,8 @@ export class PitchComponent {
 	};
 
 	/**
-	 * The sample game, Temnorid Arena: round-based team matches like CS2, with spells instead of
-	 * guns. Split the way a player meets it: the interface around a match, then the gameplay itself.
+	 * The sample game, Temnorid Arena, as built today (v0.1): a free-for-all deathmatch against bots
+	 * with spells instead of guns; rounds, teams and an economy come next. Split the way a player meets it: the interface around a match, then the gameplay itself.
 	 * Arenas are levels, so they get a package of their own, stored as Scene JSON.
 	 */
 	private readonly _exampleGame = {
@@ -226,31 +231,31 @@ export class PitchComponent {
 				group: 'Interface',
 				slug: 'temnorid-arena-menus',
 				title: 'Menus',
-				text: 'Start, find a match, lobby, settings, results.',
+				text: 'Main menu, pause, settings, sign-in and match stats.',
 			},
 			{
 				group: 'Interface',
 				slug: 'temnorid-arena-hud',
 				title: 'HUD',
-				text: 'Health, mana, spells, spell shop, scoreboard.',
+				text: 'Health, mana, spell bar, kill feed, scoreboard. Touch and VR layouts.',
 			},
 			{
 				group: 'Gameplay',
 				slug: 'temnorid-arena-core',
 				title: 'Core',
-				text: 'Rounds, teams, economy and match state.',
+				text: 'Combatants, bots, respawns and the match scoreboard.',
 			},
 			{
 				group: 'Gameplay',
 				slug: 'temnorid-arena-spells',
 				title: 'Spells',
-				text: 'Spells instead of guns: casting, mana, hits.',
+				text: 'Fireball, frost nova, shield, blink. The server checks every cast.',
 			},
 			{
 				group: 'Gameplay',
 				slug: 'temnorid-arena-maps',
 				title: 'Maps',
-				text: 'Arenas as Scene JSON: spawns and objective sites.',
+				text: 'The first arena as Scene JSON, with props and spawn points.',
 			},
 		],
 	};
@@ -262,8 +267,8 @@ export class PitchComponent {
 	];
 
 	/**
-	 * Packages the sample game uses. An arena shooter needs no object editing, VR or room
-	 * scans, so those fade; Firebase keeps accounts and match stats, the network runs the match.
+	 * Packages the sample game uses. It needs no object editing or room scans, so those fade; XR runs
+	 * the Quest build, Firebase keeps accounts and match stats, the network runs the match.
 	 */
 	protected readonly exampleUses = new Set([
 		'3d-scene-schema',
@@ -275,11 +280,58 @@ export class PitchComponent {
 		'3d-unity-character',
 		'3d-unity-assets',
 		'3d-unity-audio',
+		'3d-unity-xr',
 		'3d-unity-firebase',
 		'3d-unity-network',
 		...this._exampleConstructor.packages.map((item) => item.slug),
 		...this._exampleGame.packages.map((item) => item.slug),
 	]);
+
+	/**
+	 * One project, four kinds of device. `state` says honestly how far each one is: the Quest build
+	 * has only run with a simulated headset so far, and the iOS project is built on a Mac.
+	 */
+	protected readonly devices = [
+		{
+			name: 'Windows',
+			input: 'Keyboard and mouse, or a gamepad.',
+			state: 'Playable',
+		},
+		{
+			name: 'Android phones',
+			input: 'Touch: a move stick, drag to look, spell buttons.',
+			state: 'Builds an APK',
+		},
+		{
+			name: 'iPhone and iPad',
+			input: 'The same touch controls.',
+			state: 'Xcode project set up',
+		},
+		{
+			name: 'Meta Quest 3',
+			input: 'Controllers: stick to walk, trigger to cast along the hand.',
+			state: 'Works in the simulator, headset next',
+		},
+	];
+
+	/** Why one game can run everywhere: every device ends up as the same character command. */
+	protected readonly deviceFlow = [
+		{
+			title: 'Input',
+			packages: '3d-unity-input, 3d-unity-xr',
+			text: 'Mouse, touch, gamepad or VR controllers become the same actions.',
+		},
+		{
+			title: 'Command',
+			packages: '3d-constructor-*-controls',
+			text: 'The controls of the constructor turn actions into one character command.',
+		},
+		{
+			title: 'Character and network',
+			packages: '3d-unity-character, 3d-unity-network',
+			text: 'The character moves; the server only sees commands, so all devices share one match.',
+		},
+	];
 
 	protected readonly conclusions = [
 		{

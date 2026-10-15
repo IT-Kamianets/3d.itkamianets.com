@@ -171,6 +171,11 @@
 			"description": "Перетворює ввід гравця на команди персонажа: вперед там, куди дивиться камера, а погляд повертає персонажа.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
+		"/packages/3d-constructor-vr-controls": {
+			"title": "3d-constructor-vr-controls",
+			"description": "Перетворює XR-контролери на команди персонажа: ходьба за головою, поворот стіком, справжнє присідання та промінь прицілювання руки.",
+			"image": "https://3d.itkamianets.com/seo/packages.jpg"
+		},
 		"/packages/3d-constructor-character-view-template": {
 			"title": "3d-constructor-character-view-template",
 			"description": "Стартовий Unity-проєкт для ігор від першої та третьої особи з тестовим рівнем і готовим персонажем.",

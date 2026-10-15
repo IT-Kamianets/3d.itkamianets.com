@@ -97,10 +97,41 @@
 					<!-- No visible title: five columns need the whole screen; the speaker introduces the example. -->
 					<h2 class="sr-only">{{ example.name | tr }}: Temnorid Arena</h2>
 					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: exampleUses, columns: exampleColumns, compact: true }" />
+					<p class="mt-6 max-w-[80ch] text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ 'Temnorid Arena v0.1 today: a free-for-all deathmatch against bots. Rounds, teams and an economy come next.' | tr }}</p>
 				}
 
-				<!-- 6. Conclusions -->
+				<!-- 6. One game, every device -->
 				@case (5) {
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'One game, every device' | tr }}</h2>
+					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'One Unity project, built for each of these. Players on any of them can join the same match.' | tr }}</p>
+					<ul class="m-0 mt-8 grid list-none items-stretch gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
+						@for (item of devices; track item.name) {
+							<li class="ds-card gap-2 p-5">
+								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ item.name | tr }}</span>
+								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ item.input | tr }}</span>
+								<span class="mt-auto pt-2"><span class="ds-badge ds-badge-outline !text-[clamp(0.75rem,1vw,0.875rem)]">{{ item.state | tr }}</span></span>
+							</li>
+						}
+					</ul>
+					<h3 class="mt-10 text-[clamp(1.25rem,2vw,1.75rem)]">{{ 'Why it works: every device becomes the same command' | tr }}</h3>
+					<ol class="m-0 mt-4 grid list-none items-stretch gap-4 p-0 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]">
+						@for (step of deviceFlow; track step.title; let last = $last) {
+							<li class="ds-card gap-1.5 p-5">
+								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ step.title | tr }}</span>
+								<span class="ds-mono ds-muted !text-[clamp(0.8125rem,1vw,0.9375rem)] [overflow-wrap:anywhere]">{{ step.packages }}</span>
+								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug">{{ step.text | tr }}</span>
+							</li>
+							@if (!last) {
+								<li class="grid place-items-center text-[var(--muted-foreground)]" aria-hidden="true">
+									<app-icon class="rotate-90 lg:rotate-0" name="arrow-right" size="2rem" />
+								</li>
+							}
+						}
+					</ol>
+				}
+
+				<!-- 7. Conclusions -->
+				@case (6) {
 					<div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
 						<div>
 							<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'What this gives us' | tr }}</h2>

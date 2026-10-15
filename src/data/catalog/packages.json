@@ -1564,6 +1564,7 @@
 		],
 		"related": [
 			"3d-constructor-character-view-camera",
+			"3d-constructor-vr-controls",
 			"3d-unity-character",
 			"3d-unity-input",
 			"3d-constructor-character-view-template"
@@ -1616,6 +1617,95 @@
 			}
 		],
 		"example": "var controls = player.AddComponent<CharacterViewControls>();\ncontrols.View = Camera.main.GetComponent<CharacterViewCamera>();\ncontrols.Settings.CrouchToggle = true;\n\n// While casting, the mage faces where the camera looks\ncontrols.FaceCamera = true;\n\n// Each frame the network can send what the player did\nCharacterCommand command = controls.LastCommand;"
+	},
+	{
+		"slug": "3d-constructor-vr-controls",
+		"name": "3d-constructor-vr-controls",
+		"group": "Constructor",
+		"summary": "Turns XR controllers into character commands: walk where you look, turn with the stick, crouch for real.",
+		"purpose": "3d-unity-character moves a character but knows nothing about headsets. This package is the VR counterpart of 3d-constructor-character-view-controls: it reads the headset and controllers through 3d-unity-input and 3d-unity-xr and sends the same CharacterCommand, so the motor, the network and bots do not care which device made it, and VR players play with flat-screen players. It holds no game rules.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-constructor-vr-controls",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-character",
+			"3d-unity-xr"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-constructor-vr-controls.git",
+		"usage": "Add XRCharacterRig, VRControls and HandAim to the player next to its CharacterMotor. VRControls reads the head and the controllers each frame and sends a CharacterCommand to the motor; LastCommand holds it for the network. Gameplay reads HandAim as an IAimSource to aim from the casting hand, and uses OffHand for a wrist menu. VRControlsSettings chooses whether walking follows the head or the off hand, the sprint and crouch toggles and the room-step dead zone.",
+		"current": [
+			"Walking with the left stick relative to the head, or to the off hand.",
+			"Yaw follows the head, so the body faces where you look.",
+			"Stepping in the room walks the body after the head (5 cm dead zone), so walls still block.",
+			"Jump, sprint and crouch; sprint and crouch are toggles, and crouching for real below 75% of standing eye height crouches the character.",
+			"HandAim: the aim ray of the dominant hand as an IAimSource, with OffHand for a wrist menu.",
+			"LastCommand: the command sent this frame, for the network to send to the server."
+		],
+		"features": [
+			"Produces the same plain CharacterCommand as the flat-screen controls, so the motor, the network and bots are unchanged.",
+			"Reads only 3d-unity-input and 3d-unity-xr, never a device, so bindings stay rebindable.",
+			"While enabled, the Player map listens to XR controllers only, so keys used by an XR simulator do not also walk the character.",
+			"Comfort settings (snap or smooth turning, vignette) live in 3d-unity-xr and are saved per player."
+		],
+		"examples": [
+			"In Temnorid Arena on Meta Quest 3, the left stick walks, the right stick turns and the trigger casts along the hand.",
+			"A VR player joins the same network match as PC and phone players, because the server only sees CharacterCommand values.",
+			"The off hand carries a wrist panel with health, mana and the spell bar."
+		],
+		"roadmap": [
+			"Teleport locomotion as a comfort option.",
+			"Climbing and grabbing ledges.",
+			"Hand tracking (no controllers).",
+			"Two-handed gestures for casting."
+		],
+		"related": [
+			"3d-constructor-character-view-controls",
+			"3d-unity-xr",
+			"3d-unity-character",
+			"3d-unity-input"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-unity-xr"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "VRControls",
+				"text": "Component next to the local player’s CharacterMotor that turns the head and controllers into a CharacterCommand."
+			},
+			{
+				"name": "VRControls.LastCommand",
+				"text": "The command sent to the motor this frame; the network sends the same one to the server."
+			},
+			{
+				"name": "VRControlsSettings.MoveRelativeTo",
+				"text": "Whether the stick walks relative to the head or to the off hand."
+			},
+			{
+				"name": "VRControlsSettings.SprintToggle / CrouchToggle",
+				"text": "Make sprint and crouch toggles instead of holds."
+			},
+			{
+				"name": "VRControlsSettings.CrouchByHeadBelow",
+				"text": "Crouch the character when the head drops below this share of standing eye height."
+			},
+			{
+				"name": "VRControlsSettings.FollowDeadZone",
+				"text": "How far the head may step in the room before the body follows, in meters."
+			},
+			{
+				"name": "HandAim",
+				"text": "Component exposing the aim ray of the dominant hand as an IAimSource."
+			},
+			{
+				"name": "HandAim.OffHand",
+				"text": "The other hand, for a wrist menu."
+			}
+		],
+		"example": "player.AddComponent<XRCharacterRig>();\nvar controls = player.AddComponent<VRControls>();\nvar aim = player.AddComponent<HandAim>();\n\ncontrols.Settings.CrouchToggle = true;\n\n// Gameplay aims from the casting hand without knowing about XR\nif (aim.TryGetAimRay(out Ray ray)) { /* cast along ray */ }\n\n// Each frame the network can send what the player did\nCharacterCommand command = controls.LastCommand;"
 	},
 	{
 		"slug": "3d-constructor-character-view-template",

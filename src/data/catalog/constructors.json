@@ -29,6 +29,7 @@
 		"parts": [
 			"3d-constructor-character-view-camera",
 			"3d-constructor-character-view-controls",
+			"3d-constructor-vr-controls",
 			"3d-constructor-character-view-template"
 		],
 		"features": [

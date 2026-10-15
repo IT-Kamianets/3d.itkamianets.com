@@ -6,7 +6,7 @@ Every public package of the IT Kamianets 3D Engine: what it does, what it depend
 - Source: https://github.com/IT-Kamianets
 - This file: https://3d.itkamianets.com/packages.md (generated from the website catalog on every build)
 
-17 packages: 3 schemas, 6 core, 5 specific, 3 constructor. 6 constructors.
+18 packages: 3 schemas, 6 core, 5 specific, 4 constructor. 6 constructors.
 
 ## How the engine is built
 
@@ -74,6 +74,7 @@ The parts of a constructor: its camera, its controls, and a starter project.
 |---|---|---|
 | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera) | First- and third-person camera that follows a character and owns where the player looks. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character` |
 | [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls) | Turns player input into character commands: forward is where the camera looks, looking turns the character. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character`, `3d-constructor-character-view-camera` |
+| [`3d-constructor-vr-controls`](#3d-constructor-vr-controls) | Turns XR controllers into character commands: walk where you look, turn with the stick, crouch for real. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character`, `3d-unity-xr` |
 | [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) | Starter Unity project for first- and third-person games with a test level and a playable character. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character`, `3d-constructor-character-view-camera`, `3d-constructor-character-view-controls` |
 
 ## Constructors
@@ -89,7 +90,7 @@ For games where the player directly controls a character from first-person or th
 | Camera | 1st + 3rd Person |
 | Games like | GTA V, Cyberpunk 2077, Elden Ring |
 | Engine packages | [`3d-unity-core`](#3d-unity-core), [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-xr`](#3d-unity-xr) |
-| Constructor packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Constructor packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Starter repository | https://github.com/IT-Kamianets/3d-constructor-character-view |
 | Page | https://3d.itkamianets.com/constructors/character-view |
 
@@ -384,7 +385,7 @@ Shared base for the engine's Unity packages: logging, player settings, typed eve
 | Kind | Unity package `com.itkamianets.3d-unity-core` |
 | Version | 0.1.0 |
 | Depends on | nothing |
-| Used by | [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-firebase`](#3d-unity-firebase), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Used by | [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-firebase`](#3d-unity-firebase), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-core |
 | Page | https://3d.itkamianets.com/packages/3d-unity-core |
 
@@ -532,7 +533,7 @@ One set of input actions for keyboard and mouse, gamepad, touch and VR controlle
 | Kind | Unity package `com.itkamianets.3d-unity-input` |
 | Version | 0.1.0 |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
-| Used by | [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-xr`](#3d-unity-xr), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Used by | [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-xr`](#3d-unity-xr), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-input |
 | Page | https://3d.itkamianets.com/packages/3d-unity-input |
 
@@ -610,7 +611,7 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 | Kind | Unity package `com.itkamianets.3d-unity-character` |
 | Version | 0.1.0 |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
-| Used by | [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Used by | [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-character |
 | Page | https://3d.itkamianets.com/packages/3d-unity-character |
 
@@ -982,7 +983,7 @@ XR building blocks: controller button actions, headset status and a world-space 
 | Kind | Unity package `com.itkamianets.3d-unity-xr` |
 | Version | 0.1.0 |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input) |
-| Used by | nothing in the engine |
+| Used by | [`3d-constructor-vr-controls`](#3d-constructor-vr-controls) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-xr |
 | Page | https://3d.itkamianets.com/packages/3d-unity-xr |
 
@@ -1332,6 +1333,73 @@ https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-character` → `3d-constructor-character-view-camera`.
+
+Requirements:
+
+- Unity 6000.6
+
+### 3d-constructor-vr-controls
+
+Turns XR controllers into character commands: walk where you look, turn with the stick, crouch for real.
+
+| | |
+|---|---|
+| Kind | Unity package `com.itkamianets.3d-constructor-vr-controls` |
+| Version | 0.1.0 |
+| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-xr`](#3d-unity-xr) |
+| Used by | nothing in the engine |
+| Repository | https://github.com/IT-Kamianets/3d-constructor-vr-controls |
+| Page | https://3d.itkamianets.com/packages/3d-constructor-vr-controls |
+
+**Purpose.** 3d-unity-character moves a character but knows nothing about headsets. This package is the VR counterpart of 3d-constructor-character-view-controls: it reads the headset and controllers through 3d-unity-input and 3d-unity-xr and sends the same CharacterCommand, so the motor, the network and bots do not care which device made it, and VR players play with flat-screen players. It holds no game rules.
+
+**Usage.** Add XRCharacterRig, VRControls and HandAim to the player next to its CharacterMotor. VRControls reads the head and the controllers each frame and sends a CharacterCommand to the motor; LastCommand holds it for the network. Gameplay reads HandAim as an IAimSource to aim from the casting hand, and uses OffHand for a wrist menu. VRControlsSettings chooses whether walking follows the head or the off hand, the sprint and crouch toggles and the room-step dead zone.
+
+**Includes:**
+
+- Walking with the left stick relative to the head, or to the off hand.
+- Yaw follows the head, so the body faces where you look.
+- Stepping in the room walks the body after the head (5 cm dead zone), so walls still block.
+- Jump, sprint and crouch; sprint and crouch are toggles, and crouching for real below 75% of standing eye height crouches the character.
+- HandAim: the aim ray of the dominant hand as an IAimSource, with OffHand for a wrist menu.
+- LastCommand: the command sent this frame, for the network to send to the server.
+
+**API:**
+
+| Member | What it does |
+|---|---|
+| `VRControls` | Component next to the local player’s CharacterMotor that turns the head and controllers into a CharacterCommand. |
+| `VRControls.LastCommand` | The command sent to the motor this frame; the network sends the same one to the server. |
+| `VRControlsSettings.MoveRelativeTo` | Whether the stick walks relative to the head or to the off hand. |
+| `VRControlsSettings.SprintToggle / CrouchToggle` | Make sprint and crouch toggles instead of holds. |
+| `VRControlsSettings.CrouchByHeadBelow` | Crouch the character when the head drops below this share of standing eye height. |
+| `VRControlsSettings.FollowDeadZone` | How far the head may step in the room before the body follows, in meters. |
+| `HandAim` | Component exposing the aim ray of the dominant hand as an IAimSource. |
+| `HandAim.OffHand` | The other hand, for a wrist menu. |
+
+**Example:**
+
+```csharp
+player.AddComponent<XRCharacterRig>();
+var controls = player.AddComponent<VRControls>();
+var aim = player.AddComponent<HandAim>();
+
+controls.Settings.CrouchToggle = true;
+
+// Gameplay aims from the casting hand without knowing about XR
+if (aim.TryGetAimRay(out Ray ray)) { /* cast along ray */ }
+
+// Each frame the network can send what the player did
+CharacterCommand command = controls.LastCommand;
+```
+
+**Install:**
+
+```text
+https://github.com/IT-Kamianets/3d-constructor-vr-controls.git
+```
+
+Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-character` → `3d-unity-xr`.
 
 Requirements:
 
