@@ -166,7 +166,7 @@ export class PitchComponent {
 				{
 					slug: '3d-unity-xr',
 					title: 'XR',
-					text: 'Meta Quest controllers and an in-VR display.',
+					text: 'The VR rig: headset camera, hands and comfort settings.',
 				},
 				{
 					slug: '3d-unity-firebase',

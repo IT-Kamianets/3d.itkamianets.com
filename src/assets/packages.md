@@ -62,7 +62,7 @@ Editing tools, devices, platforms and services that only some games need.
 |---|---|---|
 | [`3d-unity-interaction`](#3d-unity-interaction) | Scene editing: select, move, rotate, scale, duplicate and delete objects, with snapping and undo. | `3d-unity-core`, `3d-unity-scene`, `3d-unity-input` |
 | [`3d-unity-spatial`](#3d-unity-spatial) | Turns a Meta Quest room scan into a scene, measures scanned rooms and builds them as solid geometry. | `3d-unity-core`, `3d-unity-scene` |
-| [`3d-unity-xr`](#3d-unity-xr) | XR building blocks: controller button actions, headset status and a world-space status display. | `3d-unity-core`, `3d-unity-input` |
+| [`3d-unity-xr`](#3d-unity-xr) | VR for a character: a headset rig on a character motor, comfort settings, a VR/flat mode switch and world-space status. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character` |
 | [`3d-unity-firebase`](#3d-unity-firebase) | Firebase over its REST API: sign-in, player profiles, saved progress and stored scenes. | `3d-unity-core`, `3d-unity-scene` |
 | [`3d-unity-network`](#3d-unity-network) | Real-time multiplayer on Netcode: sessions, server-authoritative characters, schema messages. | `3d-unity-core`, `3d-unity-character`, `3d-network-schema` |
 
@@ -539,14 +539,18 @@ One set of input actions for keyboard and mouse, gamepad, touch and VR controlle
 
 **Purpose.** Other packages read actions such as Move, Look and Primary instead of devices. Supporting a new device means adding a binding here, not changing every package that reacts to input. Actions are named by intent, never by device or game.
 
-**Usage.** Use EngineInput.Default and read actions from its Player and UI maps. ReadLookDegrees gives the same rotation from a mouse, a stick or an XR controller. Turn gameplay input off with PlayerEnabled while a menu is open. A game adds its own actions with AddMap, and they rebind and save like the engine actions.
+**Usage.** Use EngineInput.Default and read actions from its Player and UI maps. ReadLookDegrees gives the same rotation from a mouse, a stick, a touch drag or an XR controller. Turn gameplay input off with PlayerEnabled while a menu is open. A game adds its own actions with AddMap, and they rebind and save like the engine actions. On a phone, draw on-screen sticks and buttons with the Input System’s OnScreenStick and OnScreenButton, pointed at EngineTouchControls paths, and add TouchLookArea for dragging to look. In VR, read poses with TryReadHead and TryReadHandAim and buzz a controller with Haptic.
 
 **Includes:**
 
-- Player map: Move, Look, Jump, Sprint, Crouch, Primary, Secondary, Interact, ToggleView and Slot1 to Slot4.
-- UI map: Navigate, Submit, Cancel, Point, Click, ScrollWheel and Pause, named as Unity's InputSystemUIInputModule expects.
-- Bindings for keyboard and mouse, gamepad and XR controllers; touch covers menus.
-- Detection of the device kind in use, with a SchemeChanged event when the player switches.
+- Player map: Move, Look, Turn (XR), Jump, Sprint, Crouch, Primary, Secondary, Interact, ToggleView, NextSlot and Slot1 to Slot4.
+- UI map: Navigate, Submit, Cancel, Point, Click, ScrollWheel, Pause, TrackedDevicePosition and TrackedDeviceOrientation, named as Unity’s InputSystemUIInputModule expects.
+- Bindings for keyboard and mouse, gamepad, touch and XR controllers (the OpenXR controller layouts, such as Meta Quest Touch).
+- Touch: EngineTouchControls is a virtual device for a game’s on-screen move stick, look drag and buttons, so a phone drives the same actions as a keyboard. Touch look is scaled to a 1080-pixel-tall screen, so a swipe turns the view the same on every phone.
+- XR: left stick moves, right stick turns, the dominant hand’s trigger is Primary and the other Secondary; head and hand poses come from an always-on XR map (TryReadHead, TryReadHandAim) and survive a device reset.
+- DominantHand, saved per player, swaps the triggers for left-handed players; Haptic buzzes a controller.
+- Every controller and every finger is also a UI pointer, so world-space canvases and multi-touch work.
+- Detection of the device kind in use (the scheme starts as Touch on phones), with a SchemeChanged event when the player switches.
 - Look normalized to degrees: pointer movement per pixel, stick tilt per second, with optional inverted Y.
 - Interactive rebinding with Escape to cancel, saved to EngineStorage under input.bindings and loaded on start.
 - Game-specific action maps added to the same asset at runtime.
@@ -567,6 +571,11 @@ One set of input actions for keyboard and mouse, gamepad, touch and VR controlle
 | `EngineInput.SaveBindingOverrides() / LoadBindingOverrides(json)` | Exports or imports the player's changed bindings as JSON, for example to sync a cloud profile. |
 | `EngineInput.ResetBindingOverrides()` | Restores the default bindings and saves the change. |
 | `EngineInputActions.Groups` | Binding group names for each scheme, used when a game adds its own bindings. |
+| `EngineTouchControls` | A virtual device holding a game’s on-screen controls; EngineTouchControls.Path(...) gives the control path for an OnScreenStick or OnScreenButton. |
+| `TouchLookArea` | A UI area where dragging a finger looks around. |
+| `EngineInput.TryReadHead(out pose) / TryReadHandAim(hand, out pose)` | The headset’s and a controller’s aim pose in tracking space; false when none is tracked. |
+| `EngineInput.DominantHand` | Which hand’s trigger is Primary; saved per player. |
+| `EngineInput.Haptic(hand, amplitude, seconds)` | Buzzes a controller; does nothing without one. |
 
 **Example:**
 
@@ -601,6 +610,8 @@ Requirements:
 
 - Unity 6000.6
 - com.unity.inputsystem 1.20.0, resolved by the Package Manager
+- com.unity.ugui 2.6.0, resolved by the Package Manager
+- com.unity.modules.xr 1.0.0, resolved by the Package Manager
 
 ### 3d-unity-character
 
@@ -611,13 +622,13 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 | Kind | Unity package `com.itkamianets.3d-unity-character` |
 | Version | 0.1.0 |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
-| Used by | [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Used by | [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-character |
 | Page | https://3d.itkamianets.com/packages/3d-unity-character |
 
 **Purpose.** Every game style needs a character that moves well, so one implementation is shared by all constructors. The character does not read input and does not own a camera. It only follows a movement command, so player controls, an AI and the network can all drive it.
 
-**Usage.** Add a CharacterMotor to an object with its origin at the feet; it adds a Unity CharacterController. Each frame, build a CharacterCommand (world-space move direction, yaw, sprint, jump and crouch) and pass it to SetCommand. For a fixed network tick, turn SimulateInUpdate off and call Simulate yourself, using GetState and SetState to correct a predicted character.
+**Usage.** Add a CharacterMotor to an object with its origin at the feet; it adds a Unity CharacterController. Each frame, build a CharacterCommand (world-space move direction, yaw, sprint, jump and crouch) and pass it to SetCommand. For a fixed network tick, turn SimulateInUpdate off and call Simulate yourself, using GetState and SetState to correct a predicted character. Add a CharacterAnimator next to the model’s Animator to animate it from the motor’s movement. Gameplay that aims asks the enabled IAimSource and falls back to its own default.
 
 **Includes:**
 
@@ -628,6 +639,8 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 - Crouching that stays crouched until there is room to stand, with the eye height easing between the two.
 - Teleport for spawns, GetState and SetState (including jump timers) for network correction, ConsumeCommand for fixed-tick stepping.
 - Events and values for other packages: Jumped, Landed, LeftGround, CrouchChanged, EyePosition, GroundCollider, Velocity, IsSprinting.
+- CharacterAnimator feeds the movement to the model’s Animator as Forward, Right, Speed, Grounded, Crouching and VerticalSpeed (parameters the controller lacks are skipped). It reads the motor’s state, so network copies animate too, and uses no root motion.
+- IAimSource: where a character aims (a VR hand, a turret barrel); gameplay asks the enabled one and falls back to its own default, such as the screen centre.
 
 **API:**
 
@@ -645,6 +658,8 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 | `EyePosition` | World position of the eyes, easing between standing and crouching height, for a first-person camera. |
 | `GroundCollider` | The collider the character stands on, so sounds can pick the surface. |
 | `CharacterSettings` | Speeds, acceleration, jump height, gravity, coyote time, slope limit, step height and body sizes. |
+| `CharacterAnimator` | Component next to the model’s Animator that sets the movement parameters from the motor. |
+| `IAimSource` | Interface for something that provides an aim ray, such as a VR hand; gameplay reads the enabled one. |
 
 **Example:**
 
@@ -976,60 +991,66 @@ Optional:
 
 ### 3d-unity-xr
 
-XR building blocks: controller button actions, headset status and a world-space status display.
+VR for a character: a headset rig on a character motor, comfort settings, a VR/flat mode switch and world-space status.
 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-xr` |
 | Version | 0.1.0 |
-| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input) |
+| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character) |
 | Used by | [`3d-constructor-vr-controls`](#3d-constructor-vr-controls) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-xr |
 | Page | https://3d.itkamianets.com/packages/3d-unity-xr |
 
-**Purpose.** It handles how people interact with a 3D world through an XR headset, with Meta Quest as the first target. Understanding the physical room belongs to 3d-unity-spatial. It needs no Meta SDK and holds no product logic: its components do not know what a button does or what a status means.
+**Purpose.** It handles how people play in a 3D world through an XR headset, with Meta Quest as the first target: the headset camera and hands ride on a CharacterMotor, so the same character, network and bots work in VR. It is vendor-neutral: no Meta SDK and no XR plug-in inside; the project picks the runtime (OpenXR). Understanding the physical room belongs to 3d-unity-spatial, and what the controllers do belongs to the constructor’s controls, for example 3d-constructor-vr-controls. It holds no product logic.
 
-**Usage.** Add an XRPrimaryButtonAction, pick an EngineInput action such as Player/Jump, and hook OnPressed to your own code. Put a StatusHud on a world-space canvas with a TextMeshPro text and call SetStatus; turn on FollowView to keep it in front of the player. Read XRStatus to check whether a headset is active and which one.
+**Usage.** Add an XRCharacterRig to the player next to its CharacterMotor: it builds an XR origin with the headset as the main camera and two hand anchors, and follows the motor. Put XRModeSwitch on the player to turn the VR components on while XRStatus.IsActive and the flat ones otherwise. Read comfort choices from XRComfort.Current, and add a ComfortVignette to darken the view while moving. Use XRHeadDriver for a menu camera without a rig. Put a StatusHud on a world-space canvas for a floating status, and read XRStatus to know whether a headset is active.
 
 **Includes:**
 
-- XRPrimaryButtonAction: fires OnPressed once per press of any EngineInput action, by default Player/Jump, the right controller's A button.
-- The same action answers to Space or a gamepad's A on PC, so XR flows can be tested without a headset.
-- StatusHud: world-space text set with SetStatus.
-- StatusHud can follow the view: it eases to a level spot in front of the camera instead of being fixed to the head.
-- XRStatus: whether a headset is active, the XR plug-in in use and the headset model.
+- XRCharacterRig: the VR view of a CharacterMotor. The headset becomes the main camera, two hand anchors give aim poses (TryGetHandRay), and the rig follows the motor.
+- Room-scale: the player’s own steps come back as HeadOffset and the controls walk the body after them, so walls still block; the standing height maps to the character’s eyes (Recenter) and real crouching lowers the view.
+- Snap turn (30° by default) or smooth turn around the head, a respawn or blink re-faces the rig, and the view follows the body with a 25 ms smoothing that hides a 60 Hz network tick on a 72–120 Hz headset.
+- XRComfort: snap or smooth turning, snap angle, turn speed and comfort vignette on or off with its strength, saved per player.
+- ComfortVignette: darkens the edges of the view while moving with the stick, with no extra shader in builds.
+- XRModeSwitch: enables the VR set of components while a headset runs and the flat set otherwise; as an owner-only component of a networked player it leaves other copies without controls.
+- XRHeadDriver: for a scene camera without a rig, such as behind a main menu: the camera follows the headset and both controllers show a pointer ray.
+- XRVisuals: controller markers and pointer rays, and the tracking origin for world-space UI so controllers can point at canvases.
+- XRStatus: whether a headset (or the XR Interaction Toolkit’s simulated one) is active, the XR plug-in in use and the headset model.
+- XRPrimaryButtonAction: fires OnPressed once per press of any EngineInput action, by default Player/Jump, the right controller’s A button.
+- StatusHud: world-space text set with SetStatus, optionally following the view, level and eased, instead of being fixed to the head.
 
 **API:**
 
 | Member | What it does |
 |---|---|
+| `XRCharacterRig` | Component on the player next to its CharacterMotor that builds the XR origin, the headset camera and two hand anchors. |
+| `XRCharacterRig.TryGetHandRay(hand, out ray)` | The aim ray of a hand in world space; false when that controller is not tracked. |
+| `XRCharacterRig.HeadOffset / Recenter()` | How far the player has stepped in the room, which the controls walk the body after; Recenter maps the standing height to the character’s eyes. |
+| `XRComfort.Current` | The player’s saved comfort settings: SnapTurn, SnapAngle, SmoothTurnSpeed, Vignette and VignetteStrength; call Save() after a change. |
+| `ComfortVignette` | Darkens the view edges while the player moves with the stick. |
+| `XRModeSwitch` | Turns the VR components on while a headset runs and the flat ones otherwise. |
+| `XRHeadDriver` | Drives a scene camera from the headset where there is no rig, such as behind a main menu. |
 | `XRPrimaryButtonAction.OnPressed` | UnityEvent raised once per press of the chosen action. |
 | `XRPrimaryButtonAction.Action` | The action as "Map/Action" in EngineInput, such as Player/Jump (A), Player/Primary (trigger) or UI/Pause (menu). |
 | `StatusHud.SetStatus(message)` | Sets the displayed text. |
-| `StatusHud.Status` | The text shown now. |
 | `StatusHud.FollowView` | When on, the display eases to a spot 1.5 m in front of the view and slightly below eye height. |
-| `StatusHud.SnapToView()` | Puts the display in front of the view at once, for example when it first appears. |
+| `XRStatus.IsActive` | True when a headset runs, or a simulated one is connected; game code picks VR or flat layouts from it. |
 | `XRStatus.IsHeadsetActive` | True when the game runs in an active headset; false on PC without one. |
-| `XRStatus.DeviceName` | The XR plug-in in use, such as OpenXR Display, or empty. |
-| `XRStatus.HeadsetModel` | The headset's model when known, such as Oculus Quest 3, or empty. |
+| `XRStatus.DeviceName / HeadsetModel` | The XR plug-in in use, such as OpenXR Display, and the headset model when known, such as Oculus Quest 3. |
 
 **Example:**
 
 ```csharp
-var button = gameObject.AddComponent<XRPrimaryButtonAction>();
-button.Action = "Player/Jump";
-button.OnPressed.AddListener(() =>
-{
-    hud.SetStatus("Scanning room...");
-    scanner.StartScan();
-});
+var rig = player.AddComponent<XRCharacterRig>();      // headset camera + hands on the character
+player.AddComponent<XRModeSwitch>();                  // VR components in a headset, flat ones otherwise
 
-hud.FollowView = true;
-hud.SnapToView();
-if (XRStatus.IsHeadsetActive)
-{
-    EngineLog.Info("XR", $"Headset: {XRStatus.HeadsetModel}");
-}
+if (rig.TryGetHandRay(HandSide.Right, out var ray)) { /* world-space aim */ }
+
+XRComfort.Current.SnapTurn = false;                   // smooth turning, saved for this player
+XRComfort.Current.Save();
+
+if (XRStatus.IsActive) { /* show the wrist HUD instead of the screen HUD */ }
 ```
 
 **Install:**
@@ -1038,11 +1059,12 @@ if (XRStatus.IsHeadsetActive)
 https://github.com/IT-Kamianets/3d-unity-xr.git
 ```
 
-Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input`.
+Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-character`.
 
 Requirements:
 
 - Unity 6000.6
+- com.unity.inputsystem 1.20.0, resolved by the Package Manager
 - com.unity.ugui 2.6.0, resolved by the Package Manager
 - com.unity.modules.xr 1.0.0, resolved by the Package Manager
 

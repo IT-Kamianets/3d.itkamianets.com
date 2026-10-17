@@ -8,7 +8,7 @@
 
 ## Docs
 
-- [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository under your game name, set up the Unity project, work with an AI agent, send engine changes back as pull requests.
+- [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository (an empty Unity project) under your game name, add the engine packages, work with an AI agent, send engine changes back as pull requests.
 - [Installation](https://3d.itkamianets.com/docs/installation): Unity requirements, starter repositories, installing packages by git URL.
 - [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the three schemas, character and camera, multiplayer.
 - [Examples](https://3d.itkamianets.com/docs/examples): a first-person game from a starter repository, a multiplayer match, a room scan.

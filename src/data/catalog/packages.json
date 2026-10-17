@@ -490,12 +490,16 @@
 			"3d-unity-core"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-input.git",
-		"usage": "Use EngineInput.Default and read actions from its Player and UI maps. ReadLookDegrees gives the same rotation from a mouse, a stick or an XR controller. Turn gameplay input off with PlayerEnabled while a menu is open. A game adds its own actions with AddMap, and they rebind and save like the engine actions.",
+		"usage": "Use EngineInput.Default and read actions from its Player and UI maps. ReadLookDegrees gives the same rotation from a mouse, a stick, a touch drag or an XR controller. Turn gameplay input off with PlayerEnabled while a menu is open. A game adds its own actions with AddMap, and they rebind and save like the engine actions. On a phone, draw on-screen sticks and buttons with the Input System’s OnScreenStick and OnScreenButton, pointed at EngineTouchControls paths, and add TouchLookArea for dragging to look. In VR, read poses with TryReadHead and TryReadHandAim and buzz a controller with Haptic.",
 		"current": [
-			"Player map: Move, Look, Jump, Sprint, Crouch, Primary, Secondary, Interact, ToggleView and Slot1 to Slot4.",
-			"UI map: Navigate, Submit, Cancel, Point, Click, ScrollWheel and Pause, named as Unity's InputSystemUIInputModule expects.",
-			"Bindings for keyboard and mouse, gamepad and XR controllers; touch covers menus.",
-			"Detection of the device kind in use, with a SchemeChanged event when the player switches.",
+			"Player map: Move, Look, Turn (XR), Jump, Sprint, Crouch, Primary, Secondary, Interact, ToggleView, NextSlot and Slot1 to Slot4.",
+			"UI map: Navigate, Submit, Cancel, Point, Click, ScrollWheel, Pause, TrackedDevicePosition and TrackedDeviceOrientation, named as Unity’s InputSystemUIInputModule expects.",
+			"Bindings for keyboard and mouse, gamepad, touch and XR controllers (the OpenXR controller layouts, such as Meta Quest Touch).",
+			"Touch: EngineTouchControls is a virtual device for a game’s on-screen move stick, look drag and buttons, so a phone drives the same actions as a keyboard. Touch look is scaled to a 1080-pixel-tall screen, so a swipe turns the view the same on every phone.",
+			"XR: left stick moves, right stick turns, the dominant hand’s trigger is Primary and the other Secondary; head and hand poses come from an always-on XR map (TryReadHead, TryReadHandAim) and survive a device reset.",
+			"DominantHand, saved per player, swaps the triggers for left-handed players; Haptic buzzes a controller.",
+			"Every controller and every finger is also a UI pointer, so world-space canvases and multi-touch work.",
+			"Detection of the device kind in use (the scheme starts as Touch on phones), with a SchemeChanged event when the player switches.",
 			"Look normalized to degrees: pointer movement per pixel, stick tilt per second, with optional inverted Y.",
 			"Interactive rebinding with Escape to cancel, saved to EngineStorage under input.bindings and loaded on start.",
 			"Game-specific action maps added to the same asset at runtime."
@@ -505,15 +509,16 @@
 			"The same action means different things per game: Primary casts a spell in one and places an object in another.",
 			"Pause lives in the UI map, so it still works while gameplay input is off.",
 			"Binding display strings follow the current scheme, so hints show Space or A as fits.",
-			"Built on the Unity Input System; other packages never read devices directly."
+			"Built on the Unity Input System; other packages never read devices directly.",
+			"One game, every device: a phone, a headset and a keyboard all produce the same actions, so game code does not branch on the device."
 		],
 		"examples": [
 			"In Temnorid Arena, Slot1 to Slot4 pick a spell and Primary casts it, from the keyboard, a gamepad or a Quest controller.",
 			"The game adds a Scoreboard action on Tab with AddMap, and players can rebind it in the settings menu.",
-			"The HUD switches its button hints when SchemeChanged reports that the player picked up a gamepad."
+			"The HUD switches its button hints when SchemeChanged reports that the player picked up a gamepad.",
+			"In Temnorid Arena on a phone, the on-screen stick, look drag and spell buttons feed the same actions the keyboard does."
 		],
 		"roadmap": [
-			"On-screen touch controls for gameplay",
 			"Pointer and ray abstraction for mouse, touch and VR",
 			"Input events",
 			"Stable v1 input API"
@@ -527,7 +532,9 @@
 		"requirements": [
 			"Unity 6000.6",
 			"Add its engine packages first, each by git URL: 3d-unity-core",
-			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager",
+			"com.unity.ugui 2.6.0, resolved by the Package Manager",
+			"com.unity.modules.xr 1.0.0, resolved by the Package Manager"
 		],
 		"optional": [],
 		"api": [
@@ -578,6 +585,26 @@
 			{
 				"name": "EngineInputActions.Groups",
 				"text": "Binding group names for each scheme, used when a game adds its own bindings."
+			},
+			{
+				"name": "EngineTouchControls",
+				"text": "A virtual device holding a game’s on-screen controls; EngineTouchControls.Path(...) gives the control path for an OnScreenStick or OnScreenButton."
+			},
+			{
+				"name": "TouchLookArea",
+				"text": "A UI area where dragging a finger looks around."
+			},
+			{
+				"name": "EngineInput.TryReadHead(out pose) / TryReadHandAim(hand, out pose)",
+				"text": "The headset’s and a controller’s aim pose in tracking space; false when none is tracked."
+			},
+			{
+				"name": "EngineInput.DominantHand",
+				"text": "Which hand’s trigger is Primary; saved per player."
+			},
+			{
+				"name": "EngineInput.Haptic(hand, amplitude, seconds)",
+				"text": "Buzzes a controller; does nothing without one."
 			}
 		],
 		"example": "using ITKamianets.Engine.Input;\nusing UnityEngine.InputSystem;\n\nvar input = EngineInput.Default;\n\nVector2 move = input.Player.Move.ReadValue<Vector2>();\nVector2 look = input.ReadLookDegrees();\nif (input.Player.Jump.WasPressedThisFrame()) { /* jump */ }\nint slot = input.Player.SlotPressedThisFrame();  // 1..4, or 0\n\ninput.PlayerEnabled = false;                     // a menu is open\ninput.SchemeChanged += scheme => { /* show gamepad or keyboard hints */ };\n\ninput.AddMap(\"TemnoridArena\", map =>\n    map.AddAction(\"Scoreboard\", InputActionType.Button, \"<Keyboard>/tab\",\n        groups: EngineInputActions.Groups.KeyboardMouse));"
@@ -595,7 +622,7 @@
 			"3d-unity-core"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-character.git",
-		"usage": "Add a CharacterMotor to an object with its origin at the feet; it adds a Unity CharacterController. Each frame, build a CharacterCommand (world-space move direction, yaw, sprint, jump and crouch) and pass it to SetCommand. For a fixed network tick, turn SimulateInUpdate off and call Simulate yourself, using GetState and SetState to correct a predicted character.",
+		"usage": "Add a CharacterMotor to an object with its origin at the feet; it adds a Unity CharacterController. Each frame, build a CharacterCommand (world-space move direction, yaw, sprint, jump and crouch) and pass it to SetCommand. For a fixed network tick, turn SimulateInUpdate off and call Simulate yourself, using GetState and SetState to correct a predicted character. Add a CharacterAnimator next to the model’s Animator to animate it from the motor’s movement. Gameplay that aims asks the enabled IAimSource and falls back to its own default.",
 		"current": [
 			"Walk, sprint and crouch speeds with ground acceleration, deceleration and limited air control.",
 			"Jumps to a set height, with coyote time and jump buffering.",
@@ -603,7 +630,9 @@
 			"Walks up steps to a set height without jumping.",
 			"Crouching that stays crouched until there is room to stand, with the eye height easing between the two.",
 			"Teleport for spawns, GetState and SetState (including jump timers) for network correction, ConsumeCommand for fixed-tick stepping.",
-			"Events and values for other packages: Jumped, Landed, LeftGround, CrouchChanged, EyePosition, GroundCollider, Velocity, IsSprinting."
+			"Events and values for other packages: Jumped, Landed, LeftGround, CrouchChanged, EyePosition, GroundCollider, Velocity, IsSprinting.",
+			"CharacterAnimator feeds the movement to the model’s Animator as Forward, Right, Speed, Grounded, Crouching and VerticalSpeed (parameters the controller lacks are skipped). It reads the motor’s state, so network copies animate too, and uses no root motion.",
+			"IAimSource: where a character aims (a VR hand, a turret barrel); gameplay asks the enabled one and falls back to its own default, such as the screen centre."
 		],
 		"features": [
 			"Command-driven: no input or camera code inside, so it works under any camera style.",
@@ -619,7 +648,6 @@
 		"roadmap": [
 			"Moving platforms",
 			"Pushing physics objects",
-			"Animation parameters",
 			"Stable v1 character API"
 		],
 		"related": [
@@ -682,6 +710,14 @@
 			{
 				"name": "CharacterSettings",
 				"text": "Speeds, acceleration, jump height, gravity, coyote time, slope limit, step height and body sizes."
+			},
+			{
+				"name": "CharacterAnimator",
+				"text": "Component next to the model’s Animator that sets the movement parameters from the motor."
+			},
+			{
+				"name": "IAimSource",
+				"text": "Interface for something that provides an aim ray, such as a VR hand; gameplay reads the enabled one."
 			}
 		],
 		"example": "var motor = GetComponent<CharacterMotor>();   // origin at the feet\nmotor.SetCommand(new CharacterCommand\n{\n    Move = cameraForwardFlat * input.y + cameraRightFlat * input.x,\n    Yaw = cameraYaw,\n    Sprint = sprintHeld,\n    Jump = jumpPressedThisFrame,\n    Crouch = crouchHeld,\n});\nmotor.Landed += impactSpeed => { /* play landing sound */ };\nmotor.Teleport(spawn.position, spawn.eulerAngles.y);"
@@ -1116,56 +1152,95 @@
 		"slug": "3d-unity-xr",
 		"name": "3d-unity-xr",
 		"group": "Specific",
-		"summary": "XR building blocks: controller button actions, headset status and a world-space status display.",
-		"purpose": "It handles how people interact with a 3D world through an XR headset, with Meta Quest as the first target. Understanding the physical room belongs to 3d-unity-spatial. It needs no Meta SDK and holds no product logic: its components do not know what a button does or what a status means.",
+		"summary": "VR for a character: a headset rig on a character motor, comfort settings, a VR/flat mode switch and world-space status.",
+		"purpose": "It handles how people play in a 3D world through an XR headset, with Meta Quest as the first target: the headset camera and hands ride on a CharacterMotor, so the same character, network and bots work in VR. It is vendor-neutral: no Meta SDK and no XR plug-in inside; the project picks the runtime (OpenXR). Understanding the physical room belongs to 3d-unity-spatial, and what the controllers do belongs to the constructor’s controls, for example 3d-constructor-vr-controls. It holds no product logic.",
 		"version": "0.1.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-xr",
 		"dependencies": [
 			"3d-unity-core",
-			"3d-unity-input"
+			"3d-unity-input",
+			"3d-unity-character"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-xr.git",
-		"usage": "Add an XRPrimaryButtonAction, pick an EngineInput action such as Player/Jump, and hook OnPressed to your own code. Put a StatusHud on a world-space canvas with a TextMeshPro text and call SetStatus; turn on FollowView to keep it in front of the player. Read XRStatus to check whether a headset is active and which one.",
+		"usage": "Add an XRCharacterRig to the player next to its CharacterMotor: it builds an XR origin with the headset as the main camera and two hand anchors, and follows the motor. Put XRModeSwitch on the player to turn the VR components on while XRStatus.IsActive and the flat ones otherwise. Read comfort choices from XRComfort.Current, and add a ComfortVignette to darken the view while moving. Use XRHeadDriver for a menu camera without a rig. Put a StatusHud on a world-space canvas for a floating status, and read XRStatus to know whether a headset is active.",
 		"current": [
-			"XRPrimaryButtonAction: fires OnPressed once per press of any EngineInput action, by default Player/Jump, the right controller's A button.",
-			"The same action answers to Space or a gamepad's A on PC, so XR flows can be tested without a headset.",
-			"StatusHud: world-space text set with SetStatus.",
-			"StatusHud can follow the view: it eases to a level spot in front of the camera instead of being fixed to the head.",
-			"XRStatus: whether a headset is active, the XR plug-in in use and the headset model."
+			"XRCharacterRig: the VR view of a CharacterMotor. The headset becomes the main camera, two hand anchors give aim poses (TryGetHandRay), and the rig follows the motor.",
+			"Room-scale: the player’s own steps come back as HeadOffset and the controls walk the body after them, so walls still block; the standing height maps to the character’s eyes (Recenter) and real crouching lowers the view.",
+			"Snap turn (30° by default) or smooth turn around the head, a respawn or blink re-faces the rig, and the view follows the body with a 25 ms smoothing that hides a 60 Hz network tick on a 72–120 Hz headset.",
+			"XRComfort: snap or smooth turning, snap angle, turn speed and comfort vignette on or off with its strength, saved per player.",
+			"ComfortVignette: darkens the edges of the view while moving with the stick, with no extra shader in builds.",
+			"XRModeSwitch: enables the VR set of components while a headset runs and the flat set otherwise; as an owner-only component of a networked player it leaves other copies without controls.",
+			"XRHeadDriver: for a scene camera without a rig, such as behind a main menu: the camera follows the headset and both controllers show a pointer ray.",
+			"XRVisuals: controller markers and pointer rays, and the tracking origin for world-space UI so controllers can point at canvases.",
+			"XRStatus: whether a headset (or the XR Interaction Toolkit’s simulated one) is active, the XR plug-in in use and the headset model.",
+			"XRPrimaryButtonAction: fires OnPressed once per press of any EngineInput action, by default Player/Jump, the right controller’s A button.",
+			"StatusHud: world-space text set with SetStatus, optionally following the view, level and eased, instead of being fixed to the head."
 		],
 		"features": [
-			"Reads EngineInput actions, never devices, so bindings stay rebindable and testable.",
-			"No Meta SDK required: it uses Unity's built-in XR module, and Quest features come from the project's own XR setup.",
-			"Comfort first: the status display follows turning, not head tilt, and catches up smoothly.",
+			"Vendor-neutral: no Meta SDK and no XR plug-in inside; the project picks OpenXR, and Quest features come from its own XR setup.",
+			"Reads EngineInput poses and actions, never devices, so bindings stay rebindable and testable, also with simulated controllers in the Editor.",
+			"Comfort first: snap or smooth turning, a movement vignette and a smoothed view, all chosen by the player.",
+			"Works with the same character, network and bots as a flat game: VR is one more way to produce a CharacterCommand.",
 			"Product-independent: its components carry no app or game logic."
 		],
 		"examples": [
-			"Starting a room scan with the A button and showing its progress on a StatusHud.",
-			"Showing a headset-only hint when XRStatus.IsHeadsetActive is true, and a keyboard hint otherwise.",
-			"A round timer for a VR arena match that floats in front of the player."
+			"Temnorid Arena on Meta Quest 3: you stand in the arena as the mage, with the headset camera at the mage’s eyes and your hands as spell-casting anchors.",
+			"XRModeSwitch makes one player prefab work in VR and on a flat screen.",
+			"A round timer or status line for a VR match that floats in front of the player on a StatusHud."
 		],
 		"roadmap": [
-			"OpenXR and Meta Quest support with controller and hand tracking.",
+			"Hand tracking (no controllers).",
 			"Grabbing, ray and direct interaction.",
-			"Teleportation and smooth locomotion.",
-			"XR UI and VR editing tools through 3d-unity-interaction.",
-			"Meta Quest performance optimization and a stable Quest release.",
+			"Teleportation as a comfort option.",
+			"VR editing tools through 3d-unity-interaction.",
+			"A test on a real Meta Quest and performance optimization.",
 			"Additional XR platform support."
 		],
 		"related": [
+			"3d-constructor-vr-controls",
 			"3d-unity-input",
+			"3d-unity-character",
 			"3d-unity-spatial",
 			"3d-unity-interaction"
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character",
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager",
 			"com.unity.ugui 2.6.0, resolved by the Package Manager",
 			"com.unity.modules.xr 1.0.0, resolved by the Package Manager"
 		],
 		"optional": [],
 		"api": [
+			{
+				"name": "XRCharacterRig",
+				"text": "Component on the player next to its CharacterMotor that builds the XR origin, the headset camera and two hand anchors."
+			},
+			{
+				"name": "XRCharacterRig.TryGetHandRay(hand, out ray)",
+				"text": "The aim ray of a hand in world space; false when that controller is not tracked."
+			},
+			{
+				"name": "XRCharacterRig.HeadOffset / Recenter()",
+				"text": "How far the player has stepped in the room, which the controls walk the body after; Recenter maps the standing height to the character’s eyes."
+			},
+			{
+				"name": "XRComfort.Current",
+				"text": "The player’s saved comfort settings: SnapTurn, SnapAngle, SmoothTurnSpeed, Vignette and VignetteStrength; call Save() after a change."
+			},
+			{
+				"name": "ComfortVignette",
+				"text": "Darkens the view edges while the player moves with the stick."
+			},
+			{
+				"name": "XRModeSwitch",
+				"text": "Turns the VR components on while a headset runs and the flat ones otherwise."
+			},
+			{
+				"name": "XRHeadDriver",
+				"text": "Drives a scene camera from the headset where there is no rig, such as behind a main menu."
+			},
 			{
 				"name": "XRPrimaryButtonAction.OnPressed",
 				"text": "UnityEvent raised once per press of the chosen action."
@@ -1179,31 +1254,23 @@
 				"text": "Sets the displayed text."
 			},
 			{
-				"name": "StatusHud.Status",
-				"text": "The text shown now."
-			},
-			{
 				"name": "StatusHud.FollowView",
 				"text": "When on, the display eases to a spot 1.5 m in front of the view and slightly below eye height."
 			},
 			{
-				"name": "StatusHud.SnapToView()",
-				"text": "Puts the display in front of the view at once, for example when it first appears."
+				"name": "XRStatus.IsActive",
+				"text": "True when a headset runs, or a simulated one is connected; game code picks VR or flat layouts from it."
 			},
 			{
 				"name": "XRStatus.IsHeadsetActive",
 				"text": "True when the game runs in an active headset; false on PC without one."
 			},
 			{
-				"name": "XRStatus.DeviceName",
-				"text": "The XR plug-in in use, such as OpenXR Display, or empty."
-			},
-			{
-				"name": "XRStatus.HeadsetModel",
-				"text": "The headset's model when known, such as Oculus Quest 3, or empty."
+				"name": "XRStatus.DeviceName / HeadsetModel",
+				"text": "The XR plug-in in use, such as OpenXR Display, and the headset model when known, such as Oculus Quest 3."
 			}
 		],
-		"example": "var button = gameObject.AddComponent<XRPrimaryButtonAction>();\nbutton.Action = \"Player/Jump\";\nbutton.OnPressed.AddListener(() =>\n{\n    hud.SetStatus(\"Scanning room...\");\n    scanner.StartScan();\n});\n\nhud.FollowView = true;\nhud.SnapToView();\nif (XRStatus.IsHeadsetActive)\n{\n    EngineLog.Info(\"XR\", $\"Headset: {XRStatus.HeadsetModel}\");\n}"
+		"example": "var rig = player.AddComponent<XRCharacterRig>();      // headset camera + hands on the character\nplayer.AddComponent<XRModeSwitch>();                  // VR components in a headset, flat ones otherwise\n\nif (rig.TryGetHandRay(HandSide.Right, out var ray)) { /* world-space aim */ }\n\nXRComfort.Current.SnapTurn = false;                   // smooth turning, saved for this player\nXRComfort.Current.Save();\n\nif (XRStatus.IsActive) { /* show the wrist HUD instead of the screen HUD */ }"
 	},
 	{
 		"slug": "3d-unity-firebase",
