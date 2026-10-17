@@ -1,7 +1,9 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import {
+	afterNextRender,
 	Component,
 	computed,
+	DestroyRef,
 	effect,
 	ElementRef,
 	inject,
@@ -11,6 +13,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ThemeService } from '@wawjs/ngx-ui';
 import { catalogConstructors, repoUrl } from '../../feature/catalog/catalog.data';
 import { companyProfile } from '../../feature/company/company.data';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -48,6 +51,7 @@ const SWIPE_MIN = 50;
 export class PitchComponent {
 	private readonly _document = inject(DOCUMENT);
 	private readonly _router = inject(Router);
+	private readonly _theme = inject(ThemeService);
 	private readonly _route = inject(ActivatedRoute);
 	private readonly _fragment = toSignal(this._route.fragment, { initialValue: null });
 	private readonly _stage = viewChild.required<ElementRef<HTMLElement>>('stage');
@@ -67,22 +71,22 @@ export class PitchComponent {
 
 	protected readonly layers = [
 		{
-			phase: 'Phase 1',
 			title: 'Packages',
 			what: 'The systems every 3D game needs: scenes, assets, editing objects, VR, room scanning.',
 			why: 'Written once and fixed once, then shared by every game.',
+			ai: 'The agent reads packages.md and picks tested packages instead of writing 3D systems from scratch.',
 		},
 		{
-			phase: 'Phase 2',
 			title: 'Constructors',
 			what: 'A ready base for each camera type: top-down, side view, isometric and more.',
 			why: 'The camera decides how a game is built, so each type gets its own starting point.',
+			ai: 'The starter’s AGENTS.md tells the agent what to build first for this camera, so it starts from a working base.',
 		},
 		{
-			phase: 'Phase 3',
 			title: 'Games',
 			what: 'A new game starts from a constructor, not from an empty project.',
 			why: 'The team writes only what makes the game unique: rules, levels, art.',
+			ai: 'The agent writes only rules, levels and art; the packages below stay fixed and cannot be broken.',
 		},
 	];
 
@@ -349,6 +353,34 @@ export class PitchComponent {
 	];
 
 	constructor() {
+		// The deck is a fixed full-screen layer with its own scroll; without this the page behind it
+		// (topbar, footer) scrolls too, and a phone shows two scrollbars. Browser only, so prerender is untouched.
+		const destroyRef = inject(DestroyRef);
+
+		afterNextRender(() => {
+			const root = this._document.documentElement;
+			const previous = root.style.overflow;
+
+			root.style.overflow = 'hidden';
+			destroyRef.onDestroy(() => (root.style.overflow = previous));
+
+			// The slides are shown on a projector, so they are always light. Only the `data-mode` attribute
+			// is forced; the visitor's saved choice stays untouched and comes back when they leave.
+			const forceLight = () => {
+				if (root.getAttribute('data-mode') !== 'light') {
+					root.setAttribute('data-mode', 'light');
+				}
+			};
+			const watcher = new MutationObserver(forceLight);
+
+			forceLight();
+			watcher.observe(root, { attributes: true, attributeFilter: ['data-mode'] });
+			destroyRef.onDestroy(() => {
+				watcher.disconnect();
+				root.setAttribute('data-mode', this._theme.mode() ?? 'dark');
+			});
+		});
+
 		// The slide number lives in the URL fragment (#3), so reload and shared links keep the place.
 		// Applied in an effect, not at construction, so the prerendered first slide still hydrates.
 		effect(() => {

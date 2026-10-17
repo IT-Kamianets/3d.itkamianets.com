@@ -176,9 +176,6 @@
 	"Scan to follow along on your phone": "Скануйте, щоб гортати слайди на телефоні",
 	"QR code that opens these slides": "QR-код, що відкриває ці слайди",
 	"How we build: three layers, one after another": "Як ми будуємо: три шари, один за одним",
-	"Phase 1": "Фаза 1",
-	"Phase 2": "Фаза 2",
-	"Phase 3": "Фаза 3",
 	"Games": "Ігри",
 	"Why:": "Чому:",
 	"The systems every 3D game needs: scenes, assets, editing objects, VR, room scanning.": "Системи, потрібні кожній 3D-грі: сцени, ресурси, редагування об'єктів, VR, сканування кімнати.",
@@ -188,11 +185,9 @@
 	"A new game starts from a constructor, not from an empty project.": "Нова гра починається з конструктора, а не з порожнього проєкту.",
 	"The team writes only what makes the game unique: rules, levels, art.": "Команда пише лише те, що робить гру унікальною: правила, рівні, графіку.",
 	"Each layer only uses the one before it, so a fix in a package reaches every game.": "Кожен шар використовує лише попередній, тому виправлення в пакеті доходить до кожної гри.",
-	"Phase 1: the packages": "Фаза 1: пакети",
 	"The shared base: settings, events, logging, startup.": "Спільна основа: налаштування, події, логування, запуск.",
 	"Loads and saves scenes in Unity.": "Завантажує та зберігає сцени в Unity.",
 	"Select, move, rotate and scale objects.": "Вибір, переміщення, обертання й масштабування об'єктів.",
-	"Phase 2: the constructors": "Фаза 2: конструктори",
 	"One per camera type. Each combines the packages into a ready start for that kind of game.": "По одному на тип камери. Кожен поєднує пакети в готовий старт для такого типу гри.",
 	"Games like": "Ігри як",
 	"What this gives us": "Що це нам дає",
@@ -1046,5 +1041,9 @@
 	"A match’s session, its messages and its replay are defined in `3d-network-schema`, and `3d-unity-network` records a replay from the moment a session runs. The schema repository ships one in `examples/arena-replay.example.json`:": "Сесія матчу, її повідомлення та повтор визначені в `3d-network-schema`, а `3d-unity-network` записує повтор від моменту, коли сесія почала працювати. Репозиторій схеми містить один у `examples/arena-replay.example.json`:",
 	"Clone the starter repository under your game name, open its Unity project and follow its AGENTS.md to add the engine packages.": "Клонуйте репозиторій-стартер під назвою вашої гри, відкрийте його проєкт Unity і виконайте його AGENTS.md, щоб додати пакети рушія.",
 	"The VR rig: headset camera, hands and comfort settings.": "VR-риг: камера шолома, руки та налаштування комфорту.",
-	"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-unity-xr": "Спершу додайте його пакети рушія, кожен за git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-unity-xr"
+	"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-unity-xr": "Спершу додайте його пакети рушія, кожен за git URL: 3d-unity-core, 3d-unity-input, 3d-unity-character, 3d-unity-xr",
+	"With AI:": "З ШІ:",
+	"The agent reads packages.md and picks tested packages instead of writing 3D systems from scratch.": "Агент читає packages.md і обирає перевірені пакети замість того, щоб писати 3D-системи з нуля.",
+	"The starter’s AGENTS.md tells the agent what to build first for this camera, so it starts from a working base.": "AGENTS.md стартера підказує агенту, що будувати першим для цієї камери, тож він починає з робочої основи.",
+	"The agent writes only rules, levels and art; the packages below stay fixed and cannot be broken.": "Агент пише лише правила, рівні та графіку; пакети нижче лишаються незмінними й не можуть зламатися."
 }

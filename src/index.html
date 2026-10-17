@@ -9,8 +9,10 @@
     <script>
       try {
         const storedMode = localStorage.getItem('theme.mode');
-        const preferredMode =
-          storedMode === 'dark' || storedMode === 'light'
+        // The slides (/pitch) are shown on a projector: always light, whatever the visitor chose.
+        const preferredMode = /^\/pitch(\/|$)/.test(location.pathname)
+          ? 'light'
+          : storedMode === 'dark' || storedMode === 'light'
             ? storedMode
             : 'dark';
         document.documentElement.setAttribute('data-mode', preferredMode);

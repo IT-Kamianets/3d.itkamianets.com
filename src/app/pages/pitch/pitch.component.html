@@ -43,12 +43,15 @@
 					<ol class="m-0 mt-10 grid list-none items-stretch gap-4 p-0 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]">
 						@for (layer of layers; track layer.title; let last = $last) {
 							<li class="ds-card gap-3 p-6 sm:p-8">
-								<span class="ds-mono ds-muted !text-[clamp(0.875rem,1.2vw,1.125rem)]">{{ layer.phase | tr }}</span>
 								<h3 class="text-[clamp(1.5rem,2.4vw,2.25rem)]">{{ layer.title | tr }}</h3>
 								<p class="text-[clamp(1rem,1.4vw,1.25rem)] leading-snug">{{ layer.what | tr }}</p>
 								<p class="mt-auto pt-3 text-[clamp(1rem,1.4vw,1.25rem)] leading-snug text-[var(--muted-foreground)]">
 									<span class="font-semibold text-[var(--foreground)]">{{ 'Why:' | tr }}</span>
 									{{ layer.why | tr }}
+								</p>
+								<p class="border-t border-[var(--border)] pt-3 text-[clamp(1rem,1.4vw,1.25rem)] leading-snug">
+									<span class="font-semibold text-[var(--foreground)]">{{ 'With AI:' | tr }}</span>
+									{{ layer.ai | tr }}
 								</p>
 							</li>
 							@if (!last) {
@@ -63,14 +66,14 @@
 
 				<!-- 3. Packages, from generic to specific -->
 				@case (2) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Phase 1: the packages' | tr }}</h2>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Packages' | tr }}</h2>
 					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'From generic to specific. Each column builds on the one before it.' | tr }}</p>
 					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: null, columns: packageColumns }" />
 				}
 
 				<!-- 4. Constructors, in the same card style -->
 				@case (3) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Phase 2: the constructors' | tr }}</h2>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Constructors' | tr }}</h2>
 					<p class="mt-4 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'One per camera type. Each combines the packages into a ready start for that kind of game.' | tr }}</p>
 					<ul class="m-0 mt-8 grid list-none items-stretch gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
 						@for (item of constructors; track item.slug) {
@@ -178,7 +181,7 @@
 				></button>
 			}
 		</div>
-		<div class="flex w-full items-center justify-between gap-1 sm:w-auto sm:justify-start">
+		<div class="flex w-full items-center justify-start gap-1 sm:w-auto">
 			<span class="ds-mono ds-muted mr-2">{{ index() + 1 }} / {{ total }}</span>
 			<button class="ds-btn ds-btn-ghost ds-btn-icon" type="button" [disabled]="index() === 0" [attr.aria-label]="'Previous slide' | tr" (click)="go(-1)">
 				<app-icon name="arrow-left" />
