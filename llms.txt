@@ -1,0 +1,18 @@
+# IT Kamianets 3D Engine
+
+> Unity packages, engine-independent JSON schemas, and constructors (one per camera style) for building 3D games. Games such as Temnorid Arena are built from them.
+
+## Packages
+
+- [packages.md](https://3d.itkamianets.com/packages.md): every public package with its purpose, usage, dependencies, install order and git URL. Read this to choose packages for a new constructor or game.
+
+## Docs
+
+- [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository (an empty Unity project) under your game name, add the engine packages, work with an AI agent, send engine changes back as pull requests.
+- [Installation](https://3d.itkamianets.com/docs/installation): Unity requirements, starter repositories, installing packages by git URL.
+- [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the three schemas, character and camera, multiplayer.
+- [Examples](https://3d.itkamianets.com/docs/examples): a first-person game from a starter repository, a multiplayer match, a room scan.
+
+## Source
+
+- [GitHub organization](https://github.com/IT-Kamianets): one repository per package, constructor part and game.
