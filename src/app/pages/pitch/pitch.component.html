@@ -1,4 +1,4 @@
-<div class="fixed inset-0 z-[60] flex flex-col bg-[var(--background)]" role="region" [attr.aria-label]="'Presentation' | tr">
+<div class="fixed inset-0 z-[60] flex flex-col bg-[var(--background)]" role="region" aria-label="Презентація">
 	<div class="h-1 w-full bg-[var(--secondary)]" aria-hidden="true">
 		<div class="h-full bg-[var(--primary)] transition-[width] duration-300" [style.width.%]="progress()"></div>
 	</div>
@@ -20,16 +20,16 @@
 					<div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 						<div>
 							<span class="ds-badge ds-badge-outline">IT Kamianets 3D Engine</span>
-							<h1 class="ds-display mt-6 !text-[clamp(2.25rem,6vw,5.5rem)]">{{ 'Build 3D games from reusable packages' | tr }}</h1>
-							<p class="mt-6 max-w-[30ch] text-[clamp(1.25rem,2vw,1.875rem)] leading-snug text-[var(--muted-foreground)]">{{ 'How the framework is built, and where you can join the team.' | tr }}</p>
+							<h1 class="ds-display mt-6 !text-[clamp(2.25rem,6vw,5.5rem)]">Створюйте 3D-ігри з багаторазових пакетів</h1>
+							<p class="mt-6 max-w-[30ch] text-[clamp(1.25rem,2vw,1.875rem)] leading-snug text-[var(--muted-foreground)]">Як побудований фреймворк і де ви можете долучитися до команди.</p>
 						</div>
 						<div class="grid justify-items-center gap-8">
 							<app-room-scan class="w-full" />
 							<!-- For the audience in the room; a phone reader already has the slides open. -->
 							<div class="ds-card !hidden max-w-[42rem] !flex-row items-center gap-8 p-6 md:!flex">
-								<app-qr-code class="w-[clamp(10.5rem,15vw,15rem)] shrink-0" [value]="pitchUrl" [ariaLabel]="('QR code that opens these slides' | tr) + ': ' + pitchUrl" />
+								<app-qr-code class="w-[clamp(10.5rem,15vw,15rem)] shrink-0" [value]="pitchUrl" [ariaLabel]="'QR-код, що відкриває ці слайди' + ': ' + pitchUrl" />
 								<div class="grid gap-1">
-									<span class="text-[clamp(1.5rem,2.1vw,1.875rem)] font-semibold leading-snug">{{ 'Scan to follow along on your phone' | tr }}</span>
+									<span class="text-[clamp(1.5rem,2.1vw,1.875rem)] font-semibold leading-snug">Скануйте, щоб гортати слайди на телефоні</span>
 									<span class="ds-mono ds-muted break-all !text-[clamp(1.3125rem,1.65vw,1.5rem)]">{{ pitchUrlLabel }}</span>
 								</div>
 							</div>
@@ -39,19 +39,19 @@
 
 				<!-- 2. Our logic: three layers, built in this order -->
 				@case (1) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'How we build: three layers, one after another' | tr }}</h2>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">Як ми будуємо: три шари, один за одним</h2>
 					<ol class="m-0 mt-10 grid list-none items-stretch gap-4 p-0 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]">
 						@for (layer of layers; track layer.title; let last = $last) {
 							<li class="ds-card gap-3 p-6 sm:p-8">
-								<h3 class="text-[clamp(1.5rem,2.4vw,2.25rem)]">{{ layer.title | tr }}</h3>
-								<p class="text-[clamp(1rem,1.4vw,1.25rem)] leading-snug">{{ layer.what | tr }}</p>
+								<h3 class="text-[clamp(1.5rem,2.4vw,2.25rem)]">{{ layer.title }}</h3>
+								<p class="text-[clamp(1rem,1.4vw,1.25rem)] leading-snug">{{ layer.what }}</p>
 								<p class="mt-auto pt-3 text-[clamp(1rem,1.4vw,1.25rem)] leading-snug text-[var(--muted-foreground)]">
-									<span class="font-semibold text-[var(--foreground)]">{{ 'Why:' | tr }}</span>
-									{{ layer.why | tr }}
+									<span class="font-semibold text-[var(--foreground)]">Чому:</span>
+									{{ layer.why }}
 								</p>
 								<p class="border-t border-[var(--border)] pt-3 text-[clamp(1rem,1.4vw,1.25rem)] leading-snug">
-									<span class="font-semibold text-[var(--foreground)]">{{ 'With AI:' | tr }}</span>
-									{{ layer.ai | tr }}
+									<span class="font-semibold text-[var(--foreground)]">З ШІ:</span>
+									{{ layer.ai }}
 								</p>
 							</li>
 							@if (!last) {
@@ -61,28 +61,28 @@
 							}
 						}
 					</ol>
-					<p class="mt-8 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'Each layer only uses the one before it, so a fix in a package reaches every game.' | tr }}</p>
+					<p class="mt-8 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">Кожен шар використовує лише попередній, тому виправлення в пакеті доходить до кожної гри.</p>
 				}
 
 				<!-- 3. Packages, from generic to specific -->
 				@case (2) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Packages' | tr }}</h2>
-					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'From generic to specific. Each column builds on the one before it.' | tr }}</p>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">Пакети</h2>
+					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">Від загального до конкретного. Кожна колонка спирається на попередню.</p>
 					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: null, columns: packageColumns }" />
 				}
 
 				<!-- 4. Constructors, in the same card style -->
 				@case (3) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'Constructors' | tr }}</h2>
-					<p class="mt-4 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'One per camera type. Each combines the packages into a ready start for that kind of game.' | tr }}</p>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">Конструктори</h2>
+					<p class="mt-4 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">По одному на тип камери. Кожен поєднує пакети в готовий старт для такого типу гри.</p>
 					<ul class="m-0 mt-8 grid list-none items-stretch gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
 						@for (item of constructors; track item.slug) {
 							<li class="ds-card gap-2 p-5">
 								<span class="flex items-center gap-3 text-[clamp(1.0625rem,1.5vw,1.375rem)] font-semibold">
 									<app-icon [name]="item.icon" size="1.5rem" />
-									{{ item.name | tr }}
+									{{ item.name }}
 								</span>
-								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ 'Games like' | tr }} {{ item.examples.join(', ') }}</span>
+								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">Ігри як {{ item.examples.join(', ') }}</span>
 								<span class="mt-auto flex flex-wrap gap-1.5 pt-2">
 									@for (slug of item.packages; track slug) {
 										<span class="ds-badge ds-badge-outline !text-[clamp(0.75rem,1vw,0.875rem)]">{{ short(slug) }}</span>
@@ -97,32 +97,30 @@
 
 				<!-- 5. One constructor explained on the same package grid -->
 				@case (4) {
-					<!-- No visible title: five columns need the whole screen; the speaker introduces the example. -->
-					<h2 class="sr-only">{{ example.name | tr }}: Temnorid Arena</h2>
-					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: exampleUses, columns: exampleColumns, compact: true }" />
-					<p class="mt-6 max-w-[80ch] text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ 'Temnorid Arena v0.1 today: a free-for-all deathmatch against bots. Rounds, teams and an economy come next.' | tr }}</p>
-				}
+					<!-- No visible title: six columns need the whole screen; the speaker introduces the example. -->
+					<h2 class="sr-only">{{ example.name }}: Temnorid Arena</h2>
+					<ng-container *ngTemplateOutlet="packageGrid; context: { $implicit: exampleUses, columns: exampleColumns, compact: true }" />				}
 
 				<!-- 6. One game, every device -->
 				@case (5) {
-					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'One game, every device' | tr }}</h2>
-					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">{{ 'One Unity project, built for each of these. Players on any of them can join the same match.' | tr }}</p>
+					<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">Одна гра, усі пристрої</h2>
+					<p class="mt-3 max-w-[60ch] text-[clamp(1.0625rem,1.6vw,1.5rem)] leading-snug text-[var(--muted-foreground)]">Один проєкт Unity, зібраний для кожного з них. Гравці на будь-якому можуть долучитися до одного матчу.</p>
 					<ul class="m-0 mt-8 grid list-none items-stretch gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
 						@for (item of devices; track item.name) {
 							<li class="ds-card gap-2 p-5">
-								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ item.name | tr }}</span>
-								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ item.input | tr }}</span>
-								<span class="mt-auto pt-2"><span class="ds-badge ds-badge-outline !text-[clamp(0.75rem,1vw,0.875rem)]">{{ item.state | tr }}</span></span>
+								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ item.name }}</span>
+								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ item.input }}</span>
+								<span class="mt-auto pt-2"><span class="ds-badge ds-badge-outline !text-[clamp(0.75rem,1vw,0.875rem)]">{{ item.state }}</span></span>
 							</li>
 						}
 					</ul>
-					<h3 class="mt-10 text-[clamp(1.25rem,2vw,1.75rem)]">{{ 'Why it works: every device becomes the same command' | tr }}</h3>
+					<h3 class="mt-10 text-[clamp(1.25rem,2vw,1.75rem)]">Чому це працює: кожен пристрій стає тією самою командою</h3>
 					<ol class="m-0 mt-4 grid list-none items-stretch gap-4 p-0 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]">
 						@for (step of deviceFlow; track step.title; let last = $last) {
 							<li class="ds-card gap-1.5 p-5">
-								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ step.title | tr }}</span>
+								<span class="text-[clamp(1.125rem,1.6vw,1.5rem)] font-semibold">{{ step.title }}</span>
 								<span class="ds-mono ds-muted !text-[clamp(0.8125rem,1vw,0.9375rem)] [overflow-wrap:anywhere]">{{ step.packages }}</span>
-								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug">{{ step.text | tr }}</span>
+								<span class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug">{{ step.text }}</span>
 							</li>
 							@if (!last) {
 								<li class="grid place-items-center text-[var(--muted-foreground)]" aria-hidden="true">
@@ -137,14 +135,14 @@
 				@case (6) {
 					<div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
 						<div>
-							<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">{{ 'What this gives us' | tr }}</h2>
+							<h2 class="ds-page-title !text-[clamp(1.875rem,min(4.6vw,6.5vh),4rem)]">Що це нам дає</h2>
 							<ol class="ds-card m-0 mt-8 list-none p-0">
 								@for (item of conclusions; track item.title; let i = $index; let last = $last) {
 									<li class="grid items-baseline gap-x-6 gap-y-1 px-6 py-5 sm:grid-cols-[2rem_minmax(0,1fr)] sm:px-8">
 										<span class="ds-mono ds-muted !text-[clamp(1rem,1.5vw,1.375rem)]">{{ i + 1 }}</span>
 										<span class="grid gap-1">
-											<span class="text-[clamp(1.125rem,1.8vw,1.625rem)] font-semibold">{{ item.title | tr }}</span>
-											<span class="text-[clamp(1rem,1.4vw,1.25rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text | tr }}</span>
+											<span class="text-[clamp(1.125rem,1.8vw,1.625rem)] font-semibold">{{ item.title }}</span>
+											<span class="text-[clamp(1rem,1.4vw,1.25rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text }}</span>
 										</span>
 									</li>
 									@if (!last) {
@@ -154,8 +152,8 @@
 							</ol>
 						</div>
 						<div class="ds-card items-center gap-4 p-6 text-center sm:p-8">
-							<app-qr-code class="!hidden w-[clamp(10.5rem,15vw,15rem)] md:!block" [value]="telegramUrl" [ariaLabel]="('QR code that opens our Telegram group' | tr) + ': ' + telegramUrl" />
-							<span class="text-[clamp(1.25rem,2vw,1.875rem)] font-semibold leading-snug">{{ 'Join us: our Telegram group' | tr }}</span>
+							<app-qr-code class="!hidden w-[clamp(10.5rem,15vw,15rem)] md:!block" [value]="telegramUrl" [ariaLabel]="'QR-код, що відкриває нашу групу в Telegram' + ': ' + telegramUrl" />
+							<span class="text-[clamp(1.25rem,2vw,1.875rem)] font-semibold leading-snug">Долучайтеся до нашої групи в Telegram</span>
 							<a class="ds-btn ds-btn-outline ds-btn-lg" [href]="telegramUrl" rel="noopener" target="_blank">t.me/itkp3d</a>
 						</div>
 					</div>
@@ -168,14 +166,14 @@
 	<div class="flex items-center justify-between gap-4 px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:px-[3vw] sm:py-3">
 		<div class="hidden w-24 sm:block" aria-hidden="true"></div>
 		<!-- On a phone the counter and the arrows (or a swipe) navigate, so the dots stay out of the way. -->
-		<div class="hidden items-center gap-2 sm:flex" role="group" [attr.aria-label]="'Slides' | tr">
+		<div class="hidden items-center gap-2 sm:flex" role="group" aria-label="Слайди">
 			@for (n of slideNumbers; track n) {
 				<button
 					class="h-2.5 w-2.5 cursor-pointer rounded-full border-0 p-0"
 					[class.bg-[var(--primary)]]="n === index()"
 					[class.bg-[var(--border)]]="n !== index()"
 					type="button"
-					[attr.aria-label]="('Slide' | tr) + ' ' + (n + 1)"
+					[attr.aria-label]="'Слайд' + ' ' + (n + 1)"
 					[attr.aria-current]="n === index() ? 'true' : null"
 					(click)="goTo(n)"
 				></button>
@@ -183,10 +181,10 @@
 		</div>
 		<div class="flex w-full items-center justify-start gap-1 sm:w-auto">
 			<span class="ds-mono ds-muted mr-2">{{ index() + 1 }} / {{ total }}</span>
-			<button class="ds-btn ds-btn-ghost ds-btn-icon" type="button" [disabled]="index() === 0" [attr.aria-label]="'Previous slide' | tr" (click)="go(-1)">
+			<button class="ds-btn ds-btn-ghost ds-btn-icon" type="button" [disabled]="index() === 0" aria-label="Попередній слайд" (click)="go(-1)">
 				<app-icon name="arrow-left" />
 			</button>
-			<button class="ds-btn ds-btn-ghost ds-btn-icon" type="button" [disabled]="index() === total - 1" [attr.aria-label]="'Next slide' | tr" (click)="go(1)">
+			<button class="ds-btn ds-btn-ghost ds-btn-icon" type="button" [disabled]="index() === total - 1" aria-label="Наступний слайд" (click)="go(1)">
 				<app-icon name="arrow-right" />
 			</button>
 		</div>
@@ -196,33 +194,65 @@
 <!--
 	The package grid, shared by the packages slide and the constructor example.
 	Pass a set of slugs to highlight what one constructor uses and fade the rest; null shows all evenly.
-	The example adds the constructor's and the sample game's own packages as two more columns, and
-	`compact` hides the column descriptions slide 3 already gave, so five columns fit one screen.
+	The example adds the constructor and the two sample games as three more columns, and
+	`compact` hides the column descriptions slide 3 already gave, so the example fits one screen.
 -->
 <ng-template #packageGrid let-uses let-columns="columns" let-compact="compact">
 	<!-- Each column is a subgrid over two shared rows, so the card lists start level even when one description wraps. -->
 	<ol
 		class="m-0 mt-6 grid list-none gap-6 p-0 lg:grid-rows-[auto_auto]"
 		[class.lg:grid-cols-3]="columns.length === 3"
-		[class.lg:grid-cols-5]="columns.length === 5"
-		[class.lg:gap-x-4]="columns.length === 5"
+		[class.lg:grid-cols-6]="columns.length === 5"
+		[class.lg:gap-x-3]="columns.length === 5"
 	>
-		@for (column of columns; track column.title; let i = $index) {
+		@for (column of columns; track column.title) {
+			@if (column.games) {
+				<!-- Two games share one column slot pair: titles, then the shared box across both, then each game's own packages. -->
+				<li class="grid content-start gap-2.5 lg:col-span-2 lg:row-span-2">
+					<div class="grid gap-x-3 lg:grid-cols-2">
+						@for (game of column.games; track game.title) {
+							<h3 class="flex text-[clamp(1.25rem,2vw,1.75rem)]">
+								{{ game.title }}
+							</h3>
+						}
+					</div>
+					<ul class="m-0 grid list-none gap-2 p-0 lg:grid-cols-2">
+						@for (item of column.shared; track item.slug; let first = $first) {
+							<!-- The first shared package spans both game columns; the rest pair up below it. -->
+							<li class="ds-card gap-0.5 px-4 py-3 !border-[color:var(--primary)]" [class.lg:col-span-2]="first">
+								<span class="ds-mono !text-[clamp(1rem,1.15vw,1.125rem)] font-semibold [overflow-wrap:anywhere]">{{ item.slug }}</span>
+								<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text }}</span>
+							</li>
+						}
+					</ul>
+					<div class="grid content-start gap-x-3 gap-y-2 lg:grid-cols-2">
+						@for (game of column.games; track game.title) {
+							<ul class="m-0 grid list-none content-start gap-2 p-0">
+								@for (item of game.packages; track item.slug) {
+									<li class="ds-card gap-0.5 px-4 py-3 !border-[color:var(--primary)]">
+										<span class="ds-mono !text-[clamp(1rem,1.15vw,1.125rem)] font-semibold [overflow-wrap:anywhere]">{{ item.slug }}</span>
+										<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text }}</span>
+									</li>
+								}
+							</ul>
+						}
+					</div>
+				</li>
+			} @else {
 			<li class="grid content-start gap-2.5 lg:row-span-2 lg:grid-rows-subgrid">
 				<div class="grid content-start gap-1">
-					<h3 class="flex items-baseline gap-3 text-[clamp(1.25rem,2vw,1.75rem)]">
-						<span class="ds-mono ds-muted !text-[clamp(1rem,1.4vw,1.25rem)]">{{ i + 1 }}</span>
-						{{ column.title | tr }}
+					<h3 class="flex text-[clamp(1.25rem,2vw,1.75rem)]">
+						{{ column.title }}
 					</h3>
 					@if (!compact) {
-						<p class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ column.text | tr }}</p>
+						<p class="text-[clamp(0.9375rem,1.25vw,1.125rem)] leading-snug text-[var(--muted-foreground)]">{{ column.text }}</p>
 					}
 				</div>
 				<ul class="m-0 grid list-none content-start gap-2 p-0">
 					@for (item of column.packages; track item.slug; let j = $index) {
 						<!-- A column may split into groups (the game: interface, then gameplay); label each group once. -->
 						@if (item.group && item.group !== column.packages[j - 1]?.group) {
-							<li class="ds-mono ds-muted !text-[clamp(0.8125rem,0.9vw,0.9375rem)] uppercase tracking-wide" [class.pt-2]="j > 0">{{ item.group | tr }}</li>
+							<li class="ds-mono ds-muted !text-[clamp(0.8125rem,0.9vw,0.9375rem)] uppercase tracking-wide" [class.pt-2]="j > 0">{{ item.group }}</li>
 						}
 						<li
 							class="ds-card gap-0.5 py-3"
@@ -233,11 +263,12 @@
 						>
 							<!-- Long names break after a hyphen first, never mid-word unless they must. -->
 							<span class="ds-mono !text-[clamp(1rem,1.15vw,1.125rem)] font-semibold [overflow-wrap:anywhere]">{{ item.slug }}</span>
-							<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text | tr }}</span>
+							<span class="text-[clamp(0.875rem,0.85vw,0.9375rem)] leading-snug text-[var(--muted-foreground)]">{{ item.text }}</span>
 						</li>
 					}
 				</ul>
 			</li>
+			}
 		}
 	</ol>
 </ng-template>

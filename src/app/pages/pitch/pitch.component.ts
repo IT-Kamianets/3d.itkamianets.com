@@ -19,7 +19,6 @@ import { companyProfile } from '../../feature/company/company.data';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { QrCodeComponent } from '../../shared/qr-code/qr-code.component';
 import { RoomScanComponent } from '../../shared/room-scan/room-scan.component';
-import { TrPipe } from '../../shared/translate/tr.pipe';
 
 const TOTAL_SLIDES = 7;
 
@@ -28,7 +27,7 @@ const SWIPE_MIN = 50;
 
 /** A full-screen slide deck explaining how the framework is built. Arrow keys, space, Home/End, F for fullscreen, swipe on touch. */
 @Component({
-	imports: [IconComponent, NgTemplateOutlet, QrCodeComponent, RoomScanComponent, TrPipe],
+	imports: [IconComponent, NgTemplateOutlet, QrCodeComponent, RoomScanComponent],
 	templateUrl: './pitch.component.html',
 	styles: `
 		@keyframes slide-in {
@@ -57,7 +56,20 @@ export class PitchComponent {
 	private readonly _stage = viewChild.required<ElementRef<HTMLElement>>('stage');
 	private _touchStart: { x: number; y: number } | null = null;
 
-	protected readonly constructors = catalogConstructors;
+	/** Ukrainian names for the catalog constructors; the catalog itself stays in English. */
+	private static readonly _constructorNames: Record<string, string> = {
+		'character-view': 'Вид від персонажа',
+		'top-down': 'Вид зверху',
+		isometric: 'Ізометрія',
+		'side-view': 'Вид збоку',
+		'fixed-view': 'Фіксована камера',
+		'free-view': 'Камера «бога» / вільна камера',
+	};
+
+	protected readonly constructors = catalogConstructors.map((item) => ({
+		...item,
+		name: PitchComponent._constructorNames[item.slug] ?? item.name,
+	}));
 	protected readonly telegramUrl = 'https://t.me/itkp3d';
 	protected readonly pitchUrl = `${companyProfile.siteUrl}/pitch`;
 	protected readonly pitchUrlLabel = this.pitchUrl.replace(/^https?:\/\//, '');
@@ -71,22 +83,22 @@ export class PitchComponent {
 
 	protected readonly layers = [
 		{
-			title: 'Packages',
-			what: 'The systems every 3D game needs: scenes, assets, editing objects, VR, room scanning.',
-			why: 'Written once and fixed once, then shared by every game.',
-			ai: 'The agent reads packages.md and picks tested packages instead of writing 3D systems from scratch.',
+			title: 'Пакети',
+			what: 'Системи, потрібні кожній 3D-грі: сцени, ресурси, редагування об\'єктів, VR, сканування кімнати.',
+			why: 'Пишемо й виправляємо один раз, а користуються всі ігри.',
+			ai: 'Агент читає packages.md і обирає перевірені пакети замість того, щоб писати 3D-системи з нуля.',
 		},
 		{
-			title: 'Constructors',
-			what: 'A ready base for each camera type: top-down, side view, isometric and more.',
-			why: 'The camera decides how a game is built, so each type gets its own starting point.',
-			ai: 'The starter’s AGENTS.md tells the agent what to build first for this camera, so it starts from a working base.',
+			title: 'Конструктори',
+			what: 'Готова основа для кожного типу камери: вид зверху, вид збоку, ізометрія та інші.',
+			why: 'Камера визначає, як побудована гра, тому кожен тип отримує власну стартову точку.',
+			ai: 'AGENTS.md стартера підказує агенту, що будувати першим для цієї камери, тож він починає з робочої основи.',
 		},
 		{
-			title: 'Games',
-			what: 'A new game starts from a constructor, not from an empty project.',
-			why: 'The team writes only what makes the game unique: rules, levels, art.',
-			ai: 'The agent writes only rules, levels and art; the packages below stay fixed and cannot be broken.',
+			title: 'Ігри',
+			what: 'Нова гра починається з конструктора, а не з порожнього проєкту.',
+			why: 'Команда пише лише те, що робить гру унікальною: правила, рівні, графіку.',
+			ai: 'Агент пише лише правила, рівні та графіку; пакети нижче лишаються незмінними й не можуть зламатися.',
 		},
 	];
 
@@ -96,170 +108,179 @@ export class PitchComponent {
 	 */
 	protected readonly packageColumns = [
 		{
-			title: 'Generic',
-			text: 'Data formats with no engine: Unity, Unreal, web, AI tools.',
+			title: 'Загальні',
+			text: 'Формати даних без рушія: Unity, Unreal, веб, AI-інструменти.',
 			packages: [
 				{
 					slug: '3d-scene-schema',
-					title: 'Scene schema',
-					text: 'Where things are: a scene as plain JSON.',
+					title: 'Схема сцени',
+					text: 'Де що стоїть: сцена як простий JSON.',
 				},
 				{
 					slug: '3d-asset-schema',
-					title: 'Asset schema',
-					text: 'What things are: models, materials, textures.',
+					title: 'Схема ресурсів',
+					text: 'Що це за об\'єкти: моделі, матеріали, текстури.',
 				},
 				{
 					slug: '3d-network-schema',
-					title: 'Network schema',
-					text: 'What happens between players: sessions, events, results.',
+					title: 'Мережева схема',
+					text: 'Що відбувається між гравцями: сесії, події, результати.',
 				},
 			],
 		},
 		{
-			title: 'Core',
-			text: 'Unity systems every 3D game needs.',
+			title: 'Ядро',
+			text: 'Системи Unity, потрібні кожній 3D-грі.',
 			packages: [
 				{
-					slug: '3d-unity-core',
-					title: 'Core',
-					text: 'The shared base: settings, events, logging, startup.',
-				},
-				{
 					slug: '3d-unity-scene',
-					title: 'Scene',
-					text: 'Loads and saves scenes in Unity.',
+					title: 'Сцена',
+					text: 'Завантажує та зберігає сцени в Unity.',
 				},
 				{
 					slug: '3d-unity-input',
-					title: 'Input',
-					text: 'One set of actions for mouse, keyboard, touch, gamepad and VR.',
+					title: 'Ввід',
+					text: 'Єдині дії для миші, клавіатури, дотику, геймпада та VR.',
 				},
 				{
 					slug: '3d-unity-character',
-					title: 'Character',
-					text: 'Walking, running, jumping, slopes. Shared by every constructor.',
+					title: 'Персонаж',
+					text: 'Ходьба, біг, стрибки, схили. Спільний для всіх конструкторів.',
 				},
 				{
 					slug: '3d-unity-assets',
-					title: 'Assets',
-					text: 'Loads models, materials and textures by id.',
+					title: 'Ресурси',
+					text: 'Завантажує моделі, матеріали й текстури за id.',
 				},
 				{
 					slug: '3d-unity-audio',
-					title: 'Audio',
-					text: '3D sound, sound events, volume groups, music.',
+					title: 'Звук',
+					text: 'Просторовий звук, звукові події, групи гучності, музика.',
 				},
 			],
 		},
 		{
 			// Interaction sits here, not in Core: editing objects is a tool some games need, not all.
-			title: 'Specific',
-			text: 'Editing tools, devices, platforms and services.',
+			title: 'Спеціалізовані',
+			text: 'Інструменти редагування, пристрої, платформи та сервіси.',
 			packages: [
 				{
 					slug: '3d-unity-interaction',
-					title: 'Interaction',
-					text: 'Select, move, rotate and scale objects.',
+					title: 'Взаємодія',
+					text: 'Вибір, переміщення, обертання й масштабування об\'єктів.',
 				},
 				{
 					slug: '3d-unity-spatial',
-					title: 'Spatial',
-					text: 'Turns a Meta Quest room scan into a scene.',
+					title: 'Простір',
+					text: 'Перетворює скан кімнати з Meta Quest на сцену.',
 				},
 				{
 					slug: '3d-unity-xr',
 					title: 'XR',
-					text: 'The VR rig: headset camera, hands and comfort settings.',
+					text: 'VR-риг: камера шолома, руки та налаштування комфорту.',
 				},
 				{
 					slug: '3d-unity-firebase',
 					title: 'Firebase',
-					text: 'Sign-in, saved progress and stored scenes in Firebase.',
+					text: 'Вхід, збереження прогресу та сцен у Firebase.',
 				},
 				{
 					slug: '3d-unity-network',
-					title: 'Network',
-					text: 'Real-time multiplayer: the server decides, players stay in sync.',
+					title: 'Мережа',
+					text: 'Мультиплеєр у реальному часі: рішення ухвалює сервер, гравці синхронізовані.',
 				},
 			],
 		},
 	];
 
 	/** The constructor explained on slide 5, on the same grid as the packages slide. */
-	protected readonly example = catalogConstructors.find(
-		(item) => item.slug === 'character-view',
-	)!;
+	protected readonly example = this.constructors.find((item) => item.slug === 'character-view')!;
 
 	/**
 	 * The example constructor's own packages: what it adds on top of the shared ones. Movement lives
 	 * in `3d-unity-character`; the constructor only decides how input and the camera drive it.
 	 */
 	private readonly _exampleConstructor = {
-		title: 'Constructor',
+		title: 'Конструктор',
 		text: '3d-constructor-character-view',
 		packages: [
 			{
 				slug: '3d-constructor-character-view-camera',
-				title: 'Camera',
-				text: 'First- and third-person camera.',
+				title: 'Камера',
+				text: 'Камера від першої та третьої особи.',
 			},
 			{
 				slug: '3d-constructor-character-view-controls',
-				title: 'Controls',
-				text: 'Moves where the camera looks; looking turns the character.',
+				title: 'Керування',
+				text: 'Рух туди, куди дивиться камера; погляд повертає персонажа.',
 			},
 			{
 				slug: '3d-constructor-vr-controls',
-				title: 'VR controls',
-				text: 'The same for a headset: walk where you look, aim with the hand.',
+				title: 'VR-керування',
+				text: 'Те саме для шолома: йдіть туди, куди дивитесь, цільтесь рукою.',
 			},
 			{
 				slug: '3d-constructor-character-view-template',
-				title: 'Template',
-				text: 'Ready project structure and package list.',
+				title: 'Шаблон',
+				text: 'Готова структура проєкту та список пакетів.',
 			},
 		],
 	};
 
 	/**
-	 * The sample game, Temnorid Arena, as built today (v0.1): a free-for-all deathmatch against bots
-	 * with spells instead of guns; rounds, teams and an economy come next. Split the way a player meets it: the interface around a match, then the gameplay itself.
-	 * Arenas are levels, so they get a package of their own, stored as Scene JSON.
+	 * Two sample games on the same engine. This slide shows the logic, not a package list: almost
+	 * everything a game needs (skills, interface, levels) is a package both games reuse, drawn as
+	 * boxes across both columns. Only the game mode is each game's own, and it is named for what it does, so other games can reuse it.
 	 */
-	private readonly _exampleGame = {
-		title: 'The game',
-		text: 'The only part the team writes.',
-		packages: [
+	private readonly _exampleGames = {
+		title: 'Ігри',
+		shared: [
 			{
-				group: 'Interface',
-				slug: 'temnorid-arena-menus',
-				title: 'Menus',
-				text: 'Main menu, pause, settings, sign-in and match stats.',
+				slug: 'temnorid-character',
+				title: 'Персонаж',
+				text: 'Здоров’я, стани, відродження: однакові для бійця, фермера чи будь-кого іншого.',
 			},
 			{
-				group: 'Interface',
-				slug: 'temnorid-arena-hud',
+				slug: 'temnorid-skills',
+				title: 'Вміння',
+				text: 'Закляття, здібності, час перезарядки. Сервер перевіряє кожне використання.',
+			},
+			{
+				slug: 'temnorid-hud',
 				title: 'HUD',
-				text: 'Health, mana, spell bar, kill feed, scoreboard. Touch and VR layouts.',
+				text: 'Здоров’я, ресурси, панель вмінь, повідомлення про події. Розкладки для дотику та VR.',
 			},
 			{
-				group: 'Gameplay',
-				slug: 'temnorid-arena-core',
-				title: 'Core',
-				text: 'Combatants, bots, respawns and the match scoreboard.',
+				slug: 'temnorid-core',
+				title: 'Ядро',
+				text: 'Хід матчу, прогрес гравців і таблиця результатів.',
 			},
 			{
-				group: 'Gameplay',
-				slug: 'temnorid-arena-spells',
-				title: 'Spells',
-				text: 'Fireball, frost nova, shield, blink. The server checks every cast.',
+				slug: 'temnorid-maps',
+				title: 'Мапи',
+				text: 'Рівні як Scene JSON, з предметами та точками появи.',
+			},
+		],
+		games: [
+			{
+				title: 'Arena',
+				packages: [
+					{
+						slug: 'temnorid-deathmatch',
+						title: 'Дезматч',
+						text: 'Бій проти ботів: хто кого переміг і коли матч завершено.',
+					},
+				],
 			},
 			{
-				group: 'Gameplay',
-				slug: 'temnorid-arena-maps',
-				title: 'Maps',
-				text: 'The first arena as Scene JSON, with props and spawn points.',
+				title: 'Farm',
+				packages: [
+					{
+						slug: 'temnorid-farming',
+						title: 'Фермерство',
+						text: 'Посів, догляд і врожай: як росте ферма та що вважається успіхом.',
+					},
+				],
 			},
 		],
 	};
@@ -267,18 +288,17 @@ export class PitchComponent {
 	protected readonly exampleColumns = [
 		...this.packageColumns,
 		this._exampleConstructor,
-		this._exampleGame,
+		this._exampleGames,
 	];
 
 	/**
-	 * Packages the sample game uses. It needs no object editing or room scans, so those fade; XR runs
+	 * Packages the sample games use. It needs no object editing or room scans, so those fade; XR runs
 	 * the Quest build, Firebase keeps accounts and match stats, the network runs the match.
 	 */
 	protected readonly exampleUses = new Set([
 		'3d-scene-schema',
 		'3d-asset-schema',
 		'3d-network-schema',
-		'3d-unity-core',
 		'3d-unity-scene',
 		'3d-unity-input',
 		'3d-unity-character',
@@ -288,7 +308,8 @@ export class PitchComponent {
 		'3d-unity-firebase',
 		'3d-unity-network',
 		...this._exampleConstructor.packages.map((item) => item.slug),
-		...this._exampleGame.packages.map((item) => item.slug),
+		...this._exampleGames.shared.map((item) => item.slug),
+		...this._exampleGames.games.flatMap((game) => game.packages.map((item) => item.slug)),
 	]);
 
 	/**
@@ -298,57 +319,57 @@ export class PitchComponent {
 	protected readonly devices = [
 		{
 			name: 'Windows',
-			input: 'Keyboard and mouse, or a gamepad.',
-			state: 'Playable',
+			input: 'Клавіатура й миша або геймпад.',
+			state: 'Можна грати',
 		},
 		{
-			name: 'Android phones',
-			input: 'Touch: a move stick, drag to look, spell buttons.',
-			state: 'Builds an APK',
+			name: 'Телефони на Android',
+			input: 'Дотик: стік руху, перетягування для огляду, кнопки заклять.',
+			state: 'Збирається в APK',
 		},
 		{
-			name: 'iPhone and iPad',
-			input: 'The same touch controls.',
-			state: 'Xcode project set up',
+			name: 'iPhone та iPad',
+			input: 'Те саме сенсорне керування.',
+			state: 'Проєкт Xcode налаштовано',
 		},
 		{
 			name: 'Meta Quest 3',
-			input: 'Controllers: stick to walk, trigger to cast along the hand.',
-			state: 'Works in the simulator, headset next',
+			input: 'Контролери: стік для ходьби, тригер для закляття вздовж руки.',
+			state: 'Працює в симуляторі, далі — шолом',
 		},
 	];
 
 	/** Why one game can run everywhere: every device ends up as the same character command. */
 	protected readonly deviceFlow = [
 		{
-			title: 'Input',
+			title: 'Ввід',
 			packages: '3d-unity-input, 3d-unity-xr',
-			text: 'Mouse, touch, gamepad or VR controllers become the same actions.',
+			text: 'Миша, дотик, геймпад або VR-контролери стають тими самими діями.',
 		},
 		{
-			title: 'Command',
+			title: 'Команда',
 			packages: '3d-constructor-*-controls',
-			text: 'The controls of the constructor turn actions into one character command.',
+			text: 'Керування конструктора перетворює дії на одну команду персонажа.',
 		},
 		{
-			title: 'Character and network',
+			title: 'Персонаж і мережа',
 			packages: '3d-unity-character, 3d-unity-network',
-			text: 'The character moves; the server only sees commands, so all devices share one match.',
+			text: 'Персонаж рухається; сервер бачить лише команди, тож усі пристрої грають в одному матчі.',
 		},
 	];
 
 	protected readonly conclusions = [
 		{
-			title: 'Write once',
-			text: 'Every game shares the same tested packages instead of rebuilding them.',
+			title: 'Пишемо один раз',
+			text: 'Усі ігри використовують ті самі перевірені пакети, а не пишуть їх заново.',
 		},
 		{
-			title: 'Start fast',
-			text: 'A new game starts from a constructor that matches its camera.',
+			title: 'Швидкий старт',
+			text: 'Нова гра стартує з конструктора під її камеру.',
 		},
 		{
-			title: 'Focus on the game',
-			text: 'Teams spend their time on rules, levels and art.',
+			title: 'Фокус на грі',
+			text: 'Команди витрачають час на правила, рівні та графіку.',
 		},
 	];
 
