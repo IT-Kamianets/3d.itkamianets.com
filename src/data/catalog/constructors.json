@@ -63,7 +63,9 @@
 			"3d-unity-assets",
 			"3d-unity-audio"
 		],
-		"parts": [],
+		"parts": [
+			"3d-unity-topdown-camera"
+		],
 		"features": [
 			"Fixed overhead camera",
 			"Direct movement controls",
@@ -160,7 +162,9 @@
 			"3d-unity-assets",
 			"3d-unity-audio"
 		],
-		"parts": [],
+		"parts": [
+			"3d-unity-fixed-camera"
+		],
 		"features": [
 			"Predefined camera angles",
 			"Scene-driven camera switching",

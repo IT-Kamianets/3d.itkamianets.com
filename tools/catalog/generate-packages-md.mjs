@@ -23,6 +23,7 @@ const bySlug = new Map(packages.map((item) => [item.slug, item]));
 const GROUPS = [
 	{ name: 'Schemas', text: 'JSON formats with no engine. Not Unity packages: read them, validate against them, or use the Unity package that implements them.' },
 	{ name: 'Core', text: 'Unity systems every 3D game needs.' },
+	{ name: 'Game kit', text: 'Building blocks for shipping a game: screens, saves, generated sounds, scene-builder helpers, and the shared start screens, sign-in, self-update and online sessions.' },
 	{ name: 'Specific', text: 'Editing tools, devices, platforms and services that only some games need.' },
 	{ name: 'Constructor', text: 'The parts of a constructor: its camera, its controls, and a starter project.' },
 ];
@@ -157,7 +158,7 @@ ${packages.length} packages: ${GROUPS.map((group) => `${packages.filter((item) =
 
 \`\`\`text
 schemas            3d-*-schema                JSON, no engine
-Unity packages     3d-unity-*                 core systems + specific ones
+Unity packages     3d-unity-*                 core systems, game kit, specific ones
 constructors       3d-constructor-<style>-*   one per camera style
 game packages      <game>-*                   e.g. temnorid-arena-core
 \`\`\`
