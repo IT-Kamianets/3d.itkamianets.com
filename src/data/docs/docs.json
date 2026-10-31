@@ -156,15 +156,17 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Merge the block from the starter’s AGENTS.md into `dependencies` in `Packages/manifest.json`. It lists every engine package the style needs, including indirect ones, because Unity does not fetch git dependencies of a git package. For Character View:"
+						"text": "Merge these dependencies into `Packages/manifest.json`, keeping your existing Unity dependencies. This minimal Character View stack includes the camera, controls, motor and input used by the current first- and third-person games."
 					},
 					{
-						"type": "code",
-						"code": "\"com.itkamianets.3d-constructor-character-view-camera\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git\",\n\"com.itkamianets.3d-constructor-character-view-controls\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git\",\n\"com.itkamianets.3d-unity-assets\": \"https://github.com/IT-Kamianets/3d-unity-assets.git\",\n\"com.itkamianets.3d-unity-audio\": \"https://github.com/IT-Kamianets/3d-unity-audio.git\",\n\"com.itkamianets.3d-unity-character\": \"https://github.com/IT-Kamianets/3d-unity-character.git\",\n\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git\",\n\"com.itkamianets.3d-unity-input\": \"https://github.com/IT-Kamianets/3d-unity-input.git\",\n\"com.itkamianets.3d-unity-scene\": \"https://github.com/IT-Kamianets/3d-unity-scene.git\""
+						"type": "manifest",
+						"packages": [
+							"3d-constructor-character-view-controls"
+						]
 					},
 					{
 						"type": "p",
-						"text": "Unity downloads them itself: there is nothing to clone. Optional packages (multiplayer, Firebase, VR) are listed in the same file with when to add them."
+						"text": "Add scene JSON, imported assets, spatial audio or XR only when your game uses them. These are separate capabilities, not requirements for every game."
 					}
 				]
 			},
@@ -175,7 +177,7 @@
 						"type": "ul",
 						"items": [
 							"**Interface first, then gameplay.** Start with `<game>-menus` and `<game>-hud` for a playable loop, then `<game>-core`, `<game>-maps` and what your game is about.",
-							"**Name game packages `<game>-<part>`**, package id `com.itkamianets.<game>-<part>`, e.g. `temnorid-arena-core`.",
+							"**Name game packages `<game>-<part>`**, package id `com.itkamianets.<game>-<part>`.",
 							"Game packages live in their own repositories, cloned into `Packages/` like the engine ones, so several games can share one (several Temnorid games share Temnorid packages). While the game is young, keep them as folders with their own asmdef under `Assets/<Game>/`.",
 							"Scenes, prefabs that wire packages together, and build settings stay in the game; reusable code goes into packages."
 						]
@@ -193,7 +195,7 @@
 						"type": "ul",
 						"items": [
 							"`AGENTS.md` in the repository: read automatically by Codex, Cursor, Copilot and others; Claude Code reads it through `CLAUDE.md`.",
-							"[packages.md](https://3d.itkamianets.com/packages.md): every package with its purpose, dependencies, install order and git URL, generated from this website, so it is always current.",
+							"[packages.md](https://3d.itkamianets.com/packages.md): the package reference generated from this website catalog. Check source and installed revisions when upgrading.",
 							"[llms.txt](https://3d.itkamianets.com/llms.txt): a short index of these docs for AI tools."
 						]
 					},
@@ -225,7 +227,7 @@
 					},
 					{
 						"type": "p",
-						"text": "Temnorid Arena itself works this way: its repository is the game, and `node tools/setup.mjs temnorid-arena` clones every package it uses into `Packages/`."
+						"text": "Embedded package clones are local working copies. Keep their repositories separate, and keep the game manifest and lock file tracked."
 					}
 				]
 			},
@@ -234,11 +236,11 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Pin every engine package to a tag, so the game does not change when a package does:"
+						"text": "Pin each Git dependency to a published tag or a full commit SHA before release. A package version does not guarantee that a tag with the same name exists. Replace `<tag-or-commit>` with an actual revision."
 					},
 					{
 						"type": "code",
-						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0\""
+						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#<tag-or-commit>\""
 					}
 				]
 			}
@@ -300,15 +302,36 @@
 					},
 					{
 						"type": "p",
-						"text": "A typical order for a game:"
+						"text": "For Character View, use this dependency-complete starting point:"
 					},
 					{
-						"type": "code",
-						"code": "3d-unity-core\n3d-unity-scene\n3d-unity-input\n3d-unity-character\n3d-unity-assets\n3d-unity-audio\n3d-unity-network"
+						"type": "manifest",
+						"packages": [
+							"3d-constructor-character-view-controls"
+						]
 					},
 					{
 						"type": "p",
-						"text": "Pin a version by adding a tag to the URL, for example `https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0`."
+						"text": "Pin each Git dependency to a published tag or a full commit SHA before release. A package version does not guarantee that a tag with the same name exists. Replace `<tag-or-commit>` with an actual revision."
+					}
+				]
+			},
+			{
+				"title": "Optional shared game shell",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The current Unity games use `3d-unity-shell` for menus and lobby screens, `3d-unity-account` for sign-in, `3d-unity-update` for release updates and `3d-unity-net` for host-authoritative multiplayer. Add the shell with all its engine dependencies:"
+					},
+					{
+						"type": "manifest",
+						"packages": [
+							"3d-unity-shell"
+						]
+					},
+					{
+						"type": "p",
+						"text": "Configure your own `ShellConfig` and `GameAccount.Config` before opening the shell. Direct-address multiplayer and Unity Relay are separate connection options; online play requires your Unity Services configuration."
 					}
 				]
 			},
@@ -335,7 +358,7 @@
 							"**Schemas** (`3d-*-schema`): JSON formats for scenes, assets, multiplayer sessions, saves and inventories. No engine.",
 							"**Unity packages** (`3d-unity-*`): core systems every game needs, a game kit for shipping one, and specific ones for editing, VR, room scans, Firebase, multiplayer, combat and inventory.",
 							"**Constructors** (`3d-constructor-<style>-*`, and the shared `3d-unity-fixed-camera` and `3d-unity-topdown-camera`): one per camera style. Each adds only its camera and controls (flat or VR) and a starter template.",
-							"**Game packages** (`<game>-*`, e.g. `temnorid-arena-*`): the interface (menus, HUD) and the gameplay (rules, maps, content) of one game."
+							"**Game packages** (`<game>-*`, e.g. `game-arena-*`): the interface (menus, HUD) and the gameplay (rules, maps, content) of one game."
 						]
 					},
 					{
@@ -376,7 +399,7 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Movement is shared; the camera style is not. One character serves every constructor, and each constructor decides where forward is."
+						"text": "Character View shares `3d-unity-character` between first- and third-person controls. Fixed-camera and overhead games can use their own movement or command systems; installing a camera does not provide those controls."
 					},
 					{
 						"type": "code",
@@ -409,6 +432,10 @@
 			{
 				"title": "Multiplayer",
 				"blocks": [
+					{
+						"type": "p",
+						"text": "The ten current Unity games use `3d-unity-net`, not `3d-unity-network`. Choose one networking model for your game: their APIs and message formats are different."
+					},
 					{
 						"type": "p",
 						"text": "`3d-unity-network` is server-authoritative: clients send input, the server decides hits, health and score. Two kinds of traffic stay separate:"
@@ -461,7 +488,7 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Each line joins a package to one that needs it, as declared in each package."
+						"text": "The catalog graph includes engine assembly dependencies and the JSON contracts a package uses. JSON schemas are not Unity packages and are excluded from the generated installation manifests."
 					},
 					{
 						"type": "graph"
@@ -506,29 +533,32 @@
 				]
 			},
 			{
-				"title": "A multiplayer match: Temnorid Arena",
+				"title": "A host-authoritative multiplayer game",
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Temnorid Arena is the sample game: mages fight with spells instead of guns. Version 0.1 is a free-for-all deathmatch against bots on Windows, phones and Meta Quest 3; rounds, teams and an economy come next. It is built from the Character View constructor (with `3d-constructor-vr-controls` for VR) plus:"
-					},
-					{
-						"type": "ul",
-						"items": [
-							"`3d-unity-network` runs the match on the server; `3d-unity-firebase` keeps accounts and match stats.",
-							"`3d-unity-audio` makes footsteps and spells audible by direction and distance.",
-							"`3d-unity-xr` runs the Meta Quest build: the headset camera and hands ride on the same character.",
-							"Interface: `temnorid-arena-menus` (main menu, pause, settings, sign-in and stats) and `temnorid-arena-hud` (health, mana, spell bar, kill feed, scoreboard; touch and VR layouts).",
-							"Gameplay: `temnorid-arena-core` (combatants, bots, respawns, scoreboard), `-spells` and `-maps`."
-						]
-					},
-					{
-						"type": "p",
-						"text": "A match’s session, its messages and its replay are defined in `3d-network-schema`, and `3d-unity-network` records a replay from the moment a session runs. The schema repository ships one in `examples/arena-replay.example.json`:"
+						"text": "Arena uses Character View camera and controls with `3d-unity-net`, `3d-unity-combat`, `3d-unity-ai` and `3d-unity-feedback`. The shared shell handles menus and the lobby. Game rules and maps stay in the game project."
 					},
 					{
 						"type": "code",
-						"code": "{\n  \"seq\": 4,\n  \"from\": \"server\",\n  \"type\": \"temnorid-arena.round-ended\",\n  \"payload\": { \"round\": 1, \"winnerTeamId\": \"light\" }\n}"
+						"code": "using ITKamianets.Engine.Net;\nusing UnityEngine;\n\nvar net = NetSession.Ensure();\nnet.GameId = \"my-game\";\nnet.GameVersion = Application.version;\nnet.MaxPlayers = 4;\nnet.LocalName = \"Ada\";\n\nif (!net.HostDirect())\n    Debug.LogError(\"Could not start the host.\");\n\n// On another machine: net.JoinDirect(\"192.168.1.5\");\n// The host validates gameplay requests and publishes authoritative state.\nnet.RosterChanged += () => Debug.Log(net.Players.Count + \" players\");"
+					},
+					{
+						"type": "p",
+						"text": "Use `NetSession.IsAuthority` for host or solo simulation, and publish entity state from the host. The schema replay examples belong to `3d-unity-network`; they do not describe `3d-unity-net` traffic."
+					}
+				]
+			},
+			{
+				"title": "Fixed and overhead cameras",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Escape and Detective use `3d-unity-fixed-camera`: assign `FixedViewCamera.Subject` and place `CameraShotVolume` boxes with shot anchors. Call `HoldBasis` while movement input is held to preserve direction across a camera cut."
+					},
+					{
+						"type": "p",
+						"text": "Caravan Guard uses `3d-unity-topdown-camera`. `OverheadCamera` provides bounded panning and zoom; set `Focus` and `Bounds`, then call `Snap`. Selection, placement and character commands remain game code."
 					}
 				]
 			},

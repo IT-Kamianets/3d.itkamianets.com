@@ -84,7 +84,7 @@ export class PitchComponent {
 	protected readonly layers = [
 		{
 			title: 'Пакети',
-			what: 'Системи, потрібні кожній 3D-грі: сцени, ресурси, редагування об\'єктів, VR, сканування кімнати.',
+			what: "Системи, потрібні кожній 3D-грі: сцени, ресурси, редагування об'єктів, VR, сканування кімнати.",
 			why: 'Пишемо й виправляємо один раз, а користуються всі ігри.',
 			ai: 'Агент читає packages.md і обирає перевірені пакети замість того, щоб писати 3D-системи з нуля.',
 		},
@@ -119,7 +119,7 @@ export class PitchComponent {
 				{
 					slug: '3d-asset-schema',
 					title: 'Схема ресурсів',
-					text: 'Що це за об\'єкти: моделі, матеріали, текстури.',
+					text: "Що це за об'єкти: моделі, матеріали, текстури.",
 				},
 				{
 					slug: '3d-network-schema',
@@ -167,7 +167,7 @@ export class PitchComponent {
 				{
 					slug: '3d-unity-interaction',
 					title: 'Взаємодія',
-					text: 'Вибір, переміщення, обертання й масштабування об\'єктів.',
+					text: "Вибір, переміщення, обертання й масштабування об'єктів.",
 				},
 				{
 					slug: '3d-unity-spatial',
@@ -236,29 +236,29 @@ export class PitchComponent {
 		title: 'Ігри',
 		shared: [
 			{
-				slug: 'temnorid-character',
-				title: 'Персонаж',
-				text: 'Здоров’я, стани, відродження: однакові для бійця, фермера чи будь-кого іншого.',
+				slug: '3d-unity-combat',
+				title: 'Бій',
+				text: 'Здоров’я, команди, снаряди та ближні атаки. Правила бою задає гра.',
 			},
 			{
-				slug: 'temnorid-skills',
-				title: 'Вміння',
-				text: 'Закляття, здібності, час перезарядки. Сервер перевіряє кожне використання.',
+				slug: '3d-unity-ai',
+				title: 'Боти',
+				text: 'Пошук цілі, переслідування, атака та патрулювання.',
 			},
 			{
-				slug: 'temnorid-hud',
-				title: 'HUD',
-				text: 'Здоров’я, ресурси, панель вмінь, повідомлення про події. Розкладки для дотику та VR.',
+				slug: '3d-unity-ui',
+				title: 'Інтерфейс',
+				text: 'Екрани на uGUI, створені в коді та розміщені за якорями.',
 			},
 			{
-				slug: 'temnorid-core',
-				title: 'Ядро',
-				text: 'Хід матчу, прогрес гравців і таблиця результатів.',
+				slug: '3d-unity-shell',
+				title: 'Оболонка',
+				text: 'Спільні меню, вхід, лобі та панелі гри.',
 			},
 			{
-				slug: 'temnorid-maps',
-				title: 'Мапи',
-				text: 'Рівні як Scene JSON, з предметами та точками появи.',
+				slug: '3d-unity-graybox',
+				title: 'Прототип',
+				text: 'Примітиви зі стабільними id ресурсів і засоби побудови першої ігрової сцени.',
 			},
 		],
 		games: [
@@ -266,7 +266,7 @@ export class PitchComponent {
 				title: 'Arena',
 				packages: [
 					{
-						slug: 'temnorid-deathmatch',
+						slug: 'match rules (project code)',
 						title: 'Дезматч',
 						text: 'Бій проти ботів: хто кого переміг і коли матч завершено.',
 					},
@@ -276,7 +276,7 @@ export class PitchComponent {
 				title: 'Farm',
 				packages: [
 					{
-						slug: 'temnorid-farming',
+						slug: 'farming rules (project code)',
 						title: 'Фермерство',
 						text: 'Посів, догляд і врожай: як росте ферма та що вважається успіхом.',
 					},
@@ -312,30 +312,27 @@ export class PitchComponent {
 		...this._exampleGames.games.flatMap((game) => game.packages.map((item) => item.slug)),
 	]);
 
-	/**
-	 * One project, four kinds of device. `state` says honestly how far each one is: the Quest build
-	 * has only run with a simulated headset so far, and the iOS project is built on a Mac.
-	 */
+	/** Package capabilities are separate from a verified platform build. */
 	protected readonly devices = [
 		{
 			name: 'Windows',
 			input: 'Клавіатура й миша або геймпад.',
-			state: 'Можна грати',
+			state: 'Ввід із клавіатури та геймпада у пакетах',
 		},
 		{
 			name: 'Телефони на Android',
 			input: 'Дотик: стік руху, перетягування для огляду, кнопки заклять.',
-			state: 'Збирається в APK',
+			state: 'Сенсорний ввід у пакетах',
 		},
 		{
 			name: 'iPhone та iPad',
 			input: 'Те саме сенсорне керування.',
-			state: 'Проєкт Xcode налаштовано',
+			state: 'Збірку та пристрої перевіряють окремо',
 		},
 		{
 			name: 'Meta Quest 3',
 			input: 'Контролери: стік для ходьби, тригер для закляття вздовж руки.',
-			state: 'Працює в симуляторі, далі — шолом',
+			state: 'Окреме XR-налаштування та перевірка на шоломі',
 		},
 	];
 

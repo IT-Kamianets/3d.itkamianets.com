@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import docsData from '../../../data/docs/docs.json';
-import { catalogPackages, repoUrl } from '../../feature/catalog/catalog.data';
+import { catalogPackages, repoUrl, installManifest } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { DependencyGraphComponent } from '../../shared/dependency-graph/dependency-graph.component';
 import { RichPipe, TrPipe } from '../../shared/translate/tr.pipe';
@@ -14,6 +14,7 @@ type DocBlock =
 	| { type: 'ol'; items: string[] }
 	| { type: 'links'; items: { label: string; path: string; text: string }[] }
 	| { type: 'code'; code: string }
+	| { type: 'manifest'; packages: string[] }
 	| { type: 'graph' }
 	| { type: 'packages' }
 	| { type: 'examples' };
@@ -48,4 +49,11 @@ export class DocsComponent {
 	];
 	protected readonly packages = catalogPackages;
 	protected readonly repoUrl = repoUrl;
+	protected readonly installManifest = installManifest;
+	protected sectionId(title: string) {
+		return title
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '');
+	}
 }

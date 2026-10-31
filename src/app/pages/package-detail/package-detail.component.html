@@ -3,7 +3,10 @@
 		<h1 class="ds-page-title ds-mono !text-[clamp(1.75rem,4vw,2.5rem)]">{{ item.name }}</h1>
 		<p class="ds-lead mt-4">{{ item.summary | tr }}</p>
 		<p class="ds-supporting mt-5">
-			{{ item.group | tr }}, {{ item.license }}@if (item.version) {, v{{ item.version }}}
+			{{ item.group | tr }}, {{ item.license }}
+			@if (item.version) {
+				, v{{ item.version }}
+			}
 		</p>
 		<div class="mt-4 flex flex-wrap items-center gap-2">
 			<a class="ds-btn ds-btn-ghost ds-btn-sm" [href]="repo" rel="noopener" target="_blank">
@@ -15,10 +18,22 @@
 
 	<!-- Install: the primary task of this page -->
 	<section class="mt-10 max-w-[48rem]" aria-labelledby="install-title">
-		<h2 id="install-title" class="ds-section-title text-[1.25rem]">{{ 'Installation' | tr }}</h2>
+		<h2 id="install-title" class="ds-section-title text-[1.25rem]">
+			{{ 'Installation' | tr }}
+		</h2>
 		@if (item.packageId) {
-			<p class="ds-supporting mt-3 mb-2">{{ 'Unity Package Manager › Add package from git URL' | tr }}</p>
+			<p class="ds-supporting mt-3 mb-2">
+				{{ 'Unity Package Manager › Add package from git URL' | tr }}
+			</p>
 			<app-code-block [code]="gitUrl" />
+			@if (item.dependencies.length) {
+				<details class="ds-card mt-4">
+					<summary class="cursor-pointer p-4 font-medium">
+						{{ 'Manifest with engine dependencies' | tr }}
+					</summary>
+					<div class="px-4 pb-4"><app-code-block [code]="manifest" /></div>
+				</details>
+			}
 			<ul class="ds-supporting mt-3 flex list-none flex-col gap-1 p-0">
 				@for (requirement of item.requirements; track requirement) {
 					<li>{{ requirement | tr }}</li>
@@ -37,7 +52,9 @@
 		}
 	</section>
 
-	<div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+	<div
+		class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16"
+	>
 		<div class="flex flex-col gap-10">
 			<section class="prose-measure">
 				<h2 class="ds-section-title text-[1.25rem]">{{ 'Purpose' | tr }}</h2>
@@ -61,8 +78,12 @@
 					<dl class="m-0 mt-3 flex flex-col gap-4">
 						@for (entry of item.api; track entry.name) {
 							<div class="grid gap-1">
-								<dt class="ds-mono text-sm font-medium [overflow-wrap:anywhere]">{{ entry.name }}</dt>
-								<dd class="m-0 leading-7 text-[var(--muted-foreground)]">{{ entry.text | tr }}</dd>
+								<dt class="ds-mono text-sm font-medium [overflow-wrap:anywhere]">
+									{{ entry.name }}
+								</dt>
+								<dd class="m-0 leading-7 text-[var(--muted-foreground)]">
+									{{ entry.text | tr }}
+								</dd>
 							</div>
 						}
 					</dl>
@@ -73,7 +94,11 @@
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0 leading-7">
 					@for (entry of item.current; track entry) {
 						<li class="flex gap-3">
-							<app-icon class="mt-1 text-[var(--muted-foreground)]" name="check" size="1.125rem" />
+							<app-icon
+								class="mt-1 text-[var(--muted-foreground)]"
+								name="check"
+								size="1.125rem"
+							/>
 							<span>{{ entry | tr }}</span>
 						</li>
 					}
@@ -104,7 +129,9 @@
 					<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 						@for (dependency of item.dependencies; track dependency) {
 							<li>
-								<a class="ds-mono" [routerLink]="['/packages', dependency]">{{ dependency }}</a>
+								<a class="ds-mono" [routerLink]="['/packages', dependency]">{{
+									dependency
+								}}</a>
 							</li>
 						}
 					</ul>
@@ -117,17 +144,25 @@
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
 					@for (other of related; track other.slug) {
 						<li>
-							<a class="ds-mono" [routerLink]="['/packages', other.slug]">{{ other.name }}</a>
+							<a class="ds-mono" [routerLink]="['/packages', other.slug]">{{
+								other.name
+							}}</a>
 						</li>
 					}
 				</ul>
 			</section>
 			<section>
 				<details class="ds-card">
-					<summary class="flex cursor-pointer items-center justify-between gap-3 p-4 font-medium">
-						<span><span>{{ 'Roadmap' | tr }}</span> ({{ item.roadmap.length }})</span>
+					<summary
+						class="flex cursor-pointer items-center justify-between gap-3 p-4 font-medium"
+					>
+						<span
+							><span>{{ 'Roadmap' | tr }}</span> ({{ item.roadmap.length }})</span
+						>
 					</summary>
-					<ol class="m-0 flex list-decimal flex-col gap-1 px-4 pb-4 pl-9 text-sm leading-6 marker:text-[var(--muted-foreground)]">
+					<ol
+						class="m-0 flex list-decimal flex-col gap-1 px-4 pb-4 pl-9 text-sm leading-6 marker:text-[var(--muted-foreground)]"
+					>
 						@for (step of item.roadmap; track step) {
 							<li>{{ step | tr }}</li>
 						}

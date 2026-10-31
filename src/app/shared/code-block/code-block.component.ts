@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, inject, input, signal } from '@angular/core';
-import {  } from '@wawjs/ngx-translate';
+import { Component, DestroyRef, inject, input, signal } from '@angular/core';
 import { TrPipe } from '../translate/tr.pipe';
 import { IconComponent } from '../icon/icon.component';
 
@@ -9,26 +8,40 @@ import { IconComponent } from '../icon/icon.component';
 	imports: [IconComponent, TrPipe],
 	template: `
 		<div class="code-block">
-			<pre><code>{{ code() }}</code></pre>
-			<button
-				class="ds-btn ds-btn-ghost ds-btn-sm ds-btn-icon copy"
-				type="button"
-				[attr.aria-label]="'Copy to clipboard' | tr"
-				(click)="copy()"
-			>
-				<app-icon [name]="state() === 'copied' ? 'copy-check' : 'copy'" />
-			</button>
-			<span class="sr-only-text" role="status">{{ (state() === 'copied' ? 'Copied' : state() === 'failed' ? 'Copy failed. Select the text and copy it manually.' : '') | tr }}</span>
+			<div class="code-toolbar">
+				<span class="ds-supporting" role="status">{{
+					(state() === 'copied'
+						? 'Copied'
+						: state() === 'failed'
+							? 'Copy failed. Select the text and copy it manually.'
+							: ''
+					) | tr
+				}}</span>
+				<button class="ds-btn ds-btn-ghost copy" type="button" (click)="copy()">
+					<app-icon [name]="state() === 'copied' ? 'copy-check' : 'copy'" />
+					<span>{{ 'Copy code' | tr }}</span>
+				</button>
+			</div>
+			<pre
+				tabindex="0"
+				role="region"
+				[attr.aria-label]="'Code snippet' | tr"
+			><code>{{ code() }}</code></pre>
 		</div>
 	`,
 })
 export class CodeBlockComponent {
 	private readonly _document = inject(DOCUMENT);
+	private resetTimer?: ReturnType<typeof setTimeout>;
+	constructor() {
+		inject(DestroyRef).onDestroy(() => clearTimeout(this.resetTimer));
+	}
 
 	readonly code = input.required<string>();
 	protected readonly state = signal<'idle' | 'copied' | 'failed'>('idle');
 
 	protected async copy() {
+		clearTimeout(this.resetTimer);
 		const clipboard = this._document.defaultView?.navigator?.clipboard;
 
 		if (!clipboard) {
@@ -39,7 +52,7 @@ export class CodeBlockComponent {
 		try {
 			await clipboard.writeText(this.code());
 			this.state.set('copied');
-			setTimeout(() => this.state.set('idle'), 2000);
+			this.resetTimer = setTimeout(() => this.state.set('idle'), 2000);
 		} catch {
 			this.state.set('failed');
 		}

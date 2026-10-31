@@ -1,62 +1,119 @@
-<div class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-12 sm:py-16 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16">
-	<nav class="lg:sticky lg:top-24 lg:self-start" [attr.aria-label]="'Documentation navigation' | tr">
-		<p class="ds-supporting hidden lg:block">{{ 'Documentation' | tr }}</p>
-		<ul class="m-0 flex list-none gap-1 overflow-x-auto p-0 lg:mt-3 lg:flex-col">
-			@for (link of nav; track link.path) {
-				<li>
-					<a
-						class="nav-link"
-						ariaCurrentWhenActive="page"
-						routerLinkActive
-						[routerLinkActiveOptions]="{ exact: true }"
-						[routerLink]="link.path"
-					>
-						{{ link.label | tr }}
-					</a>
-				</li>
-			}
-		</ul>
-	</nav>
+<div
+	class="container-x grid grid-cols-[minmax(0,1fr)] gap-10 py-12 sm:py-16 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16"
+>
+	<aside
+		class="lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:self-start lg:overflow-y-auto"
+	>
+		<details class="docs-menu lg:hidden">
+			<summary>{{ 'Documentation menu' | tr }}</summary>
+			<nav [attr.aria-label]="'Documentation navigation' | tr">
+				<ul class="m-0 flex list-none flex-col gap-1 p-0">
+					@for (link of nav; track link.path) {
+						<li>
+							<a
+								class="nav-link"
+								ariaCurrentWhenActive="page"
+								routerLinkActive
+								[routerLinkActiveOptions]="{ exact: true }"
+								[routerLink]="link.path"
+							>
+								{{ link.label | tr }}
+							</a>
+						</li>
+					}
+				</ul>
+			</nav>
+		</details>
+		<nav class="hidden lg:block" [attr.aria-label]="'Documentation navigation' | tr">
+			<p class="ds-supporting hidden lg:block">{{ 'Documentation' | tr }}</p>
+			<ul class="m-0 flex list-none gap-1 overflow-x-auto p-0 lg:mt-3 lg:flex-col">
+				@for (link of nav; track link.path) {
+					<li>
+						<a
+							class="nav-link"
+							ariaCurrentWhenActive="page"
+							routerLinkActive
+							[routerLinkActiveOptions]="{ exact: true }"
+							[routerLink]="link.path"
+						>
+							{{ link.label | tr }}
+						</a>
+					</li>
+				}
+			</ul>
+		</nav>
 
+		<nav class="mt-8 hidden lg:block" [attr.aria-label]="'On this page' | tr">
+			<p class="ds-supporting">{{ 'On this page' | tr }}</p>
+			<ul class="mt-3 flex list-none flex-col gap-3 p-0 text-sm leading-6">
+				@for (section of content.sections; track section.title) {
+					<li>
+						<a
+							class="ds-muted"
+							[routerLink]="[]"
+							[fragment]="sectionId(section.title)"
+							queryParamsHandling="preserve"
+							>{{ section.title | tr }}</a
+						>
+					</li>
+				}
+			</ul>
+		</nav>
+	</aside>
 	<article class="min-w-0">
 		<h1 class="ds-page-title">{{ content.title | tr }}</h1>
 		<p class="ds-lead mt-4 max-w-[44ch]">{{ content.lead | tr }}</p>
 
 		@for (section of content.sections; track section.title) {
-			<section class="mt-12">
+			<section class="docs-section mt-12" [id]="sectionId(section.title)">
 				<h2 class="ds-section-title text-[1.25rem]">{{ section.title | tr }}</h2>
 
 				@for (block of section.blocks; track $index) {
 					@switch (block.type) {
 						@case ('p') {
-							<p class="prose-measure mt-4 text-pretty leading-7" [innerHTML]="block.text | rich"></p>
+							<p
+								class="prose-measure mt-4 text-pretty leading-7"
+								[innerHTML]="block.text | rich"
+							></p>
 						}
 						@case ('ul') {
-							<ul class="prose-measure mt-4 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+							<ul
+								class="prose-measure mt-4 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]"
+							>
 								@for (item of block.items; track item) {
 									<li [innerHTML]="item | rich"></li>
 								}
 							</ul>
 						}
 						@case ('ol') {
-							<ol class="prose-measure mt-4 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+							<ol
+								class="prose-measure mt-4 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]"
+							>
 								@for (item of block.items; track item) {
 									<li [innerHTML]="item | rich"></li>
 								}
 							</ol>
 						}
 						@case ('links') {
-							<ul class="prose-measure m-0 mt-4 flex list-none flex-col gap-3 p-0 leading-7">
+							<ul
+								class="prose-measure m-0 mt-4 flex list-none flex-col gap-3 p-0 leading-7"
+							>
 								@for (item of block.items; track item.path) {
 									<li>
-										<a [routerLink]="item.path">{{ item.label | tr }}</a>: {{ item.text | tr }}
+										<a [routerLink]="item.path">{{ item.label | tr }}</a
+										>: {{ item.text | tr }}
 									</li>
 								}
 							</ul>
 						}
 						@case ('code') {
-							<div class="mt-4 max-w-[34rem]">
+							<div class="mt-4 max-w-[54rem]">
 								<app-code-block [code]="block.code" />
+							</div>
+						}
+						@case ('manifest') {
+							<div class="mt-4 max-w-[54rem]">
+								<app-code-block [code]="installManifest(block.packages)" />
 							</div>
 						}
 						@case ('graph') {
@@ -65,12 +122,20 @@
 							</div>
 						}
 						@case ('examples') {
-							<ul class="prose-measure m-0 mt-4 flex list-none flex-col gap-4 p-0 leading-7">
+							<ul
+								class="prose-measure m-0 mt-4 flex list-none flex-col gap-4 p-0 leading-7"
+							>
 								@for (item of packages; track item.slug) {
 									@if (item.examples.length) {
 										<li>
-											<a class="ds-mono" [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
-											<ul class="mt-1 list-disc pl-5 marker:text-[var(--muted-foreground)]">
+											<a
+												class="ds-mono"
+												[routerLink]="['/packages', item.slug]"
+												>{{ item.name }}</a
+											>
+											<ul
+												class="mt-1 list-disc pl-5 marker:text-[var(--muted-foreground)]"
+											>
 												@for (example of item.examples; track example) {
 													<li>{{ example | tr }}</li>
 												}
@@ -81,8 +146,8 @@
 							</ul>
 						}
 						@case ('packages') {
-							<div class="ds-card mt-4 overflow-x-auto">
-								<table class="ds-table min-w-[40rem]">
+							<div class="ds-card mt-4 overflow-hidden">
+								<table class="ds-table install-table">
 									<thead>
 										<tr>
 											<th scope="col">{{ 'Package' | tr }}</th>
@@ -93,19 +158,32 @@
 									<tbody>
 										@for (item of packages; track item.slug) {
 											<tr>
-												<th scope="row" class="ds-mono !font-medium !text-[var(--foreground)]">
-													<a [routerLink]="['/packages', item.slug]">{{ item.name }}</a>
+												<th
+													scope="row"
+													class="ds-mono !font-medium !text-[var(--foreground)]"
+												>
+													<a [routerLink]="['/packages', item.slug]">{{
+														item.name
+													}}</a>
 												</th>
-												<td class="ds-mono">
+												<td class="ds-mono break-all">
 													@if (item.packageId) {
 														{{ repoUrl(item.slug) }}.git
 													} @else if (item.group === 'Schemas') {
-														<span class="ds-muted">{{ 'JSON Schema files, not a Unity package' | tr }}</span>
+														<span class="ds-muted">{{
+															'JSON Schema files, not a Unity package'
+																| tr
+														}}</span>
 													} @else {
-														<span class="ds-muted">{{ 'Unity project: clone the repository' | tr }}</span>
+														<span class="ds-muted">{{
+															'Unity project: clone the repository'
+																| tr
+														}}</span>
 													}
 												</td>
-												<td>{{ item.version || '-' }}</td>
+												<td [attr.data-label]="'Version' | tr">
+													{{ item.version || '-' }}
+												</td>
 											</tr>
 										}
 									</tbody>

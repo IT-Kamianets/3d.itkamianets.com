@@ -1,21 +1,75 @@
 <div class="container-x py-12 sm:py-16">
 	<h1 class="ds-page-title">{{ 'Packages' | tr }}</h1>
-	<p class="ds-lead mt-4 max-w-[44ch]">{{ 'Reusable building blocks, grouped by area. Open one for install steps and roadmap.' | tr }}</p>
+	<p class="ds-lead mt-4 max-w-[44ch]">
+		{{
+			'Find a framework package, check its dependencies, and copy the install instructions.'
+				| tr
+		}}
+	</p>
 
-	<div class="mt-8 flex flex-wrap gap-2" role="group" [attr.aria-label]="'Filter by area' | tr">
-		<button class="ds-chip" type="button" [attr.aria-pressed]="!group()" (click)="select(null)">{{ 'All' | tr }}</button>
+	<div class="catalog-search mt-8 max-w-[44rem]">
+		<label for="package-search" class="block font-medium">{{ 'Search packages' | tr }}</label>
+		<input
+			id="package-search"
+			class="search-input mt-2"
+			type="search"
+			[value]="query()"
+			(input)="search($event)"
+			[placeholder]="'Name, feature, or API member' | tr"
+			aria-describedby="package-count"
+			autocomplete="off"
+		/>
+	</div>
+
+	<div class="mt-5 flex flex-wrap gap-2" role="group" [attr.aria-label]="'Filter by area' | tr">
+		<button class="ds-chip" type="button" [attr.aria-pressed]="!group()" (click)="select(null)">
+			{{ 'All' | tr }}
+		</button>
 		@for (name of groups; track name) {
-			<button class="ds-chip" type="button" [attr.aria-pressed]="group() === name" (click)="select(name)">
+			<button
+				class="ds-chip"
+				type="button"
+				[attr.aria-pressed]="group() === name"
+				(click)="select(name)"
+			>
 				{{ name | tr }}
 			</button>
 		}
 	</div>
 
-	<ul class="m-0 mt-8 grid list-none gap-4 p-0 md:grid-cols-2">
+	<div class="mt-6 flex min-h-11 flex-wrap items-center justify-between gap-3">
+		<p id="package-count" class="ds-supporting" role="status">
+			{{ visible().length }} / {{ total }} {{ 'packages' | tr }}
+		</p>
+		@if (query() || group()) {
+			<button type="button" class="ds-btn ds-btn-ghost" (click)="reset()">
+				{{ 'Clear filters' | tr }}
+			</button>
+		}
+	</div>
+	@if (!visible().length) {
+		<div class="ds-card mt-4 p-6 sm:p-8">
+			<h2 class="ds-section-title">{{ 'No matching packages' | tr }}</h2>
+			<p class="ds-supporting mt-3">
+				{{
+					'Try another name or clear the filters to browse every framework package.' | tr
+				}}
+			</p>
+			<button type="button" class="ds-btn ds-btn-primary mt-5 self-start" (click)="reset()">
+				{{ 'Show all packages' | tr }}
+			</button>
+		</div>
+	}
+
+	<ul class="m-0 mt-4 grid list-none gap-4 p-0 md:grid-cols-2">
 		@for (item of visible(); track item.slug) {
 			<li class="ds-card">
 				<a class="tile-link ds-plain" [routerLink]="['/packages', item.slug]">
-					<span class="ds-mono text-base font-medium">{{ item.name }}</span>
+					<span class="ds-supporting"
+						>{{ item.group | tr }} <span aria-hidden="true">·</span>
+						{{ item.version }}</span
+					>
+					<span class="ds-mono text-base font-medium break-words">{{ item.name }}</span>
 					<span class="ds-supporting">{{ item.summary | tr }}</span>
 					<span class="ds-mono ds-muted mt-auto pt-2">
 						@if (item.dependencies.length) {

@@ -27,9 +27,7 @@
 			"Additive versioning: every 1.0.0 document is valid 1.1.0, and breaking changes get a new schema/v{n}/ folder."
 		],
 		"examples": [
-			"A Temnorid Arena map stored as Scene JSON, with MARKER spawns tagged team:a and team:b and a MARKER volume tagged as an objective site.",
-			"A room scanned on Meta Quest saved as one scene of walls, floor, ceiling and furniture.",
-			"A level editor that loads, changes and saves the same JSON, which stays readable outside Unity."
+			"Example use: an arena map stored as Scene JSON, with MARKER spawns and a tagged objective volume."
 		],
 		"roadmap": [
 			"Materials, lights and cameras in the scene",
@@ -123,9 +121,7 @@
 			"Vector3, Bounds3D and Metadata match 3d-scene-schema, so tools can share code."
 		],
 		"examples": [
-			"A Temnorid Arena map lists its crates and pillars in one library, and each PROP in the scene points to them by id.",
-			"A footstep sound stored as a WAV asset with the tags footstep and surface:stone, so tools can group sounds by ground type.",
-			"A level designer places capsule placeholders for barrels that an artist has not modeled yet."
+			"Example use: a scene library lists reusable crates and pillars; each PROP points to a model by id."
 		],
 		"roadmap": [
 			"Level of detail",
@@ -196,7 +192,7 @@
 		"packageId": "",
 		"dependencies": [],
 		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and examples/ at https://github.com/IT-Kamianets/3d-network-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-network reads and writes this format.",
-		"usage": "A session document lists the mode, the sceneId, the lifecycle state, teams and players. Every message has an envelope (messageId, sessionId, seq, tick, sentAt, from, type) and a payload typed by type. session.* types belong to the schema; game events use names namespaced by the game, such as temnorid-arena.round-ended. In Unity, SessionChannel in 3d-unity-network sends and records these messages.",
+		"usage": "A session document lists the mode, the sceneId, the lifecycle state, teams and players. Every message has an envelope (messageId, sessionId, seq, tick, sentAt, from, type) and a payload typed by type. session.* types belong to the schema; game events use names namespaced by the game, such as game-arena.round-ended. In Unity, SessionChannel in 3d-unity-network sends and records these messages.",
 		"current": [
 			"session.schema.json: sessionId, mode, sceneId, state (lobby, starting, running, ended), maxPlayers, teams, players, timestamps and game settings.",
 			"Players with a role (player, spectator or bot), a team and a connected flag.",
@@ -213,9 +209,7 @@
 			"Readable without Unity: servers, spectators, stats and AI tools use the same JSON."
 		],
 		"examples": [
-			"A Temnorid Arena match replay that rebuilds rounds, defeats and the scoreboard without running the game.",
-			"A match server written in Go or Node that speaks the same messages as the Unity host.",
-			"A stats page that reads match results with kills, deaths and spells cast to build player profiles."
+			"Example use: a server-session replay that reconstructs rounds and scores from schema messages. This is separate from the NetSession protocol."
 		],
 		"roadmap": [
 			"Chat and voice-channel messages",
@@ -243,7 +237,7 @@
 			},
 			{
 				"name": "Session.mode",
-				"text": "A game-namespaced name of the game and mode, such as temnorid-arena.competitive."
+				"text": "A game-namespaced name of the game and mode, such as game-arena.competitive."
 			},
 			{
 				"name": "Player",
@@ -278,7 +272,7 @@
 				"text": "A finished session: the starting session and its server messages ordered by seq."
 			}
 		],
-		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"messageId\": \"m-2\",\n  \"sessionId\": \"match-7f3a\",\n  \"seq\": 2,\n  \"tick\": 2210,\n  \"sentAt\": \"2026-10-14T18:02:04Z\",\n  \"from\": \"server\",\n  \"type\": \"temnorid-arena.player-defeated\",\n  \"payload\": { \"playerId\": \"p-oleh\", \"byPlayerId\": \"p-ira\", \"spell\": \"fireball\" }\n}"
+		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"messageId\": \"m-2\",\n  \"sessionId\": \"match-7f3a\",\n  \"seq\": 2,\n  \"tick\": 2210,\n  \"sentAt\": \"2026-10-14T18:02:04Z\",\n  \"from\": \"server\",\n  \"type\": \"game-arena.player-defeated\",\n  \"payload\": { \"playerId\": \"p-oleh\", \"byPlayerId\": \"p-ira\", \"spell\": \"fireball\" }\n}"
 	},
 	{
 		"slug": "3d-save-schema",
@@ -305,9 +299,7 @@
 			"No game rules, no accounts and no cloud fields: it describes one slot of one game."
 		],
 		"examples": [
-			"A Temnorid Hippodrome save that keeps the best lap time, the best total time and the race counts in the default slot.",
-			"A test or a small tool that checks a save file with any JSON Schema validator before a game loads it.",
-			"Several games on one device: every save names its gameId, so their files are never mixed up."
+			"Example use: a racing save document with the best lap time and race count in its payload."
 		],
 		"roadmap": [
 			"Invalid fixtures and a validation script",
@@ -548,9 +540,7 @@
 			"Round trips without drift: unchanged objects save with zero position error."
 		],
 		"examples": [
-			"Temnorid Arena loads an arena from JSON, then finds spawn points with FindByTag(\"spawn\") and reads each one's team tag.",
-			"A level editor moves, deletes and adds objects, then saves the level with SceneSaver.CaptureJson.",
-			"A room scanning app loads a scanned room as walls and floors with colliders to place content on."
+			"Example use: load an arena from JSON, then locate spawn points with FindByTag(\"spawn\")."
 		],
 		"roadmap": [
 			"Cameras and lights",
@@ -657,10 +647,7 @@
 			"One game, every device: a phone, a headset and a keyboard all produce the same actions, so game code does not branch on the device."
 		],
 		"examples": [
-			"In Temnorid Arena, Slot1 to Slot4 pick a spell and Primary casts it, from the keyboard, a gamepad or a Quest controller.",
-			"The game adds a Scoreboard action on Tab with AddMap, and players can rebind it in the settings menu.",
-			"The HUD switches its button hints when SchemeChanged reports that the player picked up a gamepad.",
-			"In Temnorid Arena on a phone, the on-screen stick, look drag and spell buttons feed the same actions the keyboard does."
+			"Example use: keyboard, gamepad, touch and XR bindings feed the same movement and action interface."
 		],
 		"roadmap": [
 			"Pointer and ray abstraction for mouse, touch and VR",
@@ -898,9 +885,7 @@
 			"glTFast is optional, so the package compiles and runs without it."
 		],
 		"examples": [
-			"A Temnorid Arena map loads from Scene JSON and its crates and pillars get their models by id.",
-			"A level editor places a prop at once as a placeholder while its GLB downloads.",
-			"A sound bank loads footstep clips by asset id instead of linking the files in Unity."
+			"Example use: resolve models for crates and pillars by their asset ids when loading a JSON scene."
 		],
 		"roadmap": [
 			"Performance optimization",
@@ -1009,9 +994,7 @@
 			"Optional routing of each group to the game's AudioMixer groups for reverb or ducking."
 		],
 		"examples": [
-			"Hearing an enemy wizard's footsteps on stone behind you in Temnorid Arena, and quieter when they crouch.",
-			"A fireball plays its cast sound at the caster and a flying sound attached to the projectile.",
-			"A settings screen with music and effects sliders that are remembered for the player."
+			"Example use: spatial footsteps that become quieter with distance and change surface profile on stone or grass."
 		],
 		"roadmap": [
 			"Occlusion behind walls",
@@ -1094,7 +1077,6 @@
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-ui",
 		"dependencies": [
-			"3d-unity-core",
 			"3d-unity-input"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-ui.git",
@@ -1511,8 +1493,8 @@
 		"slug": "3d-unity-account",
 		"name": "3d-unity-account",
 		"group": "Game kit",
-		"summary": "The player's Lords account in every game: sign in as a guest or with Google over Firebase's REST API, with no Firebase SDK.",
-		"purpose": "A lord should be the same person in every game. GameAccount signs players in to the Firebase project Lords uses, as a guest or with Google, remembers them between runs and gives other calls a valid ID token. Not being signed in is a normal state, and the game plays on.",
+		"summary": "Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped Firestore access without the Firebase SDK.",
+		"purpose": "GameAccount restores saved Firebase sessions, supports guest and Google sign-in, and provides valid ID tokens. Set GameAccount.Config for your own project; FirebaseConfig.Temnorid is the built-in default, not a requirement. Offline and signed-out play are valid states.",
 		"version": "0.2.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-account",
@@ -1562,6 +1544,10 @@
 		"optional": [],
 		"api": [
 			{
+				"name": "GameAccount.Config",
+				"text": "Set your FirebaseConfig before restoring a session or signing in. Google desktop sign-in also needs your Desktop OAuth client configuration."
+			},
+			{
 				"name": "GameAccount.RestoreAsync()",
 				"text": "Brings back the last player from saved tokens and refreshes them. Safe to call on every start."
 			},
@@ -1590,7 +1576,7 @@
 				"text": "The Firebase project and the Google Desktop OAuth client. FirebaseConfig.Temnorid is the project Lords uses."
 			}
 		],
-		"example": "using ITKamianets.Engine.Account;\nusing Newtonsoft.Json.Linq;\n\nawait GameAccount.RestoreAsync();\nif (!GameAccount.IsSignedIn) await GameAccount.SignInAsGuestAsync();\n\n// Later, a guest signs in with Google and keeps the same uid.\nif (GameAccount.IsGuest && GameAccount.GoogleAvailable)\n    await GameAccount.SignInWithGoogleAsync();\n\nvar firestore = FirestoreClient.ForAccount();\nvar path = \"users/\" + GameAccount.Uid + \"/progress/lords\";\nvar result = await firestore.GetAsync(path);\nif (result.Ok)\n{\n    var patch = await firestore.PatchAsync(path, new JObject { [\"note\"] = \"hello\" },\n        new[] { \"note\" }, result.Document.UpdateTime);\n    if (patch.Status == FirestoreStatus.Conflict) { /* read again and retry */ }\n}"
+		"example": "using ITKamianets.Engine.Account;\nusing Newtonsoft.Json.Linq;\n\n// Set GameAccount.Config to your Firebase project configuration first.\nawait GameAccount.RestoreAsync();\nif (!GameAccount.IsSignedIn) await GameAccount.SignInAsGuestAsync();\n\n// Later, a guest signs in with Google and keeps the same uid.\nif (GameAccount.IsGuest && GameAccount.GoogleAvailable)\n    await GameAccount.SignInWithGoogleAsync();\n\nvar firestore = FirestoreClient.ForAccount();\nvar path = \"users/\" + GameAccount.Uid + \"/progress/my-game\";\nvar result = await firestore.GetAsync(path);\nif (result.Ok)\n{\n    var patch = await firestore.PatchAsync(path, new JObject { [\"note\"] = \"hello\" },\n        new[] { \"note\" }, result.Document.UpdateTime);\n    if (patch.Status == FirestoreStatus.Conflict) { /* read again and retry */ }\n}"
 	},
 	{
 		"slug": "3d-unity-update",
@@ -1782,9 +1768,7 @@
 			"Generic: no game, room or track rules inside."
 		],
 		"examples": [
-			"A map editor for Temnorid Arena: place crates and pillars on a 0.5 m grid and save the arena as Scene JSON.",
-			"Moving furniture in a scanned room so it rests on the floor, with undo for every step.",
-			"Duplicating a row of track barriers and turning them in 15 degree steps."
+			"Example use: a map editor that places props on a grid and saves their transforms as Scene JSON."
 		],
 		"roadmap": [
 			"Move, rotate and scale gizmos (handles).",
@@ -1994,9 +1978,7 @@
 			"Product-independent: its components carry no app or game logic."
 		],
 		"examples": [
-			"Temnorid Arena on Meta Quest 3: you stand in the arena as the mage, with the headset camera at the mage’s eyes and your hands as spell-casting anchors.",
-			"XRModeSwitch makes one player prefab work in VR and on a flat screen.",
-			"A round timer or status line for a VR match that floats in front of the player on a StatusHud."
+			"Example use: a headset camera and hand anchors attached to the same character motor as a desktop player. Add the XR platform configuration separately."
 		],
 		"roadmap": [
 			"Hand tracking (no controllers).",
@@ -2112,9 +2094,7 @@
 			"Keeps what follows the player; EngineStorage in 3d-unity-core keeps settings on this device."
 		],
 		"examples": [
-			"Keeping a Temnorid Arena player's name and match stats between sessions.",
-			"A level editor that saves a built arena to the cloud and lists the scenes other players made.",
-			"Uploading a scanned room as Scene JSON for viewing on another device."
+			"Example use: store scene documents and player statistics through Firebase REST without the Firebase SDK."
 		],
 		"roadmap": [
 			"Google sign-in on PC, linked to the anonymous account",
@@ -2221,9 +2201,7 @@
 			"Newcomers get a snapshot numbered as of the latest message, so numbering never has gaps."
 		],
 		"examples": [
-			"A Temnorid Arena match where the server publishes temnorid-arena events and ends the session with team scores.",
-			"A dedicated server started with -server and a test client with -client 127.0.0.1, both without UI.",
-			"A shared VR room where several people move around one scene."
+			"Example use: a server-authoritative match that publishes schema events and ends a session with team scores. Current Unity games use the separate 3d-unity-net package."
 		],
 		"roadmap": [
 			"Server-side hit checks with lag compensation",
@@ -2865,9 +2843,7 @@
 			"Comfort settings (snap or smooth turning, vignette) live in 3d-unity-xr and are saved per player."
 		],
 		"examples": [
-			"In Temnorid Arena on Meta Quest 3, the left stick walks, the right stick turns and the trigger casts along the hand.",
-			"A VR player joins the same network match as PC and phone players, because the server only sees CharacterCommand values.",
-			"The off hand carries a wrist panel with health, mana and the spell bar."
+			"Example use: the left controller stick drives movement, the right stick turns, and a hand anchor provides an aiming direction."
 		],
 		"roadmap": [
 			"Teleport locomotion as a comfort option.",
@@ -2956,8 +2932,7 @@
 			"Keyboard and mouse and gamepad work out of the box."
 		],
 		"examples": [
-			"Temnorid Arena runs the same Playground scene and Player prefab as its movement test level.",
-			"A team starts a third-person adventure: copy the template, set StartView to third person, and replace the capsule with a character model."
+			"Use the included Playground scene and Player prefab to test the Character View movement stack in the template project."
 		],
 		"roadmap": [
 			"Pinned package versions after the first tagged release.",
@@ -3119,7 +3094,6 @@
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-topdown-camera",
 		"dependencies": [
-			"3d-unity-core",
 			"3d-unity-input"
 		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-topdown-camera.git",

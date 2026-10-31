@@ -71,7 +71,7 @@ export const findConstructor = (slug: string) =>
 	catalogConstructors.find((item) => item.slug === slug);
 
 /**
- * Game-specific packages a new project starts with, named `<game>-<suffix>` (e.g. `temnorid-arena-core`):
+ * Game-specific packages a new project starts with, named `<game>-<suffix>` (e.g. `<game>-core`):
  * the interface first, then the gameplay.
  */
 export const GENERATED_PACKAGE_SUFFIXES = ['menus', 'hud', 'core', 'maps'];
@@ -101,3 +101,21 @@ export const dependencyLevels: DependencyLevel[] = (() => {
 		packages: catalogPackages.filter((item) => levels.get(item.slug) === level),
 	}));
 })();
+
+/** Include installable transitive dependencies before their consumers; schemas stay out of UPM. */
+export function installManifest(slugs: string[]): string {
+	const installed = new Map<string, string>();
+	const visiting = new Set<string>();
+	const add = (slug: string) => {
+		const item = findPackage(slug);
+		if (!item) throw new Error(`Unknown package: ${slug}`);
+		if (visiting.has(slug)) throw new Error(`Dependency cycle: ${slug}`);
+		if (item.packageId && installed.has(item.packageId)) return;
+		visiting.add(slug);
+		item.dependencies.forEach(add);
+		visiting.delete(slug);
+		if (item.packageId) installed.set(item.packageId, `${repoUrl(item.slug)}.git`);
+	};
+	slugs.forEach(add);
+	return JSON.stringify({ dependencies: Object.fromEntries(installed) }, null, 2);
+}

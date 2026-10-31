@@ -21,11 +21,23 @@ const orgUrl = 'https://github.com/IT-Kamianets';
 const bySlug = new Map(packages.map((item) => [item.slug, item]));
 
 const GROUPS = [
-	{ name: 'Schemas', text: 'JSON formats with no engine. Not Unity packages: read them, validate against them, or use the Unity package that implements them.' },
+	{
+		name: 'Schemas',
+		text: 'JSON formats with no engine. Not Unity packages: read them, validate against them, or use the Unity package that implements them.',
+	},
 	{ name: 'Core', text: 'Unity systems every 3D game needs.' },
-	{ name: 'Game kit', text: 'Building blocks for shipping a game: screens, saves, generated sounds, scene-builder helpers, and the shared start screens, sign-in, self-update and online sessions.' },
-	{ name: 'Specific', text: 'Editing tools, devices, platforms and services that only some games need.' },
-	{ name: 'Constructor', text: 'The parts of a constructor: its camera, its controls, and a starter project.' },
+	{
+		name: 'Game kit',
+		text: 'Building blocks for shipping a game: screens, saves, generated sounds, scene-builder helpers, and the shared start screens, sign-in, self-update and online sessions.',
+	},
+	{
+		name: 'Specific',
+		text: 'Editing tools, devices, platforms and services that only some games need.',
+	},
+	{
+		name: 'Constructor',
+		text: 'The parts of a constructor: its camera, its controls, and a starter project.',
+	},
 ];
 
 /** Every engine package a package needs, directly or not, ordered so each comes after what it needs. */
@@ -43,14 +55,19 @@ const installOrder = (slug) => {
 	return order.filter((item) => bySlug.get(item)?.packageId);
 };
 
-const usedBy = (slug) => packages.filter((item) => item.dependencies.includes(slug)).map((item) => item.slug);
+const usedBy = (slug) =>
+	packages.filter((item) => item.dependencies.includes(slug)).map((item) => item.slug);
 const anchor = (slug) => `#${slug.replace(/[^a-z0-9-]/g, '')}`;
 const link = (slug) => `[\`${slug}\`](${anchor(slug)})`;
 const list = (items) => items.map((item) => `- ${item}`).join('\n');
 const gitUrl = (slug) => `${orgUrl}/${slug}.git`;
 
 const kindOf = (item) =>
-	item.packageId ? `Unity package \`${item.packageId}\`` : item.group === 'Schemas' ? 'JSON Schema (2020-12)' : 'Unity project';
+	item.packageId
+		? `Unity package \`${item.packageId}\``
+		: item.group === 'Schemas'
+			? 'JSON Schema (2020-12)'
+			: 'Unity project';
 
 const FENCE = '```';
 
@@ -63,7 +80,9 @@ const apiTable = (item) =>
 				'',
 				'| Member | What it does |',
 				'|---|---|',
-				...item.api.map((entry) => `| \`${entry.name.replace(/\|/g, '\\|')}\` | ${entry.text} |`),
+				...item.api.map(
+					(entry) => `| \`${entry.name.replace(/\|/g, '\\|')}\` | ${entry.text} |`,
+				),
 				'',
 			].join('\n')
 		: '';
@@ -82,7 +101,9 @@ const exampleBlock = (item) => {
 const packageSection = (item) => {
 	const order = installOrder(item.slug);
 	// The install order above already covers the catalog's "add its engine packages first" requirement.
-	const requirements = item.requirements.filter((text) => !text.startsWith('Add its engine packages first'));
+	const requirements = item.requirements.filter(
+		(text) => !text.startsWith('Add its engine packages first'),
+	);
 	const users = usedBy(item.slug);
 	const install = item.packageId
 		? [
@@ -143,7 +164,6 @@ ${item.description}
 `;
 };
 
-
 const markdown = `# IT Kamianets 3D Engine: packages
 
 Every public package of the IT Kamianets 3D Engine: what it does, what it depends on, and how to install it. Use this file to choose packages for a new constructor or game.
@@ -160,7 +180,7 @@ ${packages.length} packages: ${GROUPS.map((group) => `${packages.filter((item) =
 schemas            3d-*-schema                JSON, no engine
 Unity packages     3d-unity-*                 core systems, game kit, specific ones
 constructors       3d-constructor-<style>-*   one per camera style
-game packages      <game>-*                   e.g. temnorid-arena-core
+game packages      <game>-*                   game-owned; outside this catalog
 \`\`\`
 
 Each layer uses only the layers above it in this list. Game rules never go into engine or constructor packages.
@@ -169,11 +189,11 @@ Each layer uses only the layers above it in this list. Game rules never go into 
 
 **Start a game from a starter repository.** Each constructor has one (\`${orgUrl}/3d-constructor-<style>\`, listed under Constructors). Clone it under your game name; its AGENTS.md walks you or your AI agent through creating the Unity project, the engine packages to add, and what to build first.
 
-**Add a package to an existing Unity project.** In Unity, \`Window › Package Manager › + › Add package from git URL\`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a version with a tag, e.g. \`${gitUrl('3d-unity-core')}#v0.1.0\`.
+**Add a package to an existing Unity project.** In Unity, \`Window › Package Manager › + › Add package from git URL\`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a published tag or full commit SHA, replacing the placeholder in \`${gitUrl('3d-unity-core')}#<tag-or-commit>\`.
 
 **Name your own packages** \`<game>-<part>\`, with the Unity package id \`com.itkamianets.<game>-<part>\`. A new game usually starts with the interface (\`<game>-menus\`, \`<game>-hud\`) and the gameplay (\`<game>-core\`, \`<game>-maps\`). A package that more than one game could use belongs in the engine instead.
 
-**Change an engine package through a pull request**, never by copying it into a game. Clone it inside your game's repository (the starter's \`.gitignore\` ignores \`/3d-*/\`), work on a branch or your fork, point \`Packages/manifest.json\` at \`file:../<package>\` while you work, and open a pull request to the package's \`master\` branch. After the merge, switch back to the git URL pinned to the new tag. Full flow: ${siteUrl}/docs/start-a-game
+**Change an engine package through a pull request.** Clone it into your game's \`Packages/<package>\` directory. Unity loads the embedded copy instead of its Git URL; keep the manifest unchanged and keep the embedded repository out of the game's history. Work on a branch or fork, open a pull request, then remove the working clone after merging and pin the Git URL to the merged revision. Full flow: ${siteUrl}/docs/start-a-game
 
 
 ## Packages at a glance
@@ -187,13 +207,16 @@ ${group.text}
 |---|---|---|
 ${packages
 	.filter((item) => item.group === group.name)
-	.map((item) => `| ${link(item.slug)} | ${item.summary} | ${item.dependencies.length ? item.dependencies.map((slug) => `\`${slug}\``).join(', ') : '-'} |`)
+	.map(
+		(item) =>
+			`| ${link(item.slug)} | ${item.summary} | ${item.dependencies.length ? item.dependencies.map((slug) => `\`${slug}\``).join(', ') : '-'} |`,
+	)
 	.join('\n')}`,
 ).join('\n\n')}
 
 ## Constructors
 
-A constructor is a ready start for one camera style: it adds a camera, controls and a starter project on top of the engine packages.
+A constructor is a starter project for one camera style. Character View has camera and controls packages; fixed and top-down camera packages do not include complete player controls. Other styles still need implementation.
 
 ${constructors.map(constructorSection).join('\n')}
 ${GROUPS.map(
@@ -201,7 +224,10 @@ ${GROUPS.map(
 
 ${group.text}
 
-${packages.filter((item) => item.group === group.name).map(packageSection).join('\n')}`,
+${packages
+	.filter((item) => item.group === group.name)
+	.map(packageSection)
+	.join('\n')}`,
 ).join('\n')}`;
 
 await writeFile(path.join(rootDir, 'src/assets/packages.md'), markdown.replace(/\n{3,}/g, '\n\n'));

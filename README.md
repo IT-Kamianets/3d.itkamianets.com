@@ -172,45 +172,29 @@ Examples:
 
 ## Repository Architecture
 
-Example ecosystem:
+The catalog currently contains 34 framework entries (five JSON schemas, 28 UPM packages and one Unity template project), plus six constructor starters.
 
-```text
-3d-scene-schema
-3d-asset-schema
-3d-network-schema
+**Schemas**
 
-3d-unity-core
-3d-unity-scene
-3d-unity-input
-3d-unity-character
-3d-unity-assets
-3d-unity-audio
+`3d-scene-schema`, `3d-asset-schema`, `3d-network-schema`, `3d-save-schema`, `3d-inventory-schema`
 
-3d-unity-interaction
-3d-unity-spatial
-3d-unity-xr
-3d-unity-firebase
-3d-unity-network
+**Core**
 
-3d-constructor-character-view-camera
-3d-constructor-character-view-controls
-3d-constructor-character-view-template
+`3d-unity-core`, `3d-unity-scene`, `3d-unity-input`, `3d-unity-character`, `3d-unity-assets`, `3d-unity-audio`
 
-3d-constructor-character-view
-3d-constructor-top-down
-3d-constructor-isometric
-3d-constructor-side-view
-3d-constructor-fixed-view
-3d-constructor-free-view
+**Game kit**
 
-temnorid-arena-menus
-temnorid-arena-hud
-temnorid-arena-core
-temnorid-arena-spells
-temnorid-arena-maps
-```
+`3d-unity-ui`, `3d-unity-save`, `3d-unity-synth`, `3d-unity-graybox`, `3d-unity-shell`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net`
 
-The exact package split can evolve as constructors are implemented.
+**Specific**
+
+`3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase`, `3d-unity-network`, `3d-unity-combat`, `3d-unity-feedback`, `3d-unity-ai`, `3d-unity-inventory`
+
+**Constructor**
+
+`3d-constructor-character-view-camera`, `3d-constructor-character-view-controls`, `3d-constructor-vr-controls`, `3d-constructor-character-view-template`, `3d-unity-fixed-camera`, `3d-unity-topdown-camera`
+
+Character View has camera and controls implementations. Fixed and top-down camera packages are available separately; they do not supply complete player controls. The remaining camera styles have starter projects and still need implementation.
 
 ## Principles
 
@@ -296,3 +280,14 @@ Package content is taken from the `IT-Kamianets/3d-*` repository READMEs and `pa
 
 - `src/assets/packages.md`, served at `/packages.md`: every package in one Markdown file, with purpose, usage, what it includes, dependencies, install order and git URL, plus the constructors. **Generated** from the catalog by `tools/catalog/generate-packages-md.mjs` on every build: edit `packages.json` / `constructors.json`, never the file itself.
 - `src/assets/llms.txt`, served at `/llms.txt`: the short entry point AI tools look for, linking to `packages.md` and the docs. Hand-written; update it when docs pages are added or renamed.
+
+## Catalog maintenance
+
+The website documents reusable `3d-*` framework packages and constructor starters. Game-owned packages are outside this catalog.
+
+- `npm run validate`: validate package IDs, dependency graphs, constructor references and documentation install snippets.
+- `npm run build`: validate, regenerate `packages.md`, and prerender the site and SEO assets.
+- `node tools/catalog/validate-catalog.mjs --workspace ..`: compare the catalog with Unity manifests in the workspace.
+- Add `--sources <directory>` to compare catalog versions and assembly dependencies with checked-out package repositories.
+
+See [docs/catalog-audit.md](docs/catalog-audit.md) for the source audit and its limits.

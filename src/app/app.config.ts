@@ -7,7 +7,7 @@ import {
 
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
 	buildAbsoluteUrl,
 	buildSeoTitleSuffix,
@@ -54,7 +54,13 @@ export const appConfig: ApplicationConfig = {
 			mode: 'dark',
 			roundedTokens: { radius: '0.625rem', radiusPill: '624.9375rem' },
 		}),
-		provideRouter(routes),
+		provideRouter(
+			routes,
+			withInMemoryScrolling({
+				anchorScrolling: 'enabled',
+				scrollPositionRestoration: 'enabled',
+			}),
+		),
 		provideClientHydration(withEventReplay()),
 		provideTranslate({
 			defaultLanguage: environment.defaultLanguage,

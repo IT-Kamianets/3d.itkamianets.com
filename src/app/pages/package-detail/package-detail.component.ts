@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import {  } from '@wawjs/ngx-translate';
+import {} from '@wawjs/ngx-translate';
 import { TrPipe } from '../../shared/translate/tr.pipe';
-import { findPackage, repoUrl } from '../../feature/catalog/catalog.data';
+import { findPackage, repoUrl, installManifest } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 
@@ -17,4 +17,5 @@ export class PackageDetailComponent {
 	protected readonly related = this.item.related
 		.map((slug) => findPackage(slug))
 		.filter((related) => !!related);
+	protected readonly manifest = installManifest([this.item.slug]);
 }

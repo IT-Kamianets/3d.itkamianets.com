@@ -14,7 +14,7 @@ Every public package of the IT Kamianets 3D Engine: what it does, what it depend
 schemas            3d-*-schema                JSON, no engine
 Unity packages     3d-unity-*                 core systems, game kit, specific ones
 constructors       3d-constructor-<style>-*   one per camera style
-game packages      <game>-*                   e.g. temnorid-arena-core
+game packages      <game>-*                   game-owned; outside this catalog
 ```
 
 Each layer uses only the layers above it in this list. Game rules never go into engine or constructor packages.
@@ -23,11 +23,11 @@ Each layer uses only the layers above it in this list. Game rules never go into 
 
 **Start a game from a starter repository.** Each constructor has one (`https://github.com/IT-Kamianets/3d-constructor-<style>`, listed under Constructors). Clone it under your game name; its AGENTS.md walks you or your AI agent through creating the Unity project, the engine packages to add, and what to build first.
 
-**Add a package to an existing Unity project.** In Unity, `Window › Package Manager › + › Add package from git URL`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a version with a tag, e.g. `https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0`.
+**Add a package to an existing Unity project.** In Unity, `Window › Package Manager › + › Add package from git URL`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a published tag or full commit SHA, replacing the placeholder in `https://github.com/IT-Kamianets/3d-unity-core.git#<tag-or-commit>`.
 
 **Name your own packages** `<game>-<part>`, with the Unity package id `com.itkamianets.<game>-<part>`. A new game usually starts with the interface (`<game>-menus`, `<game>-hud`) and the gameplay (`<game>-core`, `<game>-maps`). A package that more than one game could use belongs in the engine instead.
 
-**Change an engine package through a pull request**, never by copying it into a game. Clone it inside your game's repository (the starter's `.gitignore` ignores `/3d-*/`), work on a branch or your fork, point `Packages/manifest.json` at `file:../<package>` while you work, and open a pull request to the package's `master` branch. After the merge, switch back to the git URL pinned to the new tag. Full flow: https://3d.itkamianets.com/docs/start-a-game
+**Change an engine package through a pull request.** Clone it into your game's `Packages/<package>` directory. Unity loads the embedded copy instead of its Git URL; keep the manifest unchanged and keep the embedded repository out of the game's history. Work on a branch or fork, open a pull request, then remove the working clone after merging and pin the Git URL to the merged revision. Full flow: https://3d.itkamianets.com/docs/start-a-game
 
 ## Packages at a glance
 
@@ -62,12 +62,12 @@ Building blocks for shipping a game: screens, saves, generated sounds, scene-bui
 
 | Package | What it does | Depends on |
 |---|---|---|
-| [`3d-unity-ui`](#3d-unity-ui) | Small helpers for building a game's screens in code with plain uGUI: panels, labels, bars, buttons and an event system wired to the engine's input. | `3d-unity-core`, `3d-unity-input` |
+| [`3d-unity-ui`](#3d-unity-ui) | Small helpers for building a game's screens in code with plain uGUI: panels, labels, bars, buttons and an event system wired to the engine's input. | `3d-unity-input` |
 | [`3d-unity-save`](#3d-unity-save) | Versioned local JSON save files: one slot per file, written safely, with a clear result for a missing, damaged or newer save. | - |
 | [`3d-unity-synth`](#3d-unity-synth) | Procedural sound: short clips built in code from waves and noise, and a sound board with volumes and a looping ambience, so a game needs no audio files. | - |
 | [`3d-unity-graybox`](#3d-unity-graybox) | Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, and Editor helpers for primitives, plain materials and world text. | - |
 | [`3d-unity-shell`](#3d-unity-shell) | The screens every Temnorid game shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars. | `3d-unity-core`, `3d-unity-input`, `3d-unity-ui`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net` |
-| [`3d-unity-account`](#3d-unity-account) | The player's Lords account in every game: sign in as a guest or with Google over Firebase's REST API, with no Firebase SDK. | `3d-unity-core` |
+| [`3d-unity-account`](#3d-unity-account) | Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped Firestore access without the Firebase SDK. | `3d-unity-core` |
 | [`3d-unity-update`](#3d-unity-update) | Keeps a game on its newest GitHub release: checks for a new version and installs it silently on Windows. | - |
 | [`3d-unity-net`](#3d-unity-net) | A small multiplayer layer over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code. | - |
 
@@ -98,11 +98,11 @@ The parts of a constructor: its camera, its controls, and a starter project.
 | [`3d-constructor-vr-controls`](#3d-constructor-vr-controls) | Turns XR controllers into character commands: walk where you look, turn with the stick, crouch for real. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character`, `3d-unity-xr` |
 | [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) | Starter Unity project for first- and third-person games with a test level and a playable character. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character`, `3d-constructor-character-view-camera`, `3d-constructor-character-view-controls` |
 | [`3d-unity-fixed-camera`](#3d-unity-fixed-camera) | Fixed cinematic camera shots for third-person games, chosen by the boxes the player walks through. | - |
-| [`3d-unity-topdown-camera`](#3d-unity-topdown-camera) | Overhead camera for strategy and tower-defense games: pan, zoom and stay inside the map. | `3d-unity-core`, `3d-unity-input` |
+| [`3d-unity-topdown-camera`](#3d-unity-topdown-camera) | Overhead camera for strategy and tower-defense games: pan, zoom and stay inside the map. | `3d-unity-input` |
 
 ## Constructors
 
-A constructor is a ready start for one camera style: it adds a camera, controls and a starter project on top of the engine packages.
+A constructor is a starter project for one camera style. Character View has camera and controls packages; fixed and top-down camera packages do not include complete player controls. Other styles still need implementation.
 
 ### Character View
 
@@ -348,7 +348,7 @@ What happens between players: multiplayer sessions, messages, results and replay
 
 **Purpose.** The shared contract for multiplayer between the Unity game, a dedicated server in any language, web spectators, stats storage, bots and AI tools. It covers the messages that matter after the fact: joins, leaves, lifecycle changes, game events and results. The per-tick stream of positions and inputs is not part of it; that stays in the networking backend.
 
-**Usage.** A session document lists the mode, the sceneId, the lifecycle state, teams and players. Every message has an envelope (messageId, sessionId, seq, tick, sentAt, from, type) and a payload typed by type. session.* types belong to the schema; game events use names namespaced by the game, such as temnorid-arena.round-ended. In Unity, SessionChannel in 3d-unity-network sends and records these messages.
+**Usage.** A session document lists the mode, the sceneId, the lifecycle state, teams and players. Every message has an envelope (messageId, sessionId, seq, tick, sentAt, from, type) and a payload typed by type. session.* types belong to the schema; game events use names namespaced by the game, such as game-arena.round-ended. In Unity, SessionChannel in 3d-unity-network sends and records these messages.
 
 **Includes:**
 
@@ -365,7 +365,7 @@ What happens between players: multiplayer sessions, messages, results and replay
 |---|---|
 | `session.schema.json` | The session document: schemaVersion, sessionId, mode, state, players and createdAt are required. |
 | `Session.state` | The lifecycle: lobby, starting, running or ended. |
-| `Session.mode` | A game-namespaced name of the game and mode, such as temnorid-arena.competitive. |
+| `Session.mode` | A game-namespaced name of the game and mode, such as game-arena.competitive. |
 | `Player` | playerId and connected are required; displayName, teamId and role (player, spectator or bot) are optional. |
 | `message.schema.json` | One message: schemaVersion, messageId, sessionId, sentAt, from, type and payload are required. |
 | `Message.type` | A session.* type defined by the schema, or a game event named <game>.<name>. |
@@ -386,7 +386,7 @@ What happens between players: multiplayer sessions, messages, results and replay
   "tick": 2210,
   "sentAt": "2026-10-14T18:02:04Z",
   "from": "server",
-  "type": "temnorid-arena.player-defeated",
+  "type": "game-arena.player-defeated",
   "payload": { "playerId": "p-oleh", "byPlayerId": "p-ira", "spell": "fireball" }
 }
 ```
@@ -515,7 +515,7 @@ Shared base for the engine's Unity packages: logging, player settings, typed eve
 | Kind | Unity package `com.itkamianets.3d-unity-core` |
 | Version | 0.1.0 |
 | Depends on | nothing |
-| Used by | [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-account`](#3d-unity-account), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-firebase`](#3d-unity-firebase), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template), [`3d-unity-topdown-camera`](#3d-unity-topdown-camera) |
+| Used by | [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-account`](#3d-unity-account), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-firebase`](#3d-unity-firebase), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-core |
 | Page | https://3d.itkamianets.com/packages/3d-unity-core |
 
@@ -982,7 +982,7 @@ Small helpers for building a game's screens in code with plain uGUI: panels, lab
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-ui` |
 | Version | 0.1.1 |
-| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input) |
+| Depends on | [`3d-unity-input`](#3d-unity-input) |
 | Used by | [`3d-unity-shell`](#3d-unity-shell) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-ui |
 | Page | https://3d.itkamianets.com/packages/3d-unity-ui |
@@ -1365,7 +1365,7 @@ Requirements:
 
 ### 3d-unity-account
 
-The player's Lords account in every game: sign in as a guest or with Google over Firebase's REST API, with no Firebase SDK.
+Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped Firestore access without the Firebase SDK.
 
 | | |
 |---|---|
@@ -1376,7 +1376,7 @@ The player's Lords account in every game: sign in as a guest or with Google over
 | Repository | https://github.com/IT-Kamianets/3d-unity-account |
 | Page | https://3d.itkamianets.com/packages/3d-unity-account |
 
-**Purpose.** A lord should be the same person in every game. GameAccount signs players in to the Firebase project Lords uses, as a guest or with Google, remembers them between runs and gives other calls a valid ID token. Not being signed in is a normal state, and the game plays on.
+**Purpose.** GameAccount restores saved Firebase sessions, supports guest and Google sign-in, and provides valid ID tokens. Set GameAccount.Config for your own project; FirebaseConfig.Temnorid is the built-in default, not a requirement. Offline and signed-out play are valid states.
 
 **Usage.** Call GameAccount.RestoreAsync() at start to bring back the last player. Offer SignInAsGuestAsync() and, where GoogleAvailable is true, SignInWithGoogleAsync(). Read Uid, DisplayName, Email and IsGuest, and listen to Changed. For Firebase calls of your own, await GetIdTokenAsync(). FirestoreClient.ForAccount() reads a document with GetAsync and changes chosen fields of an existing one with PatchAsync. Google sign-in on desktop needs the Desktop OAuth client file at Assets/Resources/account-oauth.json, which each game keeps out of git.
 
@@ -1395,6 +1395,7 @@ The player's Lords account in every game: sign in as a guest or with Google over
 
 | Member | What it does |
 |---|---|
+| `GameAccount.Config` | Set your FirebaseConfig before restoring a session or signing in. Google desktop sign-in also needs your Desktop OAuth client configuration. |
 | `GameAccount.RestoreAsync()` | Brings back the last player from saved tokens and refreshes them. Safe to call on every start. |
 | `GameAccount.SignInAsGuestAsync() / SignInWithGoogleAsync()` | Signs in as a guest or through the browser with Google, and returns whether it worked. LastError says why not. |
 | `GameAccount.IsSignedIn / Uid / DisplayName / Email / IsGuest / Changed` | Who is signed in on this device, and an event for when that changes. |
@@ -1409,6 +1410,7 @@ The player's Lords account in every game: sign in as a guest or with Google over
 using ITKamianets.Engine.Account;
 using Newtonsoft.Json.Linq;
 
+// Set GameAccount.Config to your Firebase project configuration first.
 await GameAccount.RestoreAsync();
 if (!GameAccount.IsSignedIn) await GameAccount.SignInAsGuestAsync();
 
@@ -1417,7 +1419,7 @@ if (GameAccount.IsGuest && GameAccount.GoogleAvailable)
     await GameAccount.SignInWithGoogleAsync();
 
 var firestore = FirestoreClient.ForAccount();
-var path = "users/" + GameAccount.Uid + "/progress/lords";
+var path = "users/" + GameAccount.Uid + "/progress/my-game";
 var result = await firestore.GetAsync(path);
 if (result.Ok)
 {
@@ -2596,7 +2598,7 @@ Overhead camera for strategy and tower-defense games: pan, zoom and stay inside 
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-topdown-camera` |
 | Version | 0.1.0 |
-| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input) |
+| Depends on | [`3d-unity-input`](#3d-unity-input) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-topdown-camera |
 | Page | https://3d.itkamianets.com/packages/3d-unity-topdown-camera |

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import {  } from '@wawjs/ngx-translate';
+import {} from '@wawjs/ngx-translate';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 import {
 	findConstructor,
@@ -15,9 +15,11 @@ import { IconComponent } from '../../shared/icon/icon.component';
 	templateUrl: './constructor-detail.component.html',
 })
 export class ConstructorDetailComponent {
-	protected readonly item = findConstructor(inject(ActivatedRoute).snapshot.data['slug'] as string)!;
+	protected readonly item = findConstructor(
+		inject(ActivatedRoute).snapshot.data['slug'] as string,
+	)!;
 	/** A constructor with its own camera and controls packages is ready to build a game on. */
-	protected readonly ready = this.item.parts.length > 0;
+	protected readonly ready = this.item.parts.some((slug) => slug.endsWith('-controls'));
 	protected readonly repo = repoUrl(this.item.repo);
 	protected readonly generated = GENERATED_PACKAGE_SUFFIXES.map(
 		(suffix) => `<game>-${suffix}`,
