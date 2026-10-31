@@ -180,6 +180,70 @@
 			"title": "3d-constructor-character-view-template",
 			"description": "Стартовий Unity-проєкт для ігор від першої та третьої особи з тестовим рівнем і готовим персонажем.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
+		},
+		"/packages/3d-unity-ui": {
+			"title": "3d-unity-ui",
+			"description": "Помічники для екранів гри в коді на uGUI: панелі, написи, шкали, кнопки та система подій, підключена до вводу рушія."
+		},
+		"/packages/3d-unity-save": {
+			"title": "3d-unity-save",
+			"description": "Локальні збереження гри в JSON з версіями: безпечний запис, резервна копія та зрозумілий результат для пошкодженого чи новішого файлу."
+		},
+		"/packages/3d-unity-synth": {
+			"title": "3d-unity-synth",
+			"description": "Процедурний звук для Unity: кліпи з хвиль і шуму та звукова дошка з гучністю й ambience, щоб гра обійшлася без аудіофайлів."
+		},
+		"/packages/3d-unity-graybox": {
+			"title": "3d-unity-graybox",
+			"description": "Прототип гри з примітивів Unity: стабільні id ассетів, матеріали, текст у світі з перевіркою глибини та помічники для редактора."
+		},
+		"/packages/3d-unity-shell": {
+			"title": "3d-unity-shell",
+			"description": "Екрани, спільні для ігор Temnorid: заставка, головний екран, вхід, лобі, профіль і верхня та нижня панелі в грі."
+		},
+		"/packages/3d-unity-account": {
+			"title": "3d-unity-account",
+			"description": "Акаунт гравця з Lords у кожній грі: вхід як гість або через Google за REST API Firebase, без Firebase SDK."
+		},
+		"/packages/3d-unity-update": {
+			"title": "3d-unity-update",
+			"description": "Тримає гру на найновішому релізі GitHub: перевіряє нову версію і тихо встановлює її у Windows."
+		},
+		"/packages/3d-unity-net": {
+			"title": "3d-unity-net",
+			"description": "Невеликий шар мультиплеєра над Netcode for GameObjects: хост або приєднання за адресою чи онлайн-кодом, пози й сутності."
+		},
+		"/packages/3d-unity-combat": {
+			"title": "3d-unity-combat",
+			"description": "Загальна бойова система для Unity: здоровʼя з подіями шкоди й смерті, команди, снаряди та ближні атаки в конусі й за радіусом."
+		},
+		"/packages/3d-unity-feedback": {
+			"title": "3d-unity-feedback",
+			"description": "Дешевий візуальний відгук для боїв із примітивів Unity: імпульси, кільця, попередження на підлозі та смужка здоровʼя над персонажем."
+		},
+		"/packages/3d-unity-ai": {
+			"title": "3d-unity-ai",
+			"description": "Загальні боти для Unity: помічають ціль, женуться за нею NavMesh, атакують, кидають погоню й патрулюють, а налаштування лишаються за грою."
+		},
+		"/packages/3d-unity-inventory": {
+			"title": "3d-unity-inventory",
+			"description": "Контейнери предметів для Unity: стеки за id, ліміти слотів і стеків, перенесення між контейнерами та переносні дані за 3d-inventory-schema."
+		},
+		"/packages/3d-save-schema": {
+			"title": "3d-save-schema",
+			"description": "Конверт збереження гри у форматі JSON Schema: gameId, слот, час запису, версія даних і власний payload гри без привʼязки до рушія."
+		},
+		"/packages/3d-inventory-schema": {
+			"title": "3d-inventory-schema",
+			"description": "Схема контейнера предметів у JSON Schema: кількість слотів, ліміт стеку й список предметів за id та загальною кількістю, без привʼязки до рушія."
+		},
+		"/packages/3d-unity-fixed-camera": {
+			"title": "3d-unity-fixed-camera",
+			"description": "Пакет Unity для фіксованих кінематографічних ракурсів камери: коробки з пріоритетом і гістерезисом, склейка чи перехід та крупні плани."
+		},
+		"/packages/3d-unity-topdown-camera": {
+			"title": "3d-unity-topdown-camera",
+			"description": "Пакет Unity з камерою згори для стратегій: панорамування клавішами чи краєм екрана, масштаб коліщатком, межі карти та точка на землі під курсором."
 		}
 	},
 	"structuredData": {

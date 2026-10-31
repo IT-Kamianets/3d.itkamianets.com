@@ -281,6 +281,150 @@
 		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"messageId\": \"m-2\",\n  \"sessionId\": \"match-7f3a\",\n  \"seq\": 2,\n  \"tick\": 2210,\n  \"sentAt\": \"2026-10-14T18:02:04Z\",\n  \"from\": \"server\",\n  \"type\": \"temnorid-arena.player-defeated\",\n  \"payload\": { \"playerId\": \"p-oleh\", \"byPlayerId\": \"p-ira\", \"spell\": \"fireball\" }\n}"
 	},
 	{
+		"slug": "3d-save-schema",
+		"name": "3d-save-schema",
+		"group": "Schemas",
+		"summary": "What a save looks like on disk: the envelope around one game save slot, as JSON.",
+		"purpose": "The shared shape of a game save, independent of any engine. It describes only the envelope: which game and slot the save belongs to, when it was written and which version of the game's own data it holds. The payload inside is owned and versioned by the game, so the schema says nothing about it and holds no game rules.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "",
+		"dependencies": [],
+		"install": "Nothing to install: the repository holds a JSON Schema (2020-12) file. Read save.schema.json and examples/ at https://github.com/IT-Kamianets/3d-save-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-save reads and writes this format.",
+		"usage": "A save document has six fields: schemaVersion, gameId, slotId, savedAt, payloadVersion and payload. gameId is a lowercase id such as hippodrome, and slotId names the slot, such as default. Raise payloadVersion when the shape of the game's payload changes, so the game can migrate older saves. In Unity, SaveStore in 3d-unity-save writes this envelope to one file per slot and checks both versions when it loads.",
+		"current": [
+			"save.schema.json: the envelope, with schemaVersion, gameId, slotId, savedAt, payloadVersion and payload, all required and no extra fields.",
+			"gameId as a lowercase id of letters, digits and hyphens, slotId as any non-empty name, and savedAt as a date-time.",
+			"payload as an opaque object that the game defines and versions with payloadVersion.",
+			"One example that validates: a Temnorid Hippodrome save in the default slot with the best lap, the best total time and the race counts."
+		],
+		"features": [
+			"The engine never reads the payload: any runtime can check the envelope, and only the game knows what is inside.",
+			"Two versions: schemaVersion for the envelope, which is the constant 1, and payloadVersion for the game's own data, so the game can migrate its saves.",
+			"Strict envelope: extra properties are rejected, so a misspelled field name fails validation.",
+			"No game rules, no accounts and no cloud fields: it describes one slot of one game."
+		],
+		"examples": [
+			"A Temnorid Hippodrome save that keeps the best lap time, the best total time and the race counts in the default slot.",
+			"A test or a small tool that checks a save file with any JSON Schema validator before a game loads it.",
+			"Several games on one device: every save names its gameId, so their files are never mixed up."
+		],
+		"roadmap": [
+			"Invalid fixtures and a validation script",
+			"Optional integrity fields (a checksum) if cloud sync needs them"
+		],
+		"related": [
+			"3d-unity-save",
+			"3d-inventory-schema",
+			"3d-unity-firebase"
+		],
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "save.schema.json",
+				"text": "The envelope: schemaVersion, gameId, slotId, savedAt, payloadVersion and payload are required."
+			},
+			{
+				"name": "Save.schemaVersion",
+				"text": "The version of the envelope: the constant 1."
+			},
+			{
+				"name": "Save.gameId",
+				"text": "The stable id of the game, in lowercase letters, digits and hyphens, such as hippodrome."
+			},
+			{
+				"name": "Save.slotId",
+				"text": "The name of the save slot, such as default; at least one character."
+			},
+			{
+				"name": "Save.savedAt",
+				"text": "When the save was written, as a date-time string such as 2026-10-29T12:00:00Z."
+			},
+			{
+				"name": "Save.payloadVersion",
+				"text": "The version of the game's own payload: an integer from 1."
+			},
+			{
+				"name": "Save.payload",
+				"text": "The game's own data, an object that the schema does not describe."
+			}
+		],
+		"example": "{\n  \"schemaVersion\": 1,\n  \"gameId\": \"hippodrome\",\n  \"slotId\": \"default\",\n  \"savedAt\": \"2026-10-29T12:00:00Z\",\n  \"payloadVersion\": 1,\n  \"payload\": { \"bestLapSeconds\": 21.4, \"bestTotalSeconds\": 66.9, \"wins\": 2, \"races\": 5 }\n}"
+	},
+	{
+		"slug": "3d-inventory-schema",
+		"name": "3d-inventory-schema",
+		"group": "Schemas",
+		"summary": "What a container holds: a backpack, chest or warehouse of stackable items, as JSON.",
+		"purpose": "The shared form of an item container, independent of any engine: how many slots it has, how many items fit in one slot and which items it holds, by id and total quantity. The schema does not say what an item is: ids belong to the game, and it carries no item definitions, prices or weights.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "",
+		"dependencies": [],
+		"install": "Nothing to install: the repository holds a JSON Schema (2020-12) file. Read inventory.schema.json and examples/ at https://github.com/IT-Kamianets/3d-inventory-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-inventory reads and writes this format.",
+		"usage": "A container document has schemaVersion, slots, stackLimit and items. Each item has an itemId, the game's own string such as wood, and a quantity, the total of that kind across all slots. The slot layout is not stored: it follows from slots and stackLimit. In Unity, ItemContainer in 3d-unity-inventory converts to and from this form with ToData and FromData, and a game that keeps inventories in a save file can put this data into the payload of a 3d-save-schema save.",
+		"current": [
+			"inventory.schema.json: the container, with schemaVersion, slots, stackLimit and items, all required and no extra fields.",
+			"slots and stackLimit as integers from 1: each slot holds one kind of item, up to the stack limit.",
+			"items as a list of itemId and quantity, given as a total per kind rather than slot by slot.",
+			"One example that validates: a backpack with 3 slots and a stack limit of 8, holding 10 wood and 2 iron."
+		],
+		"features": [
+			"Game-owned ids: itemId is any non-empty string, so one schema fits a backpack, a warehouse and a loot chest.",
+			"The layout follows from two numbers: slots and stackLimit decide how much fits, so no slot positions are stored.",
+			"Strict shape: extra properties are rejected on the container and on every item.",
+			"No item definitions, recipes, prices or weights: those stay in the game."
+		],
+		"examples": [
+			"A backpack of wood and iron, as in the bundled example.",
+			"A warehouse or a loot chest described with the same fields and its own slot count and stack limit.",
+			"A server or a web tool in any language that reads the same container JSON as the Unity game."
+		],
+		"roadmap": [
+			"Invalid fixtures and a validation script",
+			"Per-item stack limits and item metadata, if a second runtime needs them"
+		],
+		"related": [
+			"3d-unity-inventory",
+			"3d-save-schema",
+			"3d-unity-save"
+		],
+		"requirements": [],
+		"optional": [],
+		"api": [
+			{
+				"name": "inventory.schema.json",
+				"text": "The container: schemaVersion, slots, stackLimit and items are required."
+			},
+			{
+				"name": "Inventory.schemaVersion",
+				"text": "The version of the schema: the constant 1."
+			},
+			{
+				"name": "Inventory.slots",
+				"text": "The number of slots, an integer from 1; each slot holds one kind of item."
+			},
+			{
+				"name": "Inventory.stackLimit",
+				"text": "The most items of one kind in a single slot, an integer from 1."
+			},
+			{
+				"name": "Inventory.items",
+				"text": "The contents as a list of items, each with a total quantity."
+			},
+			{
+				"name": "Item",
+				"text": "itemId and quantity are required; quantity is an integer from 1."
+			},
+			{
+				"name": "Item.itemId",
+				"text": "The game's own item id, a non-empty string such as wood."
+			}
+		],
+		"example": "{\n  \"schemaVersion\": 1,\n  \"slots\": 3,\n  \"stackLimit\": 8,\n  \"items\": [\n    { \"itemId\": \"wood\", \"quantity\": 10 },\n    { \"itemId\": \"iron\", \"quantity\": 2 }\n  ]\n}"
+	},
+	{
 		"slug": "3d-unity-core",
 		"name": "3d-unity-core",
 		"group": "Core",
@@ -941,6 +1085,671 @@
 		"example": "var audio = EngineAudio.Default;\naudio.AddBank(playerSounds);\naudio.Play(\"spell.fireball.cast\", caster.position);\naudio.PlayAttached(\"spell.fireball.fly\", projectile.transform);\naudio.Play2D(\"ui.click\");\naudio.SetVolume(SoundGroup.Music, 0.4f);   // saved for this player\naudio.PlayMusic(\"music/round-start\");\n\nvar options = new SceneLoadOptions { AssetResolver = new AudioSceneResolver() };"
 	},
 	{
+		"slug": "3d-unity-ui",
+		"name": "3d-unity-ui",
+		"group": "Game kit",
+		"summary": "Small helpers for building a game's screens in code with plain uGUI: panels, labels, bars, buttons and an event system wired to the engine's input.",
+		"purpose": "A game's HUD and menus need the same few pieces every time, laid out so they look the same at any resolution. This package makes those pieces from code, placed by anchors, with no prefabs and no project-wide input asset. The game decides what its screens say and when they show; there is no styling system, no layout groups and no game screens here.",
+		"version": "0.1.1",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-ui",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-ui.git",
+		"usage": "Make the canvas with UiBuilder.CreateCanvas and call UiBuilder.EnsureEventSystem once. Then create a UiBuilder and build boxes, labels, bars and buttons between two anchors, each from 0 to 1 of the parent. Show a value with SetFill, change text with SetText, and call Select on a screen so the keyboard or a gamepad can use its first button. UiShapes gives a circle sprite, a rectangle's place on the screen and Quit, and LineDrawer traces a polyline on a panel.",
+		"current": [
+			"CreateCanvas: a full-screen overlay canvas that scales with the screen (1920 by 1080 reference, width and height weighted equally).",
+			"Box, Label, Bar and Button, each placed between two anchors; Label can wrap long text inside its box.",
+			"Bar returns its fill, which starts full; SetFill shows a fraction from 0 to 1.",
+			"Button colours (normal, highlighted, selected, pressed) and its font size are fields on the builder, set before building.",
+			"EnsureEventSystem: an event system whose point, click, scroll, navigate, submit and cancel actions come from EngineInput's UI map, so buttons answer to mouse, keyboard and gamepad.",
+			"SetText writes only when the text changed, Select highlights a screen's first button, and FormatTime gives minutes and seconds with a tenth, such as 1:05.3.",
+			"UiShapes: Circle makes a 128-pixel disc or ring sprite at run time, ScreenRect gives a rectangle's place on the screen in pixels, and Quit leaves the game (stops play mode in the editor).",
+			"LineDrawer: a polyline drawn on a panel from pooled rectangles, in panel units from 0 to 1, with a dot at its start."
+		],
+		"features": [
+			"Plain uGUI: Canvas, Image, Text and Button, with no styling system and no layout groups.",
+			"Everything is made in code, so a screen needs no prefab or scene setup.",
+			"Anchors, not pixels: a layout looks the same at any resolution.",
+			"Labels use Unity's built-in font (LegacyRuntime.ttf) unless the builder's Font is changed.",
+			"No garbage from redrawing: SetText skips unchanged text and LineDrawer reuses its rectangles."
+		],
+		"examples": [
+			"In Temnorid Hippodrome, the race HUD builds its stamina bar with Bar and shows the value with SetFill; the menu and pause screens are buttons placed by anchors.",
+			"In Temnorid Master, a tracing task draws the guide path and the player's stroke with two LineDrawers on one panel, round-ended with UiShapes.Circle, and reads the panel's screen position with ScreenRect.",
+			"When a screen opens, UiBuilder.Select highlights its first button, so a gamepad can press it at once."
+		],
+		"roadmap": [
+			"TextMeshPro text as an option",
+			"A small tween for screens that fade in"
+		],
+		"related": [
+			"3d-unity-input",
+			"3d-unity-shell",
+			"3d-unity-core"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input",
+			"com.unity.ugui 2.6.0, resolved by the Package Manager",
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "UiBuilder.CreateCanvas(parent, name)",
+				"text": "A full-screen overlay canvas that scales with the screen."
+			},
+			{
+				"name": "UiBuilder.EnsureEventSystem(parent)",
+				"text": "Adds an event system fed by EngineInput's UI actions, unless the scene already has one."
+			},
+			{
+				"name": "UiBuilder.Box(name, parent, min, max, colour)",
+				"text": "A coloured rectangle between two anchors."
+			},
+			{
+				"name": "UiBuilder.Bar(...) / SetFill(fill, fraction)",
+				"text": "A bar with a dark back; Bar returns the fill, and SetFill shows a fraction from 0 to 1."
+			},
+			{
+				"name": "builder.Label(name, parent, text, size, anchor, min, max, colour, wrap)",
+				"text": "A text label in the builder's font; with wrap, long text wraps inside its box."
+			},
+			{
+				"name": "builder.Button(text, parent, min, max, onClick)",
+				"text": "A button with a centred label, coloured by the builder's button fields."
+			},
+			{
+				"name": "UiBuilder.SetText(label, value) / Select(screen) / FormatTime(seconds)",
+				"text": "Sets text only when it changed; highlights a screen's first button; formats seconds as minutes and seconds with a tenth."
+			},
+			{
+				"name": "UiShapes.Circle(filled) / ScreenRect(rect) / Quit()",
+				"text": "A disc or ring sprite, a rectangle's place on the screen in pixels, and leaving the game."
+			},
+			{
+				"name": "new LineDrawer(panel, colour, thickness, dot) / Set(points) / Clear()",
+				"text": "Draws a polyline on a panel in 0 to 1 panel units, or hides it."
+			}
+		],
+		"example": "using ITKamianets.Engine.UI;\nusing UnityEngine;\n\nvar canvas = UiBuilder.CreateCanvas(transform);\nUiBuilder.EnsureEventSystem(transform);\nvar ui = new UiBuilder();\n\nvar stamina = UiBuilder.Bar(\"Stamina\", canvas.transform,\n    new Vector2(0.02f, 0.05f), new Vector2(0.24f, 0.07f), Color.green);\nUiBuilder.SetFill(stamina, 0.6f);\n\nvar menu = UiBuilder.Box(\"Menu\", canvas.transform,\n    new Vector2(0.3f, 0.2f), new Vector2(0.7f, 0.8f), new Color(0f, 0f, 0f, 0.7f));\nui.Button(\"Start\", menu.transform,\n    new Vector2(0.1f, 0.5f), new Vector2(0.9f, 0.8f), () => StartRace());\nUiBuilder.Select(menu);                 // keyboard and gamepad reach the button\n\nvar trace = new LineDrawer(panel, Color.black, 7f, UiShapes.Circle(true));\ntrace.Set(new[] { new Vector2(0.1f, 0.1f), new Vector2(0.9f, 0.8f) });"
+	},
+	{
+		"slug": "3d-unity-save",
+		"name": "3d-unity-save",
+		"group": "Game kit",
+		"summary": "Versioned local JSON save files: one slot per file, written safely, with a clear result for a missing, damaged or newer save.",
+		"purpose": "A game's progress has to survive a crash in the middle of a write, and a bad file must never be thrown away silently. This package keeps one JSON file per slot in an envelope that follows 3d-save-schema, and answers every read with a status the game can act on. The payload belongs to the game: this package never looks inside it.",
+		"version": "0.1.1",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-save",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-save.git",
+		"usage": "Create one SaveStore per game with its game id, and call Save(slot, payload, payloadVersion). Load<T>(slot, currentPayloadVersion, migrate) returns a SaveResult<T>: check Status, and use Value only when it is Ok. Pass a migrate function to upgrade older payloads. Create the store with keepBackup: true to keep the previous good save, and offer LoadBackup when the main file is damaged.",
+		"current": [
+			"SaveStore(gameId, rootDirectory, keepBackup): one file per slot at <persistent data path>/<gameId>/<slot>.json; rootDirectory replaces the persistent data path, which tests use to write to a temporary folder.",
+			"The file is an envelope with schemaVersion, gameId, slotId, savedAt, payloadVersion and payload, as in 3d-save-schema (SaveStore.SchemaVersion is 1).",
+			"Save writes a .tmp file first and then swaps it in, so a crash cannot leave half a save; it returns Ok or IoError.",
+			"Load<T> returns a SaveResult<T> with a Status (Ok, NotFound, Corrupt, UnsupportedVersion or IoError), a Value and a Message.",
+			"A payload older than currentPayloadVersion goes through your migrate function (the old payload as a JToken, and its version); without one it is UnsupportedVersion. A newer payload or schema is UnsupportedVersion too, and the file is left alone.",
+			"A file that cannot be parsed is renamed to <slot>.corrupt-<time>.json, never deleted, and the result is Corrupt.",
+			"Optional keepBackup: each time a slot is replaced, the previous save is copied to <slot>.backup.json if it was readable; LoadBackup<T> reads it, and a damaged backup is reported as Corrupt and left where it is. Off by default.",
+			"Exists, BackupExists, PathFor, BackupPathFor and Delete; Delete removes the backup too."
+		],
+		"features": [
+			"The game owns the payload: any type Newtonsoft.Json can serialize, versioned by the game through payloadVersion.",
+			"Nothing is lost silently: a damaged save is set aside and a newer one is left alone.",
+			"Progress only: per-device settings such as volume and key bindings stay in EngineStorage from 3d-unity-core.",
+			"Local only: no cloud, no accounts and no game rules.",
+			"Indented, readable JSON, so a save can be opened and attached to a bug report."
+		],
+		"examples": [
+			"In Temnorid Hippodrome, the best lap, best total time, wins and races are one payload in the default slot, loaded when the game starts.",
+			"In Temnorid Master, the store is made with keepBackup, and a damaged main save can be replaced by the last good one through LoadBackup.",
+			"Temnorid Master keeps its settings in a second slot called settings, next to its progress in the default slot."
+		],
+		"roadmap": [
+			"A cloud adapter that sends the same envelope to 3d-unity-firebase"
+		],
+		"related": [
+			"3d-save-schema",
+			"3d-unity-core",
+			"3d-unity-firebase",
+			"3d-unity-account"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "new SaveStore(gameId, rootDirectory, keepBackup)",
+				"text": "The slots of one game; throws if the game id is empty. rootDirectory and keepBackup are optional."
+			},
+			{
+				"name": "Save<T>(slot, payload, payloadVersion)",
+				"text": "Writes the slot safely and returns Ok or IoError."
+			},
+			{
+				"name": "Load<T>(slot, currentPayloadVersion, migrate)",
+				"text": "Reads the slot into a SaveResult<T>; migrate upgrades an older payload."
+			},
+			{
+				"name": "LoadBackup<T>(slot, currentPayloadVersion, migrate)",
+				"text": "Reads the previous good save of a slot; needs keepBackup."
+			},
+			{
+				"name": "Exists(slot) / BackupExists(slot)",
+				"text": "Whether the slot or its backup file exists."
+			},
+			{
+				"name": "PathFor(slot) / BackupPathFor(slot)",
+				"text": "The file path of the slot or of its backup."
+			},
+			{
+				"name": "Delete(slot)",
+				"text": "Removes the slot and its backup."
+			},
+			{
+				"name": "SaveResult<T> / SaveStatus",
+				"text": "A Status, a Value (set only when Ok) and a Message; Ok is true for a read save."
+			}
+		],
+		"example": "using ITKamianets.Engine.Save;\n\n[System.Serializable]\npublic class Records { public int wins; public float bestLap; }\n\nvar store = new SaveStore(\"hippodrome\", keepBackup: true);\nstore.Save(\"default\", new Records { wins = 3, bestLap = 41.2f }, payloadVersion: 2);\n\nvar result = store.Load<Records>(\"default\", currentPayloadVersion: 2,\n    migrate: (old, version) => new Records { wins = (int?)old[\"wins\"] ?? 0 });\n\nif (result.Ok) Use(result.Value);\nelse if (result.Status == SaveStatus.Corrupt)\n{\n    var backup = store.LoadBackup<Records>(\"default\", 2);   // the save before the last one\n    if (backup.Ok) Use(backup.Value);\n}"
+	},
+	{
+		"slug": "3d-unity-synth",
+		"name": "3d-unity-synth",
+		"group": "Game kit",
+		"summary": "Procedural sound: short clips built in code from waves and noise, and a sound board with volumes and a looping ambience, so a game needs no audio files.",
+		"purpose": "A small game can ship without audio files by making its sounds from simple waves and noise when it starts. The clip builder and the sound board are the parts every such game repeats; the game keeps its own list of sounds and its own recipes. A muted game behaves exactly like an unmuted one apart from the sound.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-synth",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-synth.git",
+		"usage": "Build each clip with Tone.Build(name, seconds, wave), where wave is a function of time in seconds, and shape it with Tone.Envelope and Tone.Noise. Add a SoundBoard component to a game object, call Init with an ambience clip and the array of one-shots, and play them by index with Play(id, volume). Set the player's volumes with SetVolumes(master, sfx). An enum works well as the list of sounds: cast it to int.",
+		"current": [
+			"Tone.Build(name, seconds, wave): a mono clip at 22,050 Hz (Tone.Rate) whose sample at time t is wave(t), clamped to -1..1.",
+			"Tone.Envelope(t, length, attack): a fast attack (4 ms by default), then a fade-out over the last 70% of the clip.",
+			"Tone.Noise(random): white noise in -1..1 from a System.Random; seed it for a repeatable sound.",
+			"SoundBoard: a component that adds two non-spatial AudioSources, one for the ambience on loop and one for one-shots.",
+			"SoundBoard.Init(ambient, clips, ambientGain): the ambience may be null; ambientGain (0.3 by default) sets how loud it is next to the master volume.",
+			"SetVolumes(master, sfx) clamps both to 0..1 and keeps them in MasterVolume and SfxVolume (0.8 and 0.9 at first); the ambience follows the master volume.",
+			"Play(id, volume) plays clip number id at master x sfx x volume, and does nothing for an unknown id or while that volume is 0, so a muted game plays no one-shots."
+		],
+		"features": [
+			"No audio files: every sound is a function of time, so there is nothing to import or compress.",
+			"Repeatable: seed the noise generator and a sound comes out the same every time.",
+			"Muting changes only what is heard: game timing never depends on a sound.",
+			"Volumes are held, not saved: the game stores them (for example in EngineStorage) and passes them to SetVolumes.",
+			"Not positional: both sources are 2D; use 3d-unity-audio for 3D sound, sound events and footsteps."
+		],
+		"examples": [
+			"In Temnorid Master, an Sfx enum lists Click, Quill, Stamp, Coin and more, each made with Tone.Build when the game starts and played with the enum cast to int.",
+			"A click is a short 1000 Hz sine shaped by Tone.Envelope, and a quill scratch is seeded noise under an envelope.",
+			"Temnorid Escape and Detective use the same SoundBoard to loop an ambience and play their effects by id."
+		],
+		"roadmap": [],
+		"related": [
+			"3d-unity-audio"
+		],
+		"requirements": [
+			"Unity 6000.6"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "Tone.Build(name, seconds, wave)",
+				"text": "Builds a mono AudioClip whose sample at time t is wave(t), clamped to -1..1."
+			},
+			{
+				"name": "Tone.Envelope(t, length, attack)",
+				"text": "A 0 to 1 shape: a fast attack, then a fade-out over most of the clip."
+			},
+			{
+				"name": "Tone.Noise(random)",
+				"text": "One white noise sample in -1..1."
+			},
+			{
+				"name": "Tone.Rate",
+				"text": "The sample rate of every clip, 22050."
+			},
+			{
+				"name": "SoundBoard.Init(ambient, clips, ambientGain)",
+				"text": "Sets the ambience and the one-shots and starts the ambience on loop."
+			},
+			{
+				"name": "SoundBoard.SetVolumes(master, sfx)",
+				"text": "Sets the master and effects volumes, each clamped to 0..1."
+			},
+			{
+				"name": "SoundBoard.Play(id, volume)",
+				"text": "Plays one-shot number id, scaled by both volumes and by volume."
+			},
+			{
+				"name": "SoundBoard.MasterVolume / SfxVolume",
+				"text": "The current volumes, read-only."
+			}
+		],
+		"example": "using ITKamianets.Engine.Synth;\nusing UnityEngine;\n\nvar random = new System.Random(7);   // seeded: the same hiss every run\n\nvar click = Tone.Build(\"click\", 0.05f,\n    t => Mathf.Sin(t * 2f * Mathf.PI * 1000f) * Tone.Envelope(t, 0.05f) * 0.45f);\nvar hiss = Tone.Build(\"hiss\", 0.2f,\n    t => Tone.Noise(random) * Tone.Envelope(t, 0.2f, 0.01f) * 0.3f);\nvar hum = Tone.Build(\"hum\", 6f, t => Mathf.Sin(t * 2f * Mathf.PI * 110f) * 0.2f);\n\nvar board = gameObject.AddComponent<SoundBoard>();\nboard.Init(hum, new[] { click, hiss }, ambientGain: 0.25f);\nboard.SetVolumes(0.8f, 0.9f);\nboard.Play(0, 0.5f);                 // click"
+	},
+	{
+		"slug": "3d-unity-graybox",
+		"name": "3d-unity-graybox",
+		"group": "Game kit",
+		"summary": "Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, and Editor helpers for primitives, plain materials and world text.",
+		"purpose": "A first playable made of cubes and cylinders should not need rewriting when real models arrive. This package tags every stand-in with the id of what it stands for, so a model can replace the primitive without touching gameplay, and it keeps scene builders short enough to run again at any time to rebuild a level from scratch.",
+		"version": "0.1.1",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-graybox",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-graybox.git",
+		"usage": "Add AssetIdTag to anything that will later get a model and set its Id, for example props/chest. In an Editor script that builds a scene, make materials with GrayboxBuilder.Mat, floors and walls with Box, decoration with Prim and signs with Text. Mat saves a material under Assets/Materials (or the folder you pass) and updates it on the next run, and it needs the Universal Render Pipeline. GrayboxBuilder is Editor code; AssetIdTag and the WorldText shader are the runtime part.",
+		"current": [
+			"AssetIdTag (runtime): a component with an Id such as monsters/goblin or props/chest, whatever shape draws the object today.",
+			"GrayboxBuilder.Prim(type, name, parent, position, scale, material, keepCollider): a primitive at a local position and scale, with no collider unless asked.",
+			"GrayboxBuilder.Box: a cube that keeps its collider, for floors, walls and anything to stand on or bump into.",
+			"GrayboxBuilder.Mat(name, colour, directory, smoothness): a plain URP Lit material of one colour, saved as <directory>/<name>.mat (Assets/Materials by default); running again updates the same asset.",
+			"GrayboxBuilder.Text: a line of text in the world (a TextMesh) for a sign or plaque, readable from its own -z side.",
+			"GrayboxBuilder.WorldTextMaterial(font, directory): the material world text is drawn with, saved as WorldText.mat in the material folder.",
+			"The Temnorid/WorldText shader: draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls."
+		],
+		"features": [
+			"The id says what an object is, not how it looks, so a primitive and a model are interchangeable.",
+			"Scene builders stay short and can be run again to rebuild a level from scratch; materials are updated, not duplicated.",
+			"Decoration has no collider by default, so it never gets in the way.",
+			"Only AssetIdTag and the shader are runtime content; GrayboxBuilder is Editor-only code."
+		],
+		"examples": [
+			"In Temnorid Escape, the scene builder tags the cell door props/cell-door, the bed props/bed and a bent wire items/bent-wire, so models can replace them later.",
+			"Escape's scene builder wraps Box, Prim, Mat and Text in one-line helpers, so each room is a few short lines.",
+			"Labels on the cell door and a plaque on a wall are made with GrayboxBuilder.Text, so walls hide them."
+		],
+		"roadmap": [
+			"A catalog that maps asset ids to model files, and a swapper that replaces tagged primitives with them (together with 3d-unity-assets)"
+		],
+		"related": [
+			"3d-unity-assets",
+			"3d-asset-schema",
+			"3d-unity-scene"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"The Universal Render Pipeline in the project: Mat makes Universal Render Pipeline/Lit materials"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "AssetIdTag.Id",
+				"text": "The stable id of what the object stands for, such as props/chest."
+			},
+			{
+				"name": "GrayboxBuilder.Prim(...)",
+				"text": "A primitive under a parent at a local position and scale; keepCollider is false by default."
+			},
+			{
+				"name": "GrayboxBuilder.Box(parent, name, position, scale, material)",
+				"text": "A cube that keeps its collider."
+			},
+			{
+				"name": "GrayboxBuilder.Mat(name, colour, directory, smoothness)",
+				"text": "A one-colour URP Lit material saved as an asset and updated on later runs; smoothness is 0.12 by default."
+			},
+			{
+				"name": "GrayboxBuilder.Text(parent, name, text, localPosition, rotation, size, colour)",
+				"text": "A TextMesh line in the world, with the depth-tested material."
+			},
+			{
+				"name": "GrayboxBuilder.WorldTextMaterial(font, directory)",
+				"text": "The depth-tested material for world text, made once and reused."
+			},
+			{
+				"name": "GrayboxBuilder.DefaultMaterialDirectory",
+				"text": "Assets/Materials, where materials are saved unless a folder is passed."
+			}
+		],
+		"example": "using ITKamianets.Engine.Graybox;\nusing ITKamianets.Engine.Graybox.EditorTools;   // in an Editor script\nusing UnityEngine;\n\nvar stone = GrayboxBuilder.Mat(\"Stone\", new Color(0.45f, 0.45f, 0.5f));\nvar wood = GrayboxBuilder.Mat(\"Wood\", new Color(0.5f, 0.35f, 0.2f));\n\nGrayboxBuilder.Box(root, \"Floor\", new Vector3(0f, -0.5f, 0f), new Vector3(20f, 1f, 20f), stone);\n\nvar chest = GrayboxBuilder.Prim(PrimitiveType.Cube, \"Chest\", root,\n    new Vector3(2f, 0.4f, 3f), new Vector3(1f, 0.8f, 0.6f), wood, keepCollider: true);\nchest.AddComponent<AssetIdTag>().Id = \"props/chest\";\n\nGrayboxBuilder.Text(root, \"Sign\", \"CELLS\", new Vector3(0f, 2f, -5f),\n    Quaternion.identity, 0.02f, Color.white);"
+	},
+	{
+		"slug": "3d-unity-shell",
+		"name": "3d-unity-shell",
+		"group": "Game kit",
+		"summary": "The screens every Temnorid game shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars.",
+		"purpose": "Every Temnorid game follows the structure of the Lords app, so a player who knows one game knows them all. The shell owns those screens and their order. A game describes itself in a ShellConfig and adds its own places; it does not rebuild a menu.",
+		"version": "0.2.2",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-shell",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-ui",
+			"3d-unity-account",
+			"3d-unity-update",
+			"3d-unity-net"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-shell.git",
+		"usage": "Fill ShellConfig.Current before any scene loads, in a method marked BeforeSceneLoad: title, GameId, Repo, MaxPlayers, GameScene, accent colour and Places. From the game's editor scene builder, call ShellSceneKit.BuildBoot, BuildMenu, SetBuildOrder and ApplyPlatformSettings. In the game scene, create ShellChrome once, handle PlaceSelected to show the content of each place, keep the HUD inside TopFraction and BottomFraction, and point the game's main menu button at ShellFlow.QuitToMenu. On phones, build a TouchButton for each thing the keyboard does.",
+		"current": [
+			"ShellBoot (scene Boot): a splash with a turning ring, shown for at least 1.2 seconds while it restores the saved account and checks for a newer release. On Windows the new installer runs here, before anything else.",
+			"ShellMenu (scene Menu): a landing screen with Play, Play with others, Profile and Quit (no Quit on phones), then sign-in, onboarding and the profile.",
+			"Sign-in, shown once when accounts are on: Google, guest or play offline. A player who signs in with Google skips onboarding, since the name comes from the account.",
+			"Onboarding, once: a name of up to 16 characters and a colour from ShellConfig.PlayerColours (eight by default), saved in ShellProfile.",
+			"Lobby: host on this network or online with a short code, join by address or code, a roster with ready flags, and Start for the host once two or more players are all ready.",
+			"ShellChrome: a top bar with the game, the current place, a status line and who you are; place tabs in the top bar on desktop and in a bottom bar on phones; a Profile place always last, with name, colour, automatic updates, account and Check for updates.",
+			"ShellFlow: Boot to Menu to the game, solo or online, and back with QuitToMenu, which raises BeforeQuit so the game can save, then leaves any session.",
+			"ShellSceneKit, in the editor: builds the Boot and Menu scenes, sets the build order, applies Android and iOS settings, builds an Android apk or aab and exports an Xcode project."
+		],
+		"features": [
+			"The shell is only a screen in front of the game: a game scene opened directly, in the editor or in a test, still works.",
+			"A game is described by data, not code: title, tagline, accent colour, places, repository and player limit sit in one ShellConfig.",
+			"Offline is normal: a failed sign-in or update check never stops the player from playing.",
+			"Every screen is built in code with 3d-unity-ui, so there are no prefabs to keep in step. Text is English only for now.",
+			"Phone ready: SafeAreaFitter keeps screens clear of notches, and TouchButton gives a game on-screen buttons it reads like keys.",
+			"No game rules, no gameplay HUD and no pause menu: games bring their own places and content."
+		],
+		"examples": [
+			"In Temnorid Hippodrome the config names two places, Race and Records, and the repository WebArtWork/hippodrome.temnorid.com that updates come from.",
+			"Temnorid Arena and Temnorid Craft use the same menu and lobby with their own titles, accent colours and places: Arena and Scoreboard, Settlement and Stock.",
+			"On a phone, Temnorid Hippodrome builds TouchButtons for steering, brake and boost only when TouchButton.IsNeeded is true.",
+			"A game's Main menu button calls ShellFlow.QuitToMenu, which raises BeforeQuit, leaves the session and loads the Menu scene."
+		],
+		"roadmap": [
+			"Localisation hooks for the Ukrainian games",
+			"A shared pause menu"
+		],
+		"related": [
+			"3d-unity-ui",
+			"3d-unity-net",
+			"3d-unity-account",
+			"3d-unity-update"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input, 3d-unity-ui, 3d-unity-account, 3d-unity-update, 3d-unity-net",
+			"com.unity.ugui 2.6.0, resolved by the Package Manager",
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "ShellConfig.Current",
+				"text": "What the game tells the shell: Title, Tagline, GameId, Repo, InstallerSuffix, StoreUrl, MaxPlayers, Accounts, Multiplayer, MenuScene, GameScene, Accent, Places and PlayerColours."
+			},
+			{
+				"name": "ShellChrome.Create(parent, sortingOrder)",
+				"text": "Creates the top bar and place tabs in the game scene. TopFraction and BottomFraction say how much of the screen height they take."
+			},
+			{
+				"name": "ShellChrome.PlaceSelected / Select(id) / SetStatus(text)",
+				"text": "Raised when a tab is chosen; Select picks a place from code, and SetStatus writes a short line, such as a score, in the top bar."
+			},
+			{
+				"name": "ShellFlow.PlaySolo() / LoadGame() / LoadMenu() / QuitToMenu()",
+				"text": "Moves between the Menu and the game scene. QuitToMenu raises BeforeQuit and closes any session."
+			},
+			{
+				"name": "ShellProfile.Current",
+				"text": "The saved name, colour and automatic-update choice of the player on this device. Save writes it and gives NetSession the name and colour."
+			},
+			{
+				"name": "TouchButton.Create(ui, parent, label, min, max)",
+				"text": "An on-screen button with Held and ConsumePress, read like a key. IsNeeded is true on phones and tablets."
+			},
+			{
+				"name": "ShellSceneKit.BuildBoot() / BuildMenu() / SetBuildOrder(...) / ApplyPlatformSettings(...)",
+				"text": "Editor only: writes the Boot and Menu scenes, sets the build order, and applies the company, product, application id, version and Android and iOS settings."
+			}
+		],
+		"example": "using ITKamianets.Engine.Shell;\nusing UnityEngine;\n\npublic static class MyGameShell\n{\n    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]\n    static void Configure()\n    {\n        ShellConfig.Current = new ShellConfig\n        {\n            Title = \"Temnorid Hippodrome\",\n            Tagline = \"Ride. Race. Cross the line first.\",\n            GameId = \"hippodrome\",\n            Repo = \"WebArtWork/hippodrome.temnorid.com\",\n            MaxPlayers = 4,\n            GameScene = \"Main\",\n            Places =\n            {\n                new ShellPlace(\"race\", \"Race\", \"R\"),\n                new ShellPlace(\"records\", \"Records\", \"T\"),\n            },\n        };\n    }\n}\n\n// In the game scene's HUD:\nvar chrome = ShellChrome.Create(transform);\nchrome.PlaceSelected += id => ShowPlace(id);\nchrome.SetStatus(\"Lap 2 of 3\");\nmainMenuButton.onClick.AddListener(ShellFlow.QuitToMenu);"
+	},
+	{
+		"slug": "3d-unity-account",
+		"name": "3d-unity-account",
+		"group": "Game kit",
+		"summary": "The player's Lords account in every game: sign in as a guest or with Google over Firebase's REST API, with no Firebase SDK.",
+		"purpose": "A lord should be the same person in every game. GameAccount signs players in to the Firebase project Lords uses, as a guest or with Google, remembers them between runs and gives other calls a valid ID token. Not being signed in is a normal state, and the game plays on.",
+		"version": "0.2.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-account",
+		"dependencies": [
+			"3d-unity-core"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-account.git",
+		"usage": "Call GameAccount.RestoreAsync() at start to bring back the last player. Offer SignInAsGuestAsync() and, where GoogleAvailable is true, SignInWithGoogleAsync(). Read Uid, DisplayName, Email and IsGuest, and listen to Changed. For Firebase calls of your own, await GetIdTokenAsync(). FirestoreClient.ForAccount() reads a document with GetAsync and changes chosen fields of an existing one with PatchAsync. Google sign-in on desktop needs the Desktop OAuth client file at Assets/Resources/account-oauth.json, which each game keeps out of git.",
+		"current": [
+			"GameAccount: static sign-in state (IsSignedIn, Uid, DisplayName, Email, IsGuest, LastError, Busy) and a Changed event.",
+			"Guest: SignInAsGuestAsync() makes an anonymous Firebase user, with nothing to type.",
+			"Google on desktop: the browser opens, Google redirects to a one-shot listener on 127.0.0.1, the code is exchanged with PKCE, and Firebase signs the player in. It gives up after three minutes.",
+			"A guest who signs in with Google keeps the same uid, so progress is not lost.",
+			"Restore and refresh: RestoreAsync() shows the remembered player at once from EngineStorage, and GetIdTokenAsync() refreshes the token when it is about to expire.",
+			"SignOut() forgets this device's session; DeleteAccountAsync() deletes the Firebase user itself.",
+			"FirestoreClient: GetAsync(path) and PatchAsync(path, data, fieldPaths, updateTime) as the signed-in player, over REST.",
+			"FirestoreRest: pure functions for addresses, patch bodies and Firestore's typed values to and from a Newtonsoft JToken."
+		],
+		"features": [
+			"No Firebase SDK: plain UnityWebRequest calls, so there is nothing native to install.",
+			"The same Firebase project as Lords (FirebaseConfig.Temnorid, its public web configuration). Access is decided by the Firestore rules, not by the key.",
+			"The Google OAuth client secret is never committed: it is read from Assets/Resources/account-oauth.json, which games git-ignore. Without the file GoogleAvailable is false and there is no Google button.",
+			"A Firestore patch never creates a document and writes only the fields it is given. With updateTime, a document changed since it was read gives Conflict.",
+			"Statuses are words (Ok, NotFound, Conflict, Denied, Failed), and messages never contain the answer text or the document path, which hold uids.",
+			"On Android and iOS only the guest is offered, until native Google sign-in exists."
+		],
+		"examples": [
+			"Temnorid Hippodrome, Arena and Craft sign players in from the shell's sign-in screen: Google, guest or play offline.",
+			"In Temnorid Craft, a player signed in with Google gets their own village, read from their Lords document users/{uid}/progress/lords; a guest sees the standard village.",
+			"A profile screen shows Sign out, or, for a guest, Sign in with Google, which keeps the guest's uid."
+		],
+		"roadmap": [
+			"Google sign-in on Android and iOS"
+		],
+		"related": [
+			"3d-unity-shell",
+			"3d-unity-core",
+			"3d-unity-firebase"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core",
+			"com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.jsonserialize 1.0.0, resolved by the Package Manager",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "GameAccount.RestoreAsync()",
+				"text": "Brings back the last player from saved tokens and refreshes them. Safe to call on every start."
+			},
+			{
+				"name": "GameAccount.SignInAsGuestAsync() / SignInWithGoogleAsync()",
+				"text": "Signs in as a guest or through the browser with Google, and returns whether it worked. LastError says why not."
+			},
+			{
+				"name": "GameAccount.IsSignedIn / Uid / DisplayName / Email / IsGuest / Changed",
+				"text": "Who is signed in on this device, and an event for when that changes."
+			},
+			{
+				"name": "GameAccount.GetIdTokenAsync()",
+				"text": "A valid Firebase ID token for other calls, refreshed when needed. Null when signed out or offline."
+			},
+			{
+				"name": "GameAccount.SignOut() / DeleteAccountAsync()",
+				"text": "Forgets this device's session, or deletes the Firebase user."
+			},
+			{
+				"name": "FirestoreClient.ForAccount()",
+				"text": "A client for the signed-in player. GetAsync(path) returns a FirestoreDocument; PatchAsync changes chosen fields of an existing one."
+			},
+			{
+				"name": "FirebaseConfig",
+				"text": "The Firebase project and the Google Desktop OAuth client. FirebaseConfig.Temnorid is the project Lords uses."
+			}
+		],
+		"example": "using ITKamianets.Engine.Account;\nusing Newtonsoft.Json.Linq;\n\nawait GameAccount.RestoreAsync();\nif (!GameAccount.IsSignedIn) await GameAccount.SignInAsGuestAsync();\n\n// Later, a guest signs in with Google and keeps the same uid.\nif (GameAccount.IsGuest && GameAccount.GoogleAvailable)\n    await GameAccount.SignInWithGoogleAsync();\n\nvar firestore = FirestoreClient.ForAccount();\nvar path = \"users/\" + GameAccount.Uid + \"/progress/lords\";\nvar result = await firestore.GetAsync(path);\nif (result.Ok)\n{\n    var patch = await firestore.PatchAsync(path, new JObject { [\"note\"] = \"hello\" },\n        new[] { \"note\" }, result.Document.UpdateTime);\n    if (patch.Status == FirestoreStatus.Conflict) { /* read again and retry */ }\n}"
+	},
+	{
+		"slug": "3d-unity-update",
+		"name": "3d-unity-update",
+		"group": "Game kit",
+		"summary": "Keeps a game on its newest GitHub release: checks for a new version and installs it silently on Windows.",
+		"purpose": "Games ship as GitHub releases. AutoUpdater asks the repository for its latest release and compares the tag with the game's version, so a player who opens an old build is moved to the new one without installing by hand. Being offline is normal and never an error for the player.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-update",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-update.git",
+		"usage": "Add an AutoUpdater to an object, set Repo to the owner and name of the GitHub repository, and call Check(). When State becomes Available, show Latest.Version and call Install(). Progress and the Changed event drive a progress bar while it downloads. On Windows the release needs an asset ending with -Setup.exe; on Android set StoreUrl, or the .apk of the release opens. The game's version is the Unity bundleVersion, and the release tag is v followed by that version.",
+		"current": [
+			"AutoUpdater and its states: Idle, Checking, UpToDate, Available, Downloading, Installing and Failed.",
+			"Check() reads releases/latest from the GitHub API, with an 8 second timeout by default, and compares its tag with Application.version. Drafts and pre-releases are ignored.",
+			"Windows: Install() downloads the asset ending with -Setup.exe to the temporary folder, runs it with /SILENT /SUPPRESSMSGBOXES /NOCANCEL /CLOSEAPPLICATIONS and quits. Without such an asset the release page opens.",
+			"Android opens StoreUrl, or the .apk of the release, or the release page. iOS and other platforms open StoreUrl or the release page.",
+			"ReleaseInfo: the parts of a GitHub release it needs (tag, name, notes, page and assets), read with JsonUtility, and FindAsset(suffix).",
+			"SemVer: reads v1.2.3, 1.2 or 1.2.3-beta and compares the three numbers. A tag that cannot be read is never newer."
+		],
+		"features": [
+			"No server of our own: the GitHub releases are the update feed.",
+			"The installer is expected to replace the game in place and start it again, as the Inno Setup installers of the Temnorid games do.",
+			"Failure is quiet: with no network the state becomes Failed with a message, and the game goes on.",
+			"In the editor a downloaded installer is saved but never run.",
+			"No in-app APK install on Android, and no checksum check of the installer yet."
+		],
+		"examples": [
+			"In Temnorid Hippodrome the Boot splash checks WebArtWork/hippodrome.temnorid.com and, on Windows, installs a newer release before the menu appears.",
+			"The shell's Profile screen shows Update now when State is Available and Check for updates otherwise.",
+			"On a phone, the same Install() sends the player to the page set in StoreUrl."
+		],
+		"roadmap": [
+			"In-app APK install on Android",
+			"Checksum check of the downloaded installer"
+		],
+		"related": [
+			"3d-unity-shell",
+			"3d-unity-account",
+			"3d-unity-net"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.jsonserialize 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "AutoUpdater.Repo / WindowsAssetSuffix / AndroidAssetSuffix / StoreUrl / TimeoutSeconds",
+				"text": "Where the releases are and how to recognise the installer. The suffixes default to -Setup.exe and .apk."
+			},
+			{
+				"name": "AutoUpdater.Check()",
+				"text": "Asks GitHub for the latest release. Safe to call again; a check or download already running is left alone."
+			},
+			{
+				"name": "AutoUpdater.Install()",
+				"text": "Moves the player to the new version. Does nothing unless State is Available."
+			},
+			{
+				"name": "AutoUpdater.State / Latest / Progress / Error / Changed",
+				"text": "Where the update is, the release found, the download progress from 0 to 1, a failure message, and an event for each change."
+			},
+			{
+				"name": "SemVer.IsNewer(latest, current)",
+				"text": "True when the first version is higher than the second, for tags such as v0.4.0."
+			},
+			{
+				"name": "ReleaseInfo.FromJson(json) / FindAsset(suffix)",
+				"text": "Reads a GitHub release, or null if it is not one, and finds the first asset whose name ends with the suffix."
+			}
+		],
+		"example": "using ITKamianets.Engine.Update;\nusing UnityEngine;\n\nvar updater = new GameObject(\"AutoUpdater\").AddComponent<AutoUpdater>();\nupdater.Repo = \"WebArtWork/hippodrome.temnorid.com\";\nupdater.Changed += () =>\n{\n    if (updater.State == UpdateState.Available) Debug.Log(\"Update to \" + updater.Latest.Version);\n    if (updater.State == UpdateState.Downloading) Debug.Log(\"Downloaded \" + updater.Progress);\n};\nupdater.Check();\n\n// When the player agrees:\nupdater.Install();\n\nbool newer = SemVer.IsNewer(\"v0.4.0\", Application.version);"
+	},
+	{
+		"slug": "3d-unity-net",
+		"name": "3d-unity-net",
+		"group": "Game kit",
+		"summary": "A small multiplayer layer over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code.",
+		"purpose": "A game that builds its scenes in code has no prefabs to spawn over the network. NetSession gives it a host-authoritative session with a roster, named events, player poses and host-published entities, and nothing more. The host decides and clients ask. IsAuthority is true offline and on the host, so single-player code runs as it is.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-net",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-net.git",
+		"usage": "Get the session with NetSession.Ensure() and set GameId, GameVersion, MaxPlayers and LocalName. Host with HostDirect() or HostOnlineAsync(), and join with JoinDirect(address) or JoinOnlineAsync(code). Watch RosterChanged, call SetReady, and on the host call StartGame(scene) once AllReady. In the game, pass things with Send and On, publish your own pose with PublishPose a few times a second and show the others with TryGetPose and RemoteBody. The host publishes what it simulates with PublishEntities about ten times a second. Run enemies, spawns and score only where IsAuthority is true. Online play needs the Unity project linked to a Unity Cloud project.",
+		"current": [
+			"HostDirect() opens a game on this machine (port 7777) and JoinDirect(address) joins it. LocalAddress() gives the address to share.",
+			"HostOnlineAsync() and JoinOnlineAsync(code) do the same through Unity Relay with a short code, so no port has to be opened. Without a linked Unity Cloud project they fail with a plain message and direct play still works.",
+			"Roster: Players with name, colour and ready flag, SetReady, AllReady and StartGame(scene, seed), which closes the game to newcomers and tells everyone to load the scene with a shared seed.",
+			"Joining is checked on the host: same GameId and same major.minor version, the game not full and not started.",
+			"Events: Send(name, payload) and On(name, handler). A client's event reaches the host, which raises it and passes it on, except names starting with host. SendTo sends to one player from the host.",
+			"Poses: PublishPose(NetPose) with position, yaw, speed, a state and two numbers of the game's own. Others read TryGetPose(id) and show it with RemoteBody.",
+			"Entities: the host calls PublishEntities(list) for what it simulates, in batches of 28. Clients read Entities, EntityUpdated and EntityGone, and RemoveEntity(id) tells everyone one is gone.",
+			"RemoteBody eases an object toward the last pose or entity state, and snaps to it when the jump is more than 12 metres."
+		],
+		"features": [
+			"The host is the authority: other players talk only to the host, which passes things on.",
+			"No spawned network objects and no prefabs: each game keeps its own scene and uses a few messages.",
+			"Events are reliable and ordered. Poses and entities are unreliable and sequenced, since the next one replaces them.",
+			"Offline, every call does nothing, and IsAuthority is true.",
+			"No prediction, reconciliation or server-side checks. For character movement with those, use 3d-unity-network.",
+			"A test can run a host and a client in one process with NetSession.CreateDetached()."
+		],
+		"examples": [
+			"In Temnorid Hippodrome the roster gives each player a grid slot, every player publishes their horse as a pose, and the host publishes the computer riders as entities.",
+			"In Temnorid Arena a client sends its fighter pick to the host as an event, and the host answers everybody with the assigned owners.",
+			"In Temnorid Craft, gathering and depositing are events to the host, and the host publishes its entities ten times a second."
+		],
+		"roadmap": [
+			"Reconnect after a short drop",
+			"Late join into a running game",
+			"Time sync for races"
+		],
+		"related": [
+			"3d-unity-network",
+			"3d-unity-shell"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.netcode.gameobjects 2.9.2, resolved by the Package Manager",
+			"com.unity.services.multiplayer 2.4.1, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "NetSession.Ensure() / Instance",
+				"text": "The one session object a game talks to. Set GameId, GameVersion, MaxPlayers, LocalName and LocalColour on it."
+			},
+			{
+				"name": "HostDirect(port) / JoinDirect(address)",
+				"text": "Opens a game on this machine, or joins one by address such as 192.168.1.5. The default port is 7777."
+			},
+			{
+				"name": "HostOnlineAsync() / JoinOnlineAsync(code)",
+				"text": "The same through Unity Relay. After HostOnlineAsync, JoinCode holds the short code to share."
+			},
+			{
+				"name": "Players / Local / SetReady(ready) / AllReady / StartGame(scene, seed)",
+				"text": "The roster and the start. StartGame is host only and raises GameStarted on every machine."
+			},
+			{
+				"name": "Send(name, payload) / SendTo(player, name, payload) / On(name, handler) / Off(name, handler)",
+				"text": "Named string events between players, through the host."
+			},
+			{
+				"name": "PublishPose(pose) / TryGetPose(id, out pose)",
+				"text": "Publishes where this player is, and reads where another player is."
+			},
+			{
+				"name": "PublishEntities(list) / RemoveEntity(id) / Entities",
+				"text": "Host only: sends what the host simulates, or removes one. Clients read Entities, EntityUpdated and EntityGone."
+			}
+		],
+		"example": "using ITKamianets.Engine.Net;\nusing UnityEngine;\n\nvar net = NetSession.Ensure();\nnet.GameId = \"hippodrome\";\nnet.GameVersion = Application.version;\nnet.MaxPlayers = 4;\nnet.LocalName = \"Ada\";\n\nnet.HostDirect();   // friends join with net.JoinDirect(NetSession.LocalAddress())\nnet.RosterChanged += () => Debug.Log(net.Players.Count + \" players\");\nnet.SetReady(true);\nif (net.AllReady) net.StartGame(\"Main\");\n\nnet.On(\"lap\", (sender, payload) => Debug.Log(sender + \": lap \" + payload));\nnet.Send(\"lap\", \"3\");\n\nnet.PublishPose(new NetPose { Position = transform.position, Yaw = transform.eulerAngles.y });\nulong other = 1;\nif (net.TryGetPose(other, out var pose)) remote.Apply(pose);   // remote is a RemoteBody"
+	},
+	{
 		"slug": "3d-unity-interaction",
 		"name": "3d-unity-interaction",
 		"group": "Specific",
@@ -1490,6 +2299,345 @@
 		"example": "var session = NetworkSession.Current;\nsession.StartHost();\n\nsession.Messages.RequestReceived += request => session.Messages.Publish(request.Type, request.Payload);\nsession.Messages.SetState(SessionState.Running, \"arena-01\");\n\nsession.Messages.End(new ResultData\n{\n    EndedAt = NetworkJson.Now(),\n    Reason = ResultReason.Completed,\n    Winners = { SessionChannel.PlayerIdFor(0) },\n});\nstring replay = NetworkJson.Serialize(session.Messages.CreateReplay());"
 	},
 	{
+		"slug": "3d-unity-combat",
+		"name": "3d-unity-combat",
+		"group": "Specific",
+		"summary": "Generic combat: health with damage and death events, teams, projectiles, and melee cone and area attacks.",
+		"purpose": "Games with fights keep rewriting the same small core: hit points, who may hurt whom, a swing in front of you, a blast around a point. This package holds that core once. It has no classes, spells, weapons, loot, experience, UI or networking: what a hit means and how hard it is stays in the game.",
+		"version": "0.2.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-combat",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-combat.git",
+		"usage": "Add a Health to every hero, monster or crate that can be hurt and set its MaxHealth and Team. To attack, call CombatQueries.DamageInCone for a melee swing or DamageInRadius for an area, passing your own team and a DamageInfo; for an arrow or a fireball call Projectile.Launch. Listen to Health.Damaged and Health.Died to play animations, sounds and effects.",
+		"current": [
+			"Health: hit points that start full, with MaxHealth, Current, Fraction (0 to 1, for a bar), IsAlive, Heal and Restore.",
+			"ApplyDamage(DamageInfo) answers Damaged, Killed or Ignored; Damaged is raised after a hit that does not kill and Died once, when health reaches zero.",
+			"DamageInfo carries the amount, an optional source object, the hit point and a free-form type label such as melee or fire.",
+			"Teams are plain numbers chosen by the game; attacks skip targets on the attacker's own team and targets that are already dead.",
+			"CombatQueries: DamageInCone is a melee swing judged on the ground plane, DamageInRadius an area attack, and FindInCone and FindInRadius return the targets without hurting them. Each target is hit once per attack.",
+			"Projectile.Launch starts a straight-flying projectile that hurts the first enemy it meets, flies through its own team and the dead, and is destroyed on the world or after its range.",
+			"IDamageable describes the same contract as an interface, for targets that are not a Health."
+		],
+		"features": [
+			"Small and generic: no classes, spells, weapons, loot, experience, UI or networking.",
+			"Any object with a Health on or above a collider can be hit, so a hero, a monster and a crate use the same code.",
+			"The target lists are for aiming and telegraphs too: find who a swing would hit before it lands.",
+			"A projectile draws itself as a small sphere of a chosen colour, or as a visual object the game supplies.",
+			"Edit-mode tests cover the package."
+		],
+		"examples": [
+			"In Temnorid Arena, melee fighters call CombatQueries.DamageInCone with a 70 degree half-angle, and archers and mages fire arrows and fireballs with Projectile.Launch.",
+			"In Temnorid Caravan Guard, the caravan is a Health, and its Current and MaxHealth feed the caravan bar.",
+			"In Temnorid Dungeons, Conquest and Legends, heroes and monsters are Health components, and each game decides what a hit does."
+		],
+		"roadmap": [
+			"A cooldown helper if two games end up writing the same one."
+		],
+		"related": [
+			"3d-unity-feedback",
+			"3d-unity-ai",
+			"3d-unity-character"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "Health",
+				"text": "Hit points of anything that can be hurt, with MaxHealth, Team, Current, Fraction and IsAlive."
+			},
+			{
+				"name": "Health.ApplyDamage(DamageInfo)",
+				"text": "Lowers health and returns Ignored (already dead or no damage), Damaged or Killed."
+			},
+			{
+				"name": "Health.Heal(amount) / Restore()",
+				"text": "Heal adds health up to the maximum and does nothing to the dead; Restore brings the character back to full health, alive again."
+			},
+			{
+				"name": "Health.Damaged / Health.Died",
+				"text": "Events raised with the Health and the DamageInfo: Damaged after a hit that does not kill, Died once when health reaches zero."
+			},
+			{
+				"name": "DamageInfo",
+				"text": "One hit: Amount, Source, Point and a Type label the game can use to tell kinds of damage apart."
+			},
+			{
+				"name": "CombatQueries.DamageInCone(origin, forward, range, halfAngle, team, info)",
+				"text": "A melee swing that hurts every enemy in range and within the half-angle on the ground plane, and returns how many were hit."
+			},
+			{
+				"name": "CombatQueries.DamageInRadius(center, radius, team, info)",
+				"text": "An area attack that hurts every enemy in the radius and returns how many were hit."
+			},
+			{
+				"name": "CombatQueries.FindInCone(...) / FindInRadius(...)",
+				"text": "Return the targets without hurting them, for aiming or a telegraph; the returned list is reused by the next query."
+			},
+			{
+				"name": "Projectile.Launch(origin, direction, speed, range, radius, team, info, colour, visual)",
+				"text": "Starts a straight-flying projectile; with no visual it is a small sphere of the given colour. The Hit event is raised when it hurts someone."
+			},
+			{
+				"name": "IDamageable",
+				"text": "Team, IsAlive and ApplyDamage as an interface, for targets that are not a Health."
+			}
+		],
+		"example": "var health = hero.AddComponent<Health>();\nhealth.MaxHealth = 120f;\nhealth.Team = 1;\nhealth.Died += (h, info) => EngineLog.Info(\"Combat\", \"Hero died\");\n\nvar info = new DamageInfo(18f, hero, type: \"melee\");\nvar hit = CombatQueries.DamageInCone(hero.transform.position, hero.transform.forward, 2.2f, 70f, health.Team, info);\n\nProjectile.Launch(muzzle.position, hero.transform.forward, 18f, 25f, 0.25f, health.Team, info, Color.yellow);"
+	},
+	{
+		"slug": "3d-unity-feedback",
+		"name": "3d-unity-feedback",
+		"group": "Specific",
+		"summary": "Cheap visual feedback for fights, made from primitives: pulses, rings, floor warnings and a health bar.",
+		"purpose": "A fight needs to be readable before the art exists: where a blow lands, how big a shockwave is, how much health is left. This package draws that from Unity primitives, so it needs no models, textures or particle systems. What an effect means and when it plays is the game's business, and a game with real art replaces these without changing its gameplay.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-feedback",
+		"dependencies": [
+			"3d-unity-combat"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-feedback.git",
+		"usage": "Call Fx.Pulse where something happens, passing a primitive type, a position, the starting and ending size, a colour and a lifetime. Add HealthBar3D to an object that already has a Health from 3d-unity-combat to show a bar above it. The bar follows Camera.main.",
+		"current": [
+			"Fx.Pulse creates a primitive without a collider that grows from one size to another and is destroyed after its lifetime.",
+			"A flat cylinder growing is a ring on the floor: a shockwave, or a red warning that fills up before a heavy blow.",
+			"A cube growing along one axis is a slash, and a small sphere is a hit spark.",
+			"Fx.Material gives a plain lit material of one colour, made once and reused.",
+			"HealthBar3D draws a bar above a character that faces the camera, shrinks with Health.Fraction and hides when the character dies."
+		],
+		"features": [
+			"Needs no art: everything is built from Unity primitives at run time.",
+			"Pulses have no colliders, so they never block movement or attacks.",
+			"Materials are shared per colour, so many effects do not make many materials.",
+			"HealthBar3D has Height and Width settings and needs only a Health next to it."
+		],
+		"examples": [
+			"In Temnorid Arena, a melee hit plays a slash cube, a shot plays a spark sphere in the weapon's tint, and each fighter wears a HealthBar3D.",
+			"In Temnorid Caravan Guard, guard posts draw a thin cube as a laser shot and enemies show yellow hit sparks and orange bursts.",
+			"In Temnorid Dungeons and Conquest, a heavy blow is announced by a red disc on the floor that grows to the size of the blow."
+		],
+		"roadmap": [
+			"Floating damage numbers.",
+			"A hit flash on the damaged character."
+		],
+		"related": [
+			"3d-unity-combat",
+			"3d-unity-ai"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-combat"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "Fx.Pulse(type, position, rotation, from, to, colour, life)",
+				"text": "Creates a collider-free primitive that scales from one size to another over its life, then destroys itself, and returns it."
+			},
+			{
+				"name": "Fx.Material(colour)",
+				"text": "A plain lit material of one colour, made once and reused."
+			},
+			{
+				"name": "FxPulse",
+				"text": "The component behind Fx.Pulse, with From, To and Life; it scales its object over time and then destroys it."
+			},
+			{
+				"name": "HealthBar3D",
+				"text": "A bar above the character with a Height and a Width, which faces the main camera and hides when the Health is dead."
+			}
+		],
+		"example": "// A red ring on the floor that fills up over a second: a warning before a heavy blow.\nFx.Pulse(PrimitiveType.Cylinder, boss.position + Vector3.up * 0.05f, Quaternion.identity,\n    new Vector3(0.5f, 0.02f, 0.5f), new Vector3(8f, 0.02f, 8f), new Color(0.9f, 0.1f, 0.1f), 1f);\n\n// A health bar above a monster that already has a Health.\nvar bar = monster.AddComponent<HealthBar3D>();\nbar.Height = 2.4f;"
+	},
+	{
+		"slug": "3d-unity-ai",
+		"name": "3d-unity-ai",
+		"group": "Specific",
+		"summary": "Generic bots: notice a target, chase it over a NavMesh, attack, give up and patrol.",
+		"purpose": "Most action games need monsters that see you, run at you, hit you and eventually lose interest. This package gives that behaviour once, as one component next to a NavMeshAgent. How far a bot sees, how hard it hits and what an attack is stay with the game: the package has no monster types, no health and no loot.",
+		"version": "0.2.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-ai",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-ai.git",
+		"usage": "Bake a NavMesh in the scene (for example with com.unity.ai.navigation). Add an AiTarget to whatever bots should hunt and keep its Alive flag up to date. Put an AiAgent on each bot next to its NavMeshAgent, set the senses and attack numbers, and handle AttackRequested to deal damage, play the animation or fire a projectile. Call Stop when the bot dies.",
+		"current": [
+			"AiTarget marks what bots may hunt: a team number, an Alive flag the game keeps up to date and an eye height.",
+			"AiAgent notices the nearest living AiTarget of another team inside SenseRadius, and walls block the view when RequireLineOfSight is on.",
+			"It chases the target over the NavMesh, and inside AttackRange it stops, turns to face the target and raises AttackRequested every AttackCooldown seconds.",
+			"It gives up when the target is dead or further than LoseRadius for LoseSeconds, then goes back home or on to its patrol points.",
+			"Ranged attackers use AttackNeedsSight to close in until they see the target, and MinDistance to step back while still attacking (state Retreat).",
+			"States are Idle, Patrol, Chase, Attack, Retreat and Dead; Stop switches the bot off, and ResetMind forgets the target after a respawn.",
+			"Bots think on a staggered TickInterval (0.2 s by default), not every frame, so many bots stay cheap."
+		],
+		"features": [
+			"The game decides what an attack is: AttackRequested only says the bot is in range and ready.",
+			"Team numbers are the game's own, so the same bots can hunt the player, a rival or a caravan.",
+			"Melee and ranged bots are the same component with different numbers.",
+			"Patrol points are plain Transforms, and the bot walks them in a loop with a wait at each.",
+			"Each bot's first think is offset at random, so bots do not all replan in the same frame."
+		],
+		"examples": [
+			"In Temnorid Arena, every fighter is an AiTarget, and archers and mages are AiAgents with AttackNeedsSight and a MinDistance of 7 to 8 metres.",
+			"In Temnorid Conquest, guards are AiAgents whose AttackRequested handler hurts the hero, and the player and remote heroes carry an AiTarget.",
+			"In Temnorid Dungeons, monsters notice and chase the hero, and the game sets the hero's AiTarget to not alive when the hero dies."
+		],
+		"roadmap": [
+			"Groups that share what they see.",
+			"Tests that bake a small NavMesh."
+		],
+		"related": [
+			"3d-unity-combat",
+			"3d-unity-feedback"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.modules.ai 1.0.0, resolved by the Package Manager",
+			"com.unity.modules.physics 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "AiTarget",
+				"text": "Marks something bots may hunt, with Team, Alive and EyeHeight; every enabled AiTarget is listed in AiTarget.All."
+			},
+			{
+				"name": "AiAgent.Team / SenseRadius / LoseRadius / LoseSeconds",
+				"text": "Who the bot is and how far it notices a target (12 m) and loses it (20 m, after 3 seconds)."
+			},
+			{
+				"name": "AiAgent.RequireLineOfSight / SightBlockers",
+				"text": "When on (the default), walls on the SightBlockers layers stop the bot from noticing a target through them."
+			},
+			{
+				"name": "AiAgent.AttackRange / AttackCooldown",
+				"text": "The bot stops and asks to attack inside this ground distance (1.8 m), at most once per cooldown (1.2 s)."
+			},
+			{
+				"name": "AiAgent.AttackNeedsSight / MinDistance",
+				"text": "For ranged attackers: attack only a target in sight, and step back while the target is closer than MinDistance."
+			},
+			{
+				"name": "AiAgent.TickInterval",
+				"text": "How often the bot looks around and replans, in seconds; higher is cheaper."
+			},
+			{
+				"name": "AiAgent.PatrolPoints / PatrolWait",
+				"text": "Points the bot walks in a loop when nothing is happening, waiting at each."
+			},
+			{
+				"name": "AiAgent.AttackRequested",
+				"text": "Raised with the agent and its target when the bot is in range and ready; do the damage in the handler."
+			},
+			{
+				"name": "AiAgent.State / Target / Nav",
+				"text": "The current AiState, the target Transform (or null) and the NavMeshAgent."
+			},
+			{
+				"name": "AiAgent.Stop() / ResetMind()",
+				"text": "Stop switches the bot off for good; ResetMind forgets the target and returns to Idle."
+			}
+		],
+		"example": "var agent = monster.GetComponent<AiAgent>();\nagent.Team = 2;\nagent.SenseRadius = 14f;\nagent.AttackRange = 1.8f;\nagent.AttackCooldown = 1.2f;\n\nagent.AttackRequested += (bot, target) =>\n{\n    var health = target.GetComponentInParent<Health>();\n    if (health != null) health.ApplyDamage(new DamageInfo(8f, bot.gameObject, target.position, \"melee\"));\n};\n\nmonster.GetComponent<Health>().Died += (h, info) => agent.Stop();\nplayer.AddComponent<AiTarget>().Team = 1;"
+	},
+	{
+		"slug": "3d-unity-inventory",
+		"name": "3d-unity-inventory",
+		"group": "Specific",
+		"summary": "Item containers: stackable items by id, slot and stack limits, transfers, and portable inventory data.",
+		"purpose": "Backpacks, warehouses and loot chests all do the same thing: hold counts of items in a fixed number of slots. This package is that container, and nothing about what an item is. Ids are the game's own strings, so one type serves wood and swords alike. Item definitions, recipes, prices, weights, UI and networking are the game's.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-inventory",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-inventory.git",
+		"usage": "Create an ItemContainer with a slot count and a stack limit, add items by id with TryAdd or AddUpTo, and take them out with TryRemove. Move items between containers with ItemContainer.Transfer or TransferAll. Listen to Changed to redraw a UI. To save, store the result of ToData in your save file and restore it with FromData or Load.",
+		"current": [
+			"ItemContainer has a fixed number of slots, each holding one kind of item up to the stack limit (99 by default).",
+			"TryAdd and TryRemove are all or nothing and answer with an InventoryStatus: Ok, InvalidQuantity, NotEnoughSpace or NotEnoughItems.",
+			"AddUpTo adds what fits and returns how many were added.",
+			"Transfer and TransferAll move items from one container to another, as many as fit, and raise Changed on both.",
+			"Count, SpaceFor, UsedSlots, TotalItems, IsEmpty and Items() read the contents, and Changed tells a UI when to redraw.",
+			"ToData and FromData convert to InventoryData, which has the same fields as 3d-inventory-schema.",
+			"Loading is forgiving: invalid entries are skipped and what does not fit is dropped, so a damaged save cannot break the container."
+		],
+		"features": [
+			"Plain C# with no dependencies: it does not even use the Unity API.",
+			"Items are only ids, so no item database is needed to use it.",
+			"Adds top up existing stacks first and then open empty slots; removals take from the last stacks first.",
+			"The saved form lists total quantities per item, and the container decides how they spread over slots.",
+			"The same container type serves a backpack, a warehouse and a loot chest."
+		],
+		"examples": [
+			"In Temnorid Craft, the player's backpack is an ItemContainer of 6 slots with a stack of 8, filled with AddUpTo when gathering and saved with ToData.",
+			"In Temnorid Dungeons, the stash between runs is an ItemContainer of 12 slots with a stack of 999, saved and loaded with the dungeon save.",
+			"In Temnorid Legends, a hero's items are an ItemContainer of 8 slots with a stack of 9."
+		],
+		"roadmap": [
+			"Per-item stack limits.",
+			"Item metadata (name, icon id) kept by the game next to the ids.",
+			"Move between two specific slots, for an inventory screen."
+		],
+		"related": [
+			"3d-unity-save"
+		],
+		"requirements": [
+			"Unity 6000.6"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "ItemContainer(slotCount, stackLimit)",
+				"text": "A container with a fixed number of slots and a stack limit (99 by default); both must be at least 1."
+			},
+			{
+				"name": "ItemContainer.TryAdd(itemId, quantity) / TryRemove(itemId, quantity)",
+				"text": "Adds or removes all of it or nothing, and returns an InventoryStatus."
+			},
+			{
+				"name": "ItemContainer.AddUpTo(itemId, quantity)",
+				"text": "Adds as much as fits and returns how many were added, which is 0 when the container is full."
+			},
+			{
+				"name": "ItemContainer.Transfer(from, to, itemId, quantity)",
+				"text": "Moves up to the quantity from one container to another, as many as fit, and returns how many moved."
+			},
+			{
+				"name": "ItemContainer.TransferAll(from, to)",
+				"text": "Moves everything that fits and returns how many items moved."
+			},
+			{
+				"name": "ItemContainer.Count(itemId) / SpaceFor(itemId)",
+				"text": "How many of an item are held in all slots, and how many more would fit right now."
+			},
+			{
+				"name": "ItemContainer.UsedSlots / TotalItems / IsEmpty / Items()",
+				"text": "Read the contents; Items() gives totals per item in the order they first appear."
+			},
+			{
+				"name": "ItemContainer.Clear()",
+				"text": "Empties every slot."
+			},
+			{
+				"name": "ItemContainer.Changed",
+				"text": "Raised after any change to the contents, including loading and clearing."
+			},
+			{
+				"name": "ItemContainer.ToData() / FromData(data) / Load(data)",
+				"text": "Convert to and from the portable InventoryData; FromData makes a container of the saved size and Load replaces the contents of an existing one."
+			},
+			{
+				"name": "InventoryData / ItemEntry",
+				"text": "The portable form with schemaVersion, slots, stackLimit and a list of itemId and quantity entries."
+			}
+		],
+		"example": "var backpack = new ItemContainer(6, 8);\nbackpack.Changed += () => EngineLog.Info(\"Inventory\", backpack.TotalItems + \" items\");\n\nvar status = backpack.TryAdd(\"iron-sword\", 1);\nvar gathered = backpack.AddUpTo(\"wood\", 20);\n\nvar chest = new ItemContainer(12, 99);\nItemContainer.Transfer(backpack, chest, \"wood\", 10);\n\nvar saved = backpack.ToData();\nvar restored = ItemContainer.FromData(saved);"
+	},
+	{
 		"slug": "3d-constructor-character-view-camera",
 		"name": "3d-constructor-character-view-camera",
 		"group": "Constructor",
@@ -1852,5 +3000,205 @@
 			}
 		],
 		"example": "// Packages/manifest.json: pin engine versions for a stable game\n{\n  \"dependencies\": {\n    \"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#v0.1.0\",\n    \"com.itkamianets.3d-unity-input\": \"https://github.com/IT-Kamianets/3d-unity-input.git#v0.1.0\",\n    \"com.itkamianets.3d-unity-character\": \"https://github.com/IT-Kamianets/3d-unity-character.git#v0.1.0\",\n    \"com.itkamianets.3d-constructor-character-view-camera\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git#v0.1.0\",\n    \"com.itkamianets.3d-constructor-character-view-controls\": \"https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git#v0.1.0\",\n    \"com.unity.inputsystem\": \"1.20.0\",\n    \"com.unity.render-pipelines.universal\": \"17.6.0\"\n  }\n}"
+	},
+	{
+		"slug": "3d-unity-fixed-camera",
+		"name": "3d-unity-fixed-camera",
+		"group": "Constructor",
+		"summary": "Fixed cinematic camera shots for third-person games, chosen by the boxes the player walks through.",
+		"purpose": "A game with the classic survival-horror look gets a working fixed camera without writing one. Shots are boxes placed in the level: the camera picks the one the subject stands in and looks at the subject from that shot's anchor. It is game-neutral, with no story, puzzle or character code, and it reads no input. Moving the character relative to the camera is the game's job, and MovementYaw gives it the direction to move by.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-fixed-camera",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-fixed-camera.git",
+		"usage": "Add FixedViewCamera to the camera object and set Subject to the player's transform. Put a CameraShotVolume on a box in each room and set its ShotId, Anchor, Size, Fov, Priority and Cut. Tune Hysteresis, BlendSeconds, LookOffset and Fallback on the camera. Call Snap after a teleport or a load, and PushOverride and PopOverride for a close-up. Move the character relative to MovementYaw, and call HoldBasis every frame with whether a movement input is held.",
+		"current": [
+			"CameraShotVolume: a box with a shot id, an anchor, a field of view, a priority and a choice between cut and glide.",
+			"FixedViewCamera looks at the subject, a little above its position, from the anchor of the volume the subject stands in.",
+			"Hysteresis at the borders: the camera lets go of a shot only when the subject is 0.3 m outside its box, unless a volume with a higher priority contains the subject.",
+			"Cut or glide: a shot with Cut jumps at once, any other shot is reached with a smooth move over 0.3 s by default.",
+			"Close-up overrides: PushOverride and PopOverride put a dedicated shot on top and restore the previous one.",
+			"MovementYaw and HoldBasis keep the direction of movement fixed while a key is held across a cut.",
+			"A fallback view behind and above the subject when no volume contains it.",
+			"CameraShotVolume.Select as a pure function that tests can call without physics."
+		],
+		"features": [
+			"No physics and no colliders: a volume tests a point with its own box maths, so the choice is the same in tests and in the game.",
+			"Standing on a border never flickers: the higher priority wins, then the nearest centre, and the current shot is kept inside the hysteresis margin.",
+			"A cut never reverses held input: MovementYaw stays where it was when the key went down.",
+			"Glides use unscaled time, so a move still finishes while the game is paused.",
+			"Game-neutral: the package knows nothing about stories, puzzles or characters."
+		],
+		"examples": [
+			"In Temnorid Escape each room of the watchtower has its own shot, and the cell latch and the records cabinet open as close-up overrides.",
+			"In Temnorid Detective seven shots cover four zones of the village, and the overview and the ending are overrides on top of them.",
+			"A test calls CameraShotVolume.Select with a point and the current volume to check that a border never flickers."
+		],
+		"roadmap": [],
+		"related": [
+			"3d-unity-topdown-camera",
+			"3d-constructor-character-view-camera",
+			"3d-unity-graybox"
+		],
+		"requirements": [
+			"Unity 6000.6"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "CameraShotVolume",
+				"text": "A box in the level that names a fixed shot for the subject standing inside it."
+			},
+			{
+				"name": "CameraShotVolume.Anchor",
+				"text": "The transform where the camera sits; it looks at the subject from here."
+			},
+			{
+				"name": "CameraShotVolume.ShotId / Fov / Size",
+				"text": "The id the game reads, the field of view in degrees (50 by default) and the size of the box in metres (4 by default)."
+			},
+			{
+				"name": "CameraShotVolume.Priority",
+				"text": "When volumes overlap, the higher priority wins."
+			},
+			{
+				"name": "CameraShotVolume.Cut",
+				"text": "Jump to this shot at once instead of gliding."
+			},
+			{
+				"name": "CameraShotVolume.Select(volumes, point, current, hysteresis)",
+				"text": "The pure choice of a shot for a point; it keeps the current volume while the point is within the hysteresis."
+			},
+			{
+				"name": "FixedViewCamera",
+				"text": "Component on the camera object that shows the shot for its subject."
+			},
+			{
+				"name": "FixedViewCamera.Subject",
+				"text": "The transform to look at; with no subject the camera does nothing."
+			},
+			{
+				"name": "FixedViewCamera.Hysteresis / BlendSeconds / LookOffset / Fallback",
+				"text": "The border margin in metres (0.3), the glide time in seconds (0.3), where on the subject to look (1.1 m up) and the height and distance of the fallback view (7 m)."
+			},
+			{
+				"name": "FixedViewCamera.MovementYaw",
+				"text": "The yaw to move relative to; frozen while HoldBasis is on."
+			},
+			{
+				"name": "FixedViewCamera.HoldBasis(held)",
+				"text": "Call every frame with whether a movement input is held, so a cut does not turn held input around."
+			},
+			{
+				"name": "FixedViewCamera.PushOverride(anchor, look, fov) / PopOverride()",
+				"text": "Takes a close-up shot from the anchor, looking at look or at the subject when it is null, and restores the previous shot."
+			},
+			{
+				"name": "FixedViewCamera.Snap()",
+				"text": "Puts the camera on the shot it should have right now, with no glide, for example after a teleport or a load."
+			},
+			{
+				"name": "FixedViewCamera.Current / ShotId / CutCount / Overriding",
+				"text": "The current volume, its shot id (inspect during an override), the number of shot changes and whether an override is active."
+			},
+			{
+				"name": "FixedViewCamera.ShotChanged",
+				"text": "Event raised with the shot id when the shot changes, but not for overrides."
+			}
+		],
+		"example": "var camera = Camera.main.gameObject.AddComponent<FixedViewCamera>();\ncamera.Subject = player.transform;\ncamera.ShotChanged += id => Debug.Log($\"Shot: {id}\");\n\n// Move relative to the camera, without a cut turning held input around\ncamera.HoldBasis(move != Vector2.zero);\nvar direction = Quaternion.Euler(0f, camera.MovementYaw, 0f) * new Vector3(move.x, 0f, move.y);\n\n// A close-up on a puzzle, then back to the room shot\ncamera.PushOverride(closeUpAnchor, puzzleTarget, 38f);\ncamera.PopOverride();"
+	},
+	{
+		"slug": "3d-unity-topdown-camera",
+		"name": "3d-unity-topdown-camera",
+		"group": "Constructor",
+		"summary": "Overhead camera for strategy and tower-defense games: pan, zoom and stay inside the map.",
+		"purpose": "A game played from above gets a working camera without writing one. It pans, zooms and stays inside the map, and that is all: it is not a strategy constructor and has no selection, building or unit commands. It reads input only through 3d-unity-input, and it turns a screen point into a point on the ground, so the game can pick a spot or a pad.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-topdown-camera",
+		"dependencies": [
+			"3d-unity-core",
+			"3d-unity-input"
+		],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-topdown-camera.git",
+		"usage": "Add OverheadCamera to the camera object and set Focus, Bounds, Pitch and the distances. The Move action (W A S D or the left stick) pans, and optionally the screen edge does too; the mouse wheel zooms between MinDistance and MaxDistance. Call Snap after changing Focus or Distance in code to jump without easing. Use TryGroundPoint to turn a pointer or touch position into a point on the ground.",
+		"current": [
+			"Pan with the Move action (W A S D or the left stick) and, optionally, when the pointer touches the screen edge.",
+			"Zoom with the mouse wheel, in steps, between a minimum and a maximum distance.",
+			"Panning is faster when zoomed out, so crossing a screen of ground takes the same time at any zoom.",
+			"Bounds: the point the camera looks at stays inside a rectangle on the ground, in x and z.",
+			"A fixed angle: the camera looks down at the ground at Pitch, 58 degrees by default, from the zoom distance.",
+			"Easing of the focus and the distance, and Snap to jump without it.",
+			"TryGroundPoint turns a screen position into a point on the ground."
+		],
+		"features": [
+			"All input comes through 3d-unity-input, so the camera never reads a device directly.",
+			"An unmoved mouse is not at the edge: (0, 0) before the first movement is ignored, and edge panning waits for the window to have focus.",
+			"Uses unscaled time, so the camera still moves while the game is paused.",
+			"Focus and Distance are plain fields: a game or a touch gesture moves and zooms the camera by setting them, and the bounds and the distance limits still apply.",
+			"Picking works on the ground plane at y = 0, so a spot under a finger or a cursor is one call."
+		],
+		"examples": [
+			"In Temnorid Caravan Guard the commander pans and zooms over one road, and the bounds keep the view inside the map.",
+			"The game moves Focus to the next stretch of road after each wave, and turns edge panning off on phones, over the interface and while a finger is down.",
+			"On a phone a drag keeps the ground under the finger by comparing two TryGroundPoint results, and a pinch sets Distance."
+		],
+		"roadmap": [],
+		"related": [
+			"3d-unity-input",
+			"3d-unity-fixed-camera",
+			"3d-constructor-character-view-camera"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"Add its engine packages first, each by git URL: 3d-unity-core, 3d-unity-input",
+			"com.unity.inputsystem 1.20.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "OverheadCamera",
+				"text": "Component on the camera object that looks down at the ground and can pan and zoom."
+			},
+			{
+				"name": "OverheadCamera.Focus",
+				"text": "The ground point in the middle of the screen; set it to move the camera."
+			},
+			{
+				"name": "OverheadCamera.Bounds",
+				"text": "A Rect on the ground: x and y are the ground x and z of the corner, width and height run along x and z."
+			},
+			{
+				"name": "OverheadCamera.Pitch / Yaw",
+				"text": "The angle of the view in degrees: Pitch from 20 to 89 (58 by default), Yaw turns the view around the ground (0 by default)."
+			},
+			{
+				"name": "OverheadCamera.Distance / MinDistance / MaxDistance",
+				"text": "The distance from the ground, 32 by default, and the limits the wheel keeps it between, 14 and 48."
+			},
+			{
+				"name": "OverheadCamera.PanSpeed",
+				"text": "Panning speed in metres per second at the default distance; it grows with the distance."
+			},
+			{
+				"name": "OverheadCamera.EdgePan / EdgePixels",
+				"text": "Pan when the pointer is within EdgePixels (14) of the screen edge; on by default."
+			},
+			{
+				"name": "OverheadCamera.ZoomStep / Smoothing",
+				"text": "The change of distance for one wheel step (4) and how fast the camera eases to its target (12)."
+			},
+			{
+				"name": "OverheadCamera.Snap()",
+				"text": "Jumps to Focus and Distance without easing; call it after changing them in code."
+			},
+			{
+				"name": "OverheadCamera.TryGroundPoint(screenPosition, out point)",
+				"text": "The point on the ground (y = 0) under a screen position; false when the ray points away from the ground."
+			}
+		],
+		"example": "var view = Camera.main.gameObject.AddComponent<OverheadCamera>();\nview.Bounds = new Rect(-70f, -45f, 140f, 100f);\nview.MinDistance = 16f;\nview.MaxDistance = 58f;\nview.Distance = 36f;\nview.Focus = new Vector3(-50f, 0f, -26f);\nview.Snap();\n\n// Which spot is the pointer on?\nvar pointer = EngineInput.Default.UI.Point.ReadValue<Vector2>();\nif (view.TryGroundPoint(pointer, out var ground))\n{\n    Debug.Log($\"Pointer on the ground at {ground}\");\n}"
 	}
 ]

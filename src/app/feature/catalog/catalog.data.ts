@@ -55,8 +55,8 @@ export interface PackageGroup {
 export const catalogPackages = packagesData as CatalogPackage[];
 export const catalogConstructors = constructorsData as CatalogConstructor[];
 
-/** From generic to specific, the same order as the architecture: schemas, then Unity core, then specific, then constructor parts. */
-const PACKAGE_GROUP_ORDER = ['Schemas', 'Core', 'Specific', 'Constructor'];
+/** From generic to specific, the same order as the architecture: schemas, then Unity core, then the game kit, then specific, then constructor parts. */
+const PACKAGE_GROUP_ORDER = ['Schemas', 'Core', 'Game kit', 'Specific', 'Constructor'];
 
 export const packageGroups: PackageGroup[] = PACKAGE_GROUP_ORDER.map((name) => ({
 	name,

@@ -22,7 +22,7 @@
 							{
 								"label": "Architecture",
 								"path": "/docs/architecture",
-								"text": "the layers, the three schemas, and how character, camera and multiplayer fit together."
+								"text": "the layers, the schemas, the game kit, and how character, camera and multiplayer fit together."
 							},
 							{
 								"label": "Examples",
@@ -53,10 +53,11 @@
 					{
 						"type": "ul",
 						"items": [
-							"**Schemas** (3): `3d-scene-schema`, `3d-asset-schema`, `3d-network-schema`. Plain JSON, readable without Unity.",
+							"**Schemas** (5): `3d-scene-schema`, `3d-asset-schema`, `3d-network-schema`, `3d-save-schema`, `3d-inventory-schema`. Plain JSON, readable without Unity.",
 							"**Core** (6): `3d-unity-core`, `-scene`, `-input`, `-character`, `-assets`, `-audio`. What every 3D game in Unity needs.",
-							"**Specific** (5): `3d-unity-interaction`, `-spatial`, `-xr`, `-firebase`, `-network`. Editing tools, devices, platforms and services that only some games need.",
-							"**Constructor** (4): the Character View camera, controls and template for first- and third-person games, and VR controls for headsets."
+							"**Game kit** (8): `3d-unity-ui`, `-save`, `-synth`, `-graybox`, `-shell`, `-account`, `-update`, `-net`. What a shipped game repeats: screens built in code, saves, generated sounds, scene-builder helpers, and the shared start screens, sign-in, self-update and online sessions.",
+							"**Specific** (9): `3d-unity-interaction`, `-spatial`, `-xr`, `-firebase`, `-network`, `-combat`, `-feedback`, `-ai`, `-inventory`. Editing tools, devices, platforms, services, and game systems (combat, effects, enemy AI, items) that only some games need.",
+							"**Constructor** (6): the Character View camera, controls and template for first- and third-person games, VR controls for headsets, and the cameras of the Fixed View and Top-down constructors."
 						]
 					}
 				]
@@ -331,9 +332,9 @@
 					{
 						"type": "ol",
 						"items": [
-							"**Schemas** (`3d-*-schema`): JSON formats for scenes, assets and multiplayer sessions. No engine.",
-							"**Unity packages** (`3d-unity-*`): core systems every game needs, plus specific ones for editing, VR, room scans, Firebase and multiplayer.",
-							"**Constructors** (`3d-constructor-<style>-*`): one per camera style. Each adds only its camera and controls (flat or VR) and a starter template.",
+							"**Schemas** (`3d-*-schema`): JSON formats for scenes, assets, multiplayer sessions, saves and inventories. No engine.",
+							"**Unity packages** (`3d-unity-*`): core systems every game needs, a game kit for shipping one, and specific ones for editing, VR, room scans, Firebase, multiplayer, combat and inventory.",
+							"**Constructors** (`3d-constructor-<style>-*`, and the shared `3d-unity-fixed-camera` and `3d-unity-topdown-camera`): one per camera style. Each adds only its camera and controls (flat or VR) and a starter template.",
 							"**Game packages** (`<game>-*`, e.g. `temnorid-arena-*`): the interface (menus, HUD) and the gameplay (rules, maps, content) of one game."
 						]
 					},
@@ -344,14 +345,16 @@
 				]
 			},
 			{
-				"title": "Three schemas",
+				"title": "Five schemas",
 				"blocks": [
 					{
 						"type": "ul",
 						"items": [
 							"`3d-scene-schema`: **where** things are. Read and written by `3d-unity-scene`.",
 							"`3d-asset-schema`: **what** things are. Resolved by `3d-unity-assets`.",
-							"`3d-network-schema`: **what happens between players**. Spoken by `3d-unity-network`."
+							"`3d-network-schema`: **what happens between players**. Spoken by `3d-unity-network`.",
+							"`3d-save-schema`: **what a game remembers**. The envelope of a save file, written and read by `3d-unity-save`.",
+							"`3d-inventory-schema`: **what is carried and stored**. Items and containers, used by `3d-unity-inventory`."
 						]
 					},
 					{
@@ -420,6 +423,36 @@
 					{
 						"type": "p",
 						"text": "`3d-unity-firebase` keeps accounts and stats between matches; `3d-unity-network` runs the match itself."
+					},
+					{
+						"type": "p",
+						"text": "`3d-unity-net` is the lighter option: a host-authoritative session with a roster, named events, player poses and host-published entities, for games that build their scenes in code and have no prefabs to spawn. `3d-unity-network` is the full server-authoritative layer above."
+					}
+				]
+			},
+			{
+				"title": "The game kit",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "A shipped game repeats the same work around its rules. The game kit holds it, so each game writes only what makes it different:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`3d-unity-shell`: the screens every Temnorid game shares (splash, landing, sign-in, onboarding, lobby, top and bottom bars), in the structure of the Lords app. A game describes itself in a `ShellConfig` and adds its own places.",
+							"`3d-unity-account`: the player’s Lords account: a guest or Google sign-in over Firebase’s REST API, remembered between runs. Not being signed in is a normal state.",
+							"`3d-unity-update`: keeps the game on its newest GitHub release and installs it silently on Windows. Being offline is never an error.",
+							"`3d-unity-net`: a small host-authoritative session over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code.",
+							"`3d-unity-save`: versioned local save files, written safely, with a kept backup of the previous save.",
+							"`3d-unity-ui`: screens built in code with plain uGUI, placed by anchors.",
+							"`3d-unity-synth`: sounds made in code from waves and noise, so no audio files are needed.",
+							"`3d-unity-graybox`: stable asset ids on primitives and the Editor helpers that build a first playable."
+						]
+					},
+					{
+						"type": "p",
+						"text": "The shell depends on `3d-unity-account`, `3d-unity-update`, `3d-unity-net` and `3d-unity-ui`; the others stand alone."
 					}
 				]
 			},
@@ -442,6 +475,7 @@
 						"type": "ul",
 						"items": [
 							"Shared before specific: if more than one constructor could use it, it belongs in a `3d-unity-*` package.",
+							"Code that two games need lives in a package, not in either game: the game kit exists because every game had its own copy.",
 							"Dependencies point one way, down the layers.",
 							"Input only through `3d-unity-input`; no package reads devices directly.",
 							"No game rules in engine or constructor packages.",
@@ -529,6 +563,23 @@
 					{
 						"type": "p",
 						"text": "Each example validates against its schema, so it doubles as a test fixture."
+					}
+				]
+			},
+			{
+				"title": "Games built on the engine",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The Temnorid games are built on the same packages. Their scenes are mostly built in code from primitives and tagged with stable asset ids (`3d-unity-graybox`), and each starts from the shared shell (`3d-unity-shell`), so the menu, sign-in, updates and online play are the same everywhere."
+					},
+					{
+						"type": "ul",
+						"items": [
+							"Temnorid Craft, Dungeons, Conquest, Arena, Caravan Guard, Hippodrome and Legends: the first games, each with its own rules on top of the shell.",
+							"Temnorid Escape and Detective: short fixed-camera episodes on `3d-unity-fixed-camera`.",
+							"Temnorid Master: seven trades in one workshop, with generated sounds (`3d-unity-synth`) and a backed-up save (`3d-unity-save`)."
+						]
 					}
 				]
 			},
