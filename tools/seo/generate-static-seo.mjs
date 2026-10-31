@@ -32,6 +32,9 @@ const lastmod = new Date().toISOString().slice(0, 10);
 await Promise.all(
 	outputDirs.map(async (outputDir) => {
 		await mkdir(outputDir, { recursive: true });
+		// Angular already prerenders HTML. Jekyll would turn packages.md into
+		// packages.html, which takes precedence over the /packages catalog.
+		await writeFile(path.join(outputDir, '.nojekyll'), '');
 		await writeFile(path.join(outputDir, 'sitemap.xml'), buildSitemap(routes, siteUrl, lastmod));
 		await writeFile(path.join(outputDir, 'robots.txt'), buildRobots(siteUrl));
 		await Promise.all(staticRoutes.map((route) => syncOgUrl(outputDir, route, siteUrl)));

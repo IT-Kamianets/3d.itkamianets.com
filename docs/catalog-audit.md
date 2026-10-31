@@ -94,3 +94,7 @@ Run `npm run validate`. With the game workspace available, run `node tools/catal
 - A separate source review confirmed the documentation corrections and found no remaining serious source-level issues.
 
 Browser screenshots, raw DOM captures and machine-readable review results are retained in the local framework-site review directory, outside the repository.
+
+## Deployment correction
+
+The public smoke check found that GitHub Pages ran Jekyll over the prebuilt Angular site. It rendered `packages.md` as `packages.html`, which shadowed the `/packages` catalog. The SEO output step now writes `.nojekyll` so Pages serves the prerendered site and preserves the raw Markdown reference.
