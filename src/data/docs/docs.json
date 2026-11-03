@@ -264,6 +264,10 @@
 					},
 					{
 						"type": "p",
+						"text": "Recommended editor: Unity 6000.6.5f1. The engine packages and our games are built and tested on it, so using the same version keeps your project aligned with them. This is a suggestion, not a requirement: any Unity 6000.6 editor works, and a different version is at your own risk."
+					},
+					{
+						"type": "p",
 						"text": "Without the Meta XR MR Utility Kit, `3d-unity-spatial` still compiles and reports that scanning is unavailable."
 					}
 				]

@@ -191,6 +191,8 @@ Each layer uses only the layers above it in this list. Game rules never go into 
 
 **Add a package to an existing Unity project.** In Unity, \`Window › Package Manager › + › Add package from git URL\`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a published tag or full commit SHA, replacing the placeholder in \`${gitUrl('3d-unity-core')}#<tag-or-commit>\`.
 
+**Recommended Unity version: 6000.6.5f1.** The engine packages and the games built on them are tested on this editor, so using it keeps your project aligned with them. It is a suggestion, not a requirement: any Unity 6000.6 editor works, and a different version is at your own risk.
+
 **Name your own packages** \`<game>-<part>\`, with the Unity package id \`com.itkamianets.<game>-<part>\`. A new game usually starts with the interface (\`<game>-menus\`, \`<game>-hud\`) and the gameplay (\`<game>-core\`, \`<game>-maps\`). A package that more than one game could use belongs in the engine instead.
 
 **Change an engine package through a pull request.** Clone it into your game's \`Packages/<package>\` directory. Unity loads the embedded copy instead of its Git URL; keep the manifest unchanged and keep the embedded repository out of the game's history. Work on a branch or fork, open a pull request, then remove the working clone after merging and pin the Git URL to the merged revision. Full flow: ${siteUrl}/docs/start-a-game
