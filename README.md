@@ -266,7 +266,7 @@ The built site is written to `dist/app/browser`; the production domain is set in
 
 ### Recommended Unity version
 
-The recommended editor is **Unity 6000.6.5f1**. It is a suggestion, never a requirement. When it changes, update it in three places: `src/data/docs/docs.json` (Installation › Requirements, plus the Ukrainian text in `src/i18n/ua.json`), the "Using packages" text in `tools/catalog/generate-packages-md.mjs`, and `src/assets/llms.txt`. Package entries keep the minimum line (`Unity 6000.6`).
+The recommended editor is **Unity 6000.6.8f1**. It is a suggestion, never a requirement. When it changes, update it in three places: `src/data/docs/docs.json` (Installation › Requirements, plus the Ukrainian text in `src/i18n/ua.json`), the "Using packages" text in `tools/catalog/generate-packages-md.mjs`, and `src/assets/llms.txt`. Package entries keep the minimum line (`Unity 6000.6`).
 
 ### Editing content
 
