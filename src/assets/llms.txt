@@ -1,5 +1,7 @@
 # IT Kamianets 3D Engine
 
+Also called the ITKP 3D Engine, or ITKP 3D for short.
+
 > Unity packages, engine-independent JSON schemas, and constructors (one per camera style) for building 3D games. Games such as Temnorid Arena, Craft, Dungeons and Master are built from them.
 
 ## Packages

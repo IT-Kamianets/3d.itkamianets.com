@@ -1,6 +1,6 @@
 # IT Kamianets 3D Engine
 
-**IT Kamianets 3D Engine** is a framework ecosystem for building reusable 3D applications and games.
+**IT Kamianets 3D Engine** is a framework ecosystem for building reusable 3D applications and games. It is also called the **ITKP 3D Engine**, or **ITKP 3D** for short; all three names mean the same thing.
 
 Website: `3d.itkamianets.com`
 

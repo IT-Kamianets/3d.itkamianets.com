@@ -1617,5 +1617,7 @@
 	"Creates the asset or replaces the one with the same slug.": "Створює асет або замінює той, що має такий самий slug.",
 	"Deletes one of your assets.": "Видаляє один із ваших асетів.",
 	"Uploads a file to Cloudflare and returns its public URL.": "Завантажує файл у Cloudflare й повертає його публічний URL.",
-	"Reads a model or prefab and returns an AssetraProduct with every field Unity can fill.": "Читає модель або префаб і повертає AssetraProduct з усіма полями, які може заповнити Unity."
+	"Reads a model or prefab and returns an AssetraProduct with every field Unity can fill.": "Читає модель або префаб і повертає AssetraProduct з усіма полями, які може заповнити Unity.",
+	"This is the **IT Kamianets 3D Engine**. In conversation and in internal notes it is also called the **ITKP 3D Engine**, or **ITKP 3D** for short. All three names mean the same thing.": "Це **IT Kamianets 3D Engine**. У розмові та у внутрішніх нотатках його також називають **ITKP 3D Engine**, а коротко — **ITKP 3D**. Усі три назви означають те саме.",
+	"**Specific** (10): `3d-unity-interaction`, `-spatial`, `-xr`, `-firebase`, `-assetra`, `-network`, `-combat`, `-feedback`, `-ai`, `-inventory`. Editing tools, devices, platforms, services, and game systems (combat, effects, enemy AI, items) that only some games need.": "**Спеціалізовані** (10): `3d-unity-interaction`, `-spatial`, `-xr`, `-firebase`, `-assetra`, `-network`, `-combat`, `-feedback`, `-ai`, `-inventory`. Інструменти редагування, пристрої, платформи, сервіси та ігрові системи (бій, ефекти, ШІ ворогів, предмети), потрібні лише деяким іграм."
 }
