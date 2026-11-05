@@ -172,7 +172,7 @@ Examples:
 
 ## Repository Architecture
 
-The catalog currently contains 34 framework entries (five JSON schemas, 28 UPM packages and one Unity template project), plus six constructor starters.
+The catalog currently contains 35 framework entries (five JSON schemas, 29 UPM packages and one Unity template project), plus six constructor starters.
 
 **Schemas**
 
@@ -188,7 +188,7 @@ The catalog currently contains 34 framework entries (five JSON schemas, 28 UPM p
 
 **Specific**
 
-`3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase`, `3d-unity-network`, `3d-unity-combat`, `3d-unity-feedback`, `3d-unity-ai`, `3d-unity-inventory`
+`3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase`, `3d-unity-assetra`, `3d-unity-network`, `3d-unity-combat`, `3d-unity-feedback`, `3d-unity-ai`, `3d-unity-inventory`
 
 **Constructor**
 

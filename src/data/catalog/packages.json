@@ -2170,6 +2170,81 @@
 		"example": "var config = FirebaseConfig.FromGoogleServicesJson(googleServicesJson.text);\nvar firebase = EngineFirebase.Initialize(config);\nawait firebase.Auth.SignInAsync();\n\nawait firebase.SaveProfileAsync(new JObject { [\"displayName\"] = \"Ira\" });\nawait firebase.SaveProgressAsync(\"stats\", new { matches = 12, wins = 7 });\nvar profile = await firebase.LoadProfileAsync();\n\nawait firebase.SaveSceneAsync(SceneSaver.Capture(level));\nvar scenes = await firebase.ListScenesAsync();"
 	},
 	{
+		"slug": "3d-unity-assetra",
+		"name": "3d-unity-assetra",
+		"group": "Specific",
+		"summary": "A shared library of 3D models for every game: browse and publish models in Assetra, with metadata read from Unity.",
+		"purpose": "Games reuse the models the studio already made instead of making them again. A model made in one game is published to Assetra (assetra.itkamianets.com) with as much metadata as Unity can read from it, and the next game finds it there. The package knows no game: it talks to the Assetra API of the IT Kamianets server, which keeps the catalog in Firebase and the files on Cloudflare.",
+		"version": "0.1.0",
+		"license": "MIT",
+		"packageId": "com.itkamianets.3d-unity-assetra",
+		"dependencies": [],
+		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-assetra.git",
+		"usage": "Open Window > Assetra and paste the Google ID token of your Assetra sign-in. Select a model or prefab in the Project window, check the fields read from it, add the title, category and price, and press Upload and publish. From code, create an AssetraClient with the token and call ListAsync, GetAsync, PutAsync or DeleteAsync.",
+		"current": [
+			"Window > Assetra: lists your assets and publishes the selected model or prefab.",
+			"ModelMetadataExtractor: triangles, vertices, meshes and LODs, bones, animation clips, blend shapes, materials, texture maps, texture resolution, PBR workflow and real-world dimensions.",
+			"Source details read from the project: file size, format, render pipeline, Unity version and the game the model came from, kept as a game:<name> tag.",
+			"AssetraProduct and AssetraDetails: the same fields as an Assetra asset; fields Unity cannot know are left out instead of sent as zeros.",
+			"AssetraClient: list, get, create or replace and delete assets through /api/assetra/asset, and file upload through /api/cloudflare."
+		],
+		"features": [
+			"One model library across games: what one game publishes, the next one can find.",
+			"Fills as many fields as possible by itself, so authors type only the title, category and price.",
+			"Project-agnostic: it holds no game rules and no Firebase keys; the server owns both.",
+			"Assets are private to their owner; the server checks the Google ID token on every call."
+		],
+		"examples": [
+			"Example use: publish a character made in one game, then list and reuse it from the next game."
+		],
+		"roadmap": [
+			"First test in a Unity 6000.6 project",
+			"Google sign-in inside the editor",
+			"Files above 7 MB through direct upload",
+			"Import a listed model into the project",
+			"Preview image and low-poly version",
+			"Read the whole team library, not only your own assets"
+		],
+		"related": [
+			"3d-unity-assets",
+			"3d-asset-schema",
+			"3d-unity-firebase"
+		],
+		"requirements": [
+			"Unity 6000.6",
+			"com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager",
+			"com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager"
+		],
+		"optional": [],
+		"api": [
+			{
+				"name": "new AssetraClient(idToken, apiUrl)",
+				"text": "Creates a client for the Assetra API; the token is the Google ID token of the player's Assetra sign-in."
+			},
+			{
+				"name": "ListAsync() / GetAsync(slug)",
+				"text": "Reads the signed-in account’s assets, or one asset by its slug."
+			},
+			{
+				"name": "PutAsync(product)",
+				"text": "Creates the asset or replaces the one with the same slug."
+			},
+			{
+				"name": "DeleteAsync(slug)",
+				"text": "Deletes one of your assets."
+			},
+			{
+				"name": "UploadAsync(data, name, mime)",
+				"text": "Uploads a file to Cloudflare and returns its public URL."
+			},
+			{
+				"name": "ModelMetadataExtractor.Extract(gameObject)",
+				"text": "Reads a model or prefab and returns an AssetraProduct with every field Unity can fill."
+			}
+		],
+		"example": "var client = new AssetraClient(idToken);\nvar product = ModelMetadataExtractor.Extract(prefab);\nproduct.title = \"Guard\";\nproduct.category = \"characters\";\n\nproduct.model = await client.UploadAsync(File.ReadAllBytes(path), \"guard.glb\", \"model/gltf-binary\");\nawait client.PutAsync(product);\n\nvar mine = await client.ListAsync();"
+	},
+	{
 		"slug": "3d-unity-network",
 		"name": "3d-unity-network",
 		"group": "Specific",

@@ -6,7 +6,7 @@ Every public package of the IT Kamianets 3D Engine: what it does, what it depend
 - Source: https://github.com/IT-Kamianets
 - This file: https://3d.itkamianets.com/packages.md (generated from the website catalog on every build)
 
-34 packages: 5 schemas, 6 core, 8 game kit, 9 specific, 6 constructor. 6 constructors.
+35 packages: 5 schemas, 6 core, 8 game kit, 10 specific, 6 constructor. 6 constructors.
 
 ## How the engine is built
 
@@ -83,6 +83,7 @@ Editing tools, devices, platforms and services that only some games need.
 | [`3d-unity-spatial`](#3d-unity-spatial) | Turns a Meta Quest room scan into a scene, measures scanned rooms and builds them as solid geometry. | `3d-unity-core`, `3d-unity-scene` |
 | [`3d-unity-xr`](#3d-unity-xr) | VR for a character: a headset rig on a character motor, comfort settings, a VR/flat mode switch and world-space status. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character` |
 | [`3d-unity-firebase`](#3d-unity-firebase) | Firebase over its REST API: sign-in, player profiles, saved progress and stored scenes. | `3d-unity-core`, `3d-unity-scene` |
+| [`3d-unity-assetra`](#3d-unity-assetra) | A shared library of 3D models for every game: browse and publish models in Assetra, with metadata read from Unity. | - |
 | [`3d-unity-network`](#3d-unity-network) | Real-time multiplayer on Netcode: sessions, server-authoritative characters, schema messages. | `3d-unity-core`, `3d-unity-character`, `3d-network-schema` |
 | [`3d-unity-combat`](#3d-unity-combat) | Generic combat: health with damage and death events, teams, projectiles, and melee cone and area attacks. | - |
 | [`3d-unity-feedback`](#3d-unity-feedback) | Cheap visual feedback for fights, made from primitives: pulses, rings, floor warnings and a health bar. | `3d-unity-combat` |
@@ -1891,6 +1892,70 @@ https://github.com/IT-Kamianets/3d-unity-firebase.git
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-scene`.
+
+Requirements:
+
+- Unity 6000.6
+- com.unity.nuget.newtonsoft-json 3.2.2, resolved by the Package Manager
+- com.unity.modules.unitywebrequest 1.0.0, resolved by the Package Manager
+
+### 3d-unity-assetra
+
+A shared library of 3D models for every game: browse and publish models in Assetra, with metadata read from Unity.
+
+| | |
+|---|---|
+| Kind | Unity package `com.itkamianets.3d-unity-assetra` |
+| Version | 0.1.0 |
+| Depends on | nothing |
+| Used by | nothing in the engine |
+| Repository | https://github.com/IT-Kamianets/3d-unity-assetra |
+| Page | https://3d.itkamianets.com/packages/3d-unity-assetra |
+
+**Purpose.** Games reuse the models the studio already made instead of making them again. A model made in one game is published to Assetra (assetra.itkamianets.com) with as much metadata as Unity can read from it, and the next game finds it there. The package knows no game: it talks to the Assetra API of the IT Kamianets server, which keeps the catalog in Firebase and the files on Cloudflare.
+
+**Usage.** Open Window > Assetra and paste the Google ID token of your Assetra sign-in. Select a model or prefab in the Project window, check the fields read from it, add the title, category and price, and press Upload and publish. From code, create an AssetraClient with the token and call ListAsync, GetAsync, PutAsync or DeleteAsync.
+
+**Includes:**
+
+- Window > Assetra: lists your assets and publishes the selected model or prefab.
+- ModelMetadataExtractor: triangles, vertices, meshes and LODs, bones, animation clips, blend shapes, materials, texture maps, texture resolution, PBR workflow and real-world dimensions.
+- Source details read from the project: file size, format, render pipeline, Unity version and the game the model came from, kept as a game:<name> tag.
+- AssetraProduct and AssetraDetails: the same fields as an Assetra asset; fields Unity cannot know are left out instead of sent as zeros.
+- AssetraClient: list, get, create or replace and delete assets through /api/assetra/asset, and file upload through /api/cloudflare.
+
+**API:**
+
+| Member | What it does |
+|---|---|
+| `new AssetraClient(idToken, apiUrl)` | Creates a client for the Assetra API; the token is the Google ID token of the player's Assetra sign-in. |
+| `ListAsync() / GetAsync(slug)` | Reads the signed-in account’s assets, or one asset by its slug. |
+| `PutAsync(product)` | Creates the asset or replaces the one with the same slug. |
+| `DeleteAsync(slug)` | Deletes one of your assets. |
+| `UploadAsync(data, name, mime)` | Uploads a file to Cloudflare and returns its public URL. |
+| `ModelMetadataExtractor.Extract(gameObject)` | Reads a model or prefab and returns an AssetraProduct with every field Unity can fill. |
+
+**Example:**
+
+```csharp
+var client = new AssetraClient(idToken);
+var product = ModelMetadataExtractor.Extract(prefab);
+product.title = "Guard";
+product.category = "characters";
+
+product.model = await client.UploadAsync(File.ReadAllBytes(path), "guard.glb", "model/gltf-binary");
+await client.PutAsync(product);
+
+var mine = await client.ListAsync();
+```
+
+**Install:**
+
+```text
+https://github.com/IT-Kamianets/3d-unity-assetra.git
+```
+
+No engine packages to add first.
 
 Requirements:
 

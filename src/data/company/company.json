@@ -156,6 +156,11 @@
 			"description": "Firebase через REST API: вхід, профілі гравців, збережений прогрес і збережені сцени.",
 			"image": "https://3d.itkamianets.com/seo/packages.jpg"
 		},
+		"/packages/3d-unity-assetra": {
+			"title": "3d-unity-assetra",
+			"description": "Спільна бібліотека 3D-моделей: перегляд і публікація моделей в Assetra з метаданими, прочитаними з Unity.",
+			"image": "https://3d.itkamianets.com/seo/packages.jpg"
+		},
 		"/packages/3d-unity-network": {
 			"title": "3d-unity-network",
 			"description": "Мультиплеєр у реальному часі на Netcode: сесії, персонажі під контролем сервера, повідомлення за схемою.",
