@@ -504,6 +504,28 @@
 				]
 			},
 			{
+				"title": "Optional: assetra.json",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "A game can keep a file named `assetra.json` in its repository root. It is a normal `3d-asset-schema` library that lists the models the game needs, so the engine and outside tools read the same list. Following it is optional: Assetra (assetra.itkamianets.com) is a separate tool by another developer, and nothing in the engine depends on it."
+					},
+					{
+						"type": "ul",
+						"items": [
+							"The game owns the list. Each model is an asset with an `id`, `bounds`, a `placeholder` shape and color, and tags or a triangle budget under `metadata`.",
+							"An asset without `source` is a placeholder waiting for a model. With `source` (a GLB path relative to the file) it is filled.",
+							"`3d-unity-assetra` syncs the file with an Assetra project: new entries appear there, and models filled there come back to the `source` path. It never removes entries or overwrites files on its own.",
+							"The project info lives in `metadata.properties.assetra` (`project`, `name`, `modelsDir`), which keeps the file valid against the schema."
+						]
+					},
+					{
+						"type": "code",
+						"code": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"libraryId\": \"my-game\",\n  \"units\": \"meters\",\n  \"metadata\": {\n    \"properties\": {\n      \"assetra\": {\n        \"project\": \"my-game\",\n        \"name\": \"My Game\",\n        \"modelsDir\": \"Assets/Models\"\n      }\n    }\n  },\n  \"assets\": [\n    {\n      \"id\": \"props/crate\",\n      \"kind\": \"model\",\n      \"bounds\": {\n        \"min\": {\n          \"x\": -0.6,\n          \"y\": 0,\n          \"z\": -0.6\n        },\n        \"max\": {\n          \"x\": 0.6,\n          \"y\": 1.2,\n          \"z\": 0.6\n        }\n      },\n      \"placeholder\": {\n        \"shape\": \"box\"\n      }\n    }\n  ]\n}"
+					}
+				]
+			},
+			{
 				"title": "Principles",
 				"blocks": [
 					{
