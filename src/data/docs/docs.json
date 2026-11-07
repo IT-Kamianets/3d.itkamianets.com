@@ -504,6 +504,26 @@
 				]
 			},
 			{
+				"title": "Where a game keeps its models",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Every game made with the engine keeps its shared models the same way, so any tool and any AI agent knows where to look and where to put a new one. This is a rule for all games, not a suggestion."
+					},
+					{
+						"type": "ul",
+						"items": [
+							"One GLB per asset id, at `Assets/Models/<group>/<name>.glb`. `<group>` and `<name>` are the two parts of the id: `props/bench` is `Assets/Models/props/bench.glb`.",
+							"An id is `group/name`, written with lowercase letters, digits and dashes. Once a game uses an id it never changes: the id is the slot, and the file is only what fills it.",
+							"`assetra.json` in the repository root lists every model of the game. `source.uri` is the GLB path above, and an entry without `source` is a placeholder waiting for a model.",
+							"Working files (FBX, OBJ, Blender files, textures from a generator) are not listed and do not go in `Assets/Models`. Keep them wherever the game's Unity assets need them.",
+							"To swap a model, overwrite the GLB at its path (or change `source.uri`) and send it on. A tool such as Assetra sees that the file differs, gives the slot the new file and drops the old version.",
+							"A model is in meters, with +Y up, +Z as the front and the pivot at the bottom center. Textures are embedded in the GLB, and a file is at most 7 MB."
+						]
+					}
+				]
+			},
+			{
 				"title": "Optional: assetra.json",
 				"blocks": [
 					{

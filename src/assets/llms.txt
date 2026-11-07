@@ -12,7 +12,7 @@ Also called the ITKP 3D Engine, or ITKP 3D for short.
 
 - [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository (an empty Unity project) under your game name, add the engine packages, work with an AI agent, send engine changes back as pull requests.
 - [Installation](https://3d.itkamianets.com/docs/installation): Unity requirements (recommended editor: Unity 6000.6.8f1, a suggestion, not a requirement), starter repositories, installing packages by git URL.
-- [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the five schemas, character and camera, multiplayer, the game kit.
+- [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the five schemas, character and camera, multiplayer, the game kit, where a game keeps its models (`Assets/Models/<group>/<name>.glb`, one GLB per asset id).
 - [Examples](https://3d.itkamianets.com/docs/examples): a first-person game from a starter repository, a multiplayer match, a room scan, the games built on the engine.
 
 ## Source
