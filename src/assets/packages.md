@@ -67,7 +67,7 @@ Building blocks for shipping a game: screens, saves, generated sounds, scene-bui
 | [`3d-unity-ui`](#3d-unity-ui) | Small helpers for building a game's screens in code with plain uGUI: panels, labels, bars, buttons and an event system wired to the engine's input. | `3d-unity-input` |
 | [`3d-unity-save`](#3d-unity-save) | Versioned local JSON save files: one slot per file, written safely, with a clear result for a missing, damaged or newer save. | - |
 | [`3d-unity-synth`](#3d-unity-synth) | Procedural sound: short clips built in code from waves and noise, and a sound board with volumes and a looping ambience, so a game needs no audio files. | - |
-| [`3d-unity-graybox`](#3d-unity-graybox) | Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, and Editor helpers for primitives, plain materials and world text. | - |
+| [`3d-unity-graybox`](#3d-unity-graybox) | Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, Editor helpers for primitives, plain materials and world text, and the model step that turns tags into assetra.json slots and swaps finished models in. | `3d-asset-schema` |
 | [`3d-unity-shell`](#3d-unity-shell) | The screens every Temnorid game shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars. | `3d-unity-core`, `3d-unity-input`, `3d-unity-ui`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net` |
 | [`3d-unity-account`](#3d-unity-account) | Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped Firestore access without the Firebase SDK. | `3d-unity-core` |
 | [`3d-unity-update`](#3d-unity-update) | Keeps a game on its newest GitHub release: checks for a new version and installs it silently on Windows. | - |
@@ -272,15 +272,15 @@ What things are: models, materials, textures and sounds described as JSON asset 
 | | |
 |---|---|
 | Kind | JSON Schema (2020-12) |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Depends on | nothing |
-| Used by | [`3d-unity-assets`](#3d-unity-assets) |
+| Used by | [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-graybox`](#3d-unity-graybox) |
 | Repository | https://github.com/IT-Kamianets/3d-asset-schema |
 | Page | https://3d.itkamianets.com/packages/3d-asset-schema |
 
 **Purpose.** A scene object names an asset by id; this schema says what that id resolves to. It describes files in standard formats (glTF/GLB, PNG/JPG, WAV/OGG/MP3) and a glTF-style material, but never says how an engine loads them. That decision belongs to engine packages such as 3d-unity-assets.
 
-**Usage.** Write an asset library: a schemaVersion, a libraryId, units and a list of assets. Each Asset has a path-like id, a kind (model, material, texture or audio), a source file, and for models optional materials, bounds and a placeholder. Scenes keep only the id, and 3d-unity-assets loads the file or shows the placeholder at runtime.
+**Usage.** Write an asset library: a schemaVersion, a libraryId, units and a list of assets. Each Asset has a path-like id, a kind (model, material, texture or audio), a source file, and for models optional materials, bounds and a placeholder. Scenes keep only the id, and 3d-unity-assets loads the file or shows the placeholder at runtime. A model that is still to be made carries a production brief (1.1.0): one line to use as the prompt, a triangle budget and a texture size, with one style phrase for the whole library.
 
 **Includes:**
 
@@ -290,6 +290,8 @@ What things are: models, materials, textures and sounds described as JSON asset 
 - Placeholders: a box, sphere or capsule with a color, sized to the bounds, shown while loading or when a file is missing.
 - Rules per kind: a material needs material, a texture or sound needs source, a model needs source or placeholder.
 - An example library with real files: a 1 m crate (GLB), a wood texture (PNG), a footstep (WAV) and a barrel with only a placeholder.
+- Production briefs (1.1.0): an asset's production has brief, budget, textureSize, rigged, generator and notes; the library's production has style and workDir. Engines ignore them; 3d-model-tools and 3d-unity-graybox read them.
+- A 1.1.0 example library with a barrier slot waiting for its model and a rigged runner made with Meshy.
 
 **API:**
 
@@ -305,6 +307,8 @@ What things are: models, materials, textures and sounds described as JSON asset 
 | `Asset.placeholder` | A shape (box, sphere or capsule) and a color shown instead of the asset while it loads or fails. |
 | `Asset.metadata.tags` | Free tags such as footstep and surface:stone that games and tools read. |
 | `common.schema.json Color` | An sRGB color with r, g, b and an optional a, each from 0 to 1. |
+| `Asset.production` | For a model to be made: brief (required), budget, textureSize (256 to 4096), rigged, generator { tool, taskId } and notes. |
+| `AssetLibrary.production` | style, added after every brief, and workDir, the folder of the working folders (Art/Models by default). |
 
 **Example:**
 
@@ -1207,20 +1211,20 @@ Requirements:
 
 ### 3d-unity-graybox
 
-Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, and Editor helpers for primitives, plain materials and world text.
+Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, Editor helpers for primitives, plain materials and world text, and the model step that turns tags into assetra.json slots and swaps finished models in.
 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-graybox` |
-| Version | 0.1.1 |
-| Depends on | nothing |
+| Version | 0.2.0 |
+| Depends on | [`3d-asset-schema`](#3d-asset-schema) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-graybox |
 | Page | https://3d.itkamianets.com/packages/3d-unity-graybox |
 
 **Purpose.** A first playable made of cubes and cylinders should not need rewriting when real models arrive. This package tags every stand-in with the id of what it stands for, so a model can replace the primitive without touching gameplay, and it keeps scene builders short enough to run again at any time to rebuild a level from scratch.
 
-**Usage.** Add AssetIdTag to anything that will later get a model and set its Id, for example props/chest. In an Editor script that builds a scene, make materials with GrayboxBuilder.Mat, floors and walls with Box, decoration with Prim and signs with Text. Mat saves a material under Assets/Materials (or the folder you pass) and updates it on the next run, and it needs the Universal Render Pipeline. GrayboxBuilder is Editor code; AssetIdTag and the WorldText shader are the runtime part.
+**Usage.** Add AssetIdTag to anything that will later get a model and set its Id, for example props/chest. In an Editor script that builds a scene, make materials with GrayboxBuilder.Mat, floors and walls with Box, decoration with Prim and signs with Text. Mat saves a material under Assets/Materials (or the folder you pass) and updates it on the next run, and it needs the Universal Render Pipeline. GrayboxBuilder is Editor code; AssetIdTag and the WorldText shader are the runtime part. For models, Tools › ITKP › Models › Update assetra.json from Open Scenes turns every tag into a 3d-asset-schema slot sized to its placeholder, and Swap Placeholders for Models in Open Scenes puts each finished model (Assets/Models/<id>.glb) in place of its primitives.
 
 **Includes:**
 
@@ -1231,6 +1235,9 @@ Build a game's first playable from Unity primitives: stable asset ids on everyth
 - GrayboxBuilder.Text: a line of text in the world (a TextMesh) for a sign or plaque, readable from its own -z side.
 - GrayboxBuilder.WorldTextMaterial(font, directory): the material world text is drawn with, saved as WorldText.mat in the material folder.
 - The Temnorid/WorldText shader: draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls.
+- ModelSlots.Update (Editor): adds a model slot to assetra.json for every tagged id, with bounds measured from its placeholder in the tag's own space, a placeholder colour and a brief to rewrite; it never removes or overwrites entries.
+- ModelSwap.Apply (Editor): puts each tag's finished model under it as a child named Model and switches the placeholder renderers off, keeping colliders, child transforms and gameplay; running it again changes nothing, and ModelSwap.Restore undoes it.
+- SwappedModel (runtime): the marker on a swapped-in model, with its id and source file.
 
 **API:**
 
@@ -1243,6 +1250,10 @@ Build a game's first playable from Unity primitives: stable asset ids on everyth
 | `GrayboxBuilder.Text(parent, name, text, localPosition, rotation, size, colour)` | A TextMesh line in the world, with the depth-tested material. |
 | `GrayboxBuilder.WorldTextMaterial(font, directory)` | The depth-tested material for world text, made once and reused. |
 | `GrayboxBuilder.DefaultMaterialDirectory` | Assets/Materials, where materials are saved unless a folder is passed. |
+| `ModelSlots.Update(libraryPath, roots)` | Adds slots for the tagged ids under the roots to assetra.json and returns what was added. |
+| `ModelSwap.Apply(root)` | Swaps every tag under root whose model exists; the file comes from source.uri in assetra.json or Assets/Models/<id>.glb. |
+| `ModelSwap.Restore(root)` | Removes the swapped models and switches the placeholders back on. |
+| `SwappedModel.Id / Source` | The asset id a swapped-in model fills and the project path of its file. |
 
 **Example:**
 
@@ -1276,6 +1287,7 @@ Requirements:
 
 - Unity 6000.6
 - The Universal Render Pipeline in the project: Mat makes Universal Render Pipeline/Lit materials
+- com.unity.cloud.gltfast in the project for GLB models to import (the swap leaves placeholders without it)
 
 ### 3d-unity-shell
 

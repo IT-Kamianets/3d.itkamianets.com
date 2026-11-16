@@ -99,26 +99,29 @@
 		"group": "Schemas",
 		"summary": "What things are: models, materials, textures and sounds described as JSON asset libraries.",
 		"purpose": "A scene object names an asset by id; this schema says what that id resolves to. It describes files in standard formats (glTF/GLB, PNG/JPG, WAV/OGG/MP3) and a glTF-style material, but never says how an engine loads them. That decision belongs to engine packages such as 3d-unity-assets.",
-		"version": "1.0.0",
+		"version": "1.1.0",
 		"license": "MIT",
 		"packageId": "",
 		"dependencies": [],
 		"install": "Nothing to install: the repository holds JSON Schema (2020-12) files. Read schema/v1/ and examples/ at https://github.com/IT-Kamianets/3d-asset-schema and validate documents with any JSON Schema validator. In Unity, 3d-unity-assets reads this format.",
-		"usage": "Write an asset library: a schemaVersion, a libraryId, units and a list of assets. Each Asset has a path-like id, a kind (model, material, texture or audio), a source file, and for models optional materials, bounds and a placeholder. Scenes keep only the id, and 3d-unity-assets loads the file or shows the placeholder at runtime.",
+		"usage": "Write an asset library: a schemaVersion, a libraryId, units and a list of assets. Each Asset has a path-like id, a kind (model, material, texture or audio), a source file, and for models optional materials, bounds and a placeholder. Scenes keep only the id, and 3d-unity-assets loads the file or shows the placeholder at runtime. A model that is still to be made carries a production brief (1.1.0): one line to use as the prompt, a triangle budget and a texture size, with one style phrase for the whole library.",
 		"current": [
 			"asset-library.schema.json: the root document with schemaVersion, libraryId, units, assets and metadata.",
 			"asset.schema.json: one asset with an id, name, kind, source, material, materials, bounds, placeholder and metadata.",
 			"A metallic/roughness material like glTF's: base color, base color texture, metallic, roughness, emission and transparency.",
 			"Placeholders: a box, sphere or capsule with a color, sized to the bounds, shown while loading or when a file is missing.",
 			"Rules per kind: a material needs material, a texture or sound needs source, a model needs source or placeholder.",
-			"An example library with real files: a 1 m crate (GLB), a wood texture (PNG), a footstep (WAV) and a barrel with only a placeholder."
+			"An example library with real files: a 1 m crate (GLB), a wood texture (PNG), a footstep (WAV) and a barrel with only a placeholder.",
+			"Production briefs (1.1.0): an asset's production has brief, budget, textureSize, rigged, generator and notes; the library's production has style and workDir. Engines ignore them; 3d-model-tools and 3d-unity-graybox read them.",
+			"A 1.1.0 example library with a barrier slot waiting for its model and a rigged runner made with Meshy."
 		],
 		"features": [
 			"Engine-independent: only standard file formats that every engine and the web can read.",
 			"Stable, lowercase, path-like ids such as props/crate-wood, unique across every library a project loads.",
 			"A level can be laid out before any model exists: bounds and placeholders stand in for it.",
 			"Fixed conventions: meters, +Y up, the model's origin at its bottom center and its front along glTF's +Z.",
-			"Vector3, Bounds3D and Metadata match 3d-scene-schema, so tools can share code."
+			"Vector3, Bounds3D and Metadata match 3d-scene-schema, so tools can share code.",
+			"Every 1.0.0 library is still valid under 1.1.0, which only adds optional fields."
 		],
 		"examples": [
 			"Example use: a scene library lists reusable crates and pillars; each PROP points to a model by id."
@@ -177,6 +180,14 @@
 			{
 				"name": "common.schema.json Color",
 				"text": "An sRGB color with r, g, b and an optional a, each from 0 to 1."
+			},
+			{
+				"name": "Asset.production",
+				"text": "For a model to be made: brief (required), budget, textureSize (256 to 4096), rigged, generator { tool, taskId } and notes."
+			},
+			{
+				"name": "AssetLibrary.production",
+				"text": "style, added after every brief, and workDir, the folder of the working folders (Art/Models by default)."
 			}
 		],
 		"example": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"libraryId\": \"example-props\",\n  \"units\": \"meters\",\n  \"assets\": [\n    {\n      \"id\": \"props/crate-wood\",\n      \"kind\": \"model\",\n      \"source\": { \"uri\": \"files/crate.glb\", \"format\": \"glb\" },\n      \"materials\": [\"materials/wood\"],\n      \"bounds\": { \"min\": { \"x\": -0.5, \"y\": 0, \"z\": -0.5 }, \"max\": { \"x\": 0.5, \"y\": 1, \"z\": 0.5 } },\n      \"placeholder\": { \"shape\": \"box\", \"color\": { \"r\": 0.55, \"g\": 0.36, \"b\": 0.2 } }\n    },\n    {\n      \"id\": \"materials/wood\",\n      \"kind\": \"material\",\n      \"material\": { \"baseColorTexture\": \"textures/wood\", \"metallic\": 0, \"roughness\": 0.8 }\n    },\n    { \"id\": \"textures/wood\", \"kind\": \"texture\", \"source\": { \"uri\": \"files/wood.png\", \"format\": \"png\" } }\n  ]\n}"
@@ -1324,14 +1335,16 @@
 		"slug": "3d-unity-graybox",
 		"name": "3d-unity-graybox",
 		"group": "Game kit",
-		"summary": "Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, and Editor helpers for primitives, plain materials and world text.",
+		"summary": "Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, Editor helpers for primitives, plain materials and world text, and the model step that turns tags into assetra.json slots and swaps finished models in.",
 		"purpose": "A first playable made of cubes and cylinders should not need rewriting when real models arrive. This package tags every stand-in with the id of what it stands for, so a model can replace the primitive without touching gameplay, and it keeps scene builders short enough to run again at any time to rebuild a level from scratch.",
-		"version": "0.1.1",
+		"version": "0.2.0",
 		"license": "MIT",
 		"packageId": "com.itkamianets.3d-unity-graybox",
-		"dependencies": [],
+		"dependencies": [
+			"3d-asset-schema"
+		],
 		"install": "Unity 6000.6. In Unity, open Window > Package Manager > Add package from git URL and enter https://github.com/IT-Kamianets/3d-unity-graybox.git",
-		"usage": "Add AssetIdTag to anything that will later get a model and set its Id, for example props/chest. In an Editor script that builds a scene, make materials with GrayboxBuilder.Mat, floors and walls with Box, decoration with Prim and signs with Text. Mat saves a material under Assets/Materials (or the folder you pass) and updates it on the next run, and it needs the Universal Render Pipeline. GrayboxBuilder is Editor code; AssetIdTag and the WorldText shader are the runtime part.",
+		"usage": "Add AssetIdTag to anything that will later get a model and set its Id, for example props/chest. In an Editor script that builds a scene, make materials with GrayboxBuilder.Mat, floors and walls with Box, decoration with Prim and signs with Text. Mat saves a material under Assets/Materials (or the folder you pass) and updates it on the next run, and it needs the Universal Render Pipeline. GrayboxBuilder is Editor code; AssetIdTag and the WorldText shader are the runtime part. For models, Tools › ITKP › Models › Update assetra.json from Open Scenes turns every tag into a 3d-asset-schema slot sized to its placeholder, and Swap Placeholders for Models in Open Scenes puts each finished model (Assets/Models/<id>.glb) in place of its primitives.",
 		"current": [
 			"AssetIdTag (runtime): a component with an Id such as monsters/goblin or props/chest, whatever shape draws the object today.",
 			"GrayboxBuilder.Prim(type, name, parent, position, scale, material, keepCollider): a primitive at a local position and scale, with no collider unless asked.",
@@ -1339,7 +1352,10 @@
 			"GrayboxBuilder.Mat(name, colour, directory, smoothness): a plain URP Lit material of one colour, saved as <directory>/<name>.mat (Assets/Materials by default); running again updates the same asset.",
 			"GrayboxBuilder.Text: a line of text in the world (a TextMesh) for a sign or plaque, readable from its own -z side.",
 			"GrayboxBuilder.WorldTextMaterial(font, directory): the material world text is drawn with, saved as WorldText.mat in the material folder.",
-			"The Temnorid/WorldText shader: draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls."
+			"The Temnorid/WorldText shader: draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls.",
+			"ModelSlots.Update (Editor): adds a model slot to assetra.json for every tagged id, with bounds measured from its placeholder in the tag's own space, a placeholder colour and a brief to rewrite; it never removes or overwrites entries.",
+			"ModelSwap.Apply (Editor): puts each tag's finished model under it as a child named Model and switches the placeholder renderers off, keeping colliders, child transforms and gameplay; running it again changes nothing, and ModelSwap.Restore undoes it.",
+			"SwappedModel (runtime): the marker on a swapped-in model, with its id and source file."
 		],
 		"features": [
 			"The id says what an object is, not how it looks, so a primitive and a model are interchangeable.",
@@ -1353,7 +1369,7 @@
 			"Labels on the cell door and a plaque on a wall are made with GrayboxBuilder.Text, so walls hide them."
 		],
 		"roadmap": [
-			"A catalog that maps asset ids to model files, and a swapper that replaces tagged primitives with them (together with 3d-unity-assets)"
+			"Swap at run time through 3d-unity-assets, for models loaded from a URL"
 		],
 		"related": [
 			"3d-unity-assets",
@@ -1362,7 +1378,8 @@
 		],
 		"requirements": [
 			"Unity 6000.6",
-			"The Universal Render Pipeline in the project: Mat makes Universal Render Pipeline/Lit materials"
+			"The Universal Render Pipeline in the project: Mat makes Universal Render Pipeline/Lit materials",
+			"com.unity.cloud.gltfast in the project for GLB models to import (the swap leaves placeholders without it)"
 		],
 		"optional": [],
 		"api": [
@@ -1393,6 +1410,22 @@
 			{
 				"name": "GrayboxBuilder.DefaultMaterialDirectory",
 				"text": "Assets/Materials, where materials are saved unless a folder is passed."
+			},
+			{
+				"name": "ModelSlots.Update(libraryPath, roots)",
+				"text": "Adds slots for the tagged ids under the roots to assetra.json and returns what was added."
+			},
+			{
+				"name": "ModelSwap.Apply(root)",
+				"text": "Swaps every tag under root whose model exists; the file comes from source.uri in assetra.json or Assets/Models/<id>.glb."
+			},
+			{
+				"name": "ModelSwap.Restore(root)",
+				"text": "Removes the swapped models and switches the placeholders back on."
+			},
+			{
+				"name": "SwappedModel.Id / Source",
+				"text": "The asset id a swapped-in model fills and the project path of its file."
 			}
 		],
 		"example": "using ITKamianets.Engine.Graybox;\nusing ITKamianets.Engine.Graybox.EditorTools;   // in an Editor script\nusing UnityEngine;\n\nvar stone = GrayboxBuilder.Mat(\"Stone\", new Color(0.45f, 0.45f, 0.5f));\nvar wood = GrayboxBuilder.Mat(\"Wood\", new Color(0.5f, 0.35f, 0.2f));\n\nGrayboxBuilder.Box(root, \"Floor\", new Vector3(0f, -0.5f, 0f), new Vector3(20f, 1f, 20f), stone);\n\nvar chest = GrayboxBuilder.Prim(PrimitiveType.Cube, \"Chest\", root,\n    new Vector3(2f, 0.4f, 3f), new Vector3(1f, 0.8f, 0.6f), wood, keepCollider: true);\nchest.AddComponent<AssetIdTag>().Id = \"props/chest\";\n\nGrayboxBuilder.Text(root, \"Sign\", \"CELLS\", new Vector3(0f, 2f, -5f),\n    Quaternion.identity, 0.02f, Color.white);"
