@@ -22,6 +22,10 @@
 		"image": "https://3d.itkamianets.com/seo/home.jpg"
 	},
 	"pageSeo": {
+		"/development": {
+			"title": "Розробка",
+			"description": "Огляд коду пакетів фреймворку та ігор на них: критичні помилки, повторювані проблеми та пропозиції щодо робочого процесу."
+		},
 		"/pitch": {
 			"title": "Презентація",
 			"description": "Презентація IT Kamianets 3D Engine: пакети, схема сцени та конструктори ігор."

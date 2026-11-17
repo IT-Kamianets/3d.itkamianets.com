@@ -1,0 +1,67 @@
+<div class="container-x py-12 sm:py-16">
+	<h1 class="ds-page-title">{{ content.title | tr }}</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]">{{ content.lead | tr }}</p>
+
+	@for (section of content.sections; track section.title) {
+		<section class="docs-section mt-12" [id]="sectionId(section.title)">
+			<h2 class="ds-section-title text-[1.25rem]">{{ section.title | tr }}</h2>
+
+			@for (block of section.blocks; track $index) {
+				@switch (block.type) {
+					@case ('p') {
+						<p class="prose-measure mt-4 text-pretty leading-7" [innerHTML]="block.text | rich"></p>
+					}
+					@case ('ul') {
+						<ul class="prose-measure mt-4 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+							@for (item of block.items; track item) {
+								<li class="mt-2" [innerHTML]="item | rich"></li>
+							}
+						</ul>
+					}
+					@case ('ol') {
+						<ol class="prose-measure mt-4 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+							@for (item of block.items; track item) {
+								<li class="mt-2" [innerHTML]="item | rich"></li>
+							}
+						</ol>
+					}
+					@case ('table') {
+						<div class="ds-card mt-4 overflow-hidden">
+							<table class="ds-table install-table">
+								<thead>
+									<tr>
+										@for (cell of block.head; track cell) {
+											<th scope="col">{{ cell | tr }}</th>
+										}
+									</tr>
+								</thead>
+								<tbody>
+									@for (row of block.rows; track row.name) {
+										<tr>
+											<th scope="row" class="ds-mono !font-medium !text-[var(--foreground)]">{{ row.name }}</th>
+											<td [attr.data-label]="block.head[1] | tr" [innerHTML]="row.text | rich"></td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					@case ('groups') {
+						<div class="mt-4 grid gap-4 md:grid-cols-2">
+							@for (group of block.groups; track group.title) {
+								<div class="ds-card gap-2 p-5">
+									<h3 class="ds-mono text-base">{{ group.title | tr }}</h3>
+									<ul class="m-0 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+										@for (item of group.items; track item) {
+											<li [innerHTML]="item | rich"></li>
+										}
+									</ul>
+								</div>
+							}
+						</div>
+					}
+				}
+			}
+		</section>
+	}
+</div>

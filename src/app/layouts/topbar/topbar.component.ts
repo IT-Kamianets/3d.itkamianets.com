@@ -25,6 +25,7 @@ export class TopbarComponent {
 		{ label: 'Packages', path: '/packages' },
 		{ label: 'Constructors', path: '/constructors' },
 		{ label: 'Docs', path: '/docs' },
+		{ label: 'Development', path: '/development' },
 	];
 	protected readonly githubUrl = GITHUB_ORG_URL;
 	protected readonly company = inject(CompanyService).company;

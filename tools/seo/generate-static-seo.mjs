@@ -18,6 +18,7 @@ const staticRoutes = [
 	'/docs/installation',
 	'/docs/architecture',
 	'/docs/examples',
+	'/development',
 	'/constructors',
 	...constructors.map((item) => `/constructors/${item.slug}`),
 ];

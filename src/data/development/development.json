@@ -1,0 +1,253 @@
+{
+	"title": "Development",
+	"lead": "A code review of the framework packages and the games built on them: what is risky, what is broken, and what to change in the workflow.",
+	"sections": [
+		{
+			"title": "Summary",
+			"blocks": [
+				{
+					"type": "p",
+					"text": "The idea behind the framework is sound, and the way you build the Unity games on it causes more risk than the individual bugs do. None of the 30 engine package repos has a release tag, and all 10 Temnorid games plus Math Runner install the packages by plain git URL. So every build pulls whatever is on each package's `master` that day. On top of that, code from one game (Temnorid/Lords) has ended up inside the shared engine packages."
+				},
+				{
+					"type": "p",
+					"text": "I found these issues by reading the code; I did not reproduce any of them in Unity, and I changed nothing."
+				}
+			]
+		},
+		{
+			"title": "High-severity bugs",
+			"blocks": [
+				{
+					"type": "table",
+					"head": [
+						"Package",
+						"Bug"
+					],
+					"rows": [
+						{
+							"name": "3d-unity-update",
+							"text": "The update installer is downloaded and run silently with no checks: no host check, no checksum, no signature. Anyone who can edit the GitHub releases can run code on every player's PC. Math Runner's own `UpdateChecker` is safer (it checks the URL and the SHA-256), so the shared package should take its approach."
+						},
+						{
+							"name": "3d-unity-account",
+							"text": "A player who starts as a guest and later signs in with a Google account they already use in Lords gets \"Google sign-in was refused\" every time. The guest screen has no sign-out, so they cannot get out of it. This follows directly from the \"play as guest, then use your Lords account\" design, so real players will hit it."
+						},
+						{
+							"name": "3d-unity-net",
+							"text": "A modified client can send a `net.gone` message that deletes host entities (enemies) on every other client."
+						},
+						{
+							"name": "3d-unity-character",
+							"text": "Walking speed on slopes depends on frame rate: on a 30° slope it is about 2 m/s at 60 fps and 0.5 m/s at 240 fps, instead of the 4 m/s walk speed. Host and client running at different tick rates will disagree."
+						},
+						{
+							"name": "3d-unity-input",
+							"text": "Rebinds for game-added action maps are lost on every restart, and the next save then deletes them for good."
+						},
+						{
+							"name": "3d-unity-scene",
+							"text": "Objects with a duplicate id or no id are loaded at the origin with no content, and saving writes them back there, which corrupts the file."
+						},
+						{
+							"name": "3d-unity-assets",
+							"text": "One malformed library entry leaves its asset id stuck as \"loading\" forever, so callbacks and placeholders never resolve."
+						},
+						{
+							"name": "3d-unity-ai",
+							"text": "Bots keep attacking a dead target for up to 3 seconds and ignore a living enemy next to them."
+						},
+						{
+							"name": "3d-constructor-character-view-controls",
+							"text": "Disabling the controls (death, cutscene, handing the character to a bot or the network) leaves the character moving with the last input."
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "Medium-severity bugs",
+			"blocks": [
+				{
+					"type": "groups",
+					"groups": [
+						{
+							"title": "net",
+							"items": [
+								"Pressing Back while connecting leaves a Relay session running.",
+								"A host never notices its own session has died.",
+								"Clients never get `PlayerLeft`, so a player who quits stays on screen frozen.",
+								"A removed entity can reappear permanently.",
+								"Long names or messages overflow the fixed-size message buffers."
+							]
+						},
+						{
+							"title": "update",
+							"items": [
+								"The download has no timeout and cannot be cancelled.",
+								"Starting the installer may also fail on IL2CPP builds; Unity's support for that there is unconfirmed."
+							]
+						},
+						{
+							"title": "account",
+							"items": [
+								"The Firebase refresh token is stored in plain PlayerPrefs.",
+								"A refresh that finishes after Sign out signs the player back in.",
+								"A Google sign-in cannot be cancelled and blocks the screen for 3 minutes.",
+								"The Firebase project key and Lords document paths are hard-coded inside the engine package."
+							]
+						},
+						{
+							"title": "shell",
+							"items": [
+								"Signing out keeps the previous player's lord class and name.",
+								"\"Lords\" and \"Temnorid\" text is hard-coded.",
+								"`ShellSceneKit` copies the OAuth secret into the game's Resources folder and overwrites any existing file.",
+								"The Android version code gives 1.0.100 and 1.1.0 the same number."
+							]
+						},
+						{
+							"title": "save",
+							"items": [
+								"`Load` can throw instead of returning a status.",
+								"A save that only fails to read into the game's own type is treated as corrupt and moved aside, so the next save overwrites the progress.",
+								"The file is not flushed to disk before it is swapped in, so the \"a crash cannot leave half a save\" promise does not hold on phones.",
+								"Text that looks like a date comes back as a different string."
+							]
+						},
+						{
+							"title": "input",
+							"items": [
+								"With a headset connected, the input scheme flips to VR almost every frame, so control hints flicker.",
+								"Quest builds start in the Touch scheme.",
+								"Reset bindings undoes the left-hand setting.",
+								"Pressing Esc to cancel a rebind also opens the pause menu."
+							]
+						},
+						{
+							"title": "character and camera",
+							"items": [
+								"Replaying network commands fires the Jumped and Landed events a second time.",
+								"The camera reads the character's starting direction before it is set.",
+								"The Character View constructor has no VR path, although the docs say it supports headsets."
+							]
+						},
+						{
+							"title": "scene and assets",
+							"items": [
+								"Neither package keeps unknown fields or checks `schemaVersion`. A load-then-save drops newer data and marks the file as an older version, including the 1.1.0 `production` block.",
+								"A library's file path is trusted as is, so `file://` addresses and `../` paths outside the folder work.",
+								"Unloading an asset breaks objects still using it.",
+								"Every scene reload leaks meshes."
+							]
+						},
+						{
+							"title": "audio",
+							"items": [
+								"Stopping a sound whose clip is still loading does not stop it; if it loops, it plays forever.",
+								"Looping sounds keep playing after the object they follow is destroyed.",
+								"Scene ambience ignores the volume settings.",
+								"`3d-unity-audio` depends on `3d-unity-character`, which points the wrong way for a core package."
+							]
+						},
+						{
+							"title": "combat",
+							"items": [
+								"Every projectile without a model creates a material that is never freed.",
+								"`AddComponent<Health>()` followed by setting `MaxHealth = 300` spawns the monster at 100/300."
+							]
+						},
+						{
+							"title": "ai",
+							"items": [
+								"`AttackNeedsSight` has no effect unless `RequireLineOfSight` is also on.",
+								"The patrol wait never happens."
+							]
+						},
+						{
+							"title": "ui",
+							"items": [
+								"`package.json` does not list `3d-unity-input`, although the code uses it."
+							]
+						},
+						{
+							"title": "topdown camera",
+							"items": [
+								"On touch screens the camera can keep panning forever after a tap near the edge."
+							]
+						}
+					]
+				},
+				{
+					"type": "p",
+					"text": "These packages were clean or had only trivial issues: `3d-unity-core`, `-fixed-camera`, `-feedback` and `-synth`."
+				}
+			]
+		},
+		{
+			"title": "Problems that repeat across the framework",
+			"blocks": [
+				{
+					"type": "ol",
+					"items": [
+						"**No version pinning.** There are no tags, every game installs packages by plain git URL, and Math Runner pulls `unity-mcp#main`. The docs say to pin before a release, but there is nothing to pin to.",
+						"**Package dependencies are not declared.** The shell, account and ui packages don't list the engine packages they use in `package.json`. That is why each game's AGENTS.md has to list everything by hand.",
+						"**The engine breaks its own rules.** Temnorid/Lords code sits inside `3d-*` packages: the Firebase config and `LordProfile` in account, `ShellLord` and its wording in shell, and the `Temnorid/WorldText` shader in graybox. It belongs in `temnorid-*` packages.",
+						"**\"Schemas are the source of truth\" is not enforced.** Nothing writes back unknown fields, checks versions, or validates data before writing it.",
+						"**Few tests.** Most core packages have empty test folders, the save package has none, and the docs-site validator doesn't check that `package.json` dependencies match the assembly references.",
+						"**Lifetimes are unmanaged.** Materials, meshes, textures, assets and looping sounds created at runtime have no owner, and the async flows (sign-in, Relay, downloads) can't be cancelled.",
+						"**The docs disagree with themselves.** The README describes three layers and four package groups, while the docs describe four layers and five groups. There are two networking packages (`-net` and `-network`) with different designs, and the Character View VR claims aren't backed by code."
+					]
+				}
+			]
+		},
+		{
+			"title": "Math Runner",
+			"blocks": [
+				{
+					"type": "ul",
+					"items": [
+						"**The branches have split.** `origin/master` has the 0.3.1 commit, which `dev` doesn't have, and `dev` has 7 commits `master` doesn't have. `dev` still says version 0.3.0 while the `v0.3.1` tag exists, so a build from `dev` would offer to \"update\" itself. Merge `master` into `dev` before the next release.",
+						"**The game doesn't follow the docs' own model rule.** The code looks up prefabs by keys like `23_striped_barrier`, not by the asset ids in `assetra.json` like `obstacles/striped-barrier`. Three model sets sit side by side: `Art/Models` (OBJ), `Art/Meshy` (FBX) and `Assets/Models` (GLB). glTFast is not in the manifest, so loading GLB at runtime through `3d-unity-assets` falls back to placeholders.",
+						"**The package lock file is stale.** It says `3d-unity-assetra` comes from a local `file:` folder, which doesn't exist, while the manifest uses a git URL.",
+						"**Unused packages.** The game uses only core and input, but installs character, camera, controls, scene, assets and audio as well.",
+						"**Its own updater duplicates `3d-unity-update`, and is the better of the two.** Move its checks into the package and use the package."
+					]
+				},
+				{
+					"type": "p",
+					"text": "Smaller game bugs:"
+				},
+				{
+					"type": "ul",
+					"items": [
+						"Coin pickup depends on frame rate: below about 15 fps at top speed, coins are skipped.",
+						"The `SchemeChanged` subscription is never removed.",
+						"The best score is not saved between runs."
+					]
+				},
+				{
+					"type": "p",
+					"text": "CI only triggers the mobile build. No tests run on a push, and the Windows release is done by hand."
+				}
+			]
+		},
+		{
+			"title": "Workflow suggestions",
+			"blocks": [
+				{
+					"type": "ol",
+					"items": [
+						"**Tag every package release** (`vX.Y.Z`) and have games use `...git#vX.Y.Z` with a committed lock file. A small script could bump the pins across all games at once.",
+						"**Declare engine dependencies in each `package.json`.** Better still, publish to a package registry (OpenUPM or GitHub Packages) so Unity resolves the whole dependency tree, and the long manifest blocks in AGENTS.md can go.",
+						"**Add CI with GameCI.** For packages: run edit-mode and play-mode tests on each PR inside a small host project. For games: run tests on push, and on a tag build Windows with Inno Setup and attach it to a release. The build script should read the version from the git tag, so `bundleVersion` can't drift again.",
+						"**Extend the docs validator** to check: `package.json` dependencies against the assembly references; Temnorid or Lords names inside `3d-*` packages; direct device input outside `3d-unity-input`; `itkp-models check` on each game's `assetra.json`.",
+						"**Move game-specific code into `temnorid-*` packages:** the account config, `LordProfile`, `ShellLord` and the shell text.",
+						"**One branch model for every game:** work on `dev`, merge to `master` by PR, and release only from `master`.",
+						"**Math Runner as the reference game:** switch it to asset ids, add glTFast, delete the OBJ and FBX copies, move it onto `3d-unity-update`, and drop the unused packages. Then copy that setup into the constructor starters."
+					]
+				}
+			]
+		}
+	]
+}
