@@ -12,7 +12,7 @@ Also called the ITKP 3D Engine, or ITKP 3D for short.
 
 - [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository (an empty Unity project) under your game name, add the engine packages, work with an AI agent, send engine changes back as pull requests.
 - [Installation](https://3d.itkamianets.com/docs/installation): Unity requirements (recommended editor: Unity 6000.6.8f1, a suggestion, not a requirement), starter repositories, installing packages by git URL.
-- [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the five schemas, character and camera, multiplayer, the game kit, where a game keeps its models (`Assets/Models/<group>/<name>.glb`, one GLB per asset id).
+- [Architecture](https://3d.itkamianets.com/docs/architecture): layers, the five schemas, character and camera, multiplayer, the game kit, where a game keeps its models (`Assets/Models/<group>/<name>.glb`, one GLB per asset id), how a model is made (a slot in `assetra.json` with `bounds` and a `production` brief from `3d-asset-schema` 1.1.0, made from the scene's tags by `3d-unity-graybox`; working files in `Art/Models/<group>/<name>/`; reference image, any 3D generator such as Meshy, `itkp-models optimize` in Blender, `itkp-models check`, swap into the game with `3d-unity-graybox`, Assetra; the tools for the image and the 3D model are suggestions). The command line is `3d-model-tools`: https://github.com/IT-Kamianets/3d-model-tools
 - [Examples](https://3d.itkamianets.com/docs/examples): a first-person game from a starter repository, a multiplayer match, a room scan, the games built on the engine.
 
 ## Source

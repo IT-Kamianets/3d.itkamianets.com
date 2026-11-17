@@ -516,7 +516,7 @@
 							"One GLB per asset id, at `Assets/Models/<group>/<name>.glb`. `<group>` and `<name>` are the two parts of the id: `props/bench` is `Assets/Models/props/bench.glb`.",
 							"An id is `group/name`, written with lowercase letters, digits and dashes. Once a game uses an id it never changes: the id is the slot, and the file is only what fills it.",
 							"`assetra.json` in the repository root lists every model of the game. `source.uri` is the GLB path above, and an entry without `source` is a placeholder waiting for a model.",
-							"Working files (FBX, OBJ, Blender files, textures from a generator) are not listed and do not go in `Assets/Models`. Keep them wherever the game's Unity assets need them.",
+							"Working files (reference images, a generator's raw output, Blender files) are not listed and do not go in `Assets/Models`. They live in `Art/Models/<group>/<name>/` at the repository root, outside Unity's `Assets` folder, so Unity never imports them.",
 							"To swap a model, overwrite the GLB at its path (or change `source.uri`) and send it on. A tool such as Assetra sees that the file differs, gives the slot the new file and drops the old version.",
 							"A model is in meters, with +Y up, +Z as the front and the pivot at the bottom center. Textures are embedded in the GLB, and a file is at most 7 MB."
 						]
@@ -533,7 +533,7 @@
 					{
 						"type": "ul",
 						"items": [
-							"The game owns the list. Each model is an asset with an `id`, `bounds`, a `placeholder` shape and color, and tags or a triangle budget under `metadata`.",
+							"The game owns the list. Each model is an asset with an `id`, `bounds`, a `placeholder` shape and color, and a `production` brief (`brief`, `budget`, `textureSize`) for whoever makes the model.",
 							"An asset without `source` is a placeholder waiting for a model. With `source` (a GLB path relative to the file) it is filled.",
 							"`3d-unity-assetra` syncs the file with an Assetra project: new entries appear there, and models filled there come back to the `source` path. It never removes entries or overwrites files on its own.",
 							"The project info lives in `metadata.properties.assetra` (`project`, `name`, `modelsDir`), which keeps the file valid against the schema."
@@ -542,6 +542,65 @@
 					{
 						"type": "code",
 						"code": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"libraryId\": \"my-game\",\n  \"units\": \"meters\",\n  \"metadata\": {\n    \"properties\": {\n      \"assetra\": {\n        \"project\": \"my-game\",\n        \"name\": \"My Game\",\n        \"modelsDir\": \"Assets/Models\"\n      }\n    }\n  },\n  \"assets\": [\n    {\n      \"id\": \"props/crate\",\n      \"kind\": \"model\",\n      \"bounds\": {\n        \"min\": {\n          \"x\": -0.6,\n          \"y\": 0,\n          \"z\": -0.6\n        },\n        \"max\": {\n          \"x\": 0.6,\n          \"y\": 1.2,\n          \"z\": 0.6\n        }\n      },\n      \"placeholder\": {\n        \"shape\": \"box\"\n      }\n    }\n  ]\n}"
+					}
+				]
+			},
+			{
+				"title": "How a model is made",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "A model starts as a slot in `assetra.json` and ends as a GLB that fills it. The steps below are the recommended way; the tools named in them are suggestions. A developer may use any image generator, any 3D generator, or model by hand, as long as the result fits the slot."
+					},
+					{
+						"type": "p",
+						"text": "The slot comes first. Before any model exists, the game adds the asset to `assetra.json` (`3d-unity-graybox` does it from the tagged placeholders: Tools › ITKP › Models › Update assetra.json from Open Scenes) and plays with the placeholder in its place. Everything a maker needs is in the slot (`3d-asset-schema` 1.1.0), so every tool works from the same brief:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"`id`: `group/name`, the slot's name and the model's path.",
+							"`bounds`: the size the model must fill, in meters, measured from the primitive that stands in for it today. Optimizing scales the model to fit it.",
+							"`placeholder`: the shape and color shown until the model exists.",
+							"`production.brief`: one line saying what the object is, written as a prompt, such as `orange and white striped road barrier`.",
+							"`production.budget` and `production.textureSize`: the most triangles and the largest texture side (256 to 4096) the model may use. `production.rigged` marks a character that needs a skeleton, and `production.generator` records the tool and job that made the raw model.",
+							"The library's `production.style` is one style phrase for the whole game, added after every brief so the models look like one set; `production.workDir` is where the working folders live (`Art/Models` by default).",
+							"Progress is not written down: a slot is `placeholder`, `reference`, `raw` or `done` depending on which files exist, so it cannot drift."
+						]
+					},
+					{
+						"type": "code",
+						"code": "{\n  \"id\": \"obstacles/barrier-striped\",\n  \"kind\": \"model\",\n  \"bounds\": {\n    \"min\": { \"x\": -1, \"y\": 0, \"z\": -0.3 },\n    \"max\": { \"x\": 1, \"y\": 1.04, \"z\": 0.3 }\n  },\n  \"placeholder\": { \"shape\": \"box\" },\n  \"production\": {\n    \"brief\": \"orange and white striped road barrier\",\n    \"budget\": 600,\n    \"textureSize\": 512\n  }\n}"
+					},
+					{
+						"type": "p",
+						"text": "Each slot has one working folder, `Art/Models/<group>/<name>/` at the repository root: `reference.png` (the image the model is made from), `raw.glb` (the generator's output, untouched) and, if there is one, `<name>.blend`. The `itkp-models` command line from `3d-model-tools` (`npm install -g github:IT-Kamianets/3d-model-tools`) runs the steps that can be automated. Then:"
+					},
+					{
+						"type": "ol",
+						"items": [
+							"Reference image. `itkp-models prompt <id>` prints the image prompt: the brief, the style, and one whole object, centered, from a three-quarter front view, on a plain light background, with no ground shadow and no text. Use any image model, for example OpenAI gpt-image, and save the result as `reference.png`. Reject bad images here: this is the cheapest step to redo.",
+							"3D model. Turn `reference.png` into a model with any tool. Meshy is the suggested one: install it with `npm install -g meshy-cli`, sign in once with `meshy auth login`, then `meshy make` builds a GLB from an image or a prompt (`--dry-run` shows the credit cost first; `meshy make --help` lists the options). Ask for the slot's budget as the polygon target, save the output untouched as `raw.glb`, and note the job in `production.generator`.",
+							"Optimize. `itkp-models optimize <id>` runs Blender headless: it turns the model by `--yaw` so its front is +Z, scales it to fit inside `bounds`, puts it on the slot floor at the slot center, reduces it to the budget, shrinks its textures, exports a GLB with embedded textures to `Assets/Models/<group>/<name>.glb` and sets `source.uri`. Any editor will do if the result passes the check.",
+							"Into the game. In Unity, Tools › ITKP › Models › Swap Placeholders for Models in Open Scenes (`3d-unity-graybox`) puts each model under its tag and switches the primitives off, so colliders and gameplay code stay as they were; scene builders call `ModelSwap.Apply(root)` at the end. GLB files need `com.unity.cloud.gltfast` in the project.",
+							"Into Assetra. Assetra reads `assetra.json` (or `3d-unity-assetra` syncs it), sees the new file and keeps it as the slot's current version."
+						]
+					},
+					{
+						"type": "p",
+						"text": "Characters follow the same steps, but rigging, animations and the animator are separate work after step 3. `itkp-models check` measures every finished model against its slot and exits with an error, so it can run in CI. It fails a model that:"
+					},
+					{
+						"type": "ul",
+						"items": [
+							"Is more than 5 percent bigger than `bounds` on any side, or fills less than 95 percent of it on every side.",
+							"Does not stand on the slot floor.",
+							"Has more triangles than `production.budget`, a texture bigger than `production.textureSize`, an external texture, or more than 7 MB."
+						]
+					},
+					{
+						"type": "p",
+						"text": "It warns when a model is off center, uses Draco compression, or fills less than 70 percent of the slot along one side: its proportions differ from the slot, so check its front or the slot's bounds. And look at it next to its neighbors in the game, not only on its own."
 					}
 				]
 			},
