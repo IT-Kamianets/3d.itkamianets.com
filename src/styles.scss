@@ -272,3 +272,27 @@ app-topbar .ds-btn { min-width: 2.75rem; min-height: 2.75rem; }
 @media (max-width: 359px) {
  .main-nav .nav-link { font-size: .8125rem; padding-inline: .5rem; }
 }
+
+/* Modal dialogs of the Development page: native <dialog>, so focus and Escape come from the browser. */
+.dev-dialog {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  overflow: visible;
+}
+.dev-dialog-wide {
+  width: min(56rem, calc(100vw - 2rem));
+}
+.dev-dialog::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+.dev-dialog-card {
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+}
+body:has(.dev-dialog[open]) {
+  overflow: hidden;
+}

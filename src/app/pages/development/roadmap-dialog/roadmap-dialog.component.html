@@ -1,0 +1,142 @@
+<dialog
+	#dialog
+	class="dev-dialog dev-dialog-wide"
+	aria-labelledby="roadmap-dialog-title"
+	(click)="backdrop($event)"
+>
+	@if (roadmap(); as item) {
+		<div class="ds-card dev-dialog-card gap-6 p-6 sm:p-8">
+			<header class="grid gap-3">
+				<h2 id="roadmap-dialog-title" class="ds-section-title">{{ item.title }}</h2>
+				<p class="flex flex-wrap gap-2">
+					<span class="ds-badge ds-badge-outline">{{ statusLabels[item.status] | tr }}</span>
+					@if (showCategories) {
+						@for (key of item.categories ?? []; track key) {
+							<span class="ds-badge ds-badge-outline">{{ categoryLabels[key] }}</span>
+						}
+					}
+				</p>
+				@if (item.description) {
+					<p class="break-words whitespace-pre-wrap">{{ item.description }}</p>
+				}
+			</header>
+
+			@if (plans().length) {
+				<section aria-labelledby="rm-plans" class="grid gap-2">
+					<h3 id="rm-plans" class="font-medium">{{ 'Plans' | tr }}</h3>
+					<ul class="m-0 grid list-none gap-2 p-0">
+						@for (plan of plans(); track plan.id) {
+							<li>
+								<span class="font-medium"
+									>{{ 'Week' | tr }} {{ plan.label.number }}: {{ plan.label.range }}</span
+								>
+								@if (plan.text) {
+									<span>: {{ plan.text }}</span>
+								}
+							</li>
+						}
+					</ul>
+				</section>
+			}
+
+			@if (packages().length) {
+				<section aria-labelledby="rm-packages" class="grid gap-2">
+					<h3 id="rm-packages" class="font-medium">{{ 'Packages' | tr }}</h3>
+					<ul class="m-0 grid list-none gap-2 p-0">
+						@for (pack of packages(); track pack.id) {
+							<li>
+								<span class="ds-mono">{{ pack.name }}</span>
+								@if (pack.description) {
+									<span class="ds-supporting"> — {{ pack.description }}</span>
+								}
+								@if (isUrl(pack.repo)) {
+									<a class="ml-2" target="_blank" rel="noopener" [href]="pack.repo">GitHub</a>
+								}
+							</li>
+						}
+					</ul>
+				</section>
+			}
+
+			@if (projects().length) {
+				<section aria-labelledby="rm-projects" class="grid gap-2">
+					<h3 id="rm-projects" class="font-medium">{{ 'Projects' | tr }}</h3>
+					<ul class="m-0 grid list-none gap-2 p-0">
+						@for (project of projects(); track project.id) {
+							<li>
+								<span class="font-medium">{{ project.name }}</span>
+								@if (project.description) {
+									<span class="ds-supporting"> — {{ project.description }}</span>
+								}
+								@for (link of project.links ?? []; track $index) {
+									@if (isUrl(link.url)) {
+										<a class="ml-2" target="_blank" rel="noopener" [href]="link.url">{{
+											link.type
+										}}</a>
+									}
+								}
+							</li>
+						}
+					</ul>
+				</section>
+			}
+
+			@if (item.tasks?.length) {
+				<section aria-labelledby="rm-tasks" class="grid gap-2">
+					<h3 id="rm-tasks" class="font-medium">{{ 'Tasks' | tr }}</h3>
+					<ul class="m-0 grid list-none gap-2 p-0">
+						@for (task of item.tasks; track task.id) {
+							<li>
+								{{ task.title }}
+								<span class="ds-supporting">· {{ taskLabels[task.status] | tr }}</span>
+							</li>
+						}
+					</ul>
+				</section>
+			}
+
+			@if (developers().length) {
+				<section aria-labelledby="rm-developers" class="grid gap-3">
+					<h3 id="rm-developers" class="font-medium">{{ 'Developers' | tr }}</h3>
+					<ul class="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
+						@for (developer of developers(); track developer.id) {
+							<li class="flex items-center gap-3">
+								@if (developer.avatar) {
+									<img
+										class="size-10 rounded-full object-cover"
+										[src]="developer.avatar"
+										alt=""
+										width="40"
+										height="40"
+										loading="lazy"
+									/>
+								}
+								<div>
+									<p class="font-medium">{{ developer.fullName }}</p>
+									<p class="ds-supporting">
+										@if (isUrl(developer.linkedin)) {
+											<a target="_blank" rel="noopener" [href]="developer.linkedin">LinkedIn</a>
+										}
+										@if (isUrl(developer.upwork)) {
+											<a class="ml-2" target="_blank" rel="noopener" [href]="developer.upwork"
+												>Upwork</a
+											>
+										}
+									</p>
+								</div>
+							</li>
+						}
+					</ul>
+				</section>
+			}
+
+			<app-feedback [targetId]="item.id" />
+
+			<div class="flex justify-end">
+				<button type="button" class="ds-btn ds-btn-outline" (click)="close()">
+					{{ 'Close' | tr }}
+				</button>
+			</div>
+		</div>
+	}
+</dialog>

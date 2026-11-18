@@ -1,67 +1,175 @@
 <div class="container-x py-12 sm:py-16">
-	<h1 class="ds-page-title">{{ content.title | tr }}</h1>
-	<p class="ds-lead mt-4 max-w-[44ch]">{{ content.lead | tr }}</p>
+	<h1 class="ds-page-title">{{ 'Public development' | tr }}</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]">
+		{{
+			'The roadmaps we plan, the packages we maintain and our week ahead. Vote for what you need, or tell us what you think.'
+				| tr
+		}}
+	</p>
 
-	@for (section of content.sections; track section.title) {
-		<section class="docs-section mt-12" [id]="sectionId(section.title)">
-			<h2 class="ds-section-title text-[1.25rem]">{{ section.title | tr }}</h2>
+	@if (filterable) {
+		<div class="mt-8 flex flex-wrap gap-2" role="group" [attr.aria-label]="'Filter by category' | tr">
+			@for (category of categories; track category.value) {
+				<button
+					class="ds-chip"
+					type="button"
+					[attr.aria-pressed]="enabled().includes(category.value)"
+					(click)="toggle(category.value)"
+				>
+					{{ category.label }}
+				</button>
+			}
+		</div>
+	}
 
-			@for (block of section.blocks; track $index) {
-				@switch (block.type) {
-					@case ('p') {
-						<p class="prose-measure mt-4 text-pretty leading-7" [innerHTML]="block.text | rich"></p>
-					}
-					@case ('ul') {
-						<ul class="prose-measure mt-4 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
-							@for (item of block.items; track item) {
-								<li class="mt-2" [innerHTML]="item | rich"></li>
+	@if (data.error(); as error) {
+		<p class="ds-supporting mt-6" role="alert">{{ error | tr }}</p>
+	}
+
+	<section class="mt-12" aria-labelledby="dev-roadmaps">
+		<div class="flex items-center gap-3">
+			<h2 id="dev-roadmaps" class="ds-section-title">{{ 'Roadmaps' | tr }}</h2>
+			<button
+				type="button"
+				class="ds-btn ds-btn-outline ds-btn-icon ds-btn-sm"
+				[attr.aria-label]="'Suggest a roadmap' | tr"
+				[title]="'Suggest a roadmap' | tr"
+				(click)="request('roadmaps')"
+			>
+				<span aria-hidden="true">+</span>
+			</button>
+		</div>
+
+		@if (data.loading()) {
+			<p class="ds-supporting mt-4" role="status">{{ 'Loading...' | tr }}</p>
+		} @else if (!roadmaps().length) {
+			<p class="ds-supporting mt-4">{{ 'No roadmaps yet.' | tr }}</p>
+		} @else {
+			<ul class="m-0 mt-4 grid list-none gap-4 p-0 md:grid-cols-2">
+				@for (item of roadmaps(); track item.id) {
+					<li class="ds-card">
+						<button type="button" class="tile-link ds-plain text-left" (click)="open(item)">
+							<span class="text-base font-medium break-words">{{ item.title }}</span>
+							@if (item.description) {
+								<span class="ds-supporting">{{ item.description }}</span>
+							}
+						</button>
+					</li>
+				}
+			</ul>
+		}
+	</section>
+
+	<section class="mt-12" aria-labelledby="dev-packages">
+		<div class="flex items-center gap-3">
+			<h2 id="dev-packages" class="ds-section-title">{{ 'Packages' | tr }}</h2>
+			<button
+				type="button"
+				class="ds-btn ds-btn-outline ds-btn-icon ds-btn-sm"
+				[attr.aria-label]="'Request a new package' | tr"
+				[title]="'Request a new package' | tr"
+				(click)="request('packages')"
+			>
+				<span aria-hidden="true">+</span>
+			</button>
+		</div>
+
+		@if (data.loading()) {
+			<p class="ds-supporting mt-4" role="status">{{ 'Loading...' | tr }}</p>
+		} @else if (!packages().length) {
+			<p class="ds-supporting mt-4">{{ 'No packages yet.' | tr }}</p>
+		} @else {
+			<ul class="m-0 mt-4 grid list-none gap-4 p-0 md:grid-cols-2">
+				@for (item of packages(); track item.id) {
+					<li class="ds-card gap-3 p-5">
+						<span class="ds-mono text-base font-medium break-words">{{ item.name }}</span>
+						@if (filterable) {
+							<span class="ds-supporting">{{ item.category }}</span>
+						}
+						@if (item.description) {
+							<span class="ds-supporting">{{ item.description }}</span>
+						}
+						@if (isUrl(item.repo)) {
+							<a class="mt-auto" target="_blank" rel="noopener" [href]="item.repo">GitHub</a>
+						}
+					</li>
+				}
+			</ul>
+		}
+	</section>
+
+	<section class="mt-12" aria-labelledby="dev-plan">
+		<div class="flex items-center gap-3">
+			<h2 id="dev-plan" class="ds-section-title">{{ 'Development plan' | tr }}</h2>
+			<button
+				type="button"
+				class="ds-btn ds-btn-outline ds-btn-icon ds-btn-sm"
+				[attr.aria-label]="'Report a bug or suggest an improvement' | tr"
+				[title]="'Report a bug or suggest an improvement' | tr"
+				(click)="request('plan')"
+			>
+				<span aria-hidden="true">+</span>
+			</button>
+		</div>
+
+		@if (data.loading()) {
+			<p class="ds-supporting mt-4" role="status">{{ 'Loading...' | tr }}</p>
+		} @else if (plan(); as plan) {
+			<article class="ds-card mt-4 gap-5 p-6 sm:p-8">
+				<div>
+					<h3 class="text-xl font-medium">{{ plan.title }}</h3>
+					<p class="ds-supporting mt-1">
+						{{ 'Week' | tr }} {{ plan.label.number }}: {{ plan.label.range }}
+					</p>
+				</div>
+
+				@if (plan.content) {
+					<p class="break-words whitespace-pre-wrap">{{ plan.content }}</p>
+				}
+
+				@if (plan.packageEntries.length) {
+					<div>
+						<h4 class="font-medium">{{ 'Packages' | tr }}</h4>
+						<ul class="m-0 mt-2 grid list-none gap-2 p-0">
+							@for (entry of plan.packageEntries; track $index) {
+								<li>
+									<span class="ds-mono">{{ entry.name }}</span>
+									@if (entry.text) {
+										<span>: {{ entry.text }}</span>
+									}
+								</li>
 							}
 						</ul>
-					}
-					@case ('ol') {
-						<ol class="prose-measure mt-4 list-decimal pl-5 leading-7 marker:text-[var(--muted-foreground)]">
-							@for (item of block.items; track item) {
-								<li class="mt-2" [innerHTML]="item | rich"></li>
-							}
-						</ol>
-					}
-					@case ('table') {
-						<div class="ds-card mt-4 overflow-hidden">
-							<table class="ds-table install-table">
-								<thead>
-									<tr>
-										@for (cell of block.head; track cell) {
-											<th scope="col">{{ cell | tr }}</th>
-										}
-									</tr>
-								</thead>
-								<tbody>
-									@for (row of block.rows; track row.name) {
-										<tr>
-											<th scope="row" class="ds-mono !font-medium !text-[var(--foreground)]">{{ row.name }}</th>
-											<td [attr.data-label]="block.head[1] | tr" [innerHTML]="row.text | rich"></td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					}
-					@case ('groups') {
-						<div class="mt-4 grid gap-4 md:grid-cols-2">
-							@for (group of block.groups; track group.title) {
-								<div class="ds-card gap-2 p-5">
-									<h3 class="ds-mono text-base">{{ group.title | tr }}</h3>
-									<ul class="m-0 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
-										@for (item of group.items; track item) {
-											<li [innerHTML]="item | rich"></li>
-										}
-									</ul>
-								</div>
-							}
-						</div>
-					}
+					</div>
 				}
-			}
-		</section>
-	}
+
+				@if (plan.roadmapEntries.length) {
+					<div>
+						<h4 class="font-medium">{{ 'Roadmaps' | tr }}</h4>
+						<ul class="m-0 mt-2 grid list-none gap-2 p-0">
+							@for (entry of plan.roadmapEntries; track $index) {
+								<li>
+									<span class="font-medium">{{ entry.name }}</span>
+									@if (entry.text) {
+										<span>: {{ entry.text }}</span>
+									}
+								</li>
+							}
+						</ul>
+					</div>
+				}
+
+				<p class="ds-supporting">
+					{{ 'Drafted by AI from the open requests and the most voted roadmaps.' | tr }}
+				</p>
+
+				<app-feedback [targetId]="plan.id" />
+			</article>
+		} @else {
+			<p class="ds-supporting mt-4">{{ 'No plan yet.' | tr }}</p>
+		}
+	</section>
+
+	<app-roadmap-dialog />
+	<app-request-dialog />
 </div>

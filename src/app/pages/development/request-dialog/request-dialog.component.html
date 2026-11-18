@@ -1,0 +1,131 @@
+<dialog
+	#dialog
+	class="dev-dialog"
+	aria-labelledby="request-dialog-title"
+	(click)="backdrop($event)"
+>
+	<div class="ds-card dev-dialog-card gap-4 p-6 sm:p-8">
+		<h2 id="request-dialog-title" class="ds-section-title">{{ config().heading | tr }}</h2>
+		<p class="ds-supporting">{{ config().lead | tr }}</p>
+
+		@if (sent()) {
+			<p role="status">{{ 'Thanks, we received your request.' | tr }}</p>
+			<button type="button" class="ds-btn ds-btn-primary self-start" (click)="close()">
+				{{ 'Close' | tr }}
+			</button>
+		} @else if (!auth.member()) {
+			<button
+				type="button"
+				class="ds-btn ds-btn-primary self-start"
+				[disabled]="auth.busy()"
+				(click)="auth.signInWithGoogle()"
+			>
+				{{ 'Sign in with Google to send a request' | tr }}
+			</button>
+			@if (auth.error(); as error) {
+				<p class="ds-supporting" role="alert">{{ error | tr }}</p>
+			}
+		} @else {
+			<form class="grid gap-4" (submit)="submit($event)">
+				@if (config().types.length > 1) {
+					<div role="group" aria-labelledby="request-type">
+						<span id="request-type" class="block font-medium">{{ 'Type' | tr }}</span>
+						<div class="mt-2 flex flex-wrap gap-2">
+							@for (option of config().types; track option) {
+								<button
+									type="button"
+									class="ds-chip"
+									[attr.aria-pressed]="type() === option"
+									(click)="chosenType.set(option)"
+								>
+									{{ typeLabels[option] | tr }}
+								</button>
+							}
+						</div>
+					</div>
+				}
+
+				@if (categories.length > 1) {
+					<div role="group" aria-labelledby="request-category">
+						<span id="request-category" class="block font-medium">{{ 'Category' | tr }}</span>
+						<div class="mt-2 flex flex-wrap gap-2">
+							@for (option of categories; track option.value) {
+								<button
+									type="button"
+									class="ds-chip"
+									[attr.aria-pressed]="category() === option.value"
+									(click)="category.set(option.value)"
+								>
+									{{ option.label }}
+								</button>
+							}
+						</div>
+					</div>
+				}
+
+				<div>
+					<label for="request-name" class="block font-medium">{{ 'Title' | tr }}</label>
+					<input
+						id="request-name"
+						class="search-input mt-2"
+						type="text"
+						required
+						maxlength="120"
+						[value]="title()"
+						(input)="title.set(valueOf($event))"
+					/>
+				</div>
+
+				@if (type() === 'package') {
+					<div>
+						<label for="request-repo" class="block font-medium">{{
+							'Repository link (optional)' | tr
+						}}</label>
+						<input
+							id="request-repo"
+							class="search-input mt-2"
+							type="url"
+							maxlength="300"
+							placeholder="https://github.com/"
+							[value]="repo()"
+							(input)="repo.set(valueOf($event))"
+						/>
+					</div>
+				}
+
+				<div>
+					<label for="request-description" class="block font-medium">{{
+						'Description' | tr
+					}}</label>
+					<textarea
+						id="request-description"
+						class="search-input mt-2"
+						rows="4"
+						maxlength="1000"
+						[value]="description()"
+						(input)="description.set(valueOf($event))"
+					></textarea>
+				</div>
+
+				<p class="ds-supporting">{{ 'We may reply to your Google email.' | tr }}</p>
+
+				@if (failed()) {
+					<p role="alert">{{ 'Could not send your request. Please try again.' | tr }}</p>
+				}
+
+				<div class="flex flex-wrap justify-end gap-2">
+					<button type="button" class="ds-btn ds-btn-outline" (click)="close()">
+						{{ 'Close' | tr }}
+					</button>
+					<button
+						type="submit"
+						class="ds-btn ds-btn-primary"
+						[disabled]="busy() || !title().trim() || !category()"
+					>
+						{{ (busy() ? 'Sending...' : 'Send request') | tr }}
+					</button>
+				</div>
+			</form>
+		}
+	</div>
+</dialog>
