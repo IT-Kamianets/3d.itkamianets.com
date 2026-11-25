@@ -14,6 +14,7 @@ const readJson = async (file) => JSON.parse(await readFile(path.join(rootDir, fi
 
 const packages = await readJson('src/data/catalog/packages.json');
 const constructors = await readJson('src/data/catalog/constructors.json');
+const applications = await readJson('src/data/catalog/applications.json');
 const company = await readJson('src/data/company/company.json');
 
 const siteUrl = (company.siteUrl || 'https://3d.itkamianets.com').replace(/\/$/, '');
@@ -164,6 +165,20 @@ ${item.description}
 `;
 };
 
+const applicationSection = (item) => `### ${item.name}
+
+${item.description}
+
+| | |
+|---|---|
+| Constructor | ${item.constructorSlug ? `[${constructors.find((c) => c.slug === item.constructorSlug).name}](${siteUrl}/constructors/${item.constructorSlug})` : '-'} |
+| Engine packages | ${item.packages.length ? item.packages.map(link).join(', ') : '-'} |
+| Platforms | ${item.platforms.join(', ')} |
+| Website | ${item.site || '-'} |
+| Source | ${item.repo} |
+| Page | ${siteUrl}/applications/${item.slug} |
+`;
+
 const markdown = `# IT Kamianets 3D Engine: packages
 
 Every public package of the IT Kamianets 3D Engine: what it does, what it depends on, and how to install it. Use this file to choose packages for a new constructor or game.
@@ -172,7 +187,7 @@ Every public package of the IT Kamianets 3D Engine: what it does, what it depend
 - Source: ${orgUrl}
 - This file: ${siteUrl}/packages.md (generated from the website catalog on every build)
 
-${packages.length} packages: ${GROUPS.map((group) => `${packages.filter((item) => item.group === group.name).length} ${group.name.toLowerCase()}`).join(', ')}. ${constructors.length} constructors.
+${packages.length} packages: ${GROUPS.map((group) => `${packages.filter((item) => item.group === group.name).length} ${group.name.toLowerCase()}`).join(', ')}. ${constructors.length} constructors, ${applications.length} applications.
 
 ## How the engine is built
 
@@ -221,6 +236,11 @@ ${packages
 A constructor is a starter project for one camera style. Character View has camera and controls packages; fixed and top-down camera packages do not include complete player controls. Other styles still need implementation.
 
 ${constructors.map(constructorSection).join('\n')}
+## Applications
+
+Games and apps built with the engine. Their own packages, rules and content live in their repositories.
+
+${applications.map(applicationSection).join('\n')}
 ${GROUPS.map(
 	(group) => `## ${group.name}
 
@@ -233,4 +253,6 @@ ${packages
 ).join('\n')}`;
 
 await writeFile(path.join(rootDir, 'src/assets/packages.md'), markdown.replace(/\n{3,}/g, '\n\n'));
-console.log(`packages.md: ${packages.length} packages, ${constructors.length} constructors`);
+console.log(
+	`packages.md: ${packages.length} packages, ${constructors.length} constructors, ${applications.length} applications`,
+);

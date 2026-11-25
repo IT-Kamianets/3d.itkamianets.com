@@ -1,0 +1,69 @@
+<article class="container-x py-12 sm:py-16">
+	<header class="flex max-w-[48rem] flex-col gap-5 sm:flex-row sm:gap-6">
+		<span class="icon-tile h-14 w-14"><app-icon [name]="item.icon" size="1.75rem" /></span>
+		<div>
+			<h1 class="ds-page-title">{{ item.name | tr }}</h1>
+			<p class="ds-lead mt-3">{{ item.description | tr }}</p>
+			<p class="ds-supporting mt-5">
+				{{ status | tr }}{{ item.version ? '. ' + ('Version' | tr) + ' ' + item.version : '' }}.
+				@if (constructorItem) {
+					{{ 'Constructor' | tr }}:
+					<a [routerLink]="['/constructors', constructorItem.slug]">{{
+						constructorItem.name | tr
+					}}</a>
+				} @else {
+					{{ 'Own camera and controls, written in the game.' | tr }}
+				}
+			</p>
+			<div class="mt-6 flex flex-wrap gap-3">
+				@if (item.site) {
+					<a class="ds-btn ds-btn-primary" [href]="item.site" rel="noopener" target="_blank">
+						<app-icon name="planet" size="1.125rem" />
+						<span>{{ 'Website' | tr }}</span>
+					</a>
+				}
+				<a
+					class="ds-btn"
+					[class.ds-btn-primary]="!item.site"
+					[class.ds-btn-outline]="item.site"
+					[href]="item.repo"
+					rel="noopener"
+					target="_blank"
+				>
+					<app-icon name="git-branch" size="1.125rem" />
+					<span>{{ 'Source code' | tr }}</span>
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-x-16 gap-y-12 lg:grid-cols-2">
+		<section>
+			<h2 class="ds-section-title text-[1.25rem]">{{ 'Features' | tr }}</h2>
+			<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+				@for (feature of item.features; track feature) {
+					<li>{{ feature | tr }}</li>
+				}
+			</ul>
+			<h2 class="ds-section-title mt-10 text-[1.25rem]">{{ 'Platforms' | tr }}</h2>
+			<p class="mt-3 leading-7">{{ item.platforms.join(', ') | tr }}</p>
+		</section>
+		@if (item.packages.length) {
+			<section>
+				<h2 class="ds-section-title text-[1.25rem]">{{ 'Engine packages' | tr }}</h2>
+				<p class="ds-supporting mt-2">
+					{{ "The game's own packages, rules and content live in its repository." | tr }}
+				</p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (name of item.packages; track name) {
+						<li>
+							<a class="ds-mono" [routerLink]="['/packages', name]">{{ name }}</a>
+						</li>
+					}
+				</ul>
+			</section>
+		}
+	</div>
+
+	<p class="mt-14"><a routerLink="/applications">{{ 'All applications' | tr }}</a></p>
+</article>

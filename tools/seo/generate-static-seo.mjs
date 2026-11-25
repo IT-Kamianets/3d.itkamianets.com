@@ -8,6 +8,7 @@ const outputDirs = [path.join(rootDir, 'dist/app/browser')];
 
 const packages = await readJson('src/data/catalog/packages.json');
 const constructors = await readJson('src/data/catalog/constructors.json');
+const applications = await readJson('src/data/catalog/applications.json');
 
 const staticRoutes = [
 	'/',
@@ -21,6 +22,8 @@ const staticRoutes = [
 	'/development',
 	'/constructors',
 	...constructors.map((item) => `/constructors/${item.slug}`),
+	'/applications',
+	...applications.map((item) => `/applications/${item.slug}`),
 ];
 
 const company = await readJson('src/data/company/company.json');

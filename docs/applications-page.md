@@ -1,6 +1,6 @@
 # ITKP 3D Engine: Applications page
 
-A request for this site, written while building the sister site [ai.itkamianets.com](https://ai.itkamianets.com) (November 2026). Not started yet.
+A request for this site, written while building the sister site [ai.itkamianets.com](https://ai.itkamianets.com) (November 2026). Built on 25 November 2026: 14 applications (the Temnorid games, Math Runner and KP Paintball Arena).
 
 ## Why
 
@@ -19,7 +19,7 @@ An **Applications** page closes the loop the same way: engine, then constructors
 
 ## Rules to keep
 
-- Game package identifiers stay off the framework site: the validator already rejects them in `src`. An application page lists its own packages as plain text without the game-specific package ids, or the validator rule is narrowed to allow names on this page only. Decide which before building it.
+- Game package identifiers stay off the framework site: the validator already rejects them in `src`. An application page lists its own packages as plain text without the game-specific package ids, or the validator rule is narrowed to allow names on this page only. Decided: application pages list engine packages only and link to the game's repository for its own packages; the validator rule stays as it is.
 - An application page describes what the game is and what it is built from. Game rules and content stay in the game's repository.
 
 ## Reference

@@ -3,12 +3,13 @@
 		<div>
 			<p class="text-base font-semibold">{{ company().name }}</p>
 			<p class="ds-supporting mt-2 max-w-[44ch]">{{ companyDescription() }}</p>
-			<p class="mt-4">
-				<a [href]="githubUrl" rel="noopener" target="_blank">GitHub</a>
+			<p class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+				<a [href]="repoUrl" rel="noopener" target="_blank">{{ 'Source code' | tr }}</a>
+				<a [href]="githubUrl" rel="noopener" target="_blank">{{ 'IT-Kamianets on GitHub' | tr }}</a>
 			</p>
 		</div>
 
-		<nav class="grid gap-8 sm:grid-cols-3" [attr.aria-label]="'Pages footer navigation' | tr">
+		<nav class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4" [attr.aria-label]="'Pages footer navigation' | tr">
 			<div>
 				<p class="ds-supporting"><a class="ds-plain" routerLink="/packages">{{ 'Packages' | tr }}</a></p>
 				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
@@ -26,6 +27,17 @@
 					@for (item of constructors; track item.slug) {
 						<li>
 							<a [routerLink]="['/constructors', item.slug]">{{ item.name | tr }}</a>
+						</li>
+					}
+				</ul>
+			</div>
+
+			<div>
+				<p class="ds-supporting"><a class="ds-plain" routerLink="/applications">{{ 'Applications' | tr }}</a></p>
+				<ul class="mt-3 flex list-none flex-col gap-2 p-0">
+					@for (item of applications; track item.slug) {
+						<li>
+							<a [routerLink]="['/applications', item.slug]">{{ item.name | tr }}</a>
 						</li>
 					}
 				</ul>

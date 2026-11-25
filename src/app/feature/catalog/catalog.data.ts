@@ -1,8 +1,11 @@
 import type { IconName } from '../../shared/icon/icons';
+import applicationsData from '../../../data/catalog/applications.json';
 import constructorsData from '../../../data/catalog/constructors.json';
 import packagesData from '../../../data/catalog/packages.json';
 
 export const GITHUB_ORG_URL = 'https://github.com/IT-Kamianets';
+/** This website's own repository. */
+export const SITE_REPO_URL = `${GITHUB_ORG_URL}/3d.itkamianets.com`;
 
 export interface CatalogPackage {
 	slug: string;
@@ -47,6 +50,35 @@ export interface CatalogConstructor {
 	features: string[];
 }
 
+export type ApplicationStatus = 'planned' | 'in-progress' | 'released';
+
+export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
+	planned: 'Planned',
+	'in-progress': 'In progress',
+	released: 'Released',
+};
+
+/** A game or app built with the engine. Its own packages, rules and content stay in its repository. */
+export interface CatalogApplication {
+	slug: string;
+	name: string;
+	icon: IconName;
+	tagline: string;
+	status: ApplicationStatus;
+	/** The current version, empty before the first numbered build. */
+	version: string;
+	description: string;
+	/** The constructor it started from; empty when it has its own camera and controls, or is not a Unity game. */
+	constructorSlug: string;
+	/** Engine packages it uses, from its Packages/manifest.json. */
+	packages: string[];
+	platforms: string[];
+	/** The game's own website; empty when there is none yet. */
+	site: string;
+	repo: string;
+	features: string[];
+}
+
 export interface PackageGroup {
 	name: string;
 	packages: CatalogPackage[];
@@ -54,6 +86,7 @@ export interface PackageGroup {
 
 export const catalogPackages = packagesData as CatalogPackage[];
 export const catalogConstructors = constructorsData as CatalogConstructor[];
+export const catalogApplications = applicationsData as CatalogApplication[];
 
 /** From generic to specific, the same order as the architecture: schemas, then Unity core, then the game kit, then specific, then constructor parts. */
 const PACKAGE_GROUP_ORDER = ['Schemas', 'Core', 'Game kit', 'Specific', 'Constructor'];
@@ -69,6 +102,9 @@ export const findPackage = (slug: string) => catalogPackages.find((item) => item
 
 export const findConstructor = (slug: string) =>
 	catalogConstructors.find((item) => item.slug === slug);
+
+export const findApplication = (slug: string) =>
+	catalogApplications.find((item) => item.slug === slug);
 
 /**
  * Game-specific packages a new project starts with, named `<game>-<suffix>` (e.g. `<game>-core`):

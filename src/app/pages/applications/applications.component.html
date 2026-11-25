@@ -1,0 +1,36 @@
+<div class="container-x py-12 sm:py-16">
+	<h1 class="ds-page-title">{{ 'Applications' | tr }}</h1>
+	<p class="ds-lead mt-4 max-w-[44ch]">
+		{{ 'Games and apps built with the engine packages and constructors.' | tr }}
+	</p>
+
+	<ul class="m-0 mt-10 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+		@for (item of applications; track item.slug) {
+			<li class="ds-card">
+				<a class="tile-link ds-plain" [routerLink]="['/applications', item.slug]">
+					<span class="icon-tile"><app-icon [name]="item.icon" /></span>
+					<span>
+						<span class="block text-base font-medium">{{ item.name | tr }}</span>
+						<span class="ds-supporting block">{{ item.tagline | tr }}</span>
+					</span>
+					<span class="ds-supporting">{{ item.description | tr }}</span>
+					<span class="ds-supporting mt-auto pt-2"
+						>{{ statusLabels[item.status] | tr }}{{ item.version ? ', ' + item.version : '' }} ·
+						{{ item.platforms.join(', ') | tr }}</span
+					>
+				</a>
+			</li>
+		}
+	</ul>
+
+	<section class="mt-16 max-w-[48rem]" aria-labelledby="add-title">
+		<h2 id="add-title" class="ds-section-title text-[1.25rem]">{{ 'Add your application' | tr }}</h2>
+		<p class="mt-3 text-pretty leading-7">
+			{{
+				'Built a game or an app on the engine? Open a pull request to this site with its entry in src/data/catalog/applications.json.'
+					| tr
+			}}
+		</p>
+		<p class="mt-3"><a routerLink="/docs/start-a-game">{{ 'Start a game' | tr }}</a></p>
+	</section>
+</div>

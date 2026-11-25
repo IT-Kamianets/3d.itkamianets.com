@@ -6,7 +6,7 @@ Every public package of the IT Kamianets 3D Engine: what it does, what it depend
 - Source: https://github.com/IT-Kamianets
 - This file: https://3d.itkamianets.com/packages.md (generated from the website catalog on every build)
 
-35 packages: 5 schemas, 6 core, 8 game kit, 10 specific, 6 constructor. 6 constructors.
+35 packages: 5 schemas, 6 core, 8 game kit, 10 specific, 6 constructor. 6 constructors, 12 applications.
 
 ## How the engine is built
 
@@ -184,6 +184,166 @@ For games where the user controls the world from a free, strategic, or god-like 
 | Constructor packages | - |
 | Starter repository | https://github.com/IT-Kamianets/3d-constructor-free-view |
 | Page | https://3d.itkamianets.com/constructors/free-view |
+
+## Applications
+
+Games and apps built with the engine. Their own packages, rules and content live in their repositories.
+
+### Math Runner
+
+A kid runs down a city street. A math question floats above the track and three answer boards block the lanes: run into the lane with the right answer, and jump or slide past obstacles.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-character`](#3d-unity-character), [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-scene`](#3d-unity-scene) |
+| Platforms | Windows |
+| Website | https://math-runner.itkamianets.com |
+| Source | https://github.com/IT-Kamianets/math-runner.itkamianets.com |
+| Page | https://3d.itkamianets.com/applications/math-runner |
+
+### KP Paintball Arena
+
+A team 3D shooter on an invented paintball arena in Kamianets-Podilskyi. Pick red or blue and be the first team to score 10 against the bots.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-character`](#3d-unity-character), [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-scene`](#3d-unity-scene) |
+| Platforms | Windows |
+| Website | - |
+| Source | https://github.com/IT-Kamianets/paintball.itkamianets.com |
+| Page | https://3d.itkamianets.com/applications/paintball |
+
+### Temnorid Arena
+
+Step into a stone courtyard against five bots and fight with weapons and elemental magic. Every period the best fighter of each class becomes its Hero.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-account`](#3d-unity-account), [`3d-unity-ai`](#3d-unity-ai), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-character`](#3d-unity-character), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://arena.temnorid.com |
+| Source | https://github.com/WebArtWork/arena.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/arena |
+
+### Temnorid Caravan Guard
+
+Raiders, steppe riders and wolves wait along the road. Place guards on the route, upgrade the ones that matter and bring the wagons home.
+
+| | |
+|---|---|
+| Constructor | [Top-Down](https://3d.itkamianets.com/constructors/top-down) |
+| Engine packages | [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-topdown-camera`](#3d-unity-topdown-camera), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows |
+| Website | https://caravan-guard.temnorid.com |
+| Source | https://github.com/WebArtWork/caravan-guard.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/caravan-guard |
+
+### Temnorid Conquest
+
+Wars for territory and the capture of settlements. Lead the assault on a village in person, fight its guards and its Lord, and defend your own lands.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-account`](#3d-unity-account), [`3d-unity-ai`](#3d-unity-ai), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-character`](#3d-unity-character), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-inventory`](#3d-unity-inventory), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://conquest.temnorid.com |
+| Source | https://github.com/WebArtWork/conquest.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/conquest |
+
+### Temnorid Craft
+
+Build up your farmstead, gather wood, stone and ore, and make tools, weapons and armour. What you store joins the same stock you have in Lords.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-character`](#3d-unity-character), [`3d-unity-core`](#3d-unity-core), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-inventory`](#3d-unity-inventory), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://craft.temnorid.com |
+| Source | https://github.com/WebArtWork/craft.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/craft |
+
+### Temnorid Detective
+
+Grain is missing and the night watchman is dead. Inspect the places, question the villagers, compare what they said with what you found and make your report. A wrong report is a normal ending.
+
+| | |
+|---|---|
+| Constructor | [Fixed Camera](https://3d.itkamianets.com/constructors/fixed-view) |
+| Engine packages | [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-fixed-camera`](#3d-unity-fixed-camera), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-synth`](#3d-unity-synth), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://detective.temnorid.com |
+| Source | https://github.com/WebArtWork/detective.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/detective |
+
+### Temnorid Dungeons
+
+Explore dangerous ruins, fight monsters, defeat bosses and find rare treasure and artefacts for your heroes.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-account`](#3d-unity-account), [`3d-unity-ai`](#3d-unity-ai), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-character`](#3d-unity-character), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-inventory`](#3d-unity-inventory), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://dungeons.temnorid.com |
+| Source | https://github.com/WebArtWork/dungeons.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/dungeons |
+
+### Temnorid Escape
+
+A scout is locked in the cell under the watchtower. No weapons and no combat: read the clues, solve three puzzles, slip past the guard and leave by the service gate.
+
+| | |
+|---|---|
+| Constructor | [Fixed Camera](https://3d.itkamianets.com/constructors/fixed-view) |
+| Engine packages | [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-fixed-camera`](#3d-unity-fixed-camera), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-synth`](#3d-unity-synth), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows |
+| Website | https://escape.temnorid.com |
+| Source | https://github.com/WebArtWork/escape.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/escape |
+
+### Temnorid Hippodrome
+
+Breed and train horses and bring them to the track. A horse's speed, stamina and temper, together with your sense of pacing, decide who crosses the line first.
+
+| | |
+|---|---|
+| Constructor | - |
+| Engine packages | [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-core`](#3d-unity-core), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows |
+| Website | https://hippodrome.temnorid.com |
+| Source | https://github.com/WebArtWork/hippodrome.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/hippodrome |
+
+### Temnorid Legends
+
+A series of separate stories in action, adventure and survival horror. The first demo, The Abandoned Village, takes about 15 to 20 minutes.
+
+| | |
+|---|---|
+| Constructor | [Character View](https://3d.itkamianets.com/constructors/character-view) |
+| Engine packages | [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-character`](#3d-unity-character), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-inventory`](#3d-unity-inventory), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows |
+| Website | https://legends.temnorid.com |
+| Source | https://github.com/WebArtWork/legends.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/legends |
+
+### Temnorid Master
+
+A workshop career game: take an order in the stable, scribe, forge, workshop, kitchen, tailor or herbalist trade, do a few hands-on steps and get paid for the quality of your work.
+
+| | |
+|---|---|
+| Constructor | [Fixed Camera](https://3d.itkamianets.com/constructors/fixed-view) |
+| Engine packages | [`3d-unity-account`](#3d-unity-account), [`3d-unity-assetra`](#3d-unity-assetra), [`3d-unity-combat`](#3d-unity-combat), [`3d-unity-core`](#3d-unity-core), [`3d-unity-feedback`](#3d-unity-feedback), [`3d-unity-graybox`](#3d-unity-graybox), [`3d-unity-input`](#3d-unity-input), [`3d-unity-net`](#3d-unity-net), [`3d-unity-save`](#3d-unity-save), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-synth`](#3d-unity-synth), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-update`](#3d-unity-update) |
+| Platforms | Windows, Android, iOS |
+| Website | https://master.temnorid.com |
+| Source | https://github.com/WebArtWork/master.temnorid.com |
+| Page | https://3d.itkamianets.com/applications/master |
 
 ## Schemas
 

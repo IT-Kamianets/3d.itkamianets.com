@@ -1,0 +1,439 @@
+[
+	{
+		"slug": "math-runner",
+		"name": "Math Runner",
+		"icon": "gamepad",
+		"tagline": "An endless runner with math questions",
+		"status": "in-progress",
+		"version": "0.1.0",
+		"description": "A kid runs down a city street. A math question floats above the track and three answer boards block the lanes: run into the lane with the right answer, and jump or slide past obstacles.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-assetra",
+			"3d-unity-assets",
+			"3d-unity-audio",
+			"3d-unity-character",
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-scene"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "https://math-runner.itkamianets.com",
+		"repo": "https://github.com/IT-Kamianets/math-runner.itkamianets.com",
+		"features": [
+			"Three lanes, a growing speed and streak bonuses.",
+			"Coins and power-ups: slow motion, magnet, shield, extra life.",
+			"A third-person camera from the Character View constructor."
+		]
+	},
+	{
+		"slug": "paintball",
+		"name": "KP Paintball Arena",
+		"icon": "gamepad",
+		"tagline": "A team paintball shooter, 3 against 3",
+		"status": "in-progress",
+		"version": "",
+		"description": "A team 3D shooter on an invented paintball arena in Kamianets-Podilskyi. Pick red or blue and be the first team to score 10 against the bots.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-assets",
+			"3d-unity-audio",
+			"3d-unity-character",
+			"3d-unity-core",
+			"3d-unity-input",
+			"3d-unity-scene"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "",
+		"repo": "https://github.com/IT-Kamianets/paintball.itkamianets.com",
+		"features": [
+			"First- and third-person camera with a centre-screen aim.",
+			"Movement, camera and input come from the engine, not game code.",
+			"Bots move between cover with AI Navigation."
+		]
+	},
+	{
+		"slug": "arena",
+		"name": "Temnorid Arena",
+		"icon": "gamepad",
+		"tagline": "Duels of warriors, archers and mages",
+		"status": "in-progress",
+		"version": "0.3.0",
+		"description": "Step into a stone courtyard against five bots and fight with weapons and elemental magic. Every period the best fighter of each class becomes its Hero.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-account",
+			"3d-unity-ai",
+			"3d-unity-assetra",
+			"3d-unity-character",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://arena.temnorid.com",
+		"repo": "https://github.com/WebArtWork/arena.temnorid.com",
+		"features": [
+			"Free-for-all for six fighters: two of each class.",
+			"Bots on the shared engine AI.",
+			"Online play, phone controls and self-updating Windows builds."
+		]
+	},
+	{
+		"slug": "caravan-guard",
+		"name": "Temnorid Caravan Guard",
+		"icon": "gamepad",
+		"tagline": "Guard trade caravans on dangerous roads",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "Raiders, steppe riders and wolves wait along the road. Place guards on the route, upgrade the ones that matter and bring the wagons home.",
+		"constructorSlug": "top-down",
+		"packages": [
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-topdown-camera",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "https://caravan-guard.temnorid.com",
+		"repo": "https://github.com/WebArtWork/caravan-guard.temnorid.com",
+		"features": [
+			"Top-down camera from the shared engine package.",
+			"Online co-op and phone controls.",
+			"Goods that arrive feed trade in Lords."
+		]
+	},
+	{
+		"slug": "conquest",
+		"name": "Temnorid Conquest",
+		"icon": "gamepad",
+		"tagline": "Take the village, defeat its Lord",
+		"status": "in-progress",
+		"version": "0.3.0",
+		"description": "Wars for territory and the capture of settlements. Lead the assault on a village in person, fight its guards and its Lord, and defend your own lands.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-account",
+			"3d-unity-ai",
+			"3d-unity-assetra",
+			"3d-unity-character",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-inventory",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://conquest.temnorid.com",
+		"repo": "https://github.com/WebArtWork/conquest.temnorid.com",
+		"features": [
+			"Your own home village.",
+			"Playing with others online.",
+			"Phone controls and self-updating builds."
+		]
+	},
+	{
+		"slug": "craft",
+		"name": "Temnorid Craft",
+		"icon": "gamepad",
+		"tagline": "Gather, carry, store",
+		"status": "in-progress",
+		"version": "0.4.1",
+		"description": "Build up your farmstead, gather wood, stone and ore, and make tools, weapons and armour. What you store joins the same stock you have in Lords.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-character",
+			"3d-unity-core",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-inventory",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://craft.temnorid.com",
+		"repo": "https://github.com/WebArtWork/craft.temnorid.com",
+		"features": [
+			"Six resources, a backpack and a village warehouse.",
+			"Inventory from the shared engine package.",
+			"Shared stock with Lords."
+		]
+	},
+	{
+		"slug": "detective",
+		"name": "Temnorid Detective",
+		"icon": "gamepad",
+		"tagline": "A short fixed-camera detective story",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "Grain is missing and the night watchman is dead. Inspect the places, question the villagers, compare what they said with what you found and make your report. A wrong report is a normal ending.",
+		"constructorSlug": "fixed-view",
+		"packages": [
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-fixed-camera",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-synth",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://detective.temnorid.com",
+		"repo": "https://github.com/WebArtWork/detective.temnorid.com",
+		"features": [
+			"Fixed cinematic shots in four zones.",
+			"Alone or as two investigators.",
+			"First playthrough about 15 to 25 minutes."
+		]
+	},
+	{
+		"slug": "dungeons",
+		"name": "Temnorid Dungeons",
+		"icon": "gamepad",
+		"tagline": "Clear the ruins, beat the boss, keep the loot",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "Explore dangerous ruins, fight monsters, defeat bosses and find rare treasure and artefacts for your heroes.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-account",
+			"3d-unity-ai",
+			"3d-unity-assetra",
+			"3d-unity-character",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-inventory",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://dungeons.temnorid.com",
+		"repo": "https://github.com/WebArtWork/dungeons.temnorid.com",
+		"features": [
+			"A compact dungeon with a boss and its warning attacks.",
+			"Alone or with up to three friends.",
+			"Loot kept in the shared inventory."
+		]
+	},
+	{
+		"slug": "escape",
+		"name": "Temnorid Escape",
+		"icon": "gamepad",
+		"tagline": "Escape from the watchtower prison",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "A scout is locked in the cell under the watchtower. No weapons and no combat: read the clues, solve three puzzles, slip past the guard and leave by the service gate.",
+		"constructorSlug": "fixed-view",
+		"packages": [
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-fixed-camera",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-synth",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "https://escape.temnorid.com",
+		"repo": "https://github.com/WebArtWork/escape.temnorid.com",
+		"features": [
+			"Fixed camera shots per room.",
+			"Light co-op for two players.",
+			"First playthrough about 10 to 15 minutes."
+		]
+	},
+	{
+		"slug": "hippodrome",
+		"name": "Temnorid Hippodrome",
+		"icon": "gamepad",
+		"tagline": "Ride, race, cross the line first",
+		"status": "in-progress",
+		"version": "0.4.0",
+		"description": "Breed and train horses and bring them to the track. A horse's speed, stamina and temper, together with your sense of pacing, decide who crosses the line first.",
+		"constructorSlug": "",
+		"packages": [
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-core",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "https://hippodrome.temnorid.com",
+		"repo": "https://github.com/WebArtWork/hippodrome.temnorid.com",
+		"features": [
+			"Its own race camera: a horse is not a walking character.",
+			"Races against bot riders.",
+			"Multiplayer and saved best times."
+		]
+	},
+	{
+		"slug": "legends",
+		"name": "Temnorid Legends",
+		"icon": "gamepad",
+		"tagline": "Every legend has its own hero",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "A series of separate stories in action, adventure and survival horror. The first demo, The Abandoned Village, takes about 15 to 20 minutes.",
+		"constructorSlug": "character-view",
+		"packages": [
+			"3d-constructor-character-view-camera",
+			"3d-constructor-character-view-controls",
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-character",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-inventory",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows"
+		],
+		"site": "https://legends.temnorid.com",
+		"repo": "https://github.com/WebArtWork/legends.temnorid.com",
+		"features": [
+			"Shared controls, cameras and combat for every legend.",
+			"Each legend has its own plot, mood and ending.",
+			"The first demo is built and tested."
+		]
+	},
+	{
+		"slug": "master",
+		"name": "Temnorid Master",
+		"icon": "gamepad",
+		"tagline": "Learn seven trades in one village workshop",
+		"status": "in-progress",
+		"version": "0.2.0",
+		"description": "A workshop career game: take an order in the stable, scribe, forge, workshop, kitchen, tailor or herbalist trade, do a few hands-on steps and get paid for the quality of your work.",
+		"constructorSlug": "fixed-view",
+		"packages": [
+			"3d-unity-account",
+			"3d-unity-assetra",
+			"3d-unity-combat",
+			"3d-unity-core",
+			"3d-unity-feedback",
+			"3d-unity-graybox",
+			"3d-unity-input",
+			"3d-unity-net",
+			"3d-unity-save",
+			"3d-unity-shell",
+			"3d-unity-synth",
+			"3d-unity-ui",
+			"3d-unity-update"
+		],
+		"platforms": [
+			"Windows",
+			"Android",
+			"iOS"
+		],
+		"site": "https://master.temnorid.com",
+		"repo": "https://github.com/WebArtWork/master.temnorid.com",
+		"features": [
+			"Seven trades with one wallet, one level and one save.",
+			"A wrong answer is never punished.",
+			"Optional co-op for up to four players."
+		]
+	}
+]

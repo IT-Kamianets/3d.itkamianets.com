@@ -7,6 +7,7 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const json = async (file) => JSON.parse(await readFile(file, 'utf8'));
 const packages = await json(path.join(root, 'src/data/catalog/packages.json'));
 const constructors = await json(path.join(root, 'src/data/catalog/constructors.json'));
+const applications = await json(path.join(root, 'src/data/catalog/applications.json'));
 const docs = await json(path.join(root, 'src/data/docs/docs.json'));
 const bySlug = new Map(packages.map((item) => [item.slug, item]));
 assert.equal(bySlug.size, packages.length, 'Duplicate package slug');
@@ -36,6 +37,15 @@ for (const item of constructors) {
 	assert(/^3d-constructor-/.test(item.repo));
 	for (const slug of [...item.parts, ...item.packages])
 		assert(bySlug.has(slug), `Broken constructor reference: ${slug}`);
+}
+assert.equal(new Set(applications.map((item) => item.slug)).size, applications.length);
+const constructorSlugs = new Set(constructors.map((item) => item.slug));
+for (const item of applications) {
+	assert(['planned', 'in-progress', 'released'].includes(item.status), `Bad status: ${item.slug}`);
+	assert(!item.constructorSlug || constructorSlugs.has(item.constructorSlug), `Broken application constructor: ${item.slug}`);
+	assert(item.packages.length, `An application lists the engine packages it uses: ${item.slug}`);
+	for (const slug of item.packages) assert(bySlug.has(slug), `Broken application reference: ${item.slug} -> ${slug}`);
+	assert(/^https:\/\//.test(item.repo), `Missing repository: ${item.slug}`);
 }
 for (const page of Object.values(docs)) {
 	const ids = page.sections.map((section) =>
@@ -142,5 +152,5 @@ if (sources) {
 	);
 }
 console.log(
-	`Catalog valid: ${packages.length} framework packages, ${constructors.length} constructors, ${Object.keys(docs).length} documentation pages`,
+	`Catalog valid: ${packages.length} framework packages, ${constructors.length} constructors, ${applications.length} applications, ${Object.keys(docs).length} documentation pages`,
 );

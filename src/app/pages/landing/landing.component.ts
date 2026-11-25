@@ -6,7 +6,6 @@ import {
 	catalogConstructors,
 	catalogPackages,
 	GITHUB_ORG_URL,
-	repoUrl,
 } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -20,7 +19,6 @@ export class LandingComponent {
 	protected readonly packages = catalogPackages;
 	protected readonly constructors = catalogConstructors;
 	protected readonly orgUrl = GITHUB_ORG_URL;
-	protected readonly coreUrl = `${repoUrl('3d-unity-core')}.git`;
 
 	/** An excerpt of a real object from the 3d-scene-schema v1 room-scan example. */
 	protected readonly schemaExcerpt = `{

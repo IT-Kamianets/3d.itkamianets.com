@@ -5,8 +5,7 @@ import { LanguageService, TranslateService } from '@wawjs/ngx-translate';
 import { ThemeService } from '@wawjs/ngx-ui';
 import type { Language } from '@wawjs/ngx-translate';
 import type { AppLanguage } from '../../../environments/environment.prod';
-import { GITHUB_ORG_URL } from '../../feature/catalog/catalog.data';
-import { CompanyService } from '../../feature/company/company.service';
+import { SITE_REPO_URL } from '../../feature/catalog/catalog.data';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 
@@ -24,11 +23,11 @@ export class TopbarComponent {
 	protected readonly links = [
 		{ label: 'Packages', path: '/packages' },
 		{ label: 'Constructors', path: '/constructors' },
+		{ label: 'Applications', path: '/applications' },
 		{ label: 'Docs', path: '/docs' },
 		{ label: 'Development', path: '/development' },
 	];
-	protected readonly githubUrl = GITHUB_ORG_URL;
-	protected readonly company = inject(CompanyService).company;
+	protected readonly githubUrl = SITE_REPO_URL;
 	protected readonly activeLanguage = this._languageService.language;
 	protected readonly mode = computed(() => this._themeService.mode() ?? 'dark');
 	protected readonly languages = computed(() =>
