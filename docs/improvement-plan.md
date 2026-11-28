@@ -4,7 +4,7 @@ Plan from the code review of the framework packages, the docs and the games buil
 
 The plan is laid out like the shared backlog on the [Development page](https://3d.itkamianets.com/development): each section is a **roadmap** (category `unity`, status `planned`) with its **tasks** and the **packages** and **projects** it touches. When it moves into the backlog, every section becomes one roadmap and every checkbox one task; the severity tag stays in the task title.
 
-Status (28 November 2026): the bugs of roadmaps 1 and 6 are fixed in the package repositories, with tests where the package has them; the boxes say what is still open.
+Status (28 November 2026): the bugs of roadmaps 1 and 6 are fixed in the package repositories, with tests where the package has them. The 24 released packages are tagged and declare their engine dependencies (roadmap 2), game code is out of the engine (roadmap 4) and the schema checks of roadmap 5 are in. The boxes say what is still open.
 
 Order matters: roadmaps 1 and 2 come first because they protect players and make every later fix reach the games safely.
 
@@ -37,12 +37,12 @@ Packages: `3d-unity-update`, `3d-unity-account`, `3d-unity-net`, `3d-unity-save`
 
 Packages: all `3d-*`. Projects: all games, the constructor starters, this site.
 
-- [ ] Tag every package repository at its current `package.json` version (`v0.1.0` and so on). Today no package has a tag.
-- [ ] Pin every game manifest to `...git#vX.Y.Z` and commit `packages-lock.json`. Pin `com.coplaydev.unity-mcp` too (Math Runner uses `#main`).
-- [ ] A small script that bumps one package's pin across every game in the workspace.
-- [ ] Declare the engine packages each package uses in its `package.json`: shell (core, input, ui, net, update, account), account (core), ui (`3d-unity-input`), camera and controls (`com.unity.inputsystem`). Drop the shell's unused input references.
-- [ ] Decide on a package registry (OpenUPM or GitHub Packages) so Unity resolves the whole tree; then shorten the manifest blocks in the starters' AGENTS.md and in the docs.
-- [ ] Add a "Releasing a package" section to Start a game: bump the version, tag, update the catalog here.
+- [x] Tag every package repository at its current `package.json` version (`v0.1.0` and so on). Done for the 24 released packages; `3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase` and `3d-constructor-vr-controls` still have no tag.
+- [ ] Pin every game manifest to `...git#vX.Y.Z` and commit `packages-lock.json`. Pin `com.coplaydev.unity-mcp` too (Math Runner uses `#main`). Script ready, games pending.
+- [x] A small script that bumps one package's pin across every game in the workspace: `tools/engine/pin-packages.mjs` (`npm run pin`), which also fills `packages-lock.json` and adds missing engine dependencies.
+- [x] Declare the engine packages each package uses in its `package.json`: shell (core, input, ui, net, update, account), account (core), ui (`3d-unity-input`), camera and controls (`com.unity.inputsystem`). Drop the shell's unused input references.
+- [x] Decide on a package registry (OpenUPM or GitHub Packages) so Unity resolves the whole tree; then shorten the manifest blocks in the starters' AGENTS.md and in the docs. Decided: OpenUPM (scope `com.itkamianets`); the listings are prepared in `tools/openupm/` but not submitted, and the manifest blocks stay until they are live.
+- [x] Add a "Releasing a package" section to Start a game: bump the version, tag, update the catalog here.
 
 ## Roadmap 3: Tests and CI
 
@@ -62,23 +62,23 @@ Packages: all `3d-*`. Projects: all games, this site.
 
 Packages: `3d-unity-account`, `3d-unity-shell`, `3d-unity-graybox`; new `temnorid-*` packages in the WebArtWork organization. Projects: all Temnorid games.
 
-- [ ] account: the default `Config` becomes empty with a clean "not configured" state; the Temnorid Firebase config moves to the games (or a `temnorid-account` package). Also removes the `Resources.Load` in a static initializer.
-- [ ] account: `LordProfile` moves to a `temnorid-*` package.
-- [ ] shell: `ShellLord` behind a "profile name provider" delegate; the Lords wording, the `Temnorid` title default and the Lords gold accent move into each game's `ShellConfig`; bar colours come from `ShellConfig`.
-- [ ] shell: a text table or callback for every user-facing string (localization hook).
-- [ ] shell: `ShellSceneKit` reads the OAuth file path from configuration, not `~/.temnorid/`.
-- [ ] graybox: rename the shader `Temnorid/WorldText` to `ITKP/WorldText`.
+- [x] account: the default `Config` becomes empty with a clean "not configured" state; the Temnorid Firebase config moves to the games (or a `temnorid-account` package). Also removes the `Resources.Load` in a static initializer.
+- [x] account: `LordProfile` moves to a `temnorid-*` package.
+- [x] shell: `ShellLord` behind a "profile name provider" delegate; the Lords wording, the `Temnorid` title default and the Lords gold accent move into each game's `ShellConfig`; bar colours come from `ShellConfig`.
+- [x] shell: a text table or callback for every user-facing string (localization hook): `ShellText`.
+- [x] shell: `ShellSceneKit` reads the OAuth file path from configuration, not `~/.temnorid/`: `ShellSceneKit.OauthSourcePath`.
+- [x] graybox: rename the shader `Temnorid/WorldText` to `ITKP/WorldText`.
 
 ## Roadmap 5: Schemas are the source of truth
 
 Packages: `3d-unity-scene`, `3d-unity-assets`, `3d-unity-save`, `3d-unity-inventory`, `3d-unity-graybox`; the five schemas.
 
-- [ ] scene and assets: `[JsonExtensionData]` on every model, copied through on save, so unknown fields survive a round trip.
-- [ ] scene, assets, save, inventory: read `schemaVersion`; refuse or warn on an unknown major version; keep the source version when writing.
+- [x] scene and assets: `[JsonExtensionData]` on every model, copied through on save, so unknown fields survive a round trip.
+- [x] scene, assets, save, inventory: read `schemaVersion`; refuse or warn on an unknown major version; keep the source version when writing.
 - [ ] assets: add the 3d-asset-schema 1.1.0 `production` blocks (asset and library) to the C# models.
-- [ ] save: validate `gameId` and slot against the schema pattern (no `../`), compare them on read, require `schemaVersion`, refuse a non-object payload.
+- [x] save: validate `gameId` and slot against the schema pattern (no `../`), compare them on read, require `schemaVersion`, refuse a non-object payload.
 - [ ] graybox: `ModelSlots` validates ids against the AssetId pattern and writes the real placeholder shape.
-- [ ] inventory: null-guard `FromData`, check `schemaVersion`.
+- [x] inventory: null-guard `FromData`, check `schemaVersion`.
 - [ ] Schema round-trip tests: every example document loads and saves back unchanged.
 - [ ] Check model orientation across engines with one asymmetric asset (glTFast flips X, the scene loader flips Z).
 
@@ -112,7 +112,7 @@ Packages: as listed per task. Projects: all games.
 **scene, assets, audio**
 - [x] [high] assets: a failing load always ends in `Fail` (`EngineAssets.cs` 261-313, 102); validate kind and source in `AddLibrary`.
 - [x] [medium] assets: glTFast versionDefine `[5.0.0,)`; `LoadLibrary` routes jar/URL paths to `LoadLibraryFromUrl`; decide whether glTFast is a hard dependency.
-- [x] [medium] assets: reference counting or per-scene scopes; redefining an id clears its cache entry. Redefining an id now clears its cache entry; reference counting is still open.
+- [x] [medium] assets: reference counting or per-scene scopes; redefining an id clears its cache entry. Redefining an id now clears its cache entry; reference counting of placed models followed in 3d-unity-assets 0.2.0.
 - [x] [medium] scene: transforms relative to the parent SceneObject; skip SceneObjects inside asset content (`SceneSaver.cs` 45-55).
 - [x] [medium] scene: destroy surface meshes on unload (`SceneLoader.cs` 184, `LoadedScene.cs` 72-75).
 - [x] [low] scene: invariant culture for `updatedAt`, keep the origin scale, identity for a missing rotation.
