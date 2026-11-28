@@ -236,15 +236,46 @@
 				]
 			},
 			{
+				"title": "Releasing a package",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "Maintainers release an engine package in five steps, in this order, so the tags, this catalog and the games never disagree:"
+					},
+					{
+						"type": "ol",
+						"items": [
+							"Bump `version` in the package’s `package.json`, following semantic versioning, and raise the engine versions in its `dependencies` when it needs something new from them.",
+							"Add the release to `CHANGELOG.md`: a `## X.Y.Z` heading and one line per change, with **Breaking:** in front of anything a game has to change.",
+							"Commit to `master`, tag that commit `vX.Y.Z` (the same version as `package.json`) and push both: `git tag vX.Y.Z` then `git push origin master vX.Y.Z`.",
+							"Update this website’s catalog in [its repository](https://github.com/IT-Kamianets/3d.itkamianets.com): the package’s `version`, `tag`, texts and known limits in `src/data/catalog/packages.json`, their Ukrainian in `src/i18n/ua.json`, then run `npm run build`, which validates the catalog and regenerates packages.md.",
+							"Move the games to the new tag with the pin script below, open each game in Unity once, and commit its `Packages/manifest.json` and `Packages/packages-lock.json` together."
+						]
+					},
+					{
+						"type": "p",
+						"text": "The pin script is `tools/engine/pin-packages.mjs` in this website’s repository (`npm run pin`). Run it from a clone that sits next to the games in one workspace folder. It pins every game’s engine packages to release tags in `manifest.json` and `packages-lock.json`, and adds the engine packages a pinned version needs that the game does not list yet. It needs git and network access to GitHub."
+					},
+					{
+						"type": "code",
+						"code": "npm run pin -- --workspace .. --latest                         # every engine package to its newest tag\nnpm run pin -- --workspace .. --pin com.itkamianets.3d-unity-save@0.2.0\nnpm run pin -- --workspace .. --latest --games <game-a>,<game-b> --dry-run"
+					},
+					{
+						"type": "p",
+						"text": "`--dry-run` shows what would change and writes nothing. Without `--games` it updates every folder whose manifest lists an engine package."
+					}
+				]
+			},
+			{
 				"title": "Before a release",
 				"blocks": [
 					{
 						"type": "p",
-						"text": "Pin each Git dependency to a published tag or a full commit SHA before release. A package version does not guarantee that a tag with the same name exists. Replace `<tag-or-commit>` with an actual revision."
+						"text": "Pin each engine package to its release tag before you release the game. The package pages show the pinned URL; a package without a tag yet can be pinned to a full commit SHA. The pin script above moves a whole workspace at once."
 					},
 					{
 						"type": "code",
-						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#<tag-or-commit>\""
+						"code": "\"com.itkamianets.3d-unity-core\": \"https://github.com/IT-Kamianets/3d-unity-core.git#v0.2.0\""
 					}
 				]
 			}
@@ -310,6 +341,10 @@
 					},
 					{
 						"type": "p",
+						"text": "Every package declares its engine dependencies in its `package.json` too, ready for a registry. With git URLs Unity still does not follow them, so the rule above stays until the registry below is live."
+					},
+					{
+						"type": "p",
 						"text": "For Character View, use this dependency-complete starting point:"
 					},
 					{
@@ -320,7 +355,24 @@
 					},
 					{
 						"type": "p",
-						"text": "Pin each Git dependency to a published tag or a full commit SHA before release. A package version does not guarantee that a tag with the same name exists. Replace `<tag-or-commit>` with an actual revision."
+						"text": "The URLs on the package pages and in these manifests are pinned to release tags (`#vX.Y.Z`), so a project gets exactly the released version. Keep the tag when you copy a URL: without it Unity follows `master`."
+					}
+				]
+			},
+			{
+				"title": "Package registry (coming soon)",
+				"blocks": [
+					{
+						"type": "p",
+						"text": "The engine packages are going to the [OpenUPM](https://openupm.com) registry. Once they are listed, add this scoped registry to `Packages/manifest.json` once, and Unity resolves every engine dependency by itself: you list only the packages you use, by version."
+					},
+					{
+						"type": "code",
+						"code": "{\n  \"scopedRegistries\": [\n    {\n      \"name\": \"OpenUPM\",\n      \"url\": \"https://package.openupm.com\",\n      \"scopes\": [\"com.itkamianets\"]\n    }\n  ],\n  \"dependencies\": {\n    \"com.itkamianets.3d-constructor-character-view-controls\": \"0.3.0\"\n  }\n}"
+					},
+					{
+						"type": "p",
+						"text": "Coming soon: the listings are prepared but not published yet. Until then, install with the git URLs and their `#vX.Y.Z` tags, as above."
 					}
 				]
 			},
@@ -339,7 +391,7 @@
 					},
 					{
 						"type": "p",
-						"text": "Configure your own `ShellConfig` and `GameAccount.Config` before opening the shell. Direct-address multiplayer and Unity Relay are separate connection options; online play requires your Unity Services configuration."
+						"text": "Before opening the shell, fill your own `ShellConfig` (title, wording, colours, places) and set your Firebase project with `GameAccount.Config = FirebaseConfig.Create(apiKey, projectId)`: the engine ships no project, so without one the game plays offline. Direct-address multiplayer and Unity Relay are separate connection options; online play requires your Unity Services configuration."
 					}
 				]
 			},
@@ -383,7 +435,7 @@
 						"items": [
 							"`3d-scene-schema`: **where** things are. Read and written by `3d-unity-scene`.",
 							"`3d-asset-schema`: **what** things are. Resolved by `3d-unity-assets`.",
-							"`3d-network-schema`: **what happens between players**. Spoken by `3d-unity-network`.",
+							"`3d-network-schema`: **what happens between players**. Spoken by the deprecated `3d-unity-network`; `3d-unity-net` uses its own small messages.",
 							"`3d-save-schema`: **what a game remembers**. The envelope of a save file, written and read by `3d-unity-save`.",
 							"`3d-inventory-schema`: **what is carried and stored**. Items and containers, used by `3d-unity-inventory`."
 						]
@@ -442,26 +494,19 @@
 				"blocks": [
 					{
 						"type": "p",
-						"text": "The ten current Unity games use `3d-unity-net`, not `3d-unity-network`. Choose one networking model for your game: their APIs and message formats are different."
+						"text": "**Decision: use `3d-unity-net`.** It is the engine’s multiplayer package, and every current Unity game uses it. `3d-unity-network` is deprecated: no game uses it, it gets no new work, and new games should not start on it."
 					},
 					{
 						"type": "p",
-						"text": "`3d-unity-network` is server-authoritative: clients send input, the server decides hits, health and score. Two kinds of traffic stay separate:"
-					},
-					{
-						"type": "ul",
-						"items": [
-							"**Per-tick state** (positions, inputs): small binary data inside the networking backend.",
-							"**Session messages** (joins, state changes, game events, results): JSON in `3d-network-schema`, readable by servers, spectators and stats without Unity."
-						]
+						"text": "`3d-unity-net` is a host-authoritative session over Netcode for GameObjects, with a roster, named events, player poses and host-published entities, for games that build their scenes in code and have no prefabs to spawn. The host runs the game’s rules and checks; clients send requests and show what the host publishes."
 					},
 					{
 						"type": "p",
-						"text": "`3d-unity-firebase` keeps accounts and stats between matches; `3d-unity-network` runs the match itself."
+						"text": "`3d-unity-account` (or `3d-unity-firebase`) keeps accounts and stats between matches; `3d-unity-net` runs the match itself."
 					},
 					{
 						"type": "p",
-						"text": "`3d-unity-net` is the lighter option: a host-authoritative session with a roster, named events, player poses and host-published entities, for games that build their scenes in code and have no prefabs to spawn. `3d-unity-network` is the full server-authoritative layer above."
+						"text": "`3d-unity-network` (server-authoritative characters with prediction and reconciliation, and session messages in `3d-network-schema`) stays available only for code that already uses it."
 					}
 				]
 			},
@@ -475,8 +520,8 @@
 					{
 						"type": "ul",
 						"items": [
-							"`3d-unity-shell`: the screens every Temnorid game shares (splash, landing, sign-in, onboarding, lobby, top and bottom bars), in the structure of the Lords app. A game describes itself in a `ShellConfig` and adds its own places.",
-							"`3d-unity-account`: the player’s Lords account: a guest or Google sign-in over Firebase’s REST API, remembered between runs. Not being signed in is a normal state.",
+							"`3d-unity-shell`: the screens a family of games shares (splash, landing, sign-in, onboarding, lobby, top and bottom bars). A game describes itself in a `ShellConfig` (title, wording, colours, places), names the player through `ShellIdentity` and can translate every shell text through `ShellText`.",
+							"`3d-unity-account`: a guest or Google sign-in over Firebase’s REST API, remembered between runs, in the Firebase project the game names with `FirebaseConfig.Create`. Not being signed in is a normal state.",
 							"`3d-unity-update`: keeps the game on its newest GitHub release and installs it silently on Windows. Being offline is never an error.",
 							"`3d-unity-net`: a small host-authoritative session over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code.",
 							"`3d-unity-save`: versioned local save files, written safely, with a kept backup of the previous save.",
@@ -488,6 +533,10 @@
 					{
 						"type": "p",
 						"text": "The shell depends on `3d-unity-account`, `3d-unity-update`, `3d-unity-net` and `3d-unity-ui`; the others stand alone."
+					},
+					{
+						"type": "p",
+						"text": "Game code stays out of these packages: a family of games keeps its Firebase project, profiles and wording in a package of its own, outside this catalog."
 					}
 				]
 			},
@@ -654,7 +703,7 @@
 					},
 					{
 						"type": "p",
-						"text": "Use `NetSession.IsAuthority` for host or solo simulation, and publish entity state from the host. The schema replay examples belong to `3d-unity-network`; they do not describe `3d-unity-net` traffic."
+						"text": "Use `NetSession.IsAuthority` for host or solo simulation, and publish entity state from the host. The schema replay examples belong to the deprecated `3d-unity-network`; they do not describe `3d-unity-net` traffic."
 					}
 				]
 			},

@@ -23,11 +23,13 @@ game packages        rules, content and assets of one game
 the game
 ```
 
+That is four layers, as on the [Architecture page](https://3d.itkamianets.com/docs/architecture): schemas, Unity packages, constructors and game packages. Each layer uses only the ones above it, so a fix in a package reaches every game built on it. The catalog sorts the packages of the first three layers into five groups, listed below.
+
 A constructor is where a new game starts. You clone its starter repository, pull in the packages it lists, and add your own game packages on top. Game rules and content never go back into the framework. If something turns out to be useful for a second game, it moves into a `3d-*` package instead.
 
 ## Packages
 
-The catalog has 35 entries: five JSON schemas, 29 Unity (UPM) packages and one Unity template project. The site groups them the same way the catalog does.
+The catalog has 35 entries: five JSON schemas, 29 Unity (UPM) packages and one Unity template project. The site sorts them into the same five groups as the catalog.
 
 Schemas (5): `3d-scene-schema`, `3d-asset-schema`, `3d-network-schema`, `3d-save-schema`, `3d-inventory-schema`. Plain JSON formats with no engine code, so a scene or a save file isn't tied to Unity.
 
@@ -35,7 +37,7 @@ Core (6): `3d-unity-core`, `3d-unity-scene`, `3d-unity-input`, `3d-unity-charact
 
 Game kit (8): `3d-unity-ui`, `3d-unity-save`, `3d-unity-synth`, `3d-unity-graybox`, `3d-unity-shell`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net`. The pieces around the game itself: menus, saves, accounts, updates, networking, prototyping.
 
-Specific (10): `3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase`, `3d-unity-assetra`, `3d-unity-network`, `3d-unity-combat`, `3d-unity-feedback`, `3d-unity-ai`, `3d-unity-inventory`. Devices, platforms, services and gameplay systems that only some games use.
+Specific (10): `3d-unity-interaction`, `3d-unity-spatial`, `3d-unity-xr`, `3d-unity-firebase`, `3d-unity-assetra`, `3d-unity-network` (deprecated: use `3d-unity-net`), `3d-unity-combat`, `3d-unity-feedback`, `3d-unity-ai`, `3d-unity-inventory`. Devices, platforms, services and gameplay systems that only some games use.
 
 Constructor (6): `3d-constructor-character-view-camera`, `3d-constructor-character-view-controls`, `3d-constructor-vr-controls`, `3d-constructor-character-view-template`, `3d-unity-fixed-camera`, `3d-unity-topdown-camera`. The parts that belong to one constructor.
 
@@ -50,7 +52,7 @@ There are six, one per camera style. The game names are only there to show the s
 - Fixed Camera: the scene decides where the camera is (Resident Evil, INSIDE).
 - God / Free Camera: the player looks after a world from above (Civilization, Cities: Skylines).
 
-Where things stand: Character View has its camera and controls. The fixed and top-down cameras exist as separate packages but don't come with full player controls yet. The other styles have starter projects and still need their implementation.
+Where things stand: Character View has its camera and controls, including a VR mode. The fixed and top-down cameras exist as separate packages but don't come with full player controls yet. The other styles have starter projects and still need their implementation.
 
 ## The website
 
@@ -88,6 +90,7 @@ Still ahead:
 npm install
 npm start          # dev server
 npm run validate   # check the catalog
+npm run pin -- --workspace .. --latest   # pin every game's engine packages to their newest release tags
 npm run catalog    # regenerate src/assets/packages.md and src/data/catalog/index.json only
 npm run build      # validate, packages.md, production build, prerender, sitemap.xml and robots.txt
 ```
@@ -109,7 +112,7 @@ We recommend Unity 6000.6.8f1. It's a suggestion, not a requirement. If it chang
 
 Routes, prerendering and the sitemap all come from the catalog JSON, so a new entry gets its page automatically. Add a matching `pageSeo` entry in `company.json` for its title and description; SEO text is Ukrainian only.
 
-Package content comes from the `IT-Kamianets/3d-*` repository READMEs and `package.json` files. The site doesn't show a ready or planned status for packages or constructors. Each constructor has `repo`, its starter repository, and `parts`, its own packages such as camera and controls. The setup steps on its page change depending on whether `parts` is empty.
+Package content comes from the `IT-Kamianets/3d-*` repository READMEs, `package.json` files and changelogs. Each package entry has `tag`, its release tag (`v<version>`, or empty while the repository has none), which pins the git URLs on the site, and `limits`, its known limits. The release steps for a package are on the Start a game docs page. The site doesn't show a ready or planned status for packages or constructors. Each constructor has `repo`, its starter repository, and `parts`, its own packages such as camera and controls. The setup steps on its page change depending on whether `parts` is empty.
 
 ### Files for developers and AI agents
 
@@ -123,7 +126,9 @@ The site documents framework packages and constructor starters only. Game packag
 
 - `npm run validate` checks package IDs, the dependency graph, constructor references and install snippets in the docs.
 - `node tools/catalog/validate-catalog.mjs --workspace ..` compares the catalog with the Unity manifests in the workspace.
-- Add `--sources <directory>` to compare versions and assembly dependencies with checked-out package repositories.
+- Add `--sources <directory>` to compare versions and assembly dependencies with checked-out package repositories (optional assemblies and packages that are not checked out are skipped).
+- `npm run pin` runs `tools/engine/pin-packages.mjs`, which pins every game's engine packages in the workspace to release tags in `manifest.json` and `packages-lock.json` (`--latest`, `--pin <id>@<x.y.z>`, `--games`, `--dry-run`).
+- `tools/openupm/` holds the prepared OpenUPM listings, one YAML file per package. They are not submitted yet.
 
 [docs/catalog-audit.md](docs/catalog-audit.md) explains the source audit and what it can't catch.
 
