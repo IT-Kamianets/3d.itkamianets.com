@@ -5,7 +5,8 @@
 		"start": "ng serve",
 		"build": "npm run validate && node tools/catalog/generate-packages-md.mjs && ng build --configuration=production && node tools/seo/generate-static-seo.mjs",
 		"catalog": "node tools/catalog/generate-packages-md.mjs",
-		"validate": "node tools/catalog/validate-catalog.mjs"
+		"validate": "node tools/catalog/validate-catalog.mjs",
+		"pin": "node tools/engine/pin-packages.mjs"
 	},
 	"dependencies": {
 		"@angular/aria": "22.2.2",
