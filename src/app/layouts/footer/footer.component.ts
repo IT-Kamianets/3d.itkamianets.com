@@ -1,13 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService } from '@wawjs/ngx-translate';
-import {
-	GITHUB_ORG_URL,
-	SITE_REPO_URL,
-	catalogApplications,
-	catalogConstructors,
-	catalogPackages,
-} from '../../feature/catalog/catalog.data';
+import { GITHUB_ORG_URL, SITE_REPO_URL, catalogIndex } from '../../feature/catalog/catalog.const';
 import { CompanyService } from '../../feature/company/company.service';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 
@@ -27,9 +21,9 @@ export class FooterComponent {
 	protected readonly currentYear = new Date().getFullYear();
 	protected readonly githubUrl = GITHUB_ORG_URL;
 	protected readonly repoUrl = SITE_REPO_URL;
-	protected readonly packages = catalogPackages;
-	protected readonly constructors = catalogConstructors;
-	protected readonly applications = catalogApplications;
+	protected readonly packages = catalogIndex.packages;
+	protected readonly constructors = catalogIndex.constructors;
+	protected readonly applications = catalogIndex.applications;
 	protected readonly docLinks = [
 		{ label: 'Overview', path: '/docs' },
 		{ label: 'Start a game', path: '/docs/start-a-game' },

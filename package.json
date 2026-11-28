@@ -3,8 +3,8 @@
 	"version": "22.0.1",
 	"scripts": {
 		"start": "ng serve",
-		"build": "npm run validate && node tools/catalog/generate-packages-md.mjs && ng build --configuration=production && node tools/seo/generate-static-seo.mjs",
-		"catalog": "node tools/catalog/generate-packages-md.mjs",
+		"build": "npm run validate && npm run catalog && ng build --configuration=production && node tools/seo/generate-static-seo.mjs",
+		"catalog": "node tools/catalog/generate-packages-md.mjs && node tools/catalog/generate-catalog-index.mjs",
 		"validate": "node tools/catalog/validate-catalog.mjs",
 		"pin": "node tools/engine/pin-packages.mjs"
 	},

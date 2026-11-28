@@ -1,6 +1,7 @@
 import {
 	APP_INITIALIZER,
 	ApplicationConfig,
+	mergeApplicationConfig,
 	provideBrowserGlobalErrorListeners,
 	provideZonelessChangeDetection,
 } from '@angular/core';
@@ -15,13 +16,18 @@ import {
 	stripTitleSuffix,
 } from '@wawjs/ngx-default';
 import { provideNgxCore } from '@wawjs/ngx-core';
-import { provideTranslate } from '@wawjs/ngx-translate';
+import { ProvideTranslateConfig, provideTranslate } from '@wawjs/ngx-translate';
 import { provideNgxUi } from '@wawjs/ngx-ui';
 import { environment } from '../environments/environment';
-import uaTranslations from '../i18n/ua.json';
 import { routes } from './app.routes';
 import { BootstrapService } from './feature/bootstrap/bootstrap.service';
 import { companyProfile } from './feature/company/company.data';
+
+/** Languages for both platforms; the Ukrainian dictionary is added per platform (see below). */
+export const translateConfig: ProvideTranslateConfig = {
+	defaultLanguage: environment.defaultLanguage,
+	languages: environment.languages,
+};
 
 const initializeBootstrapData = (bootstrapService: BootstrapService) => () =>
 	bootstrapService.initialize();
@@ -62,12 +68,6 @@ export const appConfig: ApplicationConfig = {
 			}),
 		),
 		provideClientHydration(withEventReplay()),
-		provideTranslate({
-			defaultLanguage: environment.defaultLanguage,
-			languages: environment.languages,
-			// Bundled so prerendered pages are already in the default language.
-			translations: { ua: uaTranslations, en: {} },
-		}),
 		{
 			provide: APP_INITIALIZER,
 			useFactory: initializeBootstrapData,
@@ -76,3 +76,12 @@ export const appConfig: ApplicationConfig = {
 		},
 	],
 };
+
+/**
+ * The browser fetches `/i18n/<language>.json` (served from `src/i18n`) before the app hydrates, so the
+ * Ukrainian dictionary stays out of the initial bundle. The server bundles it instead
+ * (`app.config.server.ts`), so prerendered pages are already Ukrainian.
+ */
+export const browserConfig = mergeApplicationConfig(appConfig, {
+	providers: [provideTranslate(translateConfig)],
+});

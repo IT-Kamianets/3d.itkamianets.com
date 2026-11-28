@@ -5,7 +5,7 @@ import { LanguageService, TranslateService } from '@wawjs/ngx-translate';
 import { ThemeService } from '@wawjs/ngx-ui';
 import type { Language } from '@wawjs/ngx-translate';
 import type { AppLanguage } from '../../../environments/environment.prod';
-import { SITE_REPO_URL } from '../../feature/catalog/catalog.data';
+import { SITE_REPO_URL } from '../../feature/catalog/catalog.const';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { TrPipe } from '../../shared/translate/tr.pipe';
 

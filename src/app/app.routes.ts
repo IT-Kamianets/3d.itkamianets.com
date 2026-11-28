@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { buildRouteMeta } from '@wawjs/ngx-default';
-import { catalogApplications, catalogConstructors, catalogPackages } from './feature/catalog/catalog.data';
+import { catalogIndex } from './feature/catalog/catalog.const';
 import { companyProfile } from './feature/company/company.data';
 
 const metaFor = (path: string) => ({ meta: buildRouteMeta(companyProfile, path) });
@@ -23,7 +23,7 @@ export const routes: Routes = [
 		loadComponent: () =>
 			import('./pages/packages/packages.component').then((m) => m.PackagesComponent),
 	},
-	...catalogPackages.map((item) => ({
+	...catalogIndex.packages.map((item) => ({
 		path: `packages/${item.slug}`,
 		data: { ...metaFor(`/packages/${item.slug}`), slug: item.slug },
 		loadComponent: () =>
@@ -39,7 +39,7 @@ export const routes: Routes = [
 				(m) => m.ConstructorsComponent,
 			),
 	},
-	...catalogConstructors.map((item) => ({
+	...catalogIndex.constructors.map((item) => ({
 		path: `constructors/${item.slug}`,
 		data: { ...metaFor(`/constructors/${item.slug}`), slug: item.slug },
 		loadComponent: () =>
@@ -55,7 +55,7 @@ export const routes: Routes = [
 				(m) => m.ApplicationsComponent,
 			),
 	},
-	...catalogApplications.map((item) => ({
+	...catalogIndex.applications.map((item) => ({
 		path: `applications/${item.slug}`,
 		data: { ...metaFor(`/applications/${item.slug}`), slug: item.slug },
 		loadComponent: () =>

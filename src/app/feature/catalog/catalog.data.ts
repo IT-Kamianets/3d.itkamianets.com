@@ -3,9 +3,9 @@ import applicationsData from '../../../data/catalog/applications.json';
 import constructorsData from '../../../data/catalog/constructors.json';
 import packagesData from '../../../data/catalog/packages.json';
 
-export const GITHUB_ORG_URL = 'https://github.com/IT-Kamianets';
-/** This website's own repository. */
-export const SITE_REPO_URL = `${GITHUB_ORG_URL}/3d.itkamianets.com`;
+import { repoUrl } from './catalog.const';
+
+export { GITHUB_ORG_URL, SITE_REPO_URL, repoUrl } from './catalog.const';
 
 export interface CatalogPackage {
 	slug: string;
@@ -95,8 +95,6 @@ export const packageGroups: PackageGroup[] = PACKAGE_GROUP_ORDER.map((name) => (
 	name,
 	packages: catalogPackages.filter((item) => item.group === name),
 })).filter((group) => group.packages.length > 0);
-
-export const repoUrl = (repo: string) => `${GITHUB_ORG_URL}/${repo}`;
 
 export const findPackage = (slug: string) => catalogPackages.find((item) => item.slug === slug);
 

@@ -1,0 +1,220 @@
+{
+	"packages": [
+		{
+			"slug": "3d-scene-schema",
+			"name": "3d-scene-schema"
+		},
+		{
+			"slug": "3d-asset-schema",
+			"name": "3d-asset-schema"
+		},
+		{
+			"slug": "3d-network-schema",
+			"name": "3d-network-schema"
+		},
+		{
+			"slug": "3d-save-schema",
+			"name": "3d-save-schema"
+		},
+		{
+			"slug": "3d-inventory-schema",
+			"name": "3d-inventory-schema"
+		},
+		{
+			"slug": "3d-unity-core",
+			"name": "3d-unity-core"
+		},
+		{
+			"slug": "3d-unity-scene",
+			"name": "3d-unity-scene"
+		},
+		{
+			"slug": "3d-unity-input",
+			"name": "3d-unity-input"
+		},
+		{
+			"slug": "3d-unity-character",
+			"name": "3d-unity-character"
+		},
+		{
+			"slug": "3d-unity-assets",
+			"name": "3d-unity-assets"
+		},
+		{
+			"slug": "3d-unity-audio",
+			"name": "3d-unity-audio"
+		},
+		{
+			"slug": "3d-unity-ui",
+			"name": "3d-unity-ui"
+		},
+		{
+			"slug": "3d-unity-save",
+			"name": "3d-unity-save"
+		},
+		{
+			"slug": "3d-unity-synth",
+			"name": "3d-unity-synth"
+		},
+		{
+			"slug": "3d-unity-graybox",
+			"name": "3d-unity-graybox"
+		},
+		{
+			"slug": "3d-unity-shell",
+			"name": "3d-unity-shell"
+		},
+		{
+			"slug": "3d-unity-account",
+			"name": "3d-unity-account"
+		},
+		{
+			"slug": "3d-unity-update",
+			"name": "3d-unity-update"
+		},
+		{
+			"slug": "3d-unity-net",
+			"name": "3d-unity-net"
+		},
+		{
+			"slug": "3d-unity-interaction",
+			"name": "3d-unity-interaction"
+		},
+		{
+			"slug": "3d-unity-spatial",
+			"name": "3d-unity-spatial"
+		},
+		{
+			"slug": "3d-unity-xr",
+			"name": "3d-unity-xr"
+		},
+		{
+			"slug": "3d-unity-firebase",
+			"name": "3d-unity-firebase"
+		},
+		{
+			"slug": "3d-unity-assetra",
+			"name": "3d-unity-assetra"
+		},
+		{
+			"slug": "3d-unity-network",
+			"name": "3d-unity-network"
+		},
+		{
+			"slug": "3d-unity-combat",
+			"name": "3d-unity-combat"
+		},
+		{
+			"slug": "3d-unity-feedback",
+			"name": "3d-unity-feedback"
+		},
+		{
+			"slug": "3d-unity-ai",
+			"name": "3d-unity-ai"
+		},
+		{
+			"slug": "3d-unity-inventory",
+			"name": "3d-unity-inventory"
+		},
+		{
+			"slug": "3d-constructor-character-view-camera",
+			"name": "3d-constructor-character-view-camera"
+		},
+		{
+			"slug": "3d-constructor-character-view-controls",
+			"name": "3d-constructor-character-view-controls"
+		},
+		{
+			"slug": "3d-constructor-vr-controls",
+			"name": "3d-constructor-vr-controls"
+		},
+		{
+			"slug": "3d-constructor-character-view-template",
+			"name": "3d-constructor-character-view-template"
+		},
+		{
+			"slug": "3d-unity-fixed-camera",
+			"name": "3d-unity-fixed-camera"
+		},
+		{
+			"slug": "3d-unity-topdown-camera",
+			"name": "3d-unity-topdown-camera"
+		}
+	],
+	"constructors": [
+		{
+			"slug": "character-view",
+			"name": "Character View"
+		},
+		{
+			"slug": "top-down",
+			"name": "Top-Down"
+		},
+		{
+			"slug": "isometric",
+			"name": "Isometric"
+		},
+		{
+			"slug": "side-view",
+			"name": "Side View"
+		},
+		{
+			"slug": "fixed-view",
+			"name": "Fixed Camera"
+		},
+		{
+			"slug": "free-view",
+			"name": "God / Free Camera"
+		}
+	],
+	"applications": [
+		{
+			"slug": "math-runner",
+			"name": "Math Runner"
+		},
+		{
+			"slug": "paintball",
+			"name": "KP Paintball Arena"
+		},
+		{
+			"slug": "arena",
+			"name": "Temnorid Arena"
+		},
+		{
+			"slug": "caravan-guard",
+			"name": "Temnorid Caravan Guard"
+		},
+		{
+			"slug": "conquest",
+			"name": "Temnorid Conquest"
+		},
+		{
+			"slug": "craft",
+			"name": "Temnorid Craft"
+		},
+		{
+			"slug": "detective",
+			"name": "Temnorid Detective"
+		},
+		{
+			"slug": "dungeons",
+			"name": "Temnorid Dungeons"
+		},
+		{
+			"slug": "escape",
+			"name": "Temnorid Escape"
+		},
+		{
+			"slug": "hippodrome",
+			"name": "Temnorid Hippodrome"
+		},
+		{
+			"slug": "legends",
+			"name": "Temnorid Legends"
+		},
+		{
+			"slug": "master",
+			"name": "Temnorid Master"
+		}
+	]
+}
