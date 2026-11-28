@@ -61,7 +61,10 @@ const usedBy = (slug) =>
 const anchor = (slug) => `#${slug.replace(/[^a-z0-9-]/g, '')}`;
 const link = (slug) => `[\`${slug}\`](${anchor(slug)})`;
 const list = (items) => items.map((item) => `- ${item}`).join('\n');
-const gitUrl = (slug) => `${orgUrl}/${slug}.git`;
+const gitUrl = (slug) => {
+	const tag = bySlug.get(slug)?.tag;
+	return `${orgUrl}/${slug}.git${tag ? `#${tag}` : ''}`;
+};
 
 const kindOf = (item) =>
 	item.packageId
@@ -127,7 +130,7 @@ ${item.summary}
 | | |
 |---|---|
 | Kind | ${kindOf(item)} |
-| Version | ${item.version || '-'} |
+| Version | ${item.version || '-'}${item.tag ? ` (tag \`${item.tag}\`)` : ''} |
 | Depends on | ${item.dependencies.length ? item.dependencies.map(link).join(', ') : 'nothing'} |
 | Used by | ${users.length ? users.map(link).join(', ') : 'nothing in the engine'} |
 | Repository | ${orgUrl}/${item.slug} |
@@ -140,7 +143,11 @@ ${item.summary}
 **Includes:**
 
 ${list(item.current)}
-${apiTable(item)}${exampleBlock(item)}
+${item.limits.length ? `
+**Known limits:**
+
+${list(item.limits)}
+` : ''}${apiTable(item)}${exampleBlock(item)}
 **Install:**
 
 ${install}
@@ -204,7 +211,7 @@ Each layer uses only the layers above it in this list. Game rules never go into 
 
 **Start a game from a starter repository.** Each constructor has one (\`${orgUrl}/3d-constructor-<style>\`, listed under Constructors). Clone it under your game name; its AGENTS.md walks you or your AI agent through creating the Unity project, the engine packages to add, and what to build first.
 
-**Add a package to an existing Unity project.** In Unity, \`Window › Package Manager › + › Add package from git URL\`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a published tag or full commit SHA, replacing the placeholder in \`${gitUrl('3d-unity-core')}#<tag-or-commit>\`.
+**Add a package to an existing Unity project.** In Unity, \`Window › Package Manager › + › Add package from git URL\`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. The URLs below are pinned to each package's release tag (\`#vX.Y.Z\`); a package without a tag yet has a plain URL, which follows \`master\`. Every package also declares its engine dependencies in \`package.json\`, so once the packages are on the OpenUPM registry (scope \`com.itkamianets\`, coming soon) Unity resolves the whole tree.
 
 **Recommended Unity version: 6000.6.8f1.** The engine packages and the games built on them are tested on this editor, so using it keeps your project aligned with them. It is a suggestion, not a requirement: any Unity 6000.6 editor works, and a different version is at your own risk.
 

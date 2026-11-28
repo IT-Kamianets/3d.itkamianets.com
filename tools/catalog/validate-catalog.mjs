@@ -30,6 +30,11 @@ for (const item of packages) {
 		!item.packageId || item.packageId === `com.itkamianets.${item.slug}`,
 		`Invalid package ID: ${item.slug}`,
 	);
+	assert(
+		item.tag === '' || item.tag === `v${item.version}`,
+		`Release tag must be empty or v${item.version}: ${item.slug}`,
+	);
+	assert(Array.isArray(item.limits), `Missing limits list: ${item.slug}`);
 	closure(item.slug);
 	for (const slug of item.related) assert(bySlug.has(slug), `Broken related link: ${slug}`);
 }
@@ -117,11 +122,19 @@ if (workspace) {
 const sources = argument('--sources');
 if (sources) {
 	let checked = 0;
+	const missing = [];
 	const assemblies = new Map();
 	const references = [];
 	for (const item of packages.filter((item) => item.packageId)) {
 		const directory = path.join(sources, item.slug);
-		const source = await json(path.join(directory, 'package.json'));
+		let source;
+		try {
+			source = await json(path.join(directory, 'package.json'));
+		} catch (error) {
+			if (error.code !== 'ENOENT') throw error;
+			missing.push(item.slug);
+			continue;
+		}
 		assert.equal(source.name, item.packageId);
 		assert.equal(source.version, item.version, `Stale version: ${item.slug}`);
 		checked++;
@@ -133,6 +146,8 @@ if (sources) {
 				/[\\/](Tests|Editor)[\\/]/i.test(file)
 			)
 				continue;
+			// An optional assembly compiles only when the package it references is installed.
+			if (assembly.defineConstraints?.length) continue;
 			assemblies.set(assembly.name, item.slug);
 			references.push({ slug: item.slug, refs: assembly.references ?? [] });
 		}
@@ -148,7 +163,7 @@ if (sources) {
 		}
 	}
 	console.log(
-		`Sources: ${checked} Unity package versions and named runtime assembly references checked`,
+		`Sources: ${checked} Unity package versions and named runtime assembly references checked${missing.length ? `; not checked out: ${missing.join(', ')}` : ''}`,
 	);
 }
 console.log(

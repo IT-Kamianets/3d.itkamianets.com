@@ -23,7 +23,7 @@ Each layer uses only the layers above it in this list. Game rules never go into 
 
 **Start a game from a starter repository.** Each constructor has one (`https://github.com/IT-Kamianets/3d-constructor-<style>`, listed under Constructors). Clone it under your game name; its AGENTS.md walks you or your AI agent through creating the Unity project, the engine packages to add, and what to build first.
 
-**Add a package to an existing Unity project.** In Unity, `Window › Package Manager › + › Add package from git URL`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. Pin a published tag or full commit SHA, replacing the placeholder in `https://github.com/IT-Kamianets/3d-unity-core.git#<tag-or-commit>`.
+**Add a package to an existing Unity project.** In Unity, `Window › Package Manager › + › Add package from git URL`, then paste the package's git URL. Add its dependencies first: each package below lists its install order. The URLs below are pinned to each package's release tag (`#vX.Y.Z`); a package without a tag yet has a plain URL, which follows `master`. Every package also declares its engine dependencies in `package.json`, so once the packages are on the OpenUPM registry (scope `com.itkamianets`, coming soon) Unity resolves the whole tree.
 
 **Recommended Unity version: 6000.6.8f1.** The engine packages and the games built on them are tested on this editor, so using it keeps your project aligned with them. It is a suggestion, not a requirement: any Unity 6000.6 editor works, and a different version is at your own risk.
 
@@ -56,7 +56,7 @@ Unity systems every 3D game needs.
 | [`3d-unity-input`](#3d-unity-input) | One set of input actions for keyboard and mouse, gamepad, touch and VR controllers. | `3d-unity-core` |
 | [`3d-unity-character`](#3d-unity-character) | A reusable character motor: walking, sprinting, jumping, crouching, slopes and steps, for any camera style. | `3d-unity-core` |
 | [`3d-unity-assets`](#3d-unity-assets) | Loads 3d-asset-schema assets by id in Unity: models, materials, textures and sounds, with placeholders. | `3d-unity-core`, `3d-unity-scene`, `3d-asset-schema` |
-| [`3d-unity-audio`](#3d-unity-audio) | Positional 3D sound, sound events with variations, footsteps by surface, volume groups and music. | `3d-unity-core`, `3d-unity-scene`, `3d-unity-assets`, `3d-unity-character` |
+| [`3d-unity-audio`](#3d-unity-audio) | Positional 3D sound, sound events with variations, footsteps by surface, volume groups and music. | `3d-unity-core`, `3d-unity-scene`, `3d-unity-assets` |
 
 ### Game kit
 
@@ -68,7 +68,7 @@ Building blocks for shipping a game: screens, saves, generated sounds, scene-bui
 | [`3d-unity-save`](#3d-unity-save) | Versioned local JSON save files: one slot per file, written safely, with a clear result for a missing, damaged or newer save. | - |
 | [`3d-unity-synth`](#3d-unity-synth) | Procedural sound: short clips built in code from waves and noise, and a sound board with volumes and a looping ambience, so a game needs no audio files. | - |
 | [`3d-unity-graybox`](#3d-unity-graybox) | Build a game's first playable from Unity primitives: stable asset ids on everything that will get a real model, Editor helpers for primitives, plain materials and world text, and the model step that turns tags into assetra.json slots and swaps finished models in. | `3d-asset-schema` |
-| [`3d-unity-shell`](#3d-unity-shell) | The screens every Temnorid game shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars. | `3d-unity-core`, `3d-unity-input`, `3d-unity-ui`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net` |
+| [`3d-unity-shell`](#3d-unity-shell) | The screens a family of games shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars. | `3d-unity-core`, `3d-unity-input`, `3d-unity-ui`, `3d-unity-account`, `3d-unity-update`, `3d-unity-net` |
 | [`3d-unity-account`](#3d-unity-account) | Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped Firestore access without the Firebase SDK. | `3d-unity-core` |
 | [`3d-unity-update`](#3d-unity-update) | Keeps a game on its newest GitHub release: checks for a new version and installs it silently on Windows. | - |
 | [`3d-unity-net`](#3d-unity-net) | A small multiplayer layer over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code. | - |
@@ -83,8 +83,8 @@ Editing tools, devices, platforms and services that only some games need.
 | [`3d-unity-spatial`](#3d-unity-spatial) | Turns a Meta Quest room scan into a scene, measures scanned rooms and builds them as solid geometry. | `3d-unity-core`, `3d-unity-scene` |
 | [`3d-unity-xr`](#3d-unity-xr) | VR for a character: a headset rig on a character motor, comfort settings, a VR/flat mode switch and world-space status. | `3d-unity-core`, `3d-unity-input`, `3d-unity-character` |
 | [`3d-unity-firebase`](#3d-unity-firebase) | Firebase over its REST API: sign-in, player profiles, saved progress and stored scenes. | `3d-unity-core`, `3d-unity-scene` |
-| [`3d-unity-assetra`](#3d-unity-assetra) | A shared library of 3D models for every game: browse and publish models in Assetra, with metadata read from Unity. | - |
-| [`3d-unity-network`](#3d-unity-network) | Real-time multiplayer on Netcode: sessions, server-authoritative characters, schema messages. | `3d-unity-core`, `3d-unity-character`, `3d-network-schema` |
+| [`3d-unity-assetra`](#3d-unity-assetra) | Connects a game to Assetra, the shared library of 3D models: sync the models a game needs, download the filled ones, and publish models with metadata read from Unity. | - |
+| [`3d-unity-network`](#3d-unity-network) | Deprecated: use 3d-unity-net. Real-time multiplayer on Netcode with sessions, server-authoritative characters and schema messages. | `3d-unity-core`, `3d-unity-character`, `3d-network-schema` |
 | [`3d-unity-combat`](#3d-unity-combat) | Generic combat: health with damage and death events, teams, projectiles, and melee cone and area attacks. | - |
 | [`3d-unity-feedback`](#3d-unity-feedback) | Cheap visual feedback for fights, made from primitives: pulses, rings, floor warnings and a health bar. | `3d-unity-combat` |
 | [`3d-unity-ai`](#3d-unity-ai) | Generic bots: notice a target, chase it over a NavMesh, attack, give up and patrol. | - |
@@ -680,7 +680,7 @@ Shared base for the engine's Unity packages: logging, player settings, typed eve
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-core` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | nothing |
 | Used by | [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-account`](#3d-unity-account), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-firebase`](#3d-unity-firebase), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-core |
@@ -693,7 +693,7 @@ Shared base for the engine's Unity packages: logging, player settings, typed eve
 **Includes:**
 
 - EngineLog: Debug, Info, Warning and Error lines prefixed with a category, such as [Network] Client 1 joined.
-- A minimum log level: Debug in the Editor and development builds, Info in release builds, changeable at runtime.
+- A minimum log level: Debug in the Editor and development builds, Info in release builds, changeable at runtime and reset when Play mode starts.
 - IEngineStorage for per-device player settings, with a PlayerPrefs implementation used by default.
 - Storage helpers for bool values and for objects saved as JSON with Unity's JsonUtility.
 - EngineEvents: typed publish and subscribe, where the event type is the channel.
@@ -710,7 +710,7 @@ Shared base for the engine's Unity packages: logging, player settings, typed eve
 | `storage.GetJson<T>(key, fallback) / SetJson<T>(key, value)` | Reads and writes an object as JSON using Unity's JsonUtility. |
 | `storage.GetBool(key, fallback) / SetBool(key, value)` | Reads and writes a bool stored as an int. |
 | `EngineEvents.Subscribe<T>(handler) / Unsubscribe<T>(handler)` | Adds or removes a handler for events of type T. |
-| `EngineEvents.Publish<T>(message)` | Calls every handler subscribed to T with the message. |
+| `EngineEvents.Publish<T>(message)` | Calls every handler subscribed to T with the message, without allocating per call. |
 | `EngineServices.Set<T>(service)` | Registers or replaces the service for type T; null removes it. |
 | `EngineServices.TryGet<T>(out service)` | Returns the registered service for T, or false if there is none. |
 
@@ -736,7 +736,7 @@ EngineServices.Set<IEngineStorage>(new MyCloudStorage());
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-core.git
+https://github.com/IT-Kamianets/3d-unity-core.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -752,7 +752,7 @@ Builds live Unity scenes from 3d-scene-schema JSON and saves them back to the sa
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-scene` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-scene-schema`](#3d-scene-schema) |
 | Used by | [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-spatial`](#3d-unity-spatial), [`3d-unity-firebase`](#3d-unity-firebase) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-scene |
@@ -769,8 +769,10 @@ Builds live Unity scenes from 3d-scene-schema JSON and saves them back to the sa
 - A SceneObject component on each object with its id, type, asset id and tags, including key:value tags such as team:a.
 - Double-sided surface meshes and mesh colliders from boundaries, with concave outlines triangulated; invisible walls get a collider only.
 - Box colliders from volumes, and trigger colliders for MARKER volumes such as objective zones.
-- Saving: moved objects get new transforms, removed and inactive ones are left out, and runtime objects with a SceneObject are added.
+- Saving: moved objects get new transforms relative to their parent SceneObject, removed and inactive ones are left out, runtime objects with a SceneObject are added, and SceneObjects that came inside an asset are not saved as objects of the document.
 - CoordinateConversion between the schema's right-handed space and Unity's left-handed space.
+- Fields this version does not know are kept and written back (Extra on the scene, objects, transforms and metadata), and a scene is saved in the schema version it was read in. A missing or newer-major schemaVersion is logged (SchemaVersions).
+- Surface meshes are destroyed with the scene; updatedAt is culture-invariant, the origin scale is kept, and a missing rotation means no rotation.
 
 **API:**
 
@@ -780,7 +782,7 @@ Builds live Unity scenes from 3d-scene-schema JSON and saves them back to the sa
 | `SceneLoadOptions` | Sets BuildSurfaces, SurfaceMaterial, BuildColliders, MarkerVolumesAsTriggers and AssetResolver. |
 | `LoadedScene.FindById(id)` | Returns the scene object with this id, or null. |
 | `LoadedScene.FindByTag(tag) / FindByType(type)` | Returns every object with this tag or this semantic type. |
-| `LoadedScene.Unload()` | Destroys the scene's GameObjects. |
+| `LoadedScene.Unload()` | Destroys the scene's GameObjects and the surface meshes it made. |
 | `SceneObject.HasTag(tag)` | Tells whether the object has a tag such as spawn. |
 | `SceneObject.TryGetTag(key, out value)` | Reads a key:value tag, so TryGetTag("team", out var team) gives a for team:a. |
 | `ISceneAssetResolver.Resolve(target)` | Called for every object with an asset id so another package can show its content. |
@@ -810,7 +812,7 @@ string saved = SceneSaver.CaptureJson(level);
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-scene.git
+https://github.com/IT-Kamianets/3d-unity-scene.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core`.
@@ -828,7 +830,7 @@ One set of input actions for keyboard and mouse, gamepad, touch and VR controlle
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-input` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
 | Used by | [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-shell`](#3d-unity-shell), [`3d-unity-interaction`](#3d-unity-interaction), [`3d-unity-xr`](#3d-unity-xr), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template), [`3d-unity-topdown-camera`](#3d-unity-topdown-camera) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-input |
@@ -847,10 +849,11 @@ One set of input actions for keyboard and mouse, gamepad, touch and VR controlle
 - XR: left stick moves, right stick turns, the dominant hand’s trigger is Primary and the other Secondary; head and hand poses come from an always-on XR map (TryReadHead, TryReadHandAim) and survive a device reset.
 - DominantHand, saved per player, swaps the triggers for left-handed players; Haptic buzzes a controller.
 - Every controller and every finger is also a UI pointer, so world-space canvases and multi-touch work.
-- Detection of the device kind in use (the scheme starts as Touch on phones), with a SchemeChanged event when the player switches.
+- Detection of the device kind in use (the scheme starts as Touch on phones and as XR on a Quest), with a SchemeChanged event when the player switches. Headset and controller poses never switch the scheme.
 - Look normalized to degrees: pointer movement per pixel, stick tilt per second, with optional inverted Y.
-- Interactive rebinding with Escape to cancel, saved to EngineStorage under input.bindings and loaded on start.
+- Interactive rebinding with Escape to cancel: the UI map is off while it listens, and the new binding stays in its own device group. Saved to EngineStorage under input.bindings and loaded on start.
 - Game-specific action maps added to the same asset at runtime.
+- Maps added with AddMap get the player's saved keys, and resetting the keys keeps the dominant hand.
 
 **API:**
 
@@ -898,7 +901,7 @@ input.AddMap("TemnoridArena", map =>
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-input.git
+https://github.com/IT-Kamianets/3d-unity-input.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core`.
@@ -917,9 +920,9 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-character` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
-| Used by | [`3d-unity-audio`](#3d-unity-audio), [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
+| Used by | [`3d-unity-xr`](#3d-unity-xr), [`3d-unity-network`](#3d-unity-network), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera), [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-vr-controls`](#3d-constructor-vr-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-character |
 | Page | https://3d.itkamianets.com/packages/3d-unity-character |
 
@@ -938,6 +941,8 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 - Events and values for other packages: Jumped, Landed, LeftGround, CrouchChanged, EyePosition, GroundCollider, Velocity, IsSprinting.
 - CharacterAnimator feeds the movement to the model’s Animator as Forward, Right, Speed, Grounded, Crouching and VerticalSpeed (parameters the controller lacks are skipped). It reads the motor’s state, so network copies animate too, and uses no root motion.
 - IAimSource: where a character aims (a VR hand, a turret barrel); gameplay asks the enabled one and falls back to its own default, such as the screen centre.
+- Speed on slopes does not depend on the frame rate, and CharacterAnimator runs after the motor each frame.
+- Resimulate steps the motor without raising events, for replaying commands after a network correction.
 
 **API:**
 
@@ -947,6 +952,7 @@ A reusable character motor: walking, sprinting, jumping, crouching, slopes and s
 | `CharacterCommand` | One step's intent: Move (world-space direction), Yaw, Sprint, Jump and Crouch. |
 | `SetCommand(command)` | Sets the command used by the next Update step. |
 | `Simulate(command, deltaTime)` | Advances the character by one step; used for fixed-tick and network stepping. |
+| `Resimulate(command, deltaTime)` | Steps like Simulate but raises no events, for replaying commands after a correction. |
 | `SimulateInUpdate` | When on (the default), the motor steps itself in Update; turn it off to drive it with a fixed tick. |
 | `ConsumeCommand()` | Returns the command set since the last call and clears its jump press, so a jump between two ticks is not lost. |
 | `Teleport(position, yaw)` | Moves the character instantly, for example to a spawn point, and clears its speed. |
@@ -977,7 +983,7 @@ motor.Teleport(spawn.position, spawn.eulerAngles.y);
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-character.git
+https://github.com/IT-Kamianets/3d-unity-character.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core`.
@@ -994,7 +1000,7 @@ Loads 3d-asset-schema assets by id in Unity: models, materials, textures and sou
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-assets` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-scene`](#3d-unity-scene), [`3d-asset-schema`](#3d-asset-schema) |
 | Used by | [`3d-unity-audio`](#3d-unity-audio) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-assets |
@@ -1012,20 +1018,28 @@ Loads 3d-asset-schema assets by id in Unity: models, materials, textures and sou
 - A placed model shows its placeholder (a shape and color sized to its bounds) until the real model replaces it.
 - An unknown asset or a model with no placeholder that fails to load shows a magenta stand-in and a warning.
 - Model materials listed in the library replace the model's own, in order.
-- Loaded assets are cached and shared; Unload, UnloadAll and a LoadFailed event.
+- Loaded assets are cached and shared; Unload, UnloadAll, and a LoadFailed event with a null result for every load that cannot start or finish (unknown kind, refused source, a failing handler, a bad download).
+- Reference counting: when the last object placed with Instantiate is destroyed, for example when its scene unloads, the model is freed (UnloadWhenUnused, on by default; ReferenceCount(id)).
+- Sources must stay inside the library folder or be https (AssetUris), and redefining an id drops what was loaded for it.
+- Library fields this version does not know are kept and written back (Extra); a missing or newer-major schemaVersion is logged.
+
+**Known limits:**
+
+- Reference counting covers models placed with Instantiate only: a prototype taken with Load<T>, and materials, textures and sounds, stay loaded until Unload or UnloadAll.
 
 **API:**
 
 | Member | What it does |
 |---|---|
 | `EngineAssets.Default` | The shared asset loader and the scene loader's ISceneAssetResolver. |
-| `LoadLibrary(path)` | Reads a library file from disk; its sources are relative to the file's folder. |
+| `LoadLibrary(path)` | Reads a library file from disk, with sources relative to its folder; URLs and jar: paths go to LoadLibraryFromUrl. |
 | `LoadLibraryFromUrl(url, done)` | Downloads a library over http(s) or a platform path such as StreamingAssets on Android. |
 | `AddLibrary(library, baseUri)` | Adds an already parsed AssetLibraryData; a later definition of the same id wins. |
 | `AddCatalog(catalog)` | Adds an AssetCatalog, checked before any file is loaded. |
 | `Load<T>(id, done)` | Loads an asset as a GameObject prototype, Material, Texture2D or AudioClip; calls done with null when it cannot. |
 | `Instantiate(id, parent, ready)` | Places a model right away, showing its placeholder until the model has loaded. |
-| `Unload(id) / UnloadAll()` | Frees loaded assets; objects already placed keep their copies. |
+| `Unload(id) / UnloadAll()` | Frees loaded assets; objects already placed keep their copies. Models placed with Instantiate are also freed with their last object. |
+| `UnloadWhenUnused / ReferenceCount(id)` | Frees a model when the last object placed with Instantiate is gone (on by default), and reads how many placed objects use it. |
 | `LoadFailed` | Event raised with the id and the reason when an asset cannot be loaded. |
 | `MaterialShader` | Shader for materials and placeholders, URP Lit by default; set it if builds strip that shader. |
 | `AssetCatalog (Assets > Create > IT-Kamianets > Asset Catalog)` | Maps asset ids to prefabs, materials, textures and AudioClips made in Unity. |
@@ -1047,7 +1061,7 @@ assets.Load<AudioClip>("sounds/footstep-stone-1", clip => source.PlayOneShot(cli
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-assets.git
+https://github.com/IT-Kamianets/3d-unity-assets.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-scene`.
@@ -1064,7 +1078,7 @@ Requirements:
 
 Optional:
 
-- glTFast (com.unity.cloud.gltfast) loads GLB and glTF models; without it models show their placeholders and a warning.
+- glTFast (com.unity.cloud.gltfast) 5.0.0 or newer loads GLB and glTF models; without it models show their placeholders and a warning.
 
 ### 3d-unity-audio
 
@@ -1073,8 +1087,8 @@ Positional 3D sound, sound events with variations, footsteps by surface, volume 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-audio` |
-| Version | 0.1.0 |
-| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-assets`](#3d-unity-assets), [`3d-unity-character`](#3d-unity-character) |
+| Version | 0.2.0 (tag `v0.2.0`) |
+| Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-scene`](#3d-unity-scene), [`3d-unity-assets`](#3d-unity-assets) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-audio |
 | Page | https://3d.itkamianets.com/packages/3d-unity-audio |
@@ -1090,8 +1104,9 @@ Positional 3D sound, sound events with variations, footsteps by surface, volume 
 - A name with no event plays the audio asset with that id through 3d-unity-assets.
 - Master volume and four groups (effects, music, voice, interface), applied without a mixer and saved per player through EngineStorage; playing sounds follow changes at once.
 - Music that crossfades between tracks and loops.
-- FootstepPlayer: footstep.<surface> every stride (longer when sprinting, quieter when crouching) and land.<surface> after a fall, louder for harder landings.
-- AudioSceneResolver turns audio assets placed in a scene into looping 3D sources and passes other assets to EngineAssets.
+- FootstepPlayer, with 3d-unity-character: footstep.<surface> every stride (longer when sprinting, quieter when crouching) and land.<surface> after a fall, louder for harder landings.
+- AudioSceneResolver turns audio assets placed in a scene into looping 3D sources that use their group's mixer and follow volume changes (RegisterAmbient), and passes other assets to EngineAssets.
+- Stop cancels a sound whose clip is still loading, music that finishes loading late is ignored, and looping sounds attached to a destroyed object stop.
 
 **API:**
 
@@ -1107,7 +1122,7 @@ Positional 3D sound, sound events with variations, footsteps by surface, volume 
 | `SetVolume(group, volume) / SetMasterVolume(volume)` | Sets and saves a volume from 0 to 1; playing sounds follow at once. |
 | `PlayMusic(name, fadeSeconds) / StopMusic(fadeSeconds)` | Crossfades to a looping music track, or fades the music out. |
 | `SetMixerGroup(group, mixerGroup)` | Routes a volume group through a group of the game's AudioMixer. |
-| `FootstepPlayer` | Component next to a CharacterMotor that plays footsteps and landings by surface. |
+| `FootstepPlayer` | Component next to a CharacterMotor that plays footsteps and landings by surface; in the optional Footsteps assembly, compiled only with 3d-unity-character. |
 | `AudioSurface / AudioSceneResolver` | Marks what a collider is made of; resolves audio assets placed in a scene into 3D sources. |
 
 **Example:**
@@ -1127,15 +1142,19 @@ var options = new SceneLoadOptions { AssetResolver = new AudioSceneResolver() };
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-audio.git
+https://github.com/IT-Kamianets/3d-unity-audio.git#v0.2.0
 ```
 
-Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-scene` → `3d-unity-assets` → `3d-unity-character`.
+Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-scene` → `3d-unity-assets`.
 
 Requirements:
 
 - Unity 6000.6
 - com.unity.modules.audio 1.0.0, resolved by the Package Manager
+
+Optional:
+
+- 3d-unity-character: with it, the optional ITKamianets.Engine.Audio.Footsteps assembly compiles FootstepPlayer; without it there are no footsteps.
 
 ## Game kit
 
@@ -1148,7 +1167,7 @@ Small helpers for building a game's screens in code with plain uGUI: panels, lab
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-ui` |
-| Version | 0.1.1 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-input`](#3d-unity-input) |
 | Used by | [`3d-unity-shell`](#3d-unity-shell) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-ui |
@@ -1165,8 +1184,8 @@ Small helpers for building a game's screens in code with plain uGUI: panels, lab
 - Bar returns its fill, which starts full; SetFill shows a fraction from 0 to 1.
 - Button colours (normal, highlighted, selected, pressed) and its font size are fields on the builder, set before building.
 - EnsureEventSystem: an event system whose point, click, scroll, navigate, submit and cancel actions come from EngineInput's UI map, so buttons answer to mouse, keyboard and gamepad.
-- SetText writes only when the text changed, Select highlights a screen's first button, and FormatTime gives minutes and seconds with a tenth, such as 1:05.3.
-- UiShapes: Circle makes a 128-pixel disc or ring sprite at run time, ScreenRect gives a rectangle's place on the screen in pixels, and Quit leaves the game (stops play mode in the editor).
+- SetText writes only when the text changed, Select highlights a screen's first button, and FormatTime gives minutes and seconds with a tenth, such as 1:05.3, rounded once and culture-invariant (1:00.0, never 0:60.0).
+- UiShapes: Circle makes each 128-pixel disc or ring sprite once at run time and reuses it, ScreenRect gives a rectangle's place on the screen in pixels, and Quit leaves the game (stops play mode in the editor).
 - LineDrawer: a polyline drawn on a panel from pooled rectangles, in panel units from 0 to 1, with a dot at its start.
 
 **API:**
@@ -1210,7 +1229,7 @@ trace.Set(new[] { new Vector2(0.1f, 0.1f), new Vector2(0.9f, 0.8f) });
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-ui.git
+https://github.com/IT-Kamianets/3d-unity-ui.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input`.
@@ -1228,7 +1247,7 @@ Versioned local JSON save files: one slot per file, written safely, with a clear
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-save` |
-| Version | 0.1.1 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-save |
@@ -1242,19 +1261,21 @@ Versioned local JSON save files: one slot per file, written safely, with a clear
 
 - SaveStore(gameId, rootDirectory, keepBackup): one file per slot at <persistent data path>/<gameId>/<slot>.json; rootDirectory replaces the persistent data path, which tests use to write to a temporary folder.
 - The file is an envelope with schemaVersion, gameId, slotId, savedAt, payloadVersion and payload, as in 3d-save-schema (SaveStore.SchemaVersion is 1).
-- Save writes a .tmp file first and then swaps it in, so a crash cannot leave half a save; it returns Ok or IoError.
-- Load<T> returns a SaveResult<T> with a Status (Ok, NotFound, Corrupt, UnsupportedVersion or IoError), a Value and a Message.
+- Save writes a .tmp file, flushes it to disk and then swaps it in, keeping the backup in the same step, so a crash cannot leave half a save; it returns Ok, InvalidId or IoError.
+- Load<T> never throws: it returns a SaveResult<T> with a Status (Ok, NotFound, Corrupt, UnsupportedVersion, PayloadMismatch, InvalidId or IoError), a Value and a Message.
 - A payload older than currentPayloadVersion goes through your migrate function (the old payload as a JToken, and its version); without one it is UnsupportedVersion. A newer payload or schema is UnsupportedVersion too, and the file is left alone.
 - A file that cannot be parsed is renamed to <slot>.corrupt-<time>.json, never deleted, and the result is Corrupt.
 - Optional keepBackup: each time a slot is replaced, the previous save is copied to <slot>.backup.json if it was readable; LoadBackup<T> reads it, and a damaged backup is reported as Corrupt and left where it is. Off by default.
 - Exists, BackupExists, PathFor, BackupPathFor and Delete; Delete removes the backup too.
+- A payload that does not fit the type, or a migration that throws, is PayloadMismatch, and the file stays in place. Date-like strings in a payload stay strings.
+- Game ids follow 3d-save-schema (^[a-z0-9][a-z0-9-]*$) and slot names must be safe file names; anything else is InvalidId. A save of another game is InvalidId and is left in place. schemaVersion is required and the payload must be a JSON object.
 
 **API:**
 
 | Member | What it does |
 |---|---|
-| `new SaveStore(gameId, rootDirectory, keepBackup)` | The slots of one game; throws if the game id is empty. rootDirectory and keepBackup are optional. |
-| `Save<T>(slot, payload, payloadVersion)` | Writes the slot safely and returns Ok or IoError. |
+| `new SaveStore(gameId, rootDirectory, keepBackup)` | The slots of one game; throws if the game id does not match ^[a-z0-9][a-z0-9-]*$. rootDirectory and keepBackup are optional. |
+| `Save<T>(slot, payload, payloadVersion)` | Writes the slot safely and returns Ok, InvalidId or IoError. |
 | `Load<T>(slot, currentPayloadVersion, migrate)` | Reads the slot into a SaveResult<T>; migrate upgrades an older payload. |
 | `LoadBackup<T>(slot, currentPayloadVersion, migrate)` | Reads the previous good save of a slot; needs keepBackup. |
 | `Exists(slot) / BackupExists(slot)` | Whether the slot or its backup file exists. |
@@ -1287,7 +1308,7 @@ else if (result.Status == SaveStatus.Corrupt)
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-save.git
+https://github.com/IT-Kamianets/3d-unity-save.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -1304,7 +1325,7 @@ Procedural sound: short clips built in code from waves and noise, and a sound bo
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-synth` |
-| Version | 0.1.0 |
+| Version | 0.1.0 (tag `v0.1.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-synth |
@@ -1360,7 +1381,7 @@ board.Play(0, 0.5f);                 // click
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-synth.git
+https://github.com/IT-Kamianets/3d-unity-synth.git#v0.1.0
 ```
 
 No engine packages to add first.
@@ -1376,7 +1397,7 @@ Build a game's first playable from Unity primitives: stable asset ids on everyth
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-graybox` |
-| Version | 0.2.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-asset-schema`](#3d-asset-schema) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-graybox |
@@ -1393,11 +1414,12 @@ Build a game's first playable from Unity primitives: stable asset ids on everyth
 - GrayboxBuilder.Box: a cube that keeps its collider, for floors, walls and anything to stand on or bump into.
 - GrayboxBuilder.Mat(name, colour, directory, smoothness): a plain URP Lit material of one colour, saved as <directory>/<name>.mat (Assets/Materials by default); running again updates the same asset.
 - GrayboxBuilder.Text: a line of text in the world (a TextMesh) for a sign or plaque, readable from its own -z side.
-- GrayboxBuilder.WorldTextMaterial(font, directory): the material world text is drawn with, saved as WorldText.mat in the material folder.
-- The Temnorid/WorldText shader: draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls.
+- GrayboxBuilder.WorldTextMaterial(font, directory): the material world text is drawn with, one per font, saved in the material folder as WorldText.mat for the built-in font and WorldText-<font>.mat for any other.
+- The ITKP/WorldText shader (GrayboxBuilder.WorldTextShader): draws a font texture depth-tested and without writing depth, so walls hide the text; the built-in font shader draws it through walls. Materials made before the rename keep working, since they point at the shader file.
 - ModelSlots.Update (Editor): adds a model slot to assetra.json for every tagged id, with bounds measured from its placeholder in the tag's own space, a placeholder colour and a brief to rewrite; it never removes or overwrites entries.
 - ModelSwap.Apply (Editor): puts each tag's finished model under it as a child named Model and switches the placeholder renderers off, keeping colliders, child transforms and gameplay; running it again changes nothing, and ModelSwap.Restore undoes it.
 - SwappedModel (runtime): the marker on a swapped-in model, with its id and source file.
+- Folders for materials are created through the AssetDatabase, parents included.
 
 **API:**
 
@@ -1408,7 +1430,8 @@ Build a game's first playable from Unity primitives: stable asset ids on everyth
 | `GrayboxBuilder.Box(parent, name, position, scale, material)` | A cube that keeps its collider. |
 | `GrayboxBuilder.Mat(name, colour, directory, smoothness)` | A one-colour URP Lit material saved as an asset and updated on later runs; smoothness is 0.12 by default. |
 | `GrayboxBuilder.Text(parent, name, text, localPosition, rotation, size, colour)` | A TextMesh line in the world, with the depth-tested material. |
-| `GrayboxBuilder.WorldTextMaterial(font, directory)` | The depth-tested material for world text, made once and reused. |
+| `GrayboxBuilder.WorldTextMaterial(font, directory)` | The depth-tested material for world text, one per font, made once and reused. |
+| `GrayboxBuilder.WorldTextShader` | The depth-tested world text shader of this package, ITKP/WorldText. |
 | `GrayboxBuilder.DefaultMaterialDirectory` | Assets/Materials, where materials are saved unless a folder is passed. |
 | `ModelSlots.Update(libraryPath, roots)` | Adds slots for the tagged ids under the roots to assetra.json and returns what was added. |
 | `ModelSwap.Apply(root)` | Swaps every tag under root whose model exists; the file comes from source.uri in assetra.json or Assets/Models/<id>.glb. |
@@ -1438,7 +1461,7 @@ GrayboxBuilder.Text(root, "Sign", "CELLS", new Vector3(0f, 2f, -5f),
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-graybox.git
+https://github.com/IT-Kamianets/3d-unity-graybox.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -1451,43 +1474,53 @@ Requirements:
 
 ### 3d-unity-shell
 
-The screens every Temnorid game shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars.
+The screens a family of games shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars.
 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-shell` |
-| Version | 0.2.2 |
+| Version | 0.4.0 (tag `v0.4.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-ui`](#3d-unity-ui), [`3d-unity-account`](#3d-unity-account), [`3d-unity-update`](#3d-unity-update), [`3d-unity-net`](#3d-unity-net) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-shell |
 | Page | https://3d.itkamianets.com/packages/3d-unity-shell |
 
-**Purpose.** Every Temnorid game follows the structure of the Lords app, so a player who knows one game knows them all. The shell owns those screens and their order. A game describes itself in a ShellConfig and adds its own places; it does not rebuild a menu.
+**Purpose.** Games of one family, such as the Temnorid games, share the structure of their menus, so a player who knows one game knows them all. The shell owns those screens and their order. A game describes itself in a ShellConfig (title, wording, colours, places) and adds its own places; it does not rebuild a menu. The shell holds no game's name, project or wording: a game family brings those in its own package.
 
-**Usage.** Fill ShellConfig.Current before any scene loads, in a method marked BeforeSceneLoad: title, GameId, Repo, MaxPlayers, GameScene, accent colour and Places. From the game's editor scene builder, call ShellSceneKit.BuildBoot, BuildMenu, SetBuildOrder and ApplyPlatformSettings. In the game scene, create ShellChrome once, handle PlaceSelected to show the content of each place, keep the HUD inside TopFraction and BottomFraction, and point the game's main menu button at ShellFlow.QuitToMenu. On phones, build a TouchButton for each thing the keyboard does.
+**Usage.** Fill ShellConfig.Current before any scene loads, in a method marked BeforeSceneLoad: title, GameId, Repo, MaxPlayers, GameScene, colours, AccountHint and Places. Set ShellIdentity.Source when the player's name comes from an account elsewhere, and ShellText.Translate or ShellText.Overrides to show the shell in the game's language. From the game's editor scene builder, call ShellSceneKit.BuildBoot, BuildMenu, SetBuildOrder and ApplyPlatformSettings. In the game scene, create ShellChrome once, handle PlaceSelected to show the content of each place, keep the HUD inside TopFraction and BottomFraction, and point the game's main menu button at ShellFlow.QuitToMenu. On phones, build a TouchButton for each thing the keyboard does.
 
 **Includes:**
 
-- ShellBoot (scene Boot): a splash with a turning ring, shown for at least 1.2 seconds while it restores the saved account and checks for a newer release. On Windows the new installer runs here, before anything else.
+- ShellBoot (scene Boot): a splash with a turning ring, shown for at least 1.2 seconds while it restores the saved account and checks for a newer release. On Windows the new installer runs here, before anything else, and a release that was tried before is not installed again.
 - ShellMenu (scene Menu): a landing screen with Play, Play with others, Profile and Quit (no Quit on phones), then sign-in, onboarding and the profile.
-- Sign-in, shown once when accounts are on: Google, guest or play offline. A player who signs in with Google skips onboarding, since the name comes from the account.
+- Sign-in, shown once when accounts are on: Google, guest or play offline, with the line from ShellConfig.AccountHint. A player whose name comes from the account skips onboarding. Guest and Back cancel a waiting Google sign-in, and the Google button is hidden where Google is not available.
 - Onboarding, once: a name of up to 16 characters and a colour from ShellConfig.PlayerColours (eight by default), saved in ShellProfile.
 - Lobby: host on this network or online with a short code, join by address or code, a roster with ready flags, and Start for the host once two or more players are all ready.
 - ShellChrome: a top bar with the game, the current place, a status line and who you are; place tabs in the top bar on desktop and in a bottom bar on phones; a Profile place always last, with name, colour, automatic updates, account and Check for updates.
 - ShellFlow: Boot to Menu to the game, solo or online, and back with QuitToMenu, which raises BeforeQuit so the game can save, then leaves any session.
-- ShellSceneKit, in the editor: builds the Boot and Menu scenes, sets the build order, applies Android and iOS settings, builds an Android apk or aab and exports an Xcode project.
+- ShellSceneKit, in the editor: builds the Boot and Menu scenes (asking to save an unsaved scene first), sets the build order from the paths the scenes were built at, applies Android and iOS settings (version code major*1000000 + minor*1000 + patch, orientation and architectures by choice), builds an Android apk or aab and exports an Xcode project. It copies the Google OAuth file from OauthSourcePath (~/.itkp/google-oauth-desktop.json by default) only when the game ignores it in git, and never over a different copy unless asked.
+- ShellIdentity: the game sets Source to read the player's name (and a class or role id) from its account service, so every game of a family shows the same name; that name is cleaned and read-only in Profile. Without a Source the player names themselves. Sign-out forgets it.
+- ShellText: every shell text goes through it, keyed by its English text. A game fills Overrides or sets Translate to show the shell in its own language or wording.
+- ShellConfig holds the colours (Accent, Background, Bar, Panel, PanelLight, Text and Muted) and AccountHint for the sign-in line. The defaults are neutral: the title Game and a blue accent.
+
+**Known limits:**
+
+- BuildBoot still copies the Google OAuth file as part of the build; it is not a separate step yet.
+- Some lines are built from pieces (such as " is available"), so ShellText must translate the pieces.
 
 **API:**
 
 | Member | What it does |
 |---|---|
-| `ShellConfig.Current` | What the game tells the shell: Title, Tagline, GameId, Repo, InstallerSuffix, StoreUrl, MaxPlayers, Accounts, Multiplayer, MenuScene, GameScene, Accent, Places and PlayerColours. |
+| `ShellConfig.Current` | What the game tells the shell: Title, Tagline, GameId, Repo, InstallerSuffix, StoreUrl, MaxPlayers, Accounts, Multiplayer, MenuScene, GameScene, the colours (Accent, Background, Bar, Panel, PanelLight, Text, Muted), AccountHint, Places and PlayerColours. |
+| `ShellIdentity.Source` | Set by the game: reads the signed-in player's name and class id from the game's account service. Without it the player names themselves. |
+| `ShellText.T(english) / Overrides / Translate / Changed` | Every shell text by its English text: Overrides first, then Translate; anything neither answers stays English. Changed tells open screens to redraw. |
 | `ShellChrome.Create(parent, sortingOrder)` | Creates the top bar and place tabs in the game scene. TopFraction and BottomFraction say how much of the screen height they take. |
 | `ShellChrome.PlaceSelected / Select(id) / SetStatus(text)` | Raised when a tab is chosen; Select picks a place from code, and SetStatus writes a short line, such as a score, in the top bar. |
-| `ShellFlow.PlaySolo() / LoadGame() / LoadMenu() / QuitToMenu()` | Moves between the Menu and the game scene. QuitToMenu raises BeforeQuit and closes any session. |
+| `ShellFlow.PlaySolo() / LoadGame(scene) / LoadMenu() / QuitToMenu()` | Moves between the Menu and the game scene. QuitToMenu raises BeforeQuit and closes any session. |
 | `ShellProfile.Current` | The saved name, colour and automatic-update choice of the player on this device. Save writes it and gives NetSession the name and colour. |
 | `TouchButton.Create(ui, parent, label, min, max)` | An on-screen button with Held and ConsumePress, read like a key. IsNeeded is true on phones and tablets. |
-| `ShellSceneKit.BuildBoot() / BuildMenu() / SetBuildOrder(...) / ApplyPlatformSettings(...)` | Editor only: writes the Boot and Menu scenes, sets the build order, and applies the company, product, application id, version and Android and iOS settings. |
+| `ShellSceneKit.BuildBoot() / BuildMenu() / SetBuildOrder(...) / ApplyPlatformSettings(...) / OauthSourcePath` | Editor only: writes the Boot and Menu scenes, sets the build order, and applies the company, product, application id, version and Android and iOS settings. OauthSourcePath is where the Google OAuth file is copied from. |
 
 **Example:**
 
@@ -1508,12 +1541,14 @@ public static class MyGameShell
             Repo = "WebArtWork/hippodrome.temnorid.com",
             MaxPlayers = 4,
             GameScene = "Main",
+            Accent = new Color(0.85f, 0.65f, 0.2f),
             Places =
             {
                 new ShellPlace("race", "Race", "R"),
                 new ShellPlace("records", "Records", "T"),
             },
         };
+        ShellText.Overrides["Play"] = "Race";   // the shell in the game's own words
     }
 }
 
@@ -1527,7 +1562,7 @@ mainMenuButton.onClick.AddListener(ShellFlow.QuitToMenu);
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-shell.git
+https://github.com/IT-Kamianets/3d-unity-shell.git#v0.4.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-ui` → `3d-unity-account` → `3d-unity-update` → `3d-unity-net`.
@@ -1545,39 +1580,49 @@ Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-account` |
-| Version | 0.2.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core) |
 | Used by | [`3d-unity-shell`](#3d-unity-shell) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-account |
 | Page | https://3d.itkamianets.com/packages/3d-unity-account |
 
-**Purpose.** GameAccount restores saved Firebase sessions, supports guest and Google sign-in, and provides valid ID tokens. Set GameAccount.Config for your own project; FirebaseConfig.Temnorid is the built-in default, not a requirement. Offline and signed-out play are valid states.
+**Purpose.** GameAccount restores saved Firebase sessions, supports guest and Google sign-in, and provides valid ID tokens. It ships no Firebase project: GameAccount.Config starts empty, and each game sets its own with FirebaseConfig.Create(apiKey, projectId) before signing in. Offline and signed-out play are valid states.
 
 **Usage.** Call GameAccount.RestoreAsync() at start to bring back the last player. Offer SignInAsGuestAsync() and, where GoogleAvailable is true, SignInWithGoogleAsync(). Read Uid, DisplayName, Email and IsGuest, and listen to Changed. For Firebase calls of your own, await GetIdTokenAsync(). FirestoreClient.ForAccount() reads a document with GetAsync and changes chosen fields of an existing one with PatchAsync. Google sign-in on desktop needs the Desktop OAuth client file at Assets/Resources/account-oauth.json, which each game keeps out of git.
 
 **Includes:**
 
 - GameAccount: static sign-in state (IsSignedIn, Uid, DisplayName, Email, IsGuest, LastError, Busy) and a Changed event.
+- Until a game sets its project, IsConfigured is false, sign-in answers that accounts are not set up, and the game plays offline.
 - Guest: SignInAsGuestAsync() makes an anonymous Firebase user, with nothing to type.
-- Google on desktop: the browser opens, Google redirects to a one-shot listener on 127.0.0.1, the code is exchanged with PKCE, and Firebase signs the player in. It gives up after three minutes.
-- A guest who signs in with Google keeps the same uid, so progress is not lost.
+- Google on desktop: the browser opens, Google redirects to a one-shot listener on 127.0.0.1, the code is exchanged with PKCE, and Firebase signs the player in. It gives up after three minutes, CancelSignIn() gives up sooner, and the listener ignores requests without the matching state.
+- A guest who signs in with Google keeps the same uid, so progress is not lost. If that Google account already belongs to another player, the player signs in to that account; without a fresh guest token the link is refused instead of silently signing in unlinked.
 - Restore and refresh: RestoreAsync() shows the remembered player at once from EngineStorage, and GetIdTokenAsync() refreshes the token when it is about to expire.
 - SignOut() forgets this device's session; DeleteAccountAsync() deletes the Firebase user itself.
 - FirestoreClient: GetAsync(path) and PatchAsync(path, data, fieldPaths, updateTime) as the signed-in player, over REST.
 - FirestoreRest: pure functions for addresses, patch bodies and Firestore's typed values to and from a Newtonsoft JToken.
+- Sessions stay consistent: refreshes run one at a time, any HTTP 400 from the token service ends the saved session and raises Changed, and sign-out drops answers still on their way.
+- On Windows the saved refresh token is encrypted with DPAPI (TokenProtector); tokens saved as plain text by older versions are still read.
+
+**Known limits:**
+
+- The saved refresh token is encrypted on Windows only (DPAPI); Android Keystore and iOS Keychain are still open.
+- Google sign-in works on desktop only; phones offer the guest.
+- The OAuth client file ships inside every build, phone builds included.
 
 **API:**
 
 | Member | What it does |
 |---|---|
-| `GameAccount.Config` | Set your FirebaseConfig before restoring a session or signing in. Google desktop sign-in also needs your Desktop OAuth client configuration. |
+| `GameAccount.Config` | Empty until the game sets it with FirebaseConfig.Create(apiKey, projectId); IsConfigured says whether it is set. Google desktop sign-in also needs your Desktop OAuth client file. |
 | `GameAccount.RestoreAsync()` | Brings back the last player from saved tokens and refreshes them. Safe to call on every start. |
 | `GameAccount.SignInAsGuestAsync() / SignInWithGoogleAsync()` | Signs in as a guest or through the browser with Google, and returns whether it worked. LastError says why not. |
+| `GameAccount.CancelSignIn()` | Gives up a Google sign-in that is still waiting for the browser. |
 | `GameAccount.IsSignedIn / Uid / DisplayName / Email / IsGuest / Changed` | Who is signed in on this device, and an event for when that changes. |
 | `GameAccount.GetIdTokenAsync()` | A valid Firebase ID token for other calls, refreshed when needed. Null when signed out or offline. |
 | `GameAccount.SignOut() / DeleteAccountAsync()` | Forgets this device's session, or deletes the Firebase user. |
 | `FirestoreClient.ForAccount()` | A client for the signed-in player. GetAsync(path) returns a FirestoreDocument; PatchAsync changes chosen fields of an existing one. |
-| `FirebaseConfig` | The Firebase project and the Google Desktop OAuth client. FirebaseConfig.Temnorid is the project Lords uses. |
+| `FirebaseConfig.Create(apiKey, projectId)` | A game's Firebase project, with the Google Desktop OAuth client read from its file. The engine ships none. |
 
 **Example:**
 
@@ -1585,7 +1630,8 @@ Guest and Google sign-in over Firebase REST, saved sessions, and account-scoped 
 using ITKamianets.Engine.Account;
 using Newtonsoft.Json.Linq;
 
-// Set GameAccount.Config to your Firebase project configuration first.
+// Each game names its own Firebase project: the engine ships none.
+GameAccount.Config = FirebaseConfig.Create("<web api key>", "<project id>");
 await GameAccount.RestoreAsync();
 if (!GameAccount.IsSignedIn) await GameAccount.SignInAsGuestAsync();
 
@@ -1607,7 +1653,7 @@ if (result.Ok)
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-account.git
+https://github.com/IT-Kamianets/3d-unity-account.git#v0.3.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core`.
@@ -1626,7 +1672,7 @@ Keeps a game on its newest GitHub release: checks for a new version and installs
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-update` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | nothing |
 | Used by | [`3d-unity-shell`](#3d-unity-shell) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-update |
@@ -1640,10 +1686,19 @@ Keeps a game on its newest GitHub release: checks for a new version and installs
 
 - AutoUpdater and its states: Idle, Checking, UpToDate, Available, Downloading, Installing and Failed.
 - Check() reads releases/latest from the GitHub API, with an 8 second timeout by default, and compares its tag with Application.version. Drafts and pre-releases are ignored.
-- Windows: Install() downloads the asset ending with -Setup.exe to the temporary folder, runs it with /SILENT /SUPPRESSMSGBOXES /NOCANCEL /CLOSEAPPLICATIONS and quits. Without such an asset the release page opens.
+- Windows: Install() downloads the asset ending with -Setup.exe to a private Updates folder, checks it, runs it with /SILENT /SUPPRESSMSGBOXES /NOCANCEL /CLOSEAPPLICATIONS and quits. Without such an asset, or when the installer cannot be started, the release page opens.
+- The installer is checked before it runs: a github.com release URL of this repository only, a plain file name, the size and the SHA-256 digest GitHub reports, and with RequiredPublisher a valid Authenticode signature. Anything that cannot be checked opens the release page instead, and the file stays locked until the installer starts.
+- Downloads stop when they stall (StallSeconds), Cancel() stops one, and leaving or destroying the updater aborts it.
 - Android opens StoreUrl, or the .apk of the release, or the release page. iOS and other platforms open StoreUrl or the release page.
 - ReleaseInfo: the parts of a GitHub release it needs (tag, name, notes, page and assets), read with JsonUtility, and FindAsset(suffix).
-- SemVer: reads v1.2.3, 1.2 or 1.2.3-beta and compares the three numbers. A tag that cannot be read is never newer.
+- SemVer: reads v1.2.3, 1.2 or 1.2.3-beta and compares the three numbers; 1.0.0 is newer than 1.0.0-beta. A tag that cannot be read is never newer.
+- A release that was tried once is not installed again on every start (CanInstallQuietly). Requests send AutoUpdater.UserAgent, ITKP-Updater by default.
+
+**Known limits:**
+
+- The signature check is opt-in (RequiredPublisher) until the installers are signed.
+- The installer runs only when its GitHub release asset carries a SHA-256 digest; without one the release page opens.
+- Where the scripting backend cannot start a process, the release page opens instead of the silent install.
 
 **API:**
 
@@ -1652,6 +1707,7 @@ Keeps a game on its newest GitHub release: checks for a new version and installs
 | `AutoUpdater.Repo / WindowsAssetSuffix / AndroidAssetSuffix / StoreUrl / TimeoutSeconds` | Where the releases are and how to recognise the installer. The suffixes default to -Setup.exe and .apk. |
 | `AutoUpdater.Check()` | Asks GitHub for the latest release. Safe to call again; a check or download already running is left alone. |
 | `AutoUpdater.Install()` | Moves the player to the new version. Does nothing unless State is Available. |
+| `AutoUpdater.RequiredPublisher / StallSeconds / UserAgent / Cancel()` | The Authenticode publisher an installer must be signed by (empty means no signature check), how long a stalled download may wait, the User-Agent of GitHub requests, and stopping a download. |
 | `AutoUpdater.State / Latest / Progress / Error / Changed` | Where the update is, the release found, the download progress from 0 to 1, a failure message, and an event for each change. |
 | `SemVer.IsNewer(latest, current)` | True when the first version is higher than the second, for tags such as v0.4.0. |
 | `ReleaseInfo.FromJson(json) / FindAsset(suffix)` | Reads a GitHub release, or null if it is not one, and finds the first asset whose name ends with the suffix. |
@@ -1680,7 +1736,7 @@ bool newer = SemVer.IsNewer("v0.4.0", Application.version);
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-update.git
+https://github.com/IT-Kamianets/3d-unity-update.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -1698,7 +1754,7 @@ A small multiplayer layer over Netcode for GameObjects for games that build thei
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-net` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | nothing |
 | Used by | [`3d-unity-shell`](#3d-unity-shell) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-net |
@@ -1710,14 +1766,16 @@ A small multiplayer layer over Netcode for GameObjects for games that build thei
 
 **Includes:**
 
-- HostDirect() opens a game on this machine (port 7777) and JoinDirect(address) joins it. LocalAddress() gives the address to share.
+- HostDirect() opens a game on this machine (port 7777) and JoinDirect(address) joins it, also as host:port or [ipv6]:port. LocalAddress() gives the address to share.
 - HostOnlineAsync() and JoinOnlineAsync(code) do the same through Unity Relay with a short code, so no port has to be opened. Without a linked Unity Cloud project they fail with a plain message and direct play still works.
 - Roster: Players with name, colour and ready flag, SetReady, AllReady and StartGame(scene, seed), which closes the game to newcomers and tells everyone to load the scene with a shared seed.
 - Joining is checked on the host: same GameId and same major.minor version, the game not full and not started.
-- Events: Send(name, payload) and On(name, handler). A client's event reaches the host, which raises it and passes it on, except names starting with host. SendTo sends to one player from the host.
+- Events: Send(name, payload) and On(name, handler). A client's event reaches the host, which raises it and passes it on, except names starting with host. SendTo sends to one player from the host. Names starting with net. are reserved: the host drops them from clients, and clients accept them only from the host.
 - Poses: PublishPose(NetPose) with position, yaw, speed, a state and two numbers of the game's own. Others read TryGetPose(id) and show it with RemoteBody.
 - Entities: the host calls PublishEntities(list) for what it simulates, in batches of 28. Clients read Entities, EntityUpdated and EntityGone, and RemoveEntity(id) tells everyone one is gone.
 - RemoteBody eases an object toward the last pose or entity state, and snaps to it when the jump is more than 12 metres.
+- Clients raise PlayerLeft and drop the leaver's pose when the roster shrinks, and a removed entity is not brought back by a late snapshot (GoneSeconds).
+- Leaving while an online host or join is still being made closes the Relay session, and a second host or join is refused while one runs. The host notices its game dying (server stopped, transport failure, return from pause), and a destroyed session leaves and destroys its own NetworkManager.
 
 **API:**
 
@@ -1759,7 +1817,7 @@ if (net.TryGetPose(other, out var pose)) remote.Apply(pose);   // remote is a Re
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-net.git
+https://github.com/IT-Kamianets/3d-unity-net.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -2073,12 +2131,12 @@ Requirements:
 
 ### 3d-unity-assetra
 
-A shared library of 3D models for every game: browse and publish models in Assetra, with metadata read from Unity.
+Connects a game to Assetra, the shared library of 3D models: sync the models a game needs, download the filled ones, and publish models with metadata read from Unity.
 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-assetra` |
-| Version | 0.1.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-assetra |
@@ -2090,11 +2148,19 @@ A shared library of 3D models for every game: browse and publish models in Asset
 
 **Includes:**
 
-- Window > Assetra: lists your assets and publishes the selected model or prefab.
+- Window > Assetra > Project sync: sends the game's assetra.json to its Assetra project and downloads the models filled there into their source paths, never overwriting a file or writing outside the repository.
+- Push local models to waiting placeholders: uploads the GLB of every empty placeholder (up to 7 MB), adds it to the library with CreateModelAsync and fills the placeholder. Needs an admin account; filled placeholders are never touched.
+- Collections lists the library's collections, and Publish a model lists your assets and publishes the selected model or prefab.
 - ModelMetadataExtractor: triangles, vertices, meshes and LODs, bones, animation clips, blend shapes, materials, texture maps, texture resolution, PBR workflow and real-world dimensions.
 - Source details read from the project: file size, format, render pipeline, Unity version and the game the model came from, kept as a game:<name> tag.
 - AssetraProduct and AssetraDetails: the same fields as an Assetra asset; fields Unity cannot know are left out instead of sent as zeros.
-- AssetraClient: list, get, create or replace and delete assets through /api/assetra/asset, and file upload through /api/cloudflare.
+- AssetraClient: assets, projects, sync, placeholders, models and collections through /api/assetra, and file upload through /api/cloudflare.
+- Sign in with Google inside the editor: PKCE through a Desktop OAuth client, turned into a Firebase ID token of the Assetra project and refreshed from a saved token. The client id and secret stay in the developer's editor preferences, never in the project.
+
+**Known limits:**
+
+- Not yet tried against the live API with a real Google sign-in.
+- Files are limited to 7 MB until direct upload is wrapped.
 
 **API:**
 
@@ -2106,6 +2172,8 @@ A shared library of 3D models for every game: browse and publish models in Asset
 | `DeleteAsync(slug)` | Deletes one of your assets. |
 | `UploadAsync(data, name, mime)` | Uploads a file to Cloudflare and returns its public URL. |
 | `ModelMetadataExtractor.Extract(gameObject)` | Reads a model or prefab and returns an AssetraProduct with every field Unity can fill. |
+| `AssetraSync.RunAsync(client, path, prune, download)` | Editor: sends assetra.json to its project and downloads the filled models; prune (off by default) deletes placeholders the file no longer lists, never models. |
+| `CreateModelAsync(model)` | Adds a model to the library; admin only. |
 
 **Example:**
 
@@ -2124,7 +2192,7 @@ var mine = await client.ListAsync();
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-assetra.git
+https://github.com/IT-Kamianets/3d-unity-assetra.git#v0.3.0
 ```
 
 No engine packages to add first.
@@ -2137,12 +2205,12 @@ Requirements:
 
 ### 3d-unity-network
 
-Real-time multiplayer on Netcode: sessions, server-authoritative characters, schema messages.
+Deprecated: use 3d-unity-net. Real-time multiplayer on Netcode with sessions, server-authoritative characters and schema messages.
 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-network` |
-| Version | 0.1.0 |
+| Version | 0.1.1 (tag `v0.1.1`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-character`](#3d-unity-character), [`3d-network-schema`](#3d-network-schema) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-network |
@@ -2161,6 +2229,10 @@ Real-time multiplayer on Netcode: sessions, server-authoritative characters, sch
 - Other players shown 3 ticks in the past, interpolated between server results; owner-only components switched off on their copies.
 - SessionChannel: the session in 3d-network-schema form with gapless seq numbers, joins, leaves, state changes, teams and game events.
 - Results and replays: End(result) sends session.ended, and the server records a replay from the moment the session runs.
+
+**Known limits:**
+
+- Deprecated: no game uses it and there is no new work here. New games use 3d-unity-net.
 
 **API:**
 
@@ -2200,7 +2272,7 @@ string replay = NetworkJson.Serialize(session.Messages.CreateReplay());
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-network.git
+https://github.com/IT-Kamianets/3d-unity-network.git#v0.1.1
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-character`.
@@ -2218,7 +2290,7 @@ Generic combat: health with damage and death events, teams, projectiles, and mel
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-combat` |
-| Version | 0.2.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | nothing |
 | Used by | [`3d-unity-feedback`](#3d-unity-feedback) |
 | Repository | https://github.com/IT-Kamianets/3d-unity-combat |
@@ -2230,13 +2302,14 @@ Generic combat: health with damage and death events, teams, projectiles, and mel
 
 **Includes:**
 
-- Health: hit points that start full, with MaxHealth, Current, Fraction (0 to 1, for a bar), IsAlive, Heal and Restore.
+- Health: hit points that start full, with MaxHealth, Current, Fraction (0 to 1, for a bar), IsAlive, Heal, Restore and SetMax(value, refill); the maximum is never below 1.
 - ApplyDamage(DamageInfo) answers Damaged, Killed or Ignored; Damaged is raised after a hit that does not kill and Died once, when health reaches zero.
 - DamageInfo carries the amount, an optional source object, the hit point and a free-form type label such as melee or fire.
 - Teams are plain numbers chosen by the game; attacks skip targets on the attacker's own team and targets that are already dead.
 - CombatQueries: DamageInCone is a melee swing judged on the ground plane, DamageInRadius an area attack, and FindInCone and FindInRadius return the targets without hurting them. Each target is hit once per attack.
 - Projectile.Launch starts a straight-flying projectile that hurts the first enemy it meets, flies through its own team and the dead, and is destroyed on the world or after its range.
-- IDamageable describes the same contract as an interface, for targets that are not a Health.
+- IDamageable describes the same contract as an interface for a game's own targets; queries and projectiles find targets by Health.
+- Projectiles share one material per colour and use a non-allocating cast, with a hit point fallback.
 
 **API:**
 
@@ -2245,13 +2318,14 @@ Generic combat: health with damage and death events, teams, projectiles, and mel
 | `Health` | Hit points of anything that can be hurt, with MaxHealth, Team, Current, Fraction and IsAlive. |
 | `Health.ApplyDamage(DamageInfo)` | Lowers health and returns Ignored (already dead or no damage), Damaged or Killed. |
 | `Health.Heal(amount) / Restore()` | Heal adds health up to the maximum and does nothing to the dead; Restore brings the character back to full health, alive again. |
+| `Health.SetMax(value, refill)` | Changes the maximum, never below 1, and with refill fills health up to it. |
 | `Health.Damaged / Health.Died` | Events raised with the Health and the DamageInfo: Damaged after a hit that does not kill, Died once when health reaches zero. |
 | `DamageInfo` | One hit: Amount, Source, Point and a Type label the game can use to tell kinds of damage apart. |
 | `CombatQueries.DamageInCone(origin, forward, range, halfAngle, team, info)` | A melee swing that hurts every enemy in range and within the half-angle on the ground plane, and returns how many were hit. |
 | `CombatQueries.DamageInRadius(center, radius, team, info)` | An area attack that hurts every enemy in the radius and returns how many were hit. |
 | `CombatQueries.FindInCone(...) / FindInRadius(...)` | Return the targets without hurting them, for aiming or a telegraph; the returned list is reused by the next query. |
 | `Projectile.Launch(origin, direction, speed, range, radius, team, info, colour, visual)` | Starts a straight-flying projectile; with no visual it is a small sphere of the given colour. The Hit event is raised when it hurts someone. |
-| `IDamageable` | Team, IsAlive and ApplyDamage as an interface, for targets that are not a Health. |
+| `IDamageable` | Team, IsAlive and ApplyDamage as an interface for a game's own targets; queries and projectiles look for Health. |
 
 **Example:**
 
@@ -2270,7 +2344,7 @@ Projectile.Launch(muzzle.position, hero.transform.forward, 18f, 25f, 0.25f, heal
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-combat.git
+https://github.com/IT-Kamianets/3d-unity-combat.git#v0.3.0
 ```
 
 No engine packages to add first.
@@ -2287,7 +2361,7 @@ Cheap visual feedback for fights, made from primitives: pulses, rings, floor war
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-feedback` |
-| Version | 0.1.0 |
+| Version | 0.1.1 (tag `v0.1.1`) |
 | Depends on | [`3d-unity-combat`](#3d-unity-combat) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-feedback |
@@ -2329,7 +2403,7 @@ bar.Height = 2.4f;
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-feedback.git
+https://github.com/IT-Kamianets/3d-unity-feedback.git#v0.1.1
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-combat`.
@@ -2345,7 +2419,7 @@ Generic bots: notice a target, chase it over a NavMesh, attack, give up and patr
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-ai` |
-| Version | 0.2.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-ai |
@@ -2360,10 +2434,11 @@ Generic bots: notice a target, chase it over a NavMesh, attack, give up and patr
 - AiTarget marks what bots may hunt: a team number, an Alive flag the game keeps up to date and an eye height.
 - AiAgent notices the nearest living AiTarget of another team inside SenseRadius, and walls block the view when RequireLineOfSight is on.
 - It chases the target over the NavMesh, and inside AttackRange it stops, turns to face the target and raises AttackRequested every AttackCooldown seconds.
-- It gives up when the target is dead or further than LoseRadius for LoseSeconds, then goes back home or on to its patrol points.
+- It drops a target that dies at once, and gives up on one further than LoseRadius for LoseSeconds, then goes back home or on to its patrol points.
 - Ranged attackers use AttackNeedsSight to close in until they see the target, and MinDistance to step back while still attacking (state Retreat).
 - States are Idle, Patrol, Chase, Attack, Retreat and Dead; Stop switches the bot off, and ResetMind forgets the target after a respawn.
 - Bots think on a staggered TickInterval (0.2 s by default), not every frame, so many bots stay cheap.
+- AiHealthLink, an optional assembly compiled only with 3d-unity-combat, keeps AiTarget.Alive and the teams in step with Health and stops a dead agent.
 
 **API:**
 
@@ -2373,12 +2448,13 @@ Generic bots: notice a target, chase it over a NavMesh, attack, give up and patr
 | `AiAgent.Team / SenseRadius / LoseRadius / LoseSeconds` | Who the bot is and how far it notices a target (12 m) and loses it (20 m, after 3 seconds). |
 | `AiAgent.RequireLineOfSight / SightBlockers` | When on (the default), walls on the SightBlockers layers stop the bot from noticing a target through them. |
 | `AiAgent.AttackRange / AttackCooldown` | The bot stops and asks to attack inside this ground distance (1.8 m), at most once per cooldown (1.2 s). |
-| `AiAgent.AttackNeedsSight / MinDistance` | For ranged attackers: attack only a target in sight, and step back while the target is closer than MinDistance. |
+| `AiAgent.AttackNeedsSight / MinDistance` | For ranged attackers: attack only a target in sight, also with RequireLineOfSight off, and step back while the target is closer than MinDistance. |
 | `AiAgent.TickInterval` | How often the bot looks around and replans, in seconds; higher is cheaper. |
 | `AiAgent.PatrolPoints / PatrolWait` | Points the bot walks in a loop when nothing is happening, waiting at each. |
 | `AiAgent.AttackRequested` | Raised with the agent and its target when the bot is in range and ready; do the damage in the handler. |
 | `AiAgent.State / Target / Nav` | The current AiState, the target Transform (or null) and the NavMeshAgent. |
 | `AiAgent.Stop() / ResetMind()` | Stop switches the bot off for good; ResetMind forgets the target and returns to Idle. |
+| `AiHealthLink` | With 3d-unity-combat: put it next to a Health, an AiTarget and an AiAgent to keep Alive and the team in step with Health and stop the agent when it dies. |
 
 **Example:**
 
@@ -2402,7 +2478,7 @@ player.AddComponent<AiTarget>().Team = 1;
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-ai.git
+https://github.com/IT-Kamianets/3d-unity-ai.git#v0.3.0
 ```
 
 No engine packages to add first.
@@ -2413,6 +2489,10 @@ Requirements:
 - com.unity.modules.ai 1.0.0, resolved by the Package Manager
 - com.unity.modules.physics 1.0.0, resolved by the Package Manager
 
+Optional:
+
+- 3d-unity-combat: with it, the optional AiHealthLink assembly keeps AiTarget.Alive and the teams in step with Health.
+
 ### 3d-unity-inventory
 
 Item containers: stackable items by id, slot and stack limits, transfers, and portable inventory data.
@@ -2420,7 +2500,7 @@ Item containers: stackable items by id, slot and stack limits, transfers, and po
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-inventory` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-inventory |
@@ -2438,7 +2518,7 @@ Item containers: stackable items by id, slot and stack limits, transfers, and po
 - Transfer and TransferAll move items from one container to another, as many as fit, and raise Changed on both.
 - Count, SpaceFor, UsedSlots, TotalItems, IsEmpty and Items() read the contents, and Changed tells a UI when to redraw.
 - ToData and FromData convert to InventoryData, which has the same fields as 3d-inventory-schema.
-- Loading is forgiving: invalid entries are skipped and what does not fit is dropped, so a damaged save cannot break the container.
+- Loading is forgiving: invalid entries are skipped and what does not fit is dropped, so a damaged save cannot break the container. Data from a newer schema leaves the container empty, and LoadProblem says why.
 
 **API:**
 
@@ -2453,7 +2533,7 @@ Item containers: stackable items by id, slot and stack limits, transfers, and po
 | `ItemContainer.UsedSlots / TotalItems / IsEmpty / Items()` | Read the contents; Items() gives totals per item in the order they first appear. |
 | `ItemContainer.Clear()` | Empties every slot. |
 | `ItemContainer.Changed` | Raised after any change to the contents, including loading and clearing. |
-| `ItemContainer.ToData() / FromData(data) / Load(data)` | Convert to and from the portable InventoryData; FromData makes a container of the saved size and Load replaces the contents of an existing one. |
+| `ItemContainer.ToData() / FromData(data) / Load(data)` | Convert to and from the portable InventoryData; FromData makes a container of the saved size (null for null data), Load replaces the contents of an existing one, and ToData writes schemaVersion. |
 | `InventoryData / ItemEntry` | The portable form with schemaVersion, slots, stackLimit and a list of itemId and quantity entries. |
 
 **Example:**
@@ -2475,7 +2555,7 @@ var restored = ItemContainer.FromData(saved);
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-inventory.git
+https://github.com/IT-Kamianets/3d-unity-inventory.git#v0.2.0
 ```
 
 No engine packages to add first.
@@ -2495,7 +2575,7 @@ First- and third-person camera that follows a character and owns where the playe
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-constructor-character-view-camera` |
-| Version | 0.1.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character) |
 | Used by | [`3d-constructor-character-view-controls`](#3d-constructor-character-view-controls), [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-constructor-character-view-camera |
@@ -2511,9 +2591,11 @@ First- and third-person camera that follows a character and owns where the playe
 - Over-the-shoulder third-person camera with a configurable distance and shoulder offset.
 - Smooth switching between views with the ToggleView action, and a ViewChanged event.
 - Camera collision: pulls in front of walls at once and eases back out.
-- Hides the character's body in first person while it still casts shadows.
+- Hides the character's body in first person while it still casts shadows, including renderers added later, such as a loaded model or gear.
 - Locks the mouse cursor during gameplay and frees it when a menu turns gameplay input off.
 - AimRay through the middle of the screen for aiming in either view.
+- The camera starts from the yaw of the character's transform.
+- VR mode: in a headset (XRActive, with FollowHeadsetInXR on) the camera stops placing itself and setting the field of view, follows the head for Yaw and Pitch, and stays first person with the body hidden.
 
 **API:**
 
@@ -2528,6 +2610,7 @@ First- and third-person camera that follows a character and owns where the playe
 | `CharacterViewCamera.SetLook(yaw, pitch)` | Points the view, for example on spawn; pitch is clamped to the settings. |
 | `CharacterViewCamera.ViewChanged` | Event raised with the new CameraView when the view switches. |
 | `CharacterViewCamera.LookEnabled` | Turn off to freeze the view, for example during a cutscene. |
+| `CharacterViewCamera.XRActive / FollowHeadsetInXR` | Whether the camera is in VR mode, following the headset, and whether it may switch to it. |
 | `CharacterViewCameraSettings` | Sensitivity, pitch limits, field of view, start view, distance, shoulder offset, collision and cursor locking. |
 
 **Example:**
@@ -2549,7 +2632,7 @@ if (Physics.Raycast(view.AimRay, out var hit, 100f))
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git
+https://github.com/IT-Kamianets/3d-constructor-character-view-camera.git#v0.3.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-character`.
@@ -2559,6 +2642,10 @@ Requirements:
 - Unity 6000.6
 - com.unity.modules.physics 1.0.0, resolved by the Package Manager
 
+Optional:
+
+- 3d-unity-xr: its XR rig moves the camera in a headset; a TrackedPoseDriver works too.
+
 ### 3d-constructor-character-view-controls
 
 Turns player input into character commands: forward is where the camera looks, looking turns the character.
@@ -2566,7 +2653,7 @@ Turns player input into character commands: forward is where the camera looks, l
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-constructor-character-view-controls` |
-| Version | 0.1.0 |
+| Version | 0.3.0 (tag `v0.3.0`) |
 | Depends on | [`3d-unity-core`](#3d-unity-core), [`3d-unity-input`](#3d-unity-input), [`3d-unity-character`](#3d-unity-character), [`3d-constructor-character-view-camera`](#3d-constructor-character-view-camera) |
 | Used by | [`3d-constructor-character-view-template`](#3d-constructor-character-view-template) |
 | Repository | https://github.com/IT-Kamianets/3d-constructor-character-view-controls |
@@ -2583,8 +2670,9 @@ Turns player input into character commands: forward is where the camera looks, l
 - Third person: the character turns toward where it walks; while aiming with Secondary or with FaceCamera set, it faces the camera and strafes.
 - Sprint by holding or toggling (toggle by default on gamepad), forward only while facing the camera, and it stops when the player stops.
 - Crouch by holding or toggling.
-- With gameplay input off, for example when a menu is open, the character stands still.
+- With gameplay input off, for example when a menu is open, or with the controls disabled, the character stands still. The camera is looked up again until one is found.
 - LastCommand: the command sent this frame, for the network to send to the server.
+- VR mode: in a headset the controls leave the character to VRControls when it is on the same object (YieldToVRControls); otherwise the body faces the head, the left stick walks relative to it and the right stick turns the rig, by XRSnapTurnDegrees per flick or smoothly at XRTurnSpeed.
 
 **API:**
 
@@ -2618,7 +2706,7 @@ CharacterCommand command = controls.LastCommand;
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git
+https://github.com/IT-Kamianets/3d-constructor-character-view-controls.git#v0.3.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input` → `3d-unity-character` → `3d-constructor-character-view-camera`.
@@ -2626,6 +2714,10 @@ Unity does not resolve git dependencies of a git package, so add these first, in
 Requirements:
 
 - Unity 6000.6
+
+Optional:
+
+- 3d-constructor-vr-controls: VRControls on the same object takes over in a headset, with room-scale walking and real crouching.
 
 ### 3d-constructor-vr-controls
 
@@ -2760,7 +2852,7 @@ Fixed cinematic camera shots for third-person games, chosen by the boxes the pla
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-fixed-camera` |
-| Version | 0.1.0 |
+| Version | 0.1.0 (tag `v0.1.0`) |
 | Depends on | nothing |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-fixed-camera |
@@ -2820,7 +2912,7 @@ camera.PopOverride();
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-fixed-camera.git
+https://github.com/IT-Kamianets/3d-unity-fixed-camera.git#v0.1.0
 ```
 
 No engine packages to add first.
@@ -2836,7 +2928,7 @@ Overhead camera for strategy and tower-defense games: pan, zoom and stay inside 
 | | |
 |---|---|
 | Kind | Unity package `com.itkamianets.3d-unity-topdown-camera` |
-| Version | 0.1.0 |
+| Version | 0.2.0 (tag `v0.2.0`) |
 | Depends on | [`3d-unity-input`](#3d-unity-input) |
 | Used by | nothing in the engine |
 | Repository | https://github.com/IT-Kamianets/3d-unity-topdown-camera |
@@ -2848,7 +2940,7 @@ Overhead camera for strategy and tower-defense games: pan, zoom and stay inside 
 
 **Includes:**
 
-- Pan with the Move action (W A S D or the left stick) and, optionally, when the pointer touches the screen edge.
+- Pan with the Move action (W A S D or the left stick) and, optionally, when the mouse touches the screen edge; a lifted finger never pans.
 - Zoom with the mouse wheel, in steps, between a minimum and a maximum distance.
 - Panning is faster when zoomed out, so crossing a screen of ground takes the same time at any zoom.
 - Bounds: the point the camera looks at stays inside a rectangle on the ground, in x and z.
@@ -2893,7 +2985,7 @@ if (view.TryGroundPoint(pointer, out var ground))
 **Install:**
 
 ```text
-https://github.com/IT-Kamianets/3d-unity-topdown-camera.git
+https://github.com/IT-Kamianets/3d-unity-topdown-camera.git#v0.2.0
 ```
 
 Unity does not resolve git dependencies of a git package, so add these first, in this order: `3d-unity-core` → `3d-unity-input`.

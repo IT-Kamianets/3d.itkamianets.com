@@ -15,6 +15,8 @@ export interface CatalogPackage {
 	purpose: string;
 	dependencies: string[];
 	version: string;
+	/** The release tag of this version, such as v0.2.0; empty until the repository has one. */
+	tag: string;
 	license: string;
 	packageId: string;
 	install: string;
@@ -27,6 +29,8 @@ export interface CatalogPackage {
 	related: string[];
 	/** Optional SDKs or packages the code supports when present, one sentence each. */
 	optional: string[];
+	/** Open limits of the current version, one sentence each; empty when there are none. */
+	limits: string[];
 	/** The most useful public members (or schema files and fields), with one sentence each. */
 	api: { name: string; text: string }[];
 	/** A short code sample using the real API (JSON for schemas); empty when there is none. */
@@ -136,6 +140,10 @@ export const dependencyLevels: DependencyLevel[] = (() => {
 	}));
 })();
 
+/** The git URL to install a package from, pinned to its release tag when it has one. */
+export const gitUrl = (item: CatalogPackage) =>
+	`${repoUrl(item.slug)}.git${item.tag ? `#${item.tag}` : ''}`;
+
 /** Include installable transitive dependencies before their consumers; schemas stay out of UPM. */
 export function installManifest(slugs: string[]): string {
 	const installed = new Map<string, string>();
@@ -148,7 +156,7 @@ export function installManifest(slugs: string[]): string {
 		visiting.add(slug);
 		item.dependencies.forEach(add);
 		visiting.delete(slug);
-		if (item.packageId) installed.set(item.packageId, `${repoUrl(item.slug)}.git`);
+		if (item.packageId) installed.set(item.packageId, gitUrl(item));
 	};
 	slugs.forEach(add);
 	return JSON.stringify({ dependencies: Object.fromEntries(installed) }, null, 2);

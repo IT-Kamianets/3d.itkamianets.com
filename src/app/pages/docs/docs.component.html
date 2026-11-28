@@ -168,7 +168,7 @@
 												</th>
 												<td class="ds-mono break-all">
 													@if (item.packageId) {
-														{{ repoUrl(item.slug) }}.git
+														{{ gitUrl(item) }}
 													} @else if (item.group === 'Schemas') {
 														<span class="ds-muted">{{
 															'JSON Schema files, not a Unity package'

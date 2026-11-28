@@ -104,6 +104,16 @@
 					}
 				</ul>
 			</section>
+			@if (item.limits.length) {
+				<section class="prose-measure">
+					<h2 class="ds-section-title text-[1.25rem]">{{ 'Known limits' | tr }}</h2>
+					<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">
+						@for (limit of item.limits; track limit) {
+							<li>{{ limit | tr }}</li>
+						}
+					</ul>
+				</section>
+			}
 			<section class="prose-measure">
 				<h2 class="ds-section-title text-[1.25rem]">{{ 'Main features' | tr }}</h2>
 				<ul class="mt-3 list-disc pl-5 leading-7 marker:text-[var(--muted-foreground)]">

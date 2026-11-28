@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import docsData from '../../../data/docs/docs.json';
-import { catalogPackages, repoUrl, installManifest } from '../../feature/catalog/catalog.data';
+import { catalogPackages, gitUrl, repoUrl, installManifest } from '../../feature/catalog/catalog.data';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 import { DependencyGraphComponent } from '../../shared/dependency-graph/dependency-graph.component';
 import { RichPipe, TrPipe } from '../../shared/translate/tr.pipe';
@@ -49,6 +49,7 @@ export class DocsComponent {
 	];
 	protected readonly packages = catalogPackages;
 	protected readonly repoUrl = repoUrl;
+	protected readonly gitUrl = gitUrl;
 	protected readonly installManifest = installManifest;
 	protected sectionId(title: string) {
 		return title
