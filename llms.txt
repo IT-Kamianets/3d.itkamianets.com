@@ -1,0 +1,20 @@
+# IT Kamianets 3D Engine
+
+Also called the ITKP 3D Engine, or ITKP 3D for short.
+
+> Unity packages, engine-independent JSON schemas, and constructors (one per camera style) for building 3D games. Games such as Temnorid Arena, Craft, Dungeons and Master are built from them.
+
+## Packages
+
+- [packages.md](https://3d.itkamianets.com/packages.md): every public package (schemas, core, game kit, specific, constructor parts) with its purpose, usage, current version and release tag, known limits, dependencies, install order and pinned git URL (`...git#vX.Y.Z`). Read this to choose packages for a new constructor or game. Current releases: 3d-unity-shell 0.4.0; 3d-unity-account, 3d-unity-combat, 3d-unity-ai, 3d-unity-assetra and the Character View camera and controls (with a VR mode) 0.3.0; 3d-unity-core, input, character, scene, assets, audio, ui, save, graybox, update, net, inventory and topdown-camera 0.2.0; 3d-unity-feedback 0.1.1; 3d-unity-synth and 3d-unity-fixed-camera 0.1.0. 3d-unity-net is the multiplayer package; 3d-unity-network (0.1.1) is deprecated.
+
+## Docs
+
+- [Start a game](https://3d.itkamianets.com/docs/start-a-game): clone a constructor starter repository (an empty Unity project) under your game name, add the engine packages, work with an AI agent, send engine changes back as pull requests, release a package (bump the version, CHANGELOG, tag `vX.Y.Z`, update this catalog, move the games' pins with `npm run pin`).
+- [Installation](https://3d.itkamianets.com/docs/installation): Unity requirements (recommended editor: Unity 6000.6.8f1, a suggestion, not a requirement), starter repositories, installing packages by git URL pinned to `#vX.Y.Z` release tags; the OpenUPM scoped registry (`https://package.openupm.com`, scope `com.itkamianets`) is coming soon.
+- [Architecture](https://3d.itkamianets.com/docs/architecture): the four layers and five package groups, the five schemas, character and camera, multiplayer (use `3d-unity-net`; `3d-unity-network` is deprecated), the game kit, where a game keeps its models (`Assets/Models/<group>/<name>.glb`, one GLB per asset id), how a model is made (a slot in `assetra.json` with `bounds` and a `production` brief from `3d-asset-schema` 1.1.0, made from the scene's tags by `3d-unity-graybox`; working files in `Art/Models/<group>/<name>/`; reference image, any 3D generator such as Meshy, `itkp-models optimize` in Blender, `itkp-models check`, swap into the game with `3d-unity-graybox`, Assetra; the tools for the image and the 3D model are suggestions). The command line is `3d-model-tools`: https://github.com/IT-Kamianets/3d-model-tools
+- [Examples](https://3d.itkamianets.com/docs/examples): a first-person game from a starter repository, a multiplayer match, a room scan, the games built on the engine.
+
+## Source
+
+- [GitHub organization](https://github.com/IT-Kamianets): one repository per package, constructor part and game.
