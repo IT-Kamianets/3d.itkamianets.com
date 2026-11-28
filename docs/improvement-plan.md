@@ -106,7 +106,7 @@ Packages: as listed per task. Projects: all games.
 - [x] [medium-high] Disabling the controls clears the command (`CharacterViewControls.cs` 65-70); lazy camera lookup.
 - [x] [medium] No events while replaying commands (`CharacterMotor.cs` 183-195, 289).
 - [x] [medium] Camera reads the starting yaw from the target transform (`CharacterViewCamera.cs` 87-90).
-- [ ] [medium] An XR path for Character View (head yaw, `Player.Turn`, no transform or FOV writes), or say in the docs that it is flat-screen only.
+- [x] [medium] An XR path for Character View (head yaw, `Player.Turn`, no transform or FOV writes), or say in the docs that it is flat-screen only.
 - [x] [low] Animator reads the motor in LateUpdate; first-person hiding re-collects renderers.
 
 **scene, assets, audio**
@@ -118,14 +118,14 @@ Packages: as listed per task. Projects: all games.
 - [x] [low] scene: invariant culture for `updatedAt`, keep the origin scale, identity for a missing rotation.
 - [x] [medium] audio: `Stop` bumps the voice generation (`EngineAudio.cs` 121-127); music requests use a generation too.
 - [x] [medium] audio: stop looping voices whose follow target died; scene ambience goes through volume groups.
-- [ ] [design] audio: `FootstepPlayer` out of the core audio package (constructor package or optional asmdef), so audio no longer depends on character.
+- [x] [design] audio: `FootstepPlayer` out of the core audio package (constructor package or optional asmdef), so audio no longer depends on character.
 
 **combat, ai, ui, cameras, graybox**
 - [x] [high] ai: a dead target is dropped at once (`AiAgent.cs` 117-162, 251).
 - [x] [medium] ai: `AttackNeedsSight` works on its own (`AiAgent.cs` 145); patrol waits on arrival (`AiAgent.cs` 198-203).
 - [x] [medium] combat: cache projectile materials (`Projectile.cs` 39); `SetMax(value, refill)` and clamp max health (`Health.cs` 57-60, 94).
 - [x] [low] combat: non-alloc sphere cast and a hit point fallback; look up `IDamageable` or drop the README claim.
-- [ ] [design] combat and ai: one bridge so `AiTarget.Alive` follows `Health`.
+- [x] [design] combat and ai: one bridge so `AiTarget.Alive` follows `Health`.
 - [x] [medium] topdown camera: no edge pan from a lifted touch (`OverheadCamera.cs` 55-65).
 - [x] [low] ui: `FormatTime` invariant and rounded; `UiShapes.Circle` caches its texture.
 - [x] [low] graybox: world text cache per font, folders created through the AssetDatabase.
@@ -144,9 +144,9 @@ Packages: as listed per task. Projects: all games.
 
 Project: Math Runner. Details in `math-runner.itkamianets.com/PLAN.md`.
 
-- [ ] Merge `master` into `dev`, keep releasing from `master`.
-- [ ] Use the `assetra.json` ids, add glTFast, remove the duplicate model sets.
-- [ ] Pin and trim its packages; move to `3d-unity-update` once roadmap 1 lands.
+- [x] Merge `master` into `dev`, keep releasing from `master`.
+- [ ] Use the `assetra.json` ids, add glTFast, remove the duplicate model sets. glTFast added (dev); repointing the prefabs to the ids and removing the old model sets needs the Unity editor, see the game's PLAN.md.
+- [x] Pin and trim its packages; move to `3d-unity-update` once roadmap 1 lands.
 - [ ] CI with tests and the Windows release.
 - [ ] Copy the result into the constructor starters.
 
@@ -154,8 +154,8 @@ Project: Math Runner. Details in `math-runner.itkamianets.com/PLAN.md`.
 
 Packages: this site. Projects: the constructor starters.
 
-- [ ] README: four layers and five groups, as in the docs (it still says three layers and four groups).
-- [ ] Architecture: when to use `3d-unity-net` or `3d-unity-network`, and whether both stay.
-- [ ] Character View pages: VR claims only once the XR path exists.
-- [ ] Per-package docs list the known limits found here until they are fixed (save atomicity, IL2CPP updater, unpinned installs).
-- [ ] Update `packages.json`, `ua.json`, `llms.txt` and `packages.md` with each package release from roadmap 2.
+- [x] README: four layers and five groups, as in the docs (it still says three layers and four groups).
+- [x] Architecture: when to use `3d-unity-net` or `3d-unity-network`, and whether both stay.
+- [x] Character View pages: VR claims only once the XR path exists.
+- [x] Per-package docs list the known limits found here until they are fixed (save atomicity, IL2CPP updater, unpinned installs).
+- [x] Update `packages.json`, `ua.json`, `llms.txt` and `packages.md` with each package release from roadmap 2.
