@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-combat
+aliases: []
+displayName: 'ITKP 3D Combat'
+description: 'Generic combat: health with damage and death events, teams, projectiles, and melee cone and area attacks.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-combat'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - frameworks
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

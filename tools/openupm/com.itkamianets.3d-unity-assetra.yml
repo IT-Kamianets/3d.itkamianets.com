@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-assetra
+aliases: []
+displayName: 'ITKP 3D Assetra'
+description: 'Connects a game to Assetra, the shared library of 3D models: sync the models a game needs, download the filled ones, and publish models with metadata read from Unity.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-assetra'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - asset-management
+  - integration
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

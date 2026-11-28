@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-net
+aliases: []
+displayName: 'ITKP 3D Net'
+description: 'A small multiplayer layer over Netcode for GameObjects for games that build their scenes in code: host or join by address or online code.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-net'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - network
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

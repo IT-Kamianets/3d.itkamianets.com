@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-scene
+aliases: []
+displayName: 'ITKP 3D Scene'
+description: 'Builds live Unity scenes from 3d-scene-schema JSON and saves them back to the same format.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-scene'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - level-design
+  - data-management
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

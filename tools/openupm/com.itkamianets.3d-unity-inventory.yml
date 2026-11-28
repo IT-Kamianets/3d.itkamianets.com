@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-inventory
+aliases: []
+displayName: 'ITKP 3D Inventory'
+description: 'Item containers: stackable items by id, slot and stack limits, transfers, and portable inventory data.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-inventory'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - data-management
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

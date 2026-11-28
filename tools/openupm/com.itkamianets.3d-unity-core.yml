@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-core
+aliases: []
+displayName: 'ITKP 3D Core'
+description: 'Shared base for the engine''s Unity packages: logging, player settings, typed events and services.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-core'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - frameworks
+  - utilities
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

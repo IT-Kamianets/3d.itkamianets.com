@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-constructor-character-view-controls
+aliases: []
+displayName: 'ITKP 3D Constructor Character View Controls'
+description: 'Turns player input into character commands: forward is where the camera looks, looking turns the character.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-constructor-character-view-controls'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - input-management
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

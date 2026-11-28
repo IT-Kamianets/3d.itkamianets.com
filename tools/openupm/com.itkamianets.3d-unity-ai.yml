@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-ai
+aliases: []
+displayName: 'ITKP 3D AI'
+description: 'Generic bots: notice a target, chase it over a NavMesh, attack, give up and patrol.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-ai'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - ai
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

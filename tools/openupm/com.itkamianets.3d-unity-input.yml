@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-input
+aliases: []
+displayName: 'ITKP 3D Input'
+description: 'One set of input actions for keyboard and mouse, gamepad, touch and VR controllers.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-input'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - input-management
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

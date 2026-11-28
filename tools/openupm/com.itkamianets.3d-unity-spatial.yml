@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-spatial
+aliases: []
+displayName: 'ITKP 3D Spatial'
+description: 'Turns a Meta Quest room scan into a scene, measures scanned rooms and builds them as solid geometry.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-spatial'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - ar-and-vr
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

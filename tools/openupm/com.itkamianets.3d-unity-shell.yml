@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-shell
+aliases: []
+displayName: 'ITKP 3D Shell'
+description: 'The screens a family of games shares: splash, landing, sign-in, onboarding, lobby and in-game top and bottom bars.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-shell'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - gui
+  - frameworks
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

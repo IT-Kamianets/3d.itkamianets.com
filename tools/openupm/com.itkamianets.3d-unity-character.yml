@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-character
+aliases: []
+displayName: 'ITKP 3D Character'
+description: 'A reusable character motor: walking, sprinting, jumping, crouching, slopes and steps, for any camera style.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-character'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - physics
+  - frameworks
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

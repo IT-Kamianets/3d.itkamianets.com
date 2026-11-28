@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-assets
+aliases: []
+displayName: 'ITKP 3D Assets'
+description: 'Loads 3d-asset-schema assets by id in Unity: models, materials, textures and sounds, with placeholders.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-assets'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - asset-management
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

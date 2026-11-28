@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-audio
+aliases: []
+displayName: 'ITKP 3D Audio'
+description: 'Positional 3D sound, sound events with variations, footsteps by surface, volume groups and music.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-audio'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - audio
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-topdown-camera
+aliases: []
+displayName: 'ITKP 3D Topdown Camera'
+description: 'Overhead camera for strategy and tower-defense games: pan, zoom and stay inside the map.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-topdown-camera'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - camera
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

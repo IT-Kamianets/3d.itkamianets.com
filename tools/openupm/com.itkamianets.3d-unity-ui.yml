@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-unity-ui
+aliases: []
+displayName: 'ITKP 3D UI'
+description: 'Small helpers for building a game''s screens in code with plain uGUI: panels, labels, bars, buttons and an event system wired to the engine''s input.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-ui'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - gui
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

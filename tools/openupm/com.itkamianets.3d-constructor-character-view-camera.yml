@@ -1,0 +1,17 @@
+name: com.itkamianets.3d-constructor-character-view-camera
+aliases: []
+displayName: 'ITKP 3D Constructor Character View Camera'
+description: 'First- and third-person camera that follows a character and owns where the player looks.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-constructor-character-view-camera'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - camera
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'

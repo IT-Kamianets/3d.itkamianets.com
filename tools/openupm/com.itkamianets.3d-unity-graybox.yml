@@ -1,0 +1,18 @@
+name: com.itkamianets.3d-unity-graybox
+aliases: []
+displayName: 'ITKP 3D Graybox'
+description: 'Build a game''s first playable from Unity primitives: stable asset ids on everything that will get a real model, Editor helpers for primitives, plain materials and world text, and the model step that turns tags into assetra.json slots and swaps finished models in.'
+repoUrl: 'https://github.com/IT-Kamianets/3d-unity-graybox'
+trackingMode: git
+parentRepoUrl: null
+licenseSpdxId: MIT
+licenseName: MIT License
+image: ''
+topics:
+  - level-design
+  - editor-enhancement
+hunter: ''
+gitTagPrefix: ''
+gitTagIgnore: ''
+minVersion: ''
+readme: 'master:README.md'
